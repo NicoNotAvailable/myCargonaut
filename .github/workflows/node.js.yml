@@ -42,7 +42,7 @@ jobs:
       run: npm run test
       working-directory: myCargonaut-server
     - name: build server
-      run: npm run start
+      run: npm run build
       working-directory: myCargonaut-server
     - name: build client
       run: nest build
