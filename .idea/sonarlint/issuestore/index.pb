@@ -15,3 +15,10 @@ T
 $myCargonaut-client/package-lock.json,6\b\6b32ffc048a1ec73309603b6e7f42e9782478921
 M
 myCargonaut-client/.gitignore,1\8\187cbcb0d3d55b1b3879b05d726acfbe4cf875a5
+:
+
+.gitignore,a\5\a5cc2925ca8258af241be7e5b0381edf30266302
+S
+#.idea/sonarlint/issuestore/index.pb,9\f\9fe84ebb15faf917b7def6236dba604453cc61e0
+]
+-.idea/sonarlint/securityhotspotstore/index.pb,8\8\88a9255124c95bdc913197c120a8d560edc59c8e
