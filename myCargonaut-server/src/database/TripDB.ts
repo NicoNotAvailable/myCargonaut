@@ -1,4 +1,10 @@
-import {Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToMany} from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  ManyToOne,
+  OneToMany,
+} from 'typeorm';
 import { PriceTypeEnum } from './enums/PriceTypeEnum';
 import { UserDB } from './UserDB';
 import { VehicleDB } from './VehicleDB';

@@ -10,7 +10,7 @@ import { UserDB } from './UserDB';
 import { TripDB } from './TripDB';
 
 @Entity()
-@TableInheritance({ column: { type: "varchar", name: "type" } })
+@TableInheritance({ column: { type: 'string', name: 'type' } })
 export class VehicleDB {
   @PrimaryGeneratedColumn()
   id: number;
