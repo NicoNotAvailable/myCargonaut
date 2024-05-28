@@ -1,6 +1,7 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 import { CarDB } from './CarDB';
 import { TripDB } from './TripDB';
+import {ReviewDB} from "./ReviewDB";
 
 @Entity()
 export class UserDB {
@@ -36,4 +37,10 @@ export class UserDB {
 
   @OneToMany(() => TripDB, (trip) => trip.offering)
   offers: Promise<TripDB[]>;
+
+  @OneToMany(() => TripDB, (trip) => trip.requesting)
+  requests: Promise<TripDB[]>;
+
+  @OneToMany(() => ReviewDB, (review) => review.writer)
+  writtenReviews: Promise<ReviewDB[]>;
 }

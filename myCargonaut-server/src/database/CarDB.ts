@@ -1,6 +1,7 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import {Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToMany} from 'typeorm';
 import { TypeEnum } from './enums/TypeEnum';
 import { UserDB } from './UserDB';
+import {TripDB} from "./TripDB";
 
 @Entity()
 export class CarDB {
@@ -30,4 +31,7 @@ export class CarDB {
 
   @Column()
   width: number;
+
+  @OneToMany(() => TripDB, (trip) => trip.car)
+  rides: Promise<TripDB[]>;
 }
