@@ -1,31 +1,29 @@
-import {Entity, Column, PrimaryGeneratedColumn, ManyToOne} from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
 import { TripDB } from './TripDB';
-
 
 @Entity()
 export class LocationDB {
-    @PrimaryGeneratedColumn()
-    id: number;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @ManyToOne(() => TripDB)
-    trip: TripDB;
+  @ManyToOne(() => TripDB)
+  trip: TripDB;
 
-    @Column()
-    stopNr: number;
+  @Column()
+  stopNr: number;
 
-    @Column()
-    country: string;
+  @Column()
+  country: string;
 
-    @Column()
-    zipCode: number;
+  @Column()
+  zipCode: number;
 
-    @Column()
-    city: string;
+  @Column()
+  city: string;
 
-    @Column()
-    street: string;
+  @Column()
+  street: string;
 
-    @Column()
-    streetNumber: string;
-
+  @Column()
+  streetNumber: string;
 }

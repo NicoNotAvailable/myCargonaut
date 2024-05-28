@@ -1,7 +1,7 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
-import { CarDB } from './CarDB';
+import { VehicleDB } from './VehicleDB';
 import { TripDB } from './TripDB';
-import {ReviewDB} from "./ReviewDB";
+import { ReviewDB } from './ReviewDB';
 
 @Entity()
 export class UserDB {
@@ -32,8 +32,8 @@ export class UserDB {
   @Column()
   profileText: string;
 
-  @OneToMany(() => CarDB, (car) => car.owner)
-  cars: Promise<CarDB[]>;
+  @OneToMany(() => VehicleDB, (car) => car.owner)
+  cars: Promise<VehicleDB[]>;
 
   @OneToMany(() => TripDB, (trip) => trip.offering)
   offers: Promise<TripDB[]>;
