@@ -1,5 +1,6 @@
-import { Column, ChildEntity } from 'typeorm';
+import { Column, ChildEntity, OneToMany } from 'typeorm';
 import { VehicleDB } from './VehicleDB';
+import { TripDB } from './TripDB';
 
 @ChildEntity()
 export class TrailerDB extends VehicleDB {
@@ -8,4 +9,7 @@ export class TrailerDB extends VehicleDB {
 
   @Column()
   isEnclosed: boolean;
+
+  @OneToMany(() => TripDB, (trip) => trip.trailer)
+  rides: Promise<TripDB[]>;
 }

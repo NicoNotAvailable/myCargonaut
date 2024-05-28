@@ -3,14 +3,12 @@ import {
   Column,
   PrimaryGeneratedColumn,
   ManyToOne,
-  OneToMany,
   TableInheritance,
 } from 'typeorm';
 import { UserDB } from './UserDB';
-import { TripDB } from './TripDB';
 
 @Entity()
-@TableInheritance({ column: { type: 'string', name: 'type' } })
+@TableInheritance({ column: { type: 'varchar', name: 'type' } })
 export class VehicleDB {
   @PrimaryGeneratedColumn()
   id: number;
@@ -35,7 +33,4 @@ export class VehicleDB {
 
   @Column()
   width: number;
-
-  @OneToMany(() => TripDB, (trip) => trip.car)
-  rides: Promise<TripDB[]>;
 }
