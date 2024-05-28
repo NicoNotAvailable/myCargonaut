@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import {Entity, Column, PrimaryGeneratedColumn, OneToMany, Index} from 'typeorm';
 import { VehicleDB } from './VehicleDB';
 import { TripDB } from './TripDB';
 import { ReviewDB } from './ReviewDB';
@@ -9,6 +9,7 @@ export class UserDB {
   id: number;
 
   @Column()
+  @Index({ unique: true })
   email: string;
 
   @Column()

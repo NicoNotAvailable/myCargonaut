@@ -1,9 +1,12 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import {Entity, Column, PrimaryGeneratedColumn, ManyToOne, Check} from 'typeorm';
 import { TripDB } from './TripDB';
-import { StarsEnum } from './enums/StarsEnum';
 import { UserDB } from './UserDB';
 
 @Entity()
+@Check(`"punctuality" BETWEEN 1 AND 5`)
+@Check(`"reliability" BETWEEN 1 AND 5`)
+@Check(`"comfort" BETWEEN 1 AND 5`)
+@Check(`"damage" BETWEEN 1 AND 5`)
 export class ReviewDB {
   @PrimaryGeneratedColumn()
   id: number;
@@ -15,14 +18,14 @@ export class ReviewDB {
   writer: UserDB;
 
   @Column()
-  punctuality: StarsEnum;
+  punctuality: number;
 
   @Column()
-  reliability: StarsEnum;
+  reliability: number;
 
   @Column()
-  comfort: StarsEnum;
+  comfort: number;
 
   @Column()
-  damage: StarsEnum;
+  damage: number;
 }

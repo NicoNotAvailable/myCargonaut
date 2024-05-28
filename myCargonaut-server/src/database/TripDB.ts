@@ -4,7 +4,7 @@ import { UserDB } from './UserDB';
 import { VehicleDB } from './VehicleDB';
 import { TripInfoEnum } from './enums/TripInfoEnum';
 import { StatusEnum } from './enums/StatusEnum';
-import { ReviewDB } from "./ReviewDB";
+import { ReviewDB } from './ReviewDB';
 import { LocationDB } from './LocationDB';
 
 @Entity()

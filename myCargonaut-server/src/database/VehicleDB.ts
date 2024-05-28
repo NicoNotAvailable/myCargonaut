@@ -1,4 +1,11 @@
-import {Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToMany, TableInheritance} from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  ManyToOne,
+  OneToMany,
+  TableInheritance,
+} from 'typeorm';
 import { UserDB } from './UserDB';
 import { TripDB } from './TripDB';
 

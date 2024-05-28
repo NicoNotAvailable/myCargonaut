@@ -1,5 +1,6 @@
 export enum StatusEnum {
-    player1,
-    player2,
-    draw,
+    created,
+    active,
+    finished,
+    cancelled
 }
