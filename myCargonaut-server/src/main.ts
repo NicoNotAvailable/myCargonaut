@@ -3,6 +3,7 @@ import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import * as session from 'express-session';
 import * as express from 'express';
+import { CorsOptions } from '@nestjs/common/interfaces/external/cors-options.interface';
 
 declare module 'express-session' {
   interface SessionData {
@@ -12,6 +13,15 @@ declare module 'express-session' {
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+  // Configure CORS
+  const corsOptions: CorsOptions = {
+    origin: true, // Allow requests from any origin
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true,
+  };
+  app.enableCors(corsOptions);
 
   app.use(
     session({
