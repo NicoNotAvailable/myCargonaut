@@ -1,15 +1,16 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { UserController } from './user.controller';
 import { databaseTest, tables } from '../../testDatabase/databaseTest';
-import { TypeOrmModule } from '@nestjs/typeorm';
+import { TypeOrmModule} from '@nestjs/typeorm';
 import { UserService } from './user.service';
-import fs from 'node:fs';
+import * as fs from 'fs/promises'; // Use promises version of fs
 
 describe('UserController', () => {
   let controller: UserController;
+  let module: TestingModule;
 
   beforeAll(async () => {
-    const module: TestingModule = await Test.createTestingModule({
+    module = await Test.createTestingModule({
       imports: [
         databaseTest('./testDatabase/userController.sqlite'),
         TypeOrmModule.forFeature(tables),
@@ -26,10 +27,17 @@ describe('UserController', () => {
   });
 
   afterAll(async () => {
-    fs.unlink('./testDatabase/userController.sqlite', (err) => {
-      if (err) {
-        throw err;
-      }
-    });
+    await module.close();
+
+    // Add delay to ensure all operations are complete
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+
+    // Delete the test database file
+    try {
+      await fs.unlink('./testDatabase/userController.sqlite');
+      console.log('Test database file removed');
+    } catch (err) {
+      console.error('Error removing test database file:', err);
+    }
   });
 });
