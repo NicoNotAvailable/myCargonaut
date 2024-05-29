@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import session from 'express-session';
+import * as session from 'express-session';
 import * as express from 'express';
 
 declare module 'express-session' {
@@ -33,6 +33,6 @@ async function bootstrap() {
   app.use(express.urlencoded({ extended: true }));
   app.use(express.json({ limit: '50mb' }));
 
-  await app.listen(3000);
+  await app.listen(8000);
 }
 bootstrap();

@@ -27,16 +27,16 @@ export class UserDB {
   @Column()
   lastName: string;
 
-  @Column()
+  @Column({ nullable: true })
   birthday: Date;
 
-  @Column()
+  @Column({ nullable: true })
   phoneNumber: number;
 
-  @Column()
+  @Column({ nullable: true })
   profilePic: string;
 
-  @Column()
+  @Column({ nullable: true })
   profileText: string;
 
   @OneToMany(() => VehicleDB, (car) => car.owner)
