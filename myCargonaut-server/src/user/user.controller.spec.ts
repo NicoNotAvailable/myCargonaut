@@ -111,7 +111,4 @@ describe('UserController', () => {
       BadRequestException,
     );
   });
-
-
-
 });

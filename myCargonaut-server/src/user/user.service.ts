@@ -49,28 +49,34 @@ export class UserService {
   ): Promise<UserDB> {
     // Validate email format
     if (!this.isValidEmail(email)) {
-      throw new BadRequestException('Invalid email format');
+      throw new BadRequestException('Ungültiges E-Mail-Format');
     }
 
     // Check if email already exists
     const checkUser = await this.userRepository.findOne({ where: { email } });
     if (checkUser) {
-      throw new BadRequestException('Email already exists');
+      throw new BadRequestException(
+        'Es exisitert bereits ein Nutzer mit dieser E-Mail-Adresse.',
+      );
     }
 
     // Validate phone number if provided
     if (phoneNumber && !this.isValidMobileNumber(phoneNumber)) {
-      throw new BadRequestException('Invalid German mobile number');
+      throw new BadRequestException('Ungültige Telefon-Nummer');
     }
 
     // Validate password
     if (password.trim() === '' || password.trim().length < 8) {
-      throw new BadRequestException('Password must be at least 8 characters long and not empty');
+      throw new BadRequestException(
+        'Das Passwort muss mindestens 8 Zeichen lang und nicht leer sein.',
+      );
     }
 
     // Validate user age
     if (!this.isUserAdult(birthday)) {
-      throw new BadRequestException('You must be at least 18 years old to register');
+      throw new BadRequestException(
+        'Sie müssen mindestens 18 Jahre alt sein, um sich zu registrieren.',
+      );
     }
 
     const newUser: UserDB = this.userRepository.create();
