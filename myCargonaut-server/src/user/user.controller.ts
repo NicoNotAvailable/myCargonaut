@@ -1,24 +1,44 @@
-import { BadRequestException, Body, Controller, Post } from '@nestjs/common';
+import {
+  BadRequestException,
+  Body,
+  Controller,
+  Post,
+  UploadedFile,
+  UseInterceptors,
+} from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { UserService } from './user.service';
 import { CreateUserDTO } from './DTO/CreateUserDTO';
 import { OkDTO } from '../serverDTO/OkDTO';
+import { extname } from 'path';
+import { diskStorage } from 'multer';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @ApiTags('user')
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  /*
-   * uses the userService to create a new user with the given values that are needed in order to create a new user
-   * @Param body CreateUserDTO, username, firstname, lastname, password
-   * @Return OkDTO if the user was succesfully created
-   * @Error if the input values do not meet the given requirements
-   * @Error if the user could not be created
-   */
   @ApiResponse({ type: OkDTO, description: 'creates a new user' })
+  @UseInterceptors(
+    FileInterceptor('profilePicture', {
+      storage: diskStorage({
+        destination: './uploads/profilePictures',
+        filename: (req: any, file, callback) => {
+          const randomName = Array(32)
+            .fill(null)
+            .map(() => Math.round(Math.random() * 16).toString(16))
+            .join('');
+          callback(null, `${randomName}${extname(file.originalname)}`);
+        },
+      }),
+    }),
+  )
   @Post()
-  async createUser(@Body() body: CreateUserDTO) {
+  async createUser(
+    @UploadedFile() file: Express.Multer.File,
+    @Body() body: CreateUserDTO,
+  ) {
     if (body.agb == false) {
       throw new BadRequestException(
         'Du musst die AGB akzeptieren, um dich zu registrieren',
@@ -59,6 +79,8 @@ export class UserController {
         body.email,
         body.password,
         body.birthday,
+        body.phoneNumber,
+        file.filename,
       );
       return new OkDTO(true, 'User was created');
     } catch (err) {
