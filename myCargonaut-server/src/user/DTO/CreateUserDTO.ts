@@ -3,8 +3,8 @@ import {
   IsDate,
   IsEmail,
   IsNotEmpty,
-  IsNumber,
   IsString,
+  Matches,
 } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
@@ -51,6 +51,9 @@ export class CreateUserDTO {
   birthday: Date;
 
   @ApiProperty()
-  @IsNumber()
+  @IsString()
+  @Matches(/^[+]?\d{1,3}?[-\s.]?\d{3,14}[-\s.]?\d{3,14}$/, {
+    message: 'Invalid phone number',
+  })
   phoneNumber: string;
 }

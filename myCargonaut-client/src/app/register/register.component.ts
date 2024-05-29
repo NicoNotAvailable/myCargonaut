@@ -80,12 +80,13 @@ export class RegisterComponent {
       emailConfirm: this.emailConfirm,
       password: this.password,
       passwordConfirm: this.passwordConfirm,
-      birthday: date,
+      birthday: date.toISOString().split('T')[0],
       phoneNumber: this.phonenumber,
       agb: this.agb,
 
     };
 
+    console.log('User Data:', userData);
 
     this.http.post("http://localhost:8000/user",userData)
       .subscribe(
@@ -100,7 +101,7 @@ export class RegisterComponent {
         },
         error => {
           console.error('There was an error!', error);
-          this.message = "Bitte überprüfen Sie die Eingabe";
+          this.message = error.error.message || "Bitte überprüfen Sie die Eingabe";
           setTimeout(() => {
             this.message = '';
           }, 5000);

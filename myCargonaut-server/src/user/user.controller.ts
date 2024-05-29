@@ -2,6 +2,7 @@ import {
   BadRequestException,
   Body,
   Controller,
+  Logger,
   Post,
   UploadedFile,
   UseInterceptors,
@@ -17,7 +18,24 @@ import { FileInterceptor } from '@nestjs/platform-express';
 @ApiTags('user')
 @Controller('user')
 export class UserController {
+  private readonly logger = new Logger(UserController.name);
+
   constructor(private readonly userService: UserService) {}
+
+  private isUserAdult(birthday: Date): boolean {
+    const today = new Date();
+    let age = today.getFullYear() - birthday.getFullYear();
+    const monthDifference = today.getMonth() - birthday.getMonth();
+
+    if (
+      monthDifference < 0 ||
+      (monthDifference === 0 && today.getDate() < birthday.getDate())
+    ) {
+      age--;
+    }
+
+    return age >= 18;
+  }
 
   @ApiResponse({ type: OkDTO, description: 'creates a new user' })
   @UseInterceptors(
@@ -39,6 +57,7 @@ export class UserController {
     @UploadedFile() file: Express.Multer.File,
     @Body() body: CreateUserDTO,
   ) {
+    this.logger.debug('Received createUser request with body:', body);
     if (!body.agb) {
       throw new BadRequestException(
         'Du musst die AGB akzeptieren, um dich zu registrieren',
@@ -67,6 +86,12 @@ export class UserController {
     if (body.lastName.trim().length == 0 || body.lastName.trim() === '') {
       throw new BadRequestException('Nachname darf nicht leer sein');
     }
+    const birthday = new Date(body.birthday);
+    if (!this.isUserAdult(birthday)) {
+      throw new BadRequestException(
+        'Sie müssen mindestens 18 Jahre alt sein, um sich zu registrieren.',
+      );
+    }
     try {
       const profilePic = file ? file.filename : 'empty.png';
       await this.userService.createUser(
@@ -74,12 +99,14 @@ export class UserController {
         body.lastName,
         body.email,
         body.password,
-        body.birthday,
+        birthday,
         body.phoneNumber,
         profilePic,
       );
       return new OkDTO(true, 'User was created');
     } catch (err) {
+      throw err;
+
       throw new BadRequestException('Es ist ein Fehler aufgetreten');
     }
   }

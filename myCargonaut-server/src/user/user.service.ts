@@ -17,23 +17,6 @@ export class UserService {
     return mobileNumberRegex.test(phoneNumber);
   }
 
-  private isUserAdult(birthday: Date): boolean {
-    const today = new Date();
-
-    let age = today.getFullYear() - birthday.getFullYear();
-    const monthDifference = today.getMonth() - birthday.getMonth();
-
-    // Adjust age if the birth month hasn't been reached yet this year
-    if (
-      monthDifference < 0 ||
-      (monthDifference === 0 && today.getDate() < birthday.getDate())
-    ) {
-      age--;
-    }
-
-    return age >= 18;
-  }
-
   private isValidEmail(email: string): boolean {
     return validator.isEmail(email);
   }
@@ -69,13 +52,6 @@ export class UserService {
     if (password.trim() === '' || password.trim().length < 8) {
       throw new BadRequestException(
         'Das Passwort muss mindestens 8 Zeichen lang und nicht leer sein.',
-      );
-    }
-
-    // Validate user age
-    if (!this.isUserAdult(birthday)) {
-      throw new BadRequestException(
-        'Sie müssen mindestens 18 Jahre alt sein, um sich zu registrieren.',
       );
     }
 
