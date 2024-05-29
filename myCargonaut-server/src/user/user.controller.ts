@@ -67,11 +67,6 @@ export class UserController {
     if (body.lastName.trim().length == 0 || body.lastName.trim() === '') {
       throw new BadRequestException('Nachname darf nicht leer sein');
     }
-    if (!isUserAdult(body.birthday)) {
-      throw new BadRequestException(
-        'Du musst mindestens 18 Jahre alt sein, um dich zu registrieren',
-      );
-    }
     try {
       const profilePic = file ? file.filename : 'empty.png';
       await this.userService.createUser(
@@ -88,21 +83,4 @@ export class UserController {
       throw new BadRequestException('Es ist ein Fehler aufgetreten');
     }
   }
-}
-
-function isUserAdult(birthday: Date): boolean {
-  const today = new Date();
-
-  let age = today.getFullYear() - birthday.getFullYear();
-  const monthDifference = today.getMonth() - birthday.getMonth();
-
-  // Adjust age if the birth month hasn't been reached yet this year
-  if (
-    monthDifference < 0 ||
-    (monthDifference === 0 && today.getDate() < birthday.getDate())
-  ) {
-    age--;
-  }
-
-  return age >= 18;
 }
