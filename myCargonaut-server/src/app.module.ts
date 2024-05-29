@@ -9,6 +9,8 @@ import { TrailerDB } from './database/TrailerDB';
 import { TripDB } from './database/TripDB';
 import { VehicleDB } from './database/VehicleDB';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { UserService } from './user/user.service';
+import { UserController } from './user/user.controller';
 
 @Module({
   imports: [
@@ -36,7 +38,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       VehicleDB,
     ]),
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [AppController, UserController],
+  providers: [AppService, UserService],
 })
 export class AppModule {}
