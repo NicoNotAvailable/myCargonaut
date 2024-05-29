@@ -2,6 +2,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UserDB } from '../database/UserDB';
+import * as validator from 'validator';
 
 @Injectable()
 export class UserService {
@@ -10,22 +11,75 @@ export class UserService {
     private userRepository: Repository<UserDB>,
   ) {}
 
+  private isValidMobileNumber(phoneNumber: string): boolean {
+    // Regular expression for validating mobile numbers
+    const mobileNumberRegex = /^[+]?\d{1,3}?[-\s.]?\d{3,14}[-\s.]?\d{3,14}$/;
+    return mobileNumberRegex.test(phoneNumber);
+  }
+
+  private isUserAdult(birthday: Date): boolean {
+    const today = new Date();
+
+    let age = today.getFullYear() - birthday.getFullYear();
+    const monthDifference = today.getMonth() - birthday.getMonth();
+
+    // Adjust age if the birth month hasn't been reached yet this year
+    if (
+      monthDifference < 0 ||
+      (monthDifference === 0 && today.getDate() < birthday.getDate())
+    ) {
+      age--;
+    }
+
+    return age >= 18;
+  }
+
+  private isValidEmail(email: string): boolean {
+    return validator.isEmail(email);
+  }
+
   async createUser(
     firstName: string,
     lastName: string,
     email: string,
     password: string,
     birthday: Date,
-    phoneNumber?: number,
+    phoneNumber?: string,
     profilePic?: string,
   ): Promise<UserDB> {
-    const newUser: UserDB = this.userRepository.create();
-    const checkUser: UserDB = await this.userRepository.findOne({
-      where: { email: email },
-    });
-    if (checkUser != null && email === checkUser.email) {
-      throw new BadRequestException('email already exists');
+    // Validate email format
+    if (!this.isValidEmail(email)) {
+      throw new BadRequestException('Ungültiges E-Mail-Format');
     }
+
+    // Check if email already exists
+    const checkUser = await this.userRepository.findOne({ where: { email } });
+    if (checkUser) {
+      throw new BadRequestException(
+        'Es exisitert bereits ein Nutzer mit dieser E-Mail-Adresse.',
+      );
+    }
+
+    // Validate phone number if provided
+    if (phoneNumber && !this.isValidMobileNumber(phoneNumber)) {
+      throw new BadRequestException('Ungültige Telefon-Nummer');
+    }
+
+    // Validate password
+    if (password.trim() === '' || password.trim().length < 8) {
+      throw new BadRequestException(
+        'Das Passwort muss mindestens 8 Zeichen lang und nicht leer sein.',
+      );
+    }
+
+    // Validate user age
+    if (!this.isUserAdult(birthday)) {
+      throw new BadRequestException(
+        'Sie müssen mindestens 18 Jahre alt sein, um sich zu registrieren.',
+      );
+    }
+
+    const newUser: UserDB = this.userRepository.create();
     newUser.firstName = firstName;
     newUser.lastName = lastName;
     newUser.email = email;
@@ -33,6 +87,6 @@ export class UserService {
     newUser.birthday = birthday;
     newUser.phoneNumber = phoneNumber;
     newUser.profilePic = profilePic;
-    return await this.userRepository.save(newUser);
+    return this.userRepository.save(newUser);
   }
 }

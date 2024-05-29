@@ -11,6 +11,7 @@ import * as bcrypt from 'bcryptjs';
 import { VehicleDB } from './VehicleDB';
 import { TripDB } from './TripDB';
 import { ReviewDB } from './ReviewDB';
+import { IsEmail, IsPhoneNumber } from 'class-validator';
 
 @Entity()
 export class UserDB {
@@ -18,6 +19,7 @@ export class UserDB {
   id: number;
 
   @Column()
+  @IsEmail()
   @Index({ unique: true })
   email: string;
 
@@ -34,7 +36,8 @@ export class UserDB {
   birthday: Date;
 
   @Column({ nullable: true })
-  phoneNumber: number;
+  @IsPhoneNumber()
+  phoneNumber: string;
 
   @Column({ default: 'empty.png' })
   profilePic: string;

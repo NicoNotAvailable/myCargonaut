@@ -39,7 +39,7 @@ jobs:
       run: npm ci
       working-directory: myCargonaut-client
     - name: Test it
-      run: npm run test
+      run: npm run atest
       working-directory: myCargonaut-server
     - name: build server
       run: npm run build
