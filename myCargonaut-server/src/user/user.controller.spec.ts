@@ -11,7 +11,7 @@ describe('UserController', () => {
   beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [
-        databaseTest('./testDatabase/userController.sqlite'),
+        databaseTest('./testDatabase/dbTest.sqlite'),
         TypeOrmModule.forFeature(tables),
       ],
       controllers: [UserController],
@@ -26,7 +26,7 @@ describe('UserController', () => {
   });
 
   afterAll(async () => {
-    fs.unlink('./testDatabase/userController.sqlite', (err) => {
+    fs.unlink('./testDatabase/dbTest.sqlite', (err) => {
       if (err) {
         throw err;
       }
