@@ -12,7 +12,7 @@ describe('UserController', () => {
   beforeAll(async () => {
     module = await Test.createTestingModule({
       imports: [
-        databaseTest('./testDatabase/userController.sqlite'),
+        databaseTest('./testDatabase/dbTest.sqlite'),
         TypeOrmModule.forFeature(tables),
       ],
       controllers: [UserController],
