@@ -80,10 +80,10 @@ describe('UserController', () => {
 
   it('should throw an error for a password shorter than 8 characters', async () => {
     const body = {
-      firstName: 'Jane',
+      firstName: 'Phil',
       lastName: 'Doe',
-      email: 'jane.doe@example.com',
-      emailConfirm: 'john.doe@example.com',
+      email: 'phil.doe@example.com',
+      emailConfirm: 'phil.doe@example.com',
       password: 'short',
       passwordConfirm: 'short',
       birthday: new Date('1990-01-01'),
@@ -100,7 +100,7 @@ describe('UserController', () => {
       firstName: 'Jane',
       lastName: 'Doe',
       email: 'jane.doe@example.com',
-      emailConfirm: 'john.doe@example.com',
+      emailConfirm: 'jane.doe@example.com',
       password: 'password123',
       passwordConfirm: 'password123',
       birthday: new Date('1990-01-01'),
@@ -108,6 +108,24 @@ describe('UserController', () => {
       agb: true,
     };
     await expect(controller.createUser(null, body)).rejects.toThrow(
+      BadRequestException,
+    );
+  });
+
+  it('should throw an error for an underage user', async () => {
+    const dto: CreateUserDTO = {
+      firstName: 'Mark',
+      lastName: 'Doe',
+      email: 'mark.doe@example.com',
+      emailConfirm: 'mark.doe@example.com',
+      password: 'securepassword',
+      passwordConfirm: 'securepassword',
+      agb: true,
+      birthday: new Date('2010-01-01'),
+      phoneNumber: '0800555555',
+    };
+
+    await expect(controller.createUser(null, dto)).rejects.toThrow(
       BadRequestException,
     );
   });
