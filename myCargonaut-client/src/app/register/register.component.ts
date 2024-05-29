@@ -32,9 +32,6 @@ export class RegisterComponent {
 
   birthDate: any = "";
 
-  profilePicRoute: string = "";
-
-
   constructor(private http: HttpClient) {
 
   }
@@ -68,10 +65,7 @@ export class RegisterComponent {
 
   addUser(form: any): void {
 
-
-    let date: Date = new Date(this.birthDate.year, this.birthDate.month - 1, this.birthDate.day);
-
-
+    let date: Date = new Date(this.birthDate.year, this.birthDate.month - 1, this.birthDate.day + 1);
 
     const userData = {
       firstName: this.firstName,
