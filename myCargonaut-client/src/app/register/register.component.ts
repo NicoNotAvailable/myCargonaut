@@ -30,14 +30,8 @@ export class RegisterComponent {
   phonenumber: string = "";
   agb: boolean = false;
 
-  birthDate: any ="";
+  birthDate: any = "";
 
-
-  birthDay: number = 0;
-  birthMonth: number = 0;
-  birthYear: number = 0;
-
-  selectedFile: File | null = null;
   profilePicRoute: string = "";
 
 
@@ -68,46 +62,16 @@ export class RegisterComponent {
   }
 
 
-  onFileSelected(event: any): void {
-    this.selectedFile = event.target.files[0];
+  showInputDate() {
+    console.log(this.birthDate.year + this.birthDate.month + this.birthDate.day)
   }
-
-
-  uploadFile(): void {
-    if (this.selectedFile) {
-      const formData = new FormData();
-      formData.append('file', this.selectedFile);
-
-      this.http.post<any>('http://localhost:4200/upload', formData).subscribe(
-        response => {
-          this.profilePicRoute = `../../assets/profilePictures/${response.fileName}`;
-          console.log('File uploaded successfully', response);
-        },
-        error => {
-          console.error('There was an error!', error);
-        }
-      );
-    }
-  }
-
-  showInputDate(){
-    console.log(this.birthDate.year + this.birthDate.month + this.birthDate.day )
-  }
-
-  onSubmit(form: any) {
-    console.log('Form submitted:', form);
-    // Form reset
-    this.firstName = '';
-    form.resetForm();
-  }
-
 
   addUser(form: any): void {
 
 
-    let date: Date = new Date(this.birthDate.year, this.birthDate.month -1 , this.birthDate.day);
+    let date: Date = new Date(this.birthDate.year, this.birthDate.month - 1, this.birthDate.day);
 
-    console.log(date);
+
 
     const userData = {
       firstName: this.firstName,
@@ -117,11 +81,13 @@ export class RegisterComponent {
       password: this.password,
       passwordConfirm: this.passwordConfirm,
       birthday: date,
-      phonenumber: this.phonenumber,
+      phoneNumber: this.phonenumber,
       agb: this.agb,
+
     };
 
-    this.http.post("http://localhost:8000/user", userData)
+
+    this.http.post("http://localhost:8000/user",userData)
       .subscribe(
         response => {
           form.resetForm();
@@ -140,6 +106,7 @@ export class RegisterComponent {
           }, 5000);
         }
       );
+
   }
 
 }

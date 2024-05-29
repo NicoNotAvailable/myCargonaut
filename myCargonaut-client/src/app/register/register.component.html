@@ -161,23 +161,7 @@
 
 
         <div class="row mt-4">
-          <div class="col-12 col-lg-6 mt-2">
-            <div class="row">
-              <p>Dein Profilbild</p>
-            </div>
-            <div class="row flex-column align-content-center">
-              <img rel="icon" [src]="profilePicRoute  || '../../assets/person-circle.svg'" id="profilePic">
 
-              <input type="file" (change)="onFileSelected($event)" class="form-control-file">
-
-
-              <div class="col-3">
-                <button type="button" class="btn btn-primary mt-2 mb-4" (click)="uploadFile()">Hochladen</button>
-              </div>
-
-
-            </div>
-          </div>
           <div class="col-12 col-lg-6 mt-2 ">
             <div class="form-group">
               <input [(ngModel)]="phonenumber" type="text" class="form-control" required name="phonenumber"
