@@ -10,7 +10,19 @@
           !emailMatchError &&
           !passwordMatchError &&
 
-          addUser(form) " #form="ngForm" >
+
+
+          addUser(form) " #form="ngForm"
+
+        (ngSubmit)="agbInput.invalid && checkAGB()"
+
+        (ngSubmit)="(firstNameInput.invalid ||
+         lastNameInput.invalid ||
+         emailInput.invalid ||
+         emailConfirmInput.invalid ||
+         passwordInput.invalid ||
+         passwordConfirmInput.invalid  )&& checkInputs()"
+  >
     <div class="row mt-3 flex-row justify-content-center">
 
       <div class="col-10 col-md-8 col-lg-6 text-center m-5" id="registerField">
@@ -78,7 +90,8 @@
         <div class="row mt-3">
           <div class="col-12 col-lg-6 mt-2">
             <div class="form-group">
-              <input [(ngModel)]="password" #passwordInput="ngModel" type="password" class="form-control" name="password"
+              <input [(ngModel)]="password" #passwordInput="ngModel" type="password" class="form-control"
+                     name="password"
                      required placeholder="*Passwort - min. 8 Zeichen" (input)="validatePasswordConfirmation()">
               <div *ngIf="passwordInput.invalid && (passwordInput.dirty || passwordInput.touched)"
                    class="text-danger">
@@ -92,7 +105,8 @@
             <div class="form-group">
               <input [(ngModel)]="passwordConfirm" #passwordConfirmInput="ngModel" type="password" class="form-control"
                      name="passwordConfirm"
-                     required placeholder="*Passwort bestätigen - min. 8 Zeichen" (input)="validatePasswordConfirmation()">
+                     required placeholder="*Passwort bestätigen - min. 8 Zeichen"
+                     (input)="validatePasswordConfirmation()">
               <div *ngIf="passwordConfirmInput.invalid && (passwordConfirmInput.dirty || passwordConfirmInput.touched)"
                    class="text-danger">
                 <div *ngIf="passwordConfirmInput.errors && passwordConfirmInput.errors['required']">
@@ -113,7 +127,7 @@
               <div class="input-group">
                 <input
 
-                  (input) = "showInputDate()"
+                  (input)="showInputDate()"
                   class="form-control"
                   placeholder="yyyy-mm-dd"
                   name="dp"
@@ -175,7 +189,7 @@
         <div class="row flex-row justify-content-end align-content-end">
           <div class="col-12 col-lg-3 mt-3">
             <button class="btn btn-primary" type="submit">Registrieren</button>
-            <p>{{message}}</p>
+            <p>{{ message }}</p>
           </div>
 
         </div>

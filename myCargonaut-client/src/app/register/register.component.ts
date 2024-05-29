@@ -94,6 +94,7 @@ export class RegisterComponent {
 
         },
         error => {
+
           console.error('There was an error!', error);
           this.message = error.error.message || "Bitte überprüfen Sie die Eingabe";
           setTimeout(() => {
@@ -102,6 +103,20 @@ export class RegisterComponent {
         }
       );
 
+  }
+
+  checkAGB(){
+    this.message = "Bitte akzeptieren Sie die AGBs";
+    setTimeout(() => {
+      this.message = '';
+    }, 5000);
+  }
+
+  checkInputs(){
+    this.message = "Bitte füllen Sie alle Pflichfelder aus";
+    setTimeout(() => {
+      this.message = '';
+    }, 5000);
   }
 
 }
