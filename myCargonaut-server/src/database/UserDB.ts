@@ -27,7 +27,7 @@ export class UserDB {
   @Column()
   lastName: string;
 
-  @Column({ nullable: true })
+  @Column()
   birthday: Date;
 
   @Column({ nullable: true })
