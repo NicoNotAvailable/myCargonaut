@@ -73,6 +73,7 @@ export class UserController {
       );
     }
     try {
+      const profilePic = file ? file.filename : 'empty.png';
       await this.userService.createUser(
         body.firstName,
         body.lastName,
@@ -80,11 +81,11 @@ export class UserController {
         body.password,
         body.birthday,
         body.phoneNumber,
-        file.filename,
+        profilePic,
       );
       return new OkDTO(true, 'User was created');
     } catch (err) {
-      throw new BadRequestException('E-Mail gibt es schon');
+      throw new BadRequestException('Es ist ein Fehler aufgetreten');
     }
   }
 }
