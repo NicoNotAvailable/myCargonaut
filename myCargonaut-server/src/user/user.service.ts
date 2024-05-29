@@ -16,6 +16,8 @@ export class UserService {
     email: string,
     password: string,
     birthday: Date,
+    phoneNumber?: number,
+    profilePic?: string,
   ): Promise<UserDB> {
     const newUser: UserDB = this.userRepository.create();
     const checkUser: UserDB = await this.userRepository.findOne({
@@ -29,6 +31,8 @@ export class UserService {
     newUser.email = email;
     newUser.password = password;
     newUser.birthday = birthday;
+    newUser.phoneNumber = phoneNumber;
+    newUser.profilePic = profilePic;
     return await this.userRepository.save(newUser);
   }
 }

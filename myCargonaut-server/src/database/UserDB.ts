@@ -4,7 +4,10 @@ import {
   PrimaryGeneratedColumn,
   OneToMany,
   Index,
+  BeforeUpdate,
+  BeforeInsert,
 } from 'typeorm';
+import * as bcrypt from 'bcryptjs';
 import { VehicleDB } from './VehicleDB';
 import { TripDB } from './TripDB';
 import { ReviewDB } from './ReviewDB';
@@ -33,7 +36,7 @@ export class UserDB {
   @Column({ nullable: true })
   phoneNumber: number;
 
-  @Column({ nullable: true })
+  @Column({ default: 'empty.png' })
   profilePic: string;
 
   @Column({ nullable: true })
@@ -50,4 +53,12 @@ export class UserDB {
 
   @OneToMany(() => ReviewDB, (review) => review.writer)
   writtenReviews: Promise<ReviewDB[]>;
+
+  @BeforeInsert()
+  @BeforeUpdate()
+  async hashPassword() {
+    if (this.password) {
+      this.password = await bcrypt.hash(this.password, 10);
+    }
+  }
 }
