@@ -11,9 +11,10 @@ export class UserService {
     private userRepository: Repository<UserDB>,
   ) {}
 
-  private isValidGermanMobileNumber(phoneNumber: string): boolean {
-    const germanMobileNumberRegex = /^(?:\+49|0)(1[5-7][0-9]|160|162|163|170|171|175|176|177|178|179)(\d{7,8})$/;
-    return germanMobileNumberRegex.test(phoneNumber);
+  private isValidMobileNumber(phoneNumber: string): boolean {
+    // Regular expression for validating mobile numbers
+    const mobileNumberRegex = /^[+]?\d{1,3}?[-\s.]?\d{3,14}[-\s.]?\d{3,14}$/;
+    return mobileNumberRegex.test(phoneNumber);
   }
 
   private isUserAdult(birthday: Date): boolean {
@@ -58,7 +59,7 @@ export class UserService {
     }
 
     // Validate phone number if provided
-    if (phoneNumber && !this.isValidGermanMobileNumber(phoneNumber)) {
+    if (phoneNumber && !this.isValidMobileNumber(phoneNumber)) {
       throw new BadRequestException('Invalid German mobile number');
     }
 

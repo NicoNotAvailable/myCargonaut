@@ -5,6 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserService } from './user.service';
 import * as fs from 'fs/promises';
 import { CreateUserDTO } from './DTO/CreateUserDTO';
+import { BadRequestException } from '@nestjs/common';
 
 describe('UserController', () => {
   let controller: UserController;
@@ -52,11 +53,65 @@ describe('UserController', () => {
       passwordConfirm: 'securepassword',
       agb: true,
       birthday: new Date('2000-01-01'),
-      phoneNumber: '1234567890',
+      phoneNumber: '0800555555',
     };
 
     const response = await controller.createUser(null, dto);
     expect(response.ok).toBe(true);
     expect(response.message).toBe('User was created');
   });
+
+  it('should throw an error for an existing email', async () => {
+    const body = {
+      firstName: 'Jane',
+      lastName: 'Doe',
+      email: 'john.doe@example.com',
+      emailConfirm: 'john.doe@example.com',
+      password: 'password123',
+      passwordConfirm: 'password123',
+      birthday: new Date('1990-01-01'),
+      agb: true,
+      phoneNumber: '0800555555',
+    };
+    await expect(controller.createUser(null, body)).rejects.toThrow(
+      BadRequestException,
+    );
+  });
+
+  it('should throw an error for a password shorter than 8 characters', async () => {
+    const body = {
+      firstName: 'Jane',
+      lastName: 'Doe',
+      email: 'jane.doe@example.com',
+      emailConfirm: 'john.doe@example.com',
+      password: 'short',
+      passwordConfirm: 'short',
+      birthday: new Date('1990-01-01'),
+      agb: true,
+      phoneNumber: '08005555555',
+    };
+    await expect(controller.createUser(null, body)).rejects.toThrow(
+      BadRequestException,
+    );
+  });
+
+  it('should throw an error for an invalid phone number', async () => {
+    const body = {
+      firstName: 'Jane',
+      lastName: 'Doe',
+      email: 'jane.doe@example.com',
+      emailConfirm: 'john.doe@example.com',
+      password: 'password123',
+      passwordConfirm: 'password123',
+      birthday: new Date('1990-01-01'),
+      phoneNumber: '12345',
+      agb: true,
+    };
+    await expect(controller.createUser(null, body)).rejects.toThrow(
+      BadRequestException,
+    );
+  });
+
+
+
 });
