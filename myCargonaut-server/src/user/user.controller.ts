@@ -19,6 +19,11 @@ export class UserController {
   @ApiResponse({ type: OkDTO, description: 'creates a new user' })
   @Post()
   async createUser(@Body() body: CreateUserDTO) {
+    if (body.agb == false) {
+      throw new BadRequestException(
+        'Du musst die AGB akzeptieren, um dich zu registrieren',
+      );
+    }
     if (body.password.trim() === '' || body.password.trim().length == 0) {
       throw new BadRequestException('Passwort darf nicht leer sein');
     }
@@ -27,8 +32,14 @@ export class UserController {
         'Passwort muss mindestens 8 Zeichen lang sein',
       );
     }
+    if (body.password != body.password) {
+      throw new BadRequestException('Passwort muss übereinstimmen');
+    }
     if (body.email.trim().length == 0 || body.email.trim() === '') {
       throw new BadRequestException('Email darf nicht leer sein');
+    }
+    if (body.email != body.emailConfirm) {
+      throw new BadRequestException('Email muss übereinstimmen');
     }
     if (body.firstName.trim().length == 0 || body.firstName.trim() === '') {
       throw new BadRequestException('Vorname darf nicht leer sein');
@@ -38,7 +49,7 @@ export class UserController {
     }
     if (!isUserAdult(body.birthday)) {
       throw new BadRequestException(
-        'User must be at least 18 years old to register',
+        'Du musst mindestens 18 Jahre alt sein, um dich zu registrieren',
       );
     }
     try {
