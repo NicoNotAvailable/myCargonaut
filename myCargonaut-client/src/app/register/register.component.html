@@ -1,69 +1,139 @@
 <div class="container-fluid">
   <div class="row">
-    <form (submit)="addUser($event)">
+    <form (submit)="!firstNameInput.invalid &&
+         !lastNameInput.invalid &&
+         !emailInput.invalid &&
+         !emailConfirmInput.invalid &&
+         !passwordInput.invalid &&
+         !passwordConfirmInput.invalid &&
+         !birthdateInput.invalid &&
+         !agbInput.invalid &&
+          !emailMatchError &&
+          !passwordMatchError &&
+
+          addUser($event)">
       <div class="col-2"></div>
       <div class="col-8">
         <p>Für die Registrierung brauchen wir nur noch folgende Daten:</p>
         <div class="row m-4">
           <div class="col-6">
             <div class="form-group">
-              <input [(ngModel)]="firstName" type="text" class="form-control" name="firstName" required
-                     placeholder="*Vorname">
+              <input [(ngModel)]="firstName" #firstNameInput="ngModel" type="text" class="form-control" name="firstName"
+                     required placeholder="*Vorname">
+              <div *ngIf="firstNameInput.invalid && (firstNameInput.dirty || firstNameInput.touched)"
+                   class="text-danger">
+                <div *ngIf="firstNameInput.errors && firstNameInput.errors['required']">
+                  Vorname ist erforderlich.
+                </div>
+              </div>
             </div>
+
+
           </div>
           <div class="col-6">
             <div class="form-group">
-              <input [(ngModel)]="lastName" type="text" class="form-control" required name="lastName"
-                     placeholder="*Nachname">
-            </div>
-          </div>
-        </div>
-        <div class="row m-4">
-          <div class="col-6">
-            <div class="form-group">
-              <input [(ngModel)]="email" type="text" class="form-control" required name="email"
-                     placeholder="*Email-Adresse">
-            </div>
-          </div>
-          <div class="col-6">
-            <div class="form-group">
-              <input [(ngModel)]="emailConfirm" type="text" class="form-control" required name="emailConfirm"
-                     placeholder="*Email-Adresse bestätigen">
-            </div>
-          </div>
-        </div>
-        <div class="row m-4">
-          <div class="col-6">
-            <div class="form-group">
-              <input [(ngModel)]="password" type="text" class="form-control" required name="password"
-                     placeholder="*Passwort">
-            </div>
-          </div>
-          <div class="col-6">
-            <div class="form-group">
-              <input [(ngModel)]="passwordConfirm" type="text" class="form-control" required name="passwordConfirm"
-                     placeholder="*Passwort bestätigen">
+              <input [(ngModel)]="lastName" #lastNameInput="ngModel" type="text" class="form-control" name="lastName"
+                     required placeholder="*Nachname">
+              <div *ngIf="lastNameInput.invalid && (lastNameInput.dirty || lastNameInput.touched)"
+                   class="text-danger">
+                <div *ngIf="lastNameInput.errors && lastNameInput.errors['required']">
+                  Nachname ist erforderlich.
+                </div>
+              </div>
             </div>
           </div>
         </div>
         <div class="row m-4">
           <div class="col-6">
             <div class="form-group">
-              <input [(ngModel)]="birthdate" type="text" class="form-control" required name="birthdate"
-                     placeholder="*Geburtsdatum">
+              <input [(ngModel)]="email" #emailInput="ngModel" type="text" class="form-control" name="email"
+                     required placeholder="*E-Mail Adresse" (input)="validateEmailConfirmation()">
+              <div *ngIf="emailInput.invalid && (emailInput.dirty || emailInput.touched)"
+                   class="text-danger">
+                <div *ngIf="emailInput.errors && emailInput.errors['required']">
+                  E-Mail Adresse ist erforderlich.
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="form-group">
+              <input [(ngModel)]="emailConfirm" #emailConfirmInput="ngModel" type="email" class="form-control" name="emailConfirm"
+                     required placeholder="*E-Mail Adresse bestätigen" (input)="validateEmailConfirmation()">
+              <div *ngIf="emailConfirmInput.invalid && (emailConfirmInput.dirty || emailConfirmInput.touched)"
+                   class="text-danger">
+                <div *ngIf="emailConfirmInput.errors && emailConfirmInput.errors['required']">
+                  E-Mail Adresse ist erforderlich.
+                </div>
+              </div>
+
+              <div *ngIf="emailMatchError" class="text-danger">
+                Die E-Mail Adressen stimmen nicht überein.
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row m-4">
+          <div class="col-6">
+            <div class="form-group">
+              <input [(ngModel)]="password" #passwordInput="ngModel" type="text" class="form-control" name="password"
+                     required placeholder="*Passwort" (input)="validatePasswordConfirmation()">
+              <div *ngIf="passwordInput.invalid && (passwordInput.dirty || passwordInput.touched)"
+                   class="text-danger">
+                <div *ngIf="passwordInput.errors && passwordInput.errors['required']">
+                  Passwort ist erforderlich.
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="form-group">
+              <input [(ngModel)]="passwordConfirm" #passwordConfirmInput="ngModel" type="email" class="form-control" name="passwordConfirm"
+                     required placeholder="*Passwort bestätigen" (input)="validatePasswordConfirmation()">
+              <div *ngIf="passwordConfirmInput.invalid && (passwordConfirmInput.dirty || passwordConfirmInput.touched)"
+                   class="text-danger">
+                <div *ngIf="passwordConfirmInput.errors && passwordConfirmInput.errors['required']">
+                  Passwort ist erforderlich.
+                </div>
+              </div>
+
+              <div *ngIf="passwordMatchError" class="text-danger">
+                Die Passwörter stimmen nicht überein.
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row m-4">
+          <div class="col-6">
+            <div class="form-group">
+              <input [(ngModel)]="birthdate" #birthdateInput="ngModel" type="text" class="form-control" name="birthdate"
+                     required placeholder="*Geburtstag" >
+              <div *ngIf="birthdateInput.invalid && (birthdateInput.dirty || birthdateInput.touched)"
+                   class="text-danger">
+                <div *ngIf="birthdateInput.errors && birthdateInput.errors['required']">
+                  Geburstag ist erforderlich.
+                </div>
+              </div>
             </div>
 
           </div>
           <div class="col-6">
             <div class="form-check">
-              <input [(ngModel)]="agb" class="form-check-input" type="checkbox" value="" id="agb" name="agb" required>
+              <input [(ngModel)]="agb" #agbInput="ngModel" class="form-check-input" type="checkbox" value="" id="agb" name="agb" required>
               <label class="form-check-label" for="agb">
                 Ich stimme der AGB und der Datenschutzerklärung zu
                 und bestätige, dass ich zur Nutzung dieses Services
                 mind. 18 Jahre alt bin
               </label>
+              <div *ngIf="agbInput.invalid && (agbInput.dirty || agbInput.touched)"
+                   class="text-danger">
+                <div *ngIf="agbInput.errors && agbInput.errors['required']">
+                  Die Bestätigung der AGB ist erforderlich.
+                </div>
+              </div>
             </div>
           </div>
+
         </div>
 
         <div class="row"></div>
@@ -74,7 +144,7 @@
               <p>Dein Profilbild</p>
             </div>
             <div class="row">
-              <img rel="icon" src="../../assets/person-circle.svg">
+              <img rel="icon" [src]="profilePicRoute  || '../../assets/person-circle.svg'">
             </div>
           </div>
           <div class="col-6">

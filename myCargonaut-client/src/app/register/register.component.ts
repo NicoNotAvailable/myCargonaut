@@ -1,6 +1,7 @@
 import {Component} from '@angular/core';
 import {FormsModule} from "@angular/forms";
 import {HTTP_INTERCEPTORS, HttpClient, HttpClientModule} from '@angular/common/http';
+import {NgIf} from "@angular/common";
 
 
 @Component({
@@ -9,6 +10,7 @@ import {HTTP_INTERCEPTORS, HttpClient, HttpClientModule} from '@angular/common/h
   imports: [
     FormsModule,
     HttpClientModule,
+    NgIf,
   ],
   templateUrl: './register.component.html',
   styleUrl: './register.component.css'
@@ -32,14 +34,35 @@ export class RegisterComponent {
 
   }
 
+
+  emailMatchError: boolean = false;
+  passwordMatchError: boolean = false;
+
+
+  validateEmailConfirmation() {
+    if (this.email !== this.emailConfirm) {
+      this.emailMatchError = true;
+    } else {
+      this.emailMatchError = false;
+    }
+  }
+
+
+  validatePasswordConfirmation() {
+    if (this.password !== this.passwordConfirm) {
+      this.passwordMatchError = true;
+    } else {
+      this.passwordMatchError = false;
+    }
+  }
+
+
   onFileSelected(event: any): void {
     this.selectedFile = event.target.files[0];
   }
 
 
   uploadFile(): void {
-    console.log(this.selectedFile);
-
     if (this.selectedFile) {
       const formData = new FormData();
       formData.append('file', this.selectedFile);
