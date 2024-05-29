@@ -37,7 +37,7 @@ export class UserDB {
 
   @Column({ nullable: true })
   @IsPhoneNumber()
-  phoneNumber: number;
+  phoneNumber: string;
 
   @Column({ default: 'empty.png' })
   profilePic: string;

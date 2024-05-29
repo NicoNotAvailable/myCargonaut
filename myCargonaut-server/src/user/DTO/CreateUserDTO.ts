@@ -52,5 +52,5 @@ export class CreateUserDTO {
 
   @ApiProperty()
   @IsNumber()
-  phoneNumber: number;
+  phoneNumber: string;
 }

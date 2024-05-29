@@ -39,7 +39,7 @@ export class UserController {
     @UploadedFile() file: Express.Multer.File,
     @Body() body: CreateUserDTO,
   ) {
-    if (body.agb == false) {
+    if (!body.agb) {
       throw new BadRequestException(
         'Du musst die AGB akzeptieren, um dich zu registrieren',
       );
@@ -52,7 +52,7 @@ export class UserController {
         'Passwort muss mindestens 8 Zeichen lang sein',
       );
     }
-    if (body.password != body.password) {
+    if (body.password != body.passwordConfirm) {
       throw new BadRequestException('Passwort muss übereinstimmen');
     }
     if (body.email.trim().length == 0 || body.email.trim() === '') {
@@ -92,14 +92,14 @@ export class UserController {
 
 function isUserAdult(birthday: Date): boolean {
   const today = new Date();
-  const birthDate = new Date(birthday);
-  let age = today.getFullYear() - birthDate.getFullYear();
-  const monthDifference = today.getMonth() - birthDate.getMonth();
+
+  let age = today.getFullYear() - birthday.getFullYear();
+  const monthDifference = today.getMonth() - birthday.getMonth();
 
   // Adjust age if the birth month hasn't been reached yet this year
   if (
     monthDifference < 0 ||
-    (monthDifference === 0 && today.getDate() < birthDate.getDate())
+    (monthDifference === 0 && today.getDate() < birthday.getDate())
   ) {
     age--;
   }

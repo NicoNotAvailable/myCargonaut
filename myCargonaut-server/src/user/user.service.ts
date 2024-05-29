@@ -16,7 +16,7 @@ export class UserService {
     email: string,
     password: string,
     birthday: Date,
-    phoneNumber?: number,
+    phoneNumber?: string,
     profilePic?: string,
   ): Promise<UserDB> {
     const newUser: UserDB = this.userRepository.create();
