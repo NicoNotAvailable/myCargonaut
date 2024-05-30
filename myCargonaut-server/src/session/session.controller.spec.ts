@@ -3,18 +3,26 @@ import { SessionController } from './session.controller';
 import { databaseTest, tables } from '../../testDatabase/databaseTest';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import fs from 'fs/promises';
+import { UserService } from '../user/user.service';
+import { CreateUserDTO } from '../user/DTO/CreateUserDTO';
+import { OkDTO } from '../serverDTO/OkDTO';
+import { UserController } from '../user/user.controller';
+import { LoginDTO } from './DTO/LoginDTO';
+import { SessionData } from 'express-session';
 
 describe('SessionController', () => {
   let controller: SessionController;
+  let userController: UserController;
   let module: TestingModule;
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     module = await Test.createTestingModule({
       imports: [
         databaseTest('./testDatabase/dbTest.sqlite'),
         TypeOrmModule.forFeature(tables),
       ],
-      controllers: [SessionController],
+      controllers: [SessionController, UserController],
+      providers: [UserService],
     }).compile();
 
     controller = module.get<SessionController>(SessionController);
@@ -36,6 +44,53 @@ describe('SessionController', () => {
       console.log('Test database file removed');
     } catch (err) {
       console.error('Error removing test database file:', err);
+    }
+  });
+
+  it('should login an user succesfully', async () => {
+    const newUserData: CreateUserDTO = {
+      firstName: 'John',
+      lastName: 'Doe',
+      email: 'john.doe@example.com',
+      emailConfirm: 'john.doe@example.com',
+      password: 'securepassword',
+      passwordConfirm: 'securepassword',
+      agb: true,
+      birthday: new Date('2000-01-01'),
+      phoneNumber: '0800555555',
+    };
+
+    try {
+      const createRes: OkDTO = await userController.createUser(
+        null,
+        newUserData,
+      );
+      if (createRes) {
+        const loginUserData: LoginDTO = {
+          email: newUserData.email,
+          password: newUserData.password,
+        };
+        const mockSession: SessionData = {
+          cookie: {
+            originalMaxAge: null,
+            expires: null,
+            secure: false,
+            httpOnly: true,
+            path: '/',
+            sameSite: 'lax',
+          },
+          currentUser: null,
+        };
+
+        const loginRes: OkDTO = await controller.loginUser(
+          mockSession,
+          loginUserData,
+        );
+        expect(loginRes.ok).toBe(true);
+        expect(loginRes.message).toBe('User was logged in');
+      }
+    } catch (err) {
+      console.error('Error creating user');
     }
   });
 });
