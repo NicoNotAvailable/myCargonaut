@@ -21,6 +21,16 @@ export class SessionController {
     @InjectRepository(UserDB)
     private readonly userRepo: Repository<UserDB>,
   ) {}
+
+  /*
+   * sets the user, that logged in via the corresponding Login-Formular as the currentUser in the session
+   * @Pre user has already a registered account
+   * @Param username: the unique username that has been set when registering
+   * @Param password: the password that matches with the password of the unique username in the Database
+   * @Return LoginUserDTO which combines the important attributes when logging in an user
+   * @Error if the password or email is empty
+   * @Error if the password and username do not match
+   */
   @Post('login')
   async loginUser(
     @Session() session: SessionData,
