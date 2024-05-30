@@ -9,6 +9,7 @@ import { OkDTO } from '../serverDTO/OkDTO';
 import { UserController } from '../user/user.controller';
 import { LoginDTO } from './DTO/LoginDTO';
 import { SessionData } from 'express-session';
+import { BadRequestException, UnauthorizedException } from '@nestjs/common';
 
 describe('SessionController', () => {
   let controller: SessionController;
@@ -88,6 +89,94 @@ describe('SessionController', () => {
         );
         expect(loginRes.ok).toBe(true);
         expect(loginRes.message).toBe('User was logged in');
+      }
+    } catch (err) {
+      console.error('Error creating user');
+    }
+  });
+
+  it('should throw an error for blank inputs', async () => {
+    const newUserData: CreateUserDTO = {
+      firstName: 'John',
+      lastName: 'Doe',
+      email: 'john.doe@example.com',
+      emailConfirm: 'john.doe@example.com',
+      password: 'securepassword',
+      passwordConfirm: 'securepassword',
+      agb: true,
+      birthday: new Date('2000-01-01'),
+      phoneNumber: '0800555555',
+    };
+
+    try {
+      const createRes: OkDTO = await userController.createUser(
+        null,
+        newUserData,
+      );
+      if (createRes) {
+        const loginUserData: LoginDTO = {
+          email: '',
+          password: '',
+        };
+        const mockSession: SessionData = {
+          cookie: {
+            originalMaxAge: null,
+            expires: null,
+            secure: false,
+            httpOnly: true,
+            path: '/',
+            sameSite: 'lax',
+          },
+          currentUser: null,
+        };
+
+        await expect(
+          controller.loginUser(mockSession, loginUserData),
+        ).rejects.toThrow(BadRequestException);
+      }
+    } catch (err) {
+      console.error('Error creating user');
+    }
+  });
+
+  it('should throw an error for mismatching data', async () => {
+    const newUserData: CreateUserDTO = {
+      firstName: 'John',
+      lastName: 'Doe',
+      email: 'john.doe@example.com',
+      emailConfirm: 'john.doe@example.com',
+      password: 'securepassword',
+      passwordConfirm: 'securepassword',
+      agb: true,
+      birthday: new Date('2000-01-01'),
+      phoneNumber: '0800555555',
+    };
+
+    try {
+      const createRes: OkDTO = await userController.createUser(
+        null,
+        newUserData,
+      );
+      if (createRes) {
+        const loginUserData: LoginDTO = {
+          email: 'john.doe@exm.de',
+          password: '123456789',
+        };
+        const mockSession: SessionData = {
+          cookie: {
+            originalMaxAge: null,
+            expires: null,
+            secure: false,
+            httpOnly: true,
+            path: '/',
+            sameSite: 'lax',
+          },
+          currentUser: null,
+        };
+
+        await expect(
+          controller.loginUser(mockSession, loginUserData),
+        ).rejects.toThrow(UnauthorizedException);
       }
     } catch (err) {
       console.error('Error creating user');

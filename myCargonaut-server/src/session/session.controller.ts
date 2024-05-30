@@ -4,6 +4,7 @@ import {
   Post,
   UnauthorizedException,
   Session,
+  BadRequestException,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { UserDB } from '../database/UserDB';
@@ -37,7 +38,7 @@ export class SessionController {
     @Body() body: LoginDTO,
   ): Promise<OkDTO> {
     if (body.password === '' || body.email === '') {
-      throw new UnauthorizedException('Felder müssen ausgefüllt sein');
+      throw new BadRequestException('Felder müssen ausgefüllt sein');
     }
     const loggedUser: LoginUserDTO = await this.userRepo.findOneBy({
       email: body.email,
