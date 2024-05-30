@@ -1,0 +1,14 @@
+html{
+  background-color: azure;
+  font-family: Roboto, sans-serif;
+}
+
+.customButton{
+  background-color: #005B52;
+  color: azure;
+  font-weight: bold;
+  border-radius: 15px;
+}
+.customButton:hover, .customButton:active, .customButton:focus{
+  box-shadow: 0 0 20px #005B52;
+}
