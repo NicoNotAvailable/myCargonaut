@@ -103,8 +103,8 @@ export class UserController {
       await this.userService.createUser(
         body.firstName,
         body.lastName,
-        body.email,
-        body.password,
+        body.email.trim(),
+        body.password.trim(),
         birthday,
         body.phoneNumber,
         profilePic,
@@ -150,7 +150,7 @@ export class UserController {
 
   @ApiResponse({
     type: OkDTO,
-    description: 'updates a specifics user password by their id',
+    description: 'updates a specifics user email by their id',
   })
   @Put()
   @ApiBearerAuth()
@@ -164,10 +164,10 @@ export class UserController {
     if (body.password.trim() != user.password.trim()) {
       throw new BadRequestException('Aktuelles Passwort ist falsch');
     }
-    if (body.newEmail.trim().length == 0 || body.newEmail.trim() === '') {
+    if (body.Email.trim().length == 0 || body.Email.trim() === '') {
       throw new BadRequestException('Email darf nicht leer sein');
     }
-    if (body.newEmail != body.newEmailConfirm) {
+    if (body.Email != body.EmailConfirm) {
       throw new BadRequestException('Email muss übereinstimmen');
     }
     await this.userService.updateUser(user);

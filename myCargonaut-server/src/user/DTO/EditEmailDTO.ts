@@ -11,11 +11,11 @@ export class EditEmailDTO {
   @IsString()
   @IsNotEmpty()
   @IsEmail()
-  newEmail: string;
+  Email: string;
 
   @ApiProperty()
   @IsString()
   @IsNotEmpty()
   @IsEmail()
-  newEmailConfirm: string;
+  EmailConfirm: string;
 }
