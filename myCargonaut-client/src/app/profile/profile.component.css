@@ -1,0 +1,24 @@
+.textGreen {
+  color: #005B52;
+}
+
+.backgroundGreen {
+  background-color: #005B52;
+}
+
+input:disabled {
+  color: white;
+}
+
+.circle {
+  width: 125px;
+  height: 125px;
+  border-radius: 50%;
+}
+
+.inputSize {
+  width: 500px;
+  height: 250px;
+}
+
+
