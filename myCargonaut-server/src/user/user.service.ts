@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {BadRequestException, Injectable, NotFoundException} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UserDB } from '../database/UserDB';
@@ -19,6 +19,15 @@ export class UserService {
 
   private isValidEmail(email: string): boolean {
     return validator.isEmail(email);
+  }
+
+  // gets a single user from the database by their ID
+  async getUserById(id: number): Promise<UserDB> {
+    const user = await this.userRepository.findOne({ where: { id } });
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+    return user;
   }
 
   async createUser(
@@ -64,5 +73,9 @@ export class UserService {
     newUser.phoneNumber = phoneNumber;
     newUser.profilePic = profilePic;
     return this.userRepository.save(newUser);
+  }
+
+  async updateUser(userData: UserDB): Promise<UserDB> {
+    return this.userRepository.save(userData);
   }
 }

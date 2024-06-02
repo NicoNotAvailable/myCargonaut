@@ -4,16 +4,23 @@ import {
   Controller,
   Logger,
   Post,
+  Put,
+  Session,
   UploadedFile,
+  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
-import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { UserService } from './user.service';
 import { CreateUserDTO } from './DTO/CreateUserDTO';
 import { OkDTO } from '../serverDTO/OkDTO';
 import { extname } from 'path';
 import { diskStorage } from 'multer';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { EditPasswordDTO } from './DTO/EditPasswordDTO';
+import { EditEmailDTO } from './DTO/EditEmailDTO';
+import { SessionData } from 'express-session';
+import { IsLoggedInGuard } from '../session/is-logged-in.guard';
 
 @ApiTags('user')
 @Controller('user')
@@ -57,7 +64,6 @@ export class UserController {
     @UploadedFile() file: Express.Multer.File,
     @Body() body: CreateUserDTO,
   ) {
-    this.logger.debug('Received createUser request with body:', body);
     if (!body.agb) {
       throw new BadRequestException(
         'Du musst die AGB akzeptieren, um dich zu registrieren',
@@ -109,5 +115,62 @@ export class UserController {
 
       throw new BadRequestException('Es ist ein Fehler aufgetreten');
     }
+  }
+
+  @ApiResponse({
+    type: OkDTO,
+    description: 'updates a specifics user password by their id',
+  })
+  @Put()
+  @ApiBearerAuth()
+  @UseGuards(IsLoggedInGuard)
+  async updatePassword(
+    @Session() session: SessionData,
+    @Body() body: EditPasswordDTO,
+  ): Promise<OkDTO> {
+    const id = session.currentUser;
+    const user = await this.userService.getUserById(id);
+    if (body.password.trim() != user.password.trim()) {
+      throw new BadRequestException('Aktuelles Passwort ist falsch');
+    }
+    if (body.newPassword.trim() === '' || body.newPassword.trim().length == 0) {
+      throw new BadRequestException('Neues Passwort darf nicht leer sein');
+    }
+    if (body.newPassword.trim().length < 8) {
+      throw new BadRequestException(
+        'Neues Passwort muss mindestens 8 Zeichen lang sein',
+      );
+    }
+    if (body.newPassword != body.newPasswordConfirm) {
+      throw new BadRequestException('Neues Passwort muss übereinstimmen');
+    }
+    await this.userService.updateUser(user);
+    return new OkDTO(true, 'User was updated');
+  }
+
+  @ApiResponse({
+    type: OkDTO,
+    description: 'updates a specifics user password by their id',
+  })
+  @Put()
+  @ApiBearerAuth()
+  @UseGuards(IsLoggedInGuard)
+  async updateEmail(
+    @Session() session: SessionData,
+    @Body() body: EditEmailDTO,
+  ): Promise<OkDTO> {
+    const id = session.currentUser;
+    const user = await this.userService.getUserById(id);
+    if (body.password.trim() != user.password.trim()) {
+      throw new BadRequestException('Aktuelles Passwort ist falsch');
+    }
+    if (body.newEmail.trim().length == 0 || body.newEmail.trim() === '') {
+      throw new BadRequestException('Email darf nicht leer sein');
+    }
+    if (body.newEmail != body.newEmailConfirm) {
+      throw new BadRequestException('Email muss übereinstimmen');
+    }
+    await this.userService.updateUser(user);
+    return new OkDTO(true, 'User was updated');
   }
 }
