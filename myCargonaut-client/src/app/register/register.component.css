@@ -1,28 +1,30 @@
 #registerField {
   background-color: #fff;
-  box-shadow: 0px 0px 20px #005B52;
-  border: 1px solid #ddd;
   margin-bottom: 10px;
   border-radius: 20px;
   padding-right: 7%;
   padding-left: 7%;
   padding-top: 3%;
   padding-bottom: 3%;
-  }
+  transition: all 0.4s ease;
+}
+#registerField:hover{
+  box-shadow: 0px 0px 20px #005B52;
+}
 
-.form-control{
+.form-control {
 
-  border: 1px solid #005B52;
+  border: 0.1rem solid #005B52;
   border-radius: 15px;
 
 }
 
-#divLine{
+#divLine {
   border: 1px solid #000;
   margin: 20px;
 }
 
-#profilePic{
+#profilePic {
   width: 200px;
   height: 200px;
 }
