@@ -6,7 +6,6 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UserDB } from '../database/UserDB';
-import * as validator from 'validator';
 
 @Injectable()
 export class UserService {
