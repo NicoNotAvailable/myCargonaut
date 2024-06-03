@@ -21,6 +21,7 @@ import { EditPasswordDTO } from './DTO/EditPasswordDTO';
 import { EditEmailDTO } from './DTO/EditEmailDTO';
 import { SessionData } from 'express-session';
 import { IsLoggedInGuard } from '../session/is-logged-in.guard';
+import {EditUserDTO} from "./DTO/EditUserDTO";
 
 @ApiTags('user')
 @Controller('user')
@@ -188,9 +189,6 @@ export class UserController {
   ): Promise<OkDTO> {
     const id = session.currentUser;
     const user = await this.userService.getUserById(id);
-    if (body.password.trim() != user.password.trim()) {
-      throw new BadRequestException('Aktuelles Passwort ist falsch');
-    }
     if (body.newEmail.trim().length == 0 || body.newEmail.trim() === '') {
       throw new BadRequestException('Email darf nicht leer sein');
     }
@@ -201,4 +199,22 @@ export class UserController {
     await this.userService.updateUser(user);
     return new OkDTO(true, 'User was updated');
   }
+
+  @ApiResponse({
+    type: OkDTO,
+    description: 'updates a specifics user details',
+  })
+  @Put()
+  @ApiBearerAuth()
+  @UseGuards(IsLoggedInGuard)
+  async updateUser(
+    @Session() session: SessionData,
+    @Body() body: EditUserDTO,
+  ): Promise<OkDTO> {
+    const id = session.currentUser;
+    const user = await this.userService.getUserById(id);
+    if(body.phoneNumber &&)
+  }
+
+
 }

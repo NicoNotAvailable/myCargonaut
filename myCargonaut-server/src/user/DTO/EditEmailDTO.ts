@@ -5,11 +5,6 @@ export class EditEmailDTO {
   @ApiProperty()
   @IsString()
   @IsNotEmpty()
-  password: string;
-
-  @ApiProperty()
-  @IsString()
-  @IsNotEmpty()
   @IsEmail()
   newEmail: string;
 
