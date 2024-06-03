@@ -15,6 +15,9 @@ export class ChatDB {
   @Column()
   message: string;
 
+  @Column()
+  read: boolean;
+
   @Column({ default: new Date().toISOString() })
   timestamp: string;
 }
