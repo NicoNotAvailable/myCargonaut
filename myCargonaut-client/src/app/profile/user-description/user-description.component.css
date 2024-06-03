@@ -1,0 +1,19 @@
+.circle {
+  border-radius: 50%;
+}
+
+.editButton {
+  background-color: #1A9CC5;
+}
+
+.textareaSize {
+  height: 250px;
+}
+
+.backgroundGreen {
+  background-color: #005B52;
+}
+
+.textGreen {
+  color: #005B52;
+}
