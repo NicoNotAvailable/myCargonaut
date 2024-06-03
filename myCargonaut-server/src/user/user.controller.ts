@@ -10,7 +10,12 @@ import {
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
-import {ApiBearerAuth, ApiConsumes, ApiResponse, ApiTags} from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiConsumes,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { UserService } from './user.service';
 import { CreateUserDTO } from './DTO/CreateUserDTO';
 import { OkDTO } from '../serverDTO/OkDTO';
@@ -21,7 +26,8 @@ import { EditPasswordDTO } from './DTO/EditPasswordDTO';
 import { EditEmailDTO } from './DTO/EditEmailDTO';
 import { SessionData } from 'express-session';
 import { IsLoggedInGuard } from '../session/is-logged-in.guard';
-import {EditUserDTO} from "./DTO/EditUserDTO";
+import { EditUserDTO } from './DTO/EditUserDTO';
+import * as validator from 'validator';
 
 @ApiTags('user')
 @Controller('user')
@@ -29,6 +35,22 @@ export class UserController {
   private readonly logger = new Logger(UserController.name);
 
   constructor(private readonly userService: UserService) {}
+
+  private validateNonEmptyString(value: string, errorMessage: string): void {
+    if (!value?.trim()) {
+      throw new BadRequestException(errorMessage);
+    }
+  }
+
+  private isValidMobileNumber(phoneNumber: string): boolean {
+    // Regular expression for validating mobile numbers
+    const mobileNumberRegex = /^[+]?\d{1,3}?[-\s.]?\d{3,14}[-\s.]?\d{3,14}$/;
+    return mobileNumberRegex.test(phoneNumber);
+  }
+
+  private isValidEmail(email: string): boolean {
+    return validator.isEmail(email);
+  }
 
   private isUserAdult(birthday: Date): boolean {
     const today = new Date();
@@ -56,9 +78,7 @@ export class UserController {
         'Du musst die AGB akzeptieren, um dich zu registrieren',
       );
     }
-    if (body.password.trim() === '' || body.password.trim().length == 0) {
-      throw new BadRequestException('Passwort darf nicht leer sein');
-    }
+    this.validateNonEmptyString(body.password, 'Passwort darf nicht leer sein');
     if (body.password.trim().length < 8) {
       throw new BadRequestException(
         'Passwort muss mindestens 8 Zeichen lang sein',
@@ -67,17 +87,17 @@ export class UserController {
     if (body.password != body.passwordConfirm) {
       throw new BadRequestException('Passwort muss übereinstimmen');
     }
-    if (body.email.trim().length == 0 || body.email.trim() === '') {
-      throw new BadRequestException('Email darf nicht leer sein');
+    this.validateNonEmptyString(body.email, 'Email darf nicht leer sein');
+    if (!this.isValidEmail(body.email)) {
+      throw new BadRequestException('Ungültiges E-Mail-Format');
     }
     if (body.email != body.emailConfirm) {
       throw new BadRequestException('Email muss übereinstimmen');
     }
-    if (body.firstName.trim().length == 0 || body.firstName.trim() === '') {
-      throw new BadRequestException('Vorname darf nicht leer sein');
-    }
-    if (body.lastName.trim().length == 0 || body.lastName.trim() === '') {
-      throw new BadRequestException('Nachname darf nicht leer sein');
+    this.validateNonEmptyString(body.firstName, 'Vorname darf nicht leer sein');
+    this.validateNonEmptyString(body.lastName, 'Nachname darf nicht leer sein');
+    if (body.phoneNumber && !this.isValidMobileNumber(body.phoneNumber)) {
+      throw new BadRequestException('Ungültige Telefon-Nummer');
     }
     const birthday = new Date(body.birthday);
     if (!this.isUserAdult(birthday)) {
@@ -213,8 +233,29 @@ export class UserController {
   ): Promise<OkDTO> {
     const id = session.currentUser;
     const user = await this.userService.getUserById(id);
-    if(body.phoneNumber &&)
+    if (body.phoneNumber) {
+      if (!this.isValidMobileNumber(body.phoneNumber)) {
+        throw new BadRequestException('Ungültige telefon-Nummer');
+      }
+      user.phoneNumber = body.phoneNumber;
+    }
+    if (body.firstName) {
+      this.validateNonEmptyString(
+        body.firstName,
+        'Vorname darf nicht leer sein',
+      );
+      user.firstName = body.firstName;
+    }
+    if (body.lastName) {
+      this.validateNonEmptyString(
+        body.lastName,
+        'Nachname darf nicht leer sein',
+      );
+      user.lastName = body.lastName;
+    }
+    if (body.profileText) user.profileText = body.profileText;
+
+    await this.userService.updateUser(user);
+    return new OkDTO(true, 'User was updated');
   }
-
-
 }
