@@ -1,13 +1,17 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToOne } from 'typeorm';
 import { TripDB } from './TripDB';
+import { RequestDB } from './RequestDB';
 
 @Entity()
 export class LocationDB {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => TripDB)
-  trip: TripDB;
+  @OneToOne(() => TripDB, { nullable: true })
+  trip: TripDB | null;
+
+  @OneToOne(() => RequestDB, { nullable: true })
+  request: RequestDB | null;
 
   @Column()
   stopNr: number;

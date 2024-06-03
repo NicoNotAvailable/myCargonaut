@@ -13,6 +13,7 @@ import { UserService } from './user/user.service';
 import { UserController } from './user/user.controller';
 import { SessionController } from './session/session.controller';
 import { ChatDB } from './database/ChatDB';
+import {RequestDB} from "./database/RequestDB";
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { ChatDB } from './database/ChatDB';
         TripDB,
         VehicleDB,
         ChatDB,
+        RequestDB,
       ],
       synchronize: true,
     }),
@@ -40,6 +42,7 @@ import { ChatDB } from './database/ChatDB';
       TripDB,
       VehicleDB,
       ChatDB,
+      RequestDB,
     ]),
   ],
   controllers: [AppController, UserController, SessionController],

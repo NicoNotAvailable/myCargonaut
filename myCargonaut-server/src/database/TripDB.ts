@@ -3,7 +3,7 @@ import {
   Column,
   PrimaryGeneratedColumn,
   ManyToOne,
-  OneToMany,
+  OneToMany, OneToOne,
 } from 'typeorm';
 import { PriceTypeEnum } from './enums/PriceTypeEnum';
 import { UserDB } from './UserDB';
@@ -73,6 +73,6 @@ export class TripDB {
   @OneToMany(() => ReviewDB, (review) => review.trip)
   reviews: Promise<ReviewDB[]>;
 
-  @OneToMany(() => LocationDB, (location) => location.trip)
-  locations: Promise<LocationDB[]>;
+  @OneToOne(() => LocationDB, (location: { trip: any }) => location.trip)
+  location: Promise<LocationDB>;
 }
