@@ -4,8 +4,9 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { BeforeInsert, BeforeUpdate, Repository } from "typeorm";
 import { UserDB } from '../database/UserDB';
+import * as bcrypt from "bcryptjs";
 
 @Injectable()
 export class UserService {
@@ -40,11 +41,13 @@ export class UserService {
       );
     }
 
+    const hashedPassword = await bcrypt.hash(password, 10);
+
     const newUser: UserDB = this.userRepository.create();
     newUser.firstName = firstName;
     newUser.lastName = lastName;
     newUser.email = email;
-    newUser.password = password;
+    newUser.password = hashedPassword;
     newUser.birthday = birthday;
     newUser.phoneNumber = phoneNumber;
     newUser.profilePic = profilePic;

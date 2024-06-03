@@ -4,12 +4,18 @@ import { databaseTest, tables } from '../../testDatabase/databaseTest';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserService } from './user.service';
 import * as fs from 'fs/promises';
-import { CreateUserDTO } from './DTO/CreateUserDTO';
 import { BadRequestException } from '@nestjs/common';
+import { SessionData } from 'express-session';
+import { EditUserDTO } from './DTO/EditUserDTO';
+import { CreateUserDTO } from './DTO/CreateUserDTO';
+import { EditPasswordDTO } from './DTO/EditPasswordDTO';
+import { EditEmailDTO } from './DTO/EditEmailDTO';
+import { UserDB } from '../database/UserDB';
 
 describe('UserController', () => {
   let controller: UserController;
   let module: TestingModule;
+  let service: UserService;
 
   beforeAll(async () => {
     module = await Test.createTestingModule({
@@ -22,6 +28,7 @@ describe('UserController', () => {
     }).compile();
 
     controller = module.get<UserController>(UserController);
+    service = module.get<UserService>(UserService);
   });
 
   it('should be defined', () => {
@@ -44,7 +51,7 @@ describe('UserController', () => {
   });
 
   it('should create a user successfully', async () => {
-    const dto: CreateUserDTO = {
+    const body: CreateUserDTO = {
       firstName: 'John',
       lastName: 'Doe',
       email: 'john.doe@example.com',
@@ -56,13 +63,13 @@ describe('UserController', () => {
       phoneNumber: '0800555555',
     };
 
-    const response = await controller.createUser(null, dto);
+    const response = await controller.createUser(null, body);
     expect(response.ok).toBe(true);
     expect(response.message).toBe('User was created');
   });
 
   it('should throw an error for an existing email', async () => {
-    const body = {
+    const body: CreateUserDTO = {
       firstName: 'Jane',
       lastName: 'Doe',
       email: 'john.doe@example.com',
@@ -79,7 +86,7 @@ describe('UserController', () => {
   });
 
   it('should throw an error for a password shorter than 8 characters', async () => {
-    const body = {
+    const body: CreateUserDTO = {
       firstName: 'Phil',
       lastName: 'Doe',
       email: 'phil.doe@example.com',
@@ -96,7 +103,7 @@ describe('UserController', () => {
   });
 
   it('should throw an error for an invalid phone number', async () => {
-    const body = {
+    const body: CreateUserDTO = {
       firstName: 'Jane',
       lastName: 'Doe',
       email: 'jane.doe@example.com',
@@ -113,7 +120,7 @@ describe('UserController', () => {
   });
 
   it('should throw an error for an underage user', async () => {
-    const dto: CreateUserDTO = {
+    const body: CreateUserDTO = {
       firstName: 'Mark',
       lastName: 'Doe',
       email: 'mark.doe@example.com',
@@ -125,7 +132,199 @@ describe('UserController', () => {
       phoneNumber: '0800555555',
     };
 
-    await expect(controller.createUser(null, dto)).rejects.toThrow(
+    await expect(controller.createUser(null, body)).rejects.toThrow(
+      BadRequestException,
+    );
+  });
+
+  it('should update a users info successfully', async () => {
+    const userBody: EditUserDTO = {
+      firstName: 'Maximilian',
+      lastName: 'Doe',
+      phoneNumber: '015298273928',
+      profileText: null,
+    };
+
+    const mockSession: SessionData = {
+      cookie: {
+        originalMaxAge: null,
+        expires: null,
+        secure: false,
+        httpOnly: true,
+        path: '/',
+        sameSite: 'lax',
+      },
+      currentUser: 1,
+    };
+
+    // Mock the request object
+    const req: any = {
+      session: mockSession,
+    };
+
+    const response = await controller.updateUser(req, userBody);
+    expect(response.ok).toBe(true);
+    expect(response.message).toBe('User was updated');
+
+    const updatedUser = await module
+      .get<UserService>(UserService)
+      .getUserById(mockSession.currentUser);
+
+    expect(updatedUser.firstName).toBe('Maximilian');
+    expect(updatedUser.phoneNumber).toBe('015298273928');
+    expect(updatedUser.profileText).toBe(null);
+  });
+
+  it('should update user email successfully', async () => {
+    const emailBody: EditEmailDTO = {
+      newEmail: 'max.doe@example.com',
+      newEmailConfirm: 'max.doe@example.com',
+    };
+
+    const mockSession: SessionData = {
+      cookie: {
+        originalMaxAge: null,
+        expires: null,
+        secure: false,
+        httpOnly: true,
+        path: '/',
+        sameSite: 'lax',
+      },
+      currentUser: 1,
+    };
+
+    // Mock the request object
+    const req: any = {
+      session: mockSession,
+    };
+
+    const response = await controller.updateEmail(req, emailBody);
+    expect(response.ok).toBe(true);
+    expect(response.message).toBe('User was updated');
+
+    const updatedUser: UserDB = await module
+      .get<UserService>(UserService)
+      .getUserById(mockSession.currentUser);
+
+    expect(updatedUser.email).toBe('max.doe@example.com');
+  });
+
+  it('should throw an error for mismatched email confirmation', async () => {
+    const emailBody: EditEmailDTO = {
+      newEmail: 'new.doe@example.com',
+      newEmailConfirm: 'mismatch.doe@example.com',
+    };
+
+    const mockSession: SessionData = {
+      cookie: {
+        originalMaxAge: null,
+        expires: null,
+        secure: false,
+        httpOnly: true,
+        path: '/',
+        sameSite: 'lax',
+      },
+      currentUser: 1,
+    };
+
+    // Mock the request object
+    const req: any = {
+      session: mockSession,
+    };
+
+    await expect(controller.updateEmail(req, emailBody)).rejects.toThrow(
+      BadRequestException,
+    );
+  });
+
+  it('should update user password successfully', async () => {
+    const passwordBody: EditPasswordDTO = {
+      password: 'securepassword',
+      newPassword: 'newsecurepassword',
+      newPasswordConfirm: 'newsecurepassword',
+    };
+
+    const mockSession: SessionData = {
+      cookie: {
+        originalMaxAge: null,
+        expires: null,
+        secure: false,
+        httpOnly: true,
+        path: '/',
+        sameSite: 'lax',
+      },
+      currentUser: 1,
+    };
+
+    // Mock the request object
+    const req: any = {
+      session: mockSession,
+    };
+
+    const testUser = await module
+      .get<UserService>(UserService)
+      .getUserById(mockSession.currentUser);
+    console.log(testUser.password);
+    const response = await controller.updatePassword(req, passwordBody);
+    expect(response.ok).toBe(true);
+    expect(response.message).toBe('User was updated');
+    expect(testUser.password).toBe('newsecurepassword');
+  });
+
+  it('should throw an error for mismatched password confirmation', async () => {
+    const passwordBody: EditPasswordDTO = {
+      password: 'newsecurepassword',
+      newPassword: 'newNewsecurepassword',
+      newPasswordConfirm: 'mismatchpassword',
+    };
+
+    const mockSession: SessionData = {
+      cookie: {
+        originalMaxAge: null,
+        expires: null,
+        secure: false,
+        httpOnly: true,
+        path: '/',
+        sameSite: 'lax',
+      },
+      currentUser: 1,
+    };
+
+    // Mock the request object
+    const req: any = {
+      session: mockSession,
+    };
+
+    await expect(controller.updatePassword(req, passwordBody)).rejects.toThrow(
+      BadRequestException,
+    );
+  });
+
+  it('should throw an error for incorrect current password', async () => {
+    const passwordBody: EditPasswordDTO = {
+      password: 'wrongpassword',
+      newPassword: 'newsecurepassword',
+      newPasswordConfirm: 'newsecurepassword',
+    };
+
+    const mockSession: SessionData = {
+      cookie: {
+        originalMaxAge: null,
+        expires: null,
+        secure: false,
+        httpOnly: true,
+        path: '/',
+        sameSite: 'lax',
+      },
+      currentUser: 1,
+    };
+
+    // Mock the request object
+    const req: any = {
+      session: mockSession,
+    };
+
+    await expect(controller.updatePassword(req, passwordBody)).rejects.toThrow(
       BadRequestException,
     );
   });

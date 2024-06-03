@@ -2,6 +2,7 @@ import {
   BadRequestException,
   Body,
   Controller,
+  Logger,
   Post,
   Put,
   Session,
@@ -32,6 +33,7 @@ import * as validator from 'validator';
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
+  private readonly logger = new Logger(UserController.name);
 
   private validateNonEmptyString(value: string, errorMessage: string): void {
     if (!value?.trim()) {
@@ -172,6 +174,8 @@ export class UserController {
   ): Promise<OkDTO> {
     const id = session.currentUser;
     const user = await this.userService.getUserById(id);
+    this.logger.log(user.password);
+    this.logger.log(body.password);
     if (body.password.trim() != user.password.trim()) {
       throw new BadRequestException('Aktuelles Passwort ist falsch');
     }
@@ -228,12 +232,13 @@ export class UserController {
   ): Promise<OkDTO> {
     const id = session.currentUser;
     const user = await this.userService.getUserById(id);
-    if (body.phoneNumber) {
-      if (!this.isValidMobileNumber(body.phoneNumber)) {
-        throw new BadRequestException('Ungültige telefon-Nummer');
-      }
-      user.phoneNumber = body.phoneNumber;
+    if (
+      body.phoneNumber != user.phoneNumber &&
+      !this.isValidMobileNumber(body.phoneNumber)
+    ) {
+      throw new BadRequestException('Ungültige telefon-Nummer');
     }
+    user.phoneNumber = body.phoneNumber;
     if (body.firstName) {
       this.validateNonEmptyString(
         body.firstName,

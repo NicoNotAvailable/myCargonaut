@@ -63,12 +63,4 @@ export class UserDB {
 
   @OneToMany(() => ChatDB, (chat) => chat.receiver)
   receivedChats: Promise<ChatDB[]>;
-
-  @BeforeInsert()
-  @BeforeUpdate()
-  async hashPassword() {
-    if (this.password) {
-      this.password = await bcrypt.hash(this.password, 10);
-    }
-  }
 }
