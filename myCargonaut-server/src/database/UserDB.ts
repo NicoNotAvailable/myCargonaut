@@ -12,6 +12,7 @@ import { VehicleDB } from './VehicleDB';
 import { TripDB } from './TripDB';
 import { ReviewDB } from './ReviewDB';
 import { IsEmail, IsPhoneNumber } from 'class-validator';
+import { ChatDB } from './ChatDB';
 
 @Entity()
 export class UserDB {
@@ -56,6 +57,12 @@ export class UserDB {
 
   @OneToMany(() => ReviewDB, (review) => review.writer)
   writtenReviews: Promise<ReviewDB[]>;
+
+  @OneToMany(() => ChatDB, (chat) => chat.writer)
+  writtenChats: Promise<ChatDB[]>;
+
+  @OneToMany(() => ChatDB, (chat) => chat.receiver)
+  receivedChats: Promise<ChatDB[]>;
 
   @BeforeInsert()
   @BeforeUpdate()

@@ -7,7 +7,7 @@ export class ChatDB {
   id: number;
 
   @ManyToOne(() => UserDB)
-  sender: UserDB;
+  writer: UserDB;
 
   @ManyToOne(() => UserDB)
   receiver: UserDB;
