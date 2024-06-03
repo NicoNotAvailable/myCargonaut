@@ -32,8 +32,6 @@ import * as validator from 'validator';
 @ApiTags('user')
 @Controller('user')
 export class UserController {
-  private readonly logger = new Logger(UserController.name);
-
   constructor(private readonly userService: UserService) {}
 
   private validateNonEmptyString(value: string, errorMessage: string): void {
@@ -119,8 +117,6 @@ export class UserController {
       return new OkDTO(true, 'User was created');
     } catch (err) {
       throw err;
-
-      throw new BadRequestException('Es ist ein Fehler aufgetreten');
     }
   }
 
