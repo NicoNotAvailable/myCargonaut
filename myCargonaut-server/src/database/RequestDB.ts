@@ -1,13 +1,7 @@
-import {
-  Entity,
-  Column,
-  PrimaryGeneratedColumn,
-  ManyToOne,
-  OneToOne,
-} from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
 import { UserDB } from './UserDB';
-import { TripDB } from './TripDB';
 import { LocationDB } from './LocationDB';
+import { TripDB } from './TripDB';
 
 @Entity()
 export class RequestDB {
@@ -20,9 +14,12 @@ export class RequestDB {
   @ManyToOne(() => TripDB)
   trip: TripDB;
 
+  @ManyToOne(() => LocationDB)
+  startLocation: LocationDB;
+
+  @ManyToOne(() => LocationDB)
+  endLocation: LocationDB;
+
   @Column({ default: new Date().toISOString() })
   timestamp: string;
-
-  @OneToOne(() => LocationDB, (location: { request: any }) => location.request)
-  location: Promise<LocationDB>;
 }

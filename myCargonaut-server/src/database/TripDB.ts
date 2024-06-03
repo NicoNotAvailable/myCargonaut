@@ -3,7 +3,8 @@ import {
   Column,
   PrimaryGeneratedColumn,
   ManyToOne,
-  OneToMany, OneToOne,
+  OneToMany,
+  OneToOne,
 } from 'typeorm';
 import { PriceTypeEnum } from './enums/PriceTypeEnum';
 import { UserDB } from './UserDB';
@@ -13,6 +14,8 @@ import { ReviewDB } from './ReviewDB';
 import { LocationDB } from './LocationDB';
 import { CarDB } from './CarDB';
 import { TrailerDB } from './TrailerDB';
+import { RequestDB } from './RequestDB';
+import { ChatDB } from './ChatDB';
 
 @Entity()
 export class TripDB {
@@ -24,6 +27,9 @@ export class TripDB {
 
   @ManyToOne(() => UserDB)
   requesting: UserDB;
+
+  @ManyToOne(() => ChatDB)
+  chat: ChatDB;
 
   @ManyToOne(() => CarDB)
   car: CarDB;
@@ -72,6 +78,9 @@ export class TripDB {
 
   @OneToMany(() => ReviewDB, (review) => review.trip)
   reviews: Promise<ReviewDB[]>;
+
+  @OneToMany(() => RequestDB, (request) => request.trip)
+  requests: Promise<RequestDB[]>;
 
   @OneToOne(() => LocationDB, (location: { trip: any }) => location.trip)
   location: Promise<LocationDB>;

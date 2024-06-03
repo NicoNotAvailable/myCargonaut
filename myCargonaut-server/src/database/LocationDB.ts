@@ -1,4 +1,10 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToOne } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  OneToOne,
+  OneToMany,
+} from 'typeorm';
 import { TripDB } from './TripDB';
 import { RequestDB } from './RequestDB';
 
@@ -7,11 +13,8 @@ export class LocationDB {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @OneToOne(() => TripDB, { nullable: true })
-  trip: TripDB | null;
-
-  @OneToOne(() => RequestDB, { nullable: true })
-  request: RequestDB | null;
+  @OneToOne(() => TripDB)
+  trip: TripDB;
 
   @Column()
   stopNr: number;
@@ -30,4 +33,10 @@ export class LocationDB {
 
   @Column()
   streetNumber: string;
+
+  @OneToMany(() => RequestDB, (request) => request.startLocation)
+  startLocationRequests: Promise<RequestDB[]>;
+
+  @OneToMany(() => RequestDB, (request) => request.endLocation)
+  endLocationRequests: Promise<RequestDB[]>;
 }
