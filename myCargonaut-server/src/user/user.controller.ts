@@ -10,7 +10,7 @@ import {
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {ApiBearerAuth, ApiConsumes, ApiResponse, ApiTags} from '@nestjs/swagger';
 import { UserService } from './user.service';
 import { CreateUserDTO } from './DTO/CreateUserDTO';
 import { OkDTO } from '../serverDTO/OkDTO';
@@ -45,20 +45,6 @@ export class UserController {
   }
 
   @ApiResponse({ type: OkDTO, description: 'creates a new user' })
-  @UseInterceptors(
-    FileInterceptor('profilePicture', {
-      storage: diskStorage({
-        destination: './uploads/profilePictures',
-        filename: (req: any, file, callback) => {
-          const randomName = Array(32)
-            .fill(null)
-            .map(() => Math.round(Math.random() * 16).toString(16))
-            .join('');
-          callback(null, `${randomName}${extname(file.originalname)}`);
-        },
-      }),
-    }),
-  )
   @Post()
   async createUser(
     @UploadedFile() file: Express.Multer.File,
@@ -117,6 +103,46 @@ export class UserController {
     }
   }
 
+  /*
+   * uses the userService to update the profile picture of the current user
+   * @Pre the user is currently logged in as the currentUser
+   * @Param a file as the profile picture image
+   * @Return an OkDTO if it was succesful
+   */
+  @ApiResponse({
+    type: OkDTO,
+    description: 'posts a profile picture for a specific user',
+  })
+  @ApiBearerAuth()
+  @UseGuards(IsLoggedInGuard)
+  @Post('upload-profile-picture')
+  @ApiConsumes('multipart/form-data')
+  @UseInterceptors(
+    FileInterceptor('file', {
+      storage: diskStorage({
+        destination: './uploads/profilepictures',
+        filename: (req: any, file, callback) => {
+          const randomName = Array(32)
+            .fill(null)
+            .map(() => Math.round(Math.random() * 16).toString(16))
+            .join('');
+          callback(null, `${randomName}${extname(file.originalname)}`);
+        },
+      }),
+    }),
+  )
+  async uploadProfilePicture(
+    @UploadedFile() file: Express.Multer.File,
+    @Session() session: SessionData,
+  ) {
+    const id = session.currentUser;
+    const user = await this.userService.getUserById(id);
+    user.profilePic = file.filename;
+    await this.userService.updateUser(user);
+
+    return new OkDTO(true, 'Profile Picture Upload successfull');
+  }
+
   @ApiResponse({
     type: OkDTO,
     description: 'updates a specifics user password by their id',
@@ -144,6 +170,7 @@ export class UserController {
     if (body.newPassword != body.newPasswordConfirm) {
       throw new BadRequestException('Neues Passwort muss übereinstimmen');
     }
+    user.password = body.newPassword;
     await this.userService.updateUser(user);
     return new OkDTO(true, 'User was updated');
   }
@@ -164,12 +191,13 @@ export class UserController {
     if (body.password.trim() != user.password.trim()) {
       throw new BadRequestException('Aktuelles Passwort ist falsch');
     }
-    if (body.Email.trim().length == 0 || body.Email.trim() === '') {
+    if (body.newEmail.trim().length == 0 || body.newEmail.trim() === '') {
       throw new BadRequestException('Email darf nicht leer sein');
     }
-    if (body.Email != body.EmailConfirm) {
+    if (body.newEmail != body.newEmailConfirm) {
       throw new BadRequestException('Email muss übereinstimmen');
     }
+    user.email = body.newEmail;
     await this.userService.updateUser(user);
     return new OkDTO(true, 'User was updated');
   }
