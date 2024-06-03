@@ -2,7 +2,6 @@ import {
   BadRequestException,
   Body,
   Controller,
-  Logger,
   Post,
   Put,
   Session,
