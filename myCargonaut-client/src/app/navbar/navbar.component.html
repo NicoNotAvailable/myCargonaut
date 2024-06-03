@@ -1,0 +1,49 @@
+<nav class="navbar navbar-expand-lg bg-body-tertiary p-0">
+  <div class="container-fluid mc-green">
+    <a class="navbar-brand" href="">
+      <img ngSrc="../../assets/myCargonaut-White.png" alt="myCargonaut-Logo" height="80" width="193"/>
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
+            aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+      <div class="navbar-nav">
+        <a class="nav-link text-white navbar-font mx-3" href="#">Angebote</a>
+        <a class="nav-link text-white navbar-font mx-3" href="#">Gesuche</a>
+      </div>
+      <div class="d-flex ms-auto mt-3">
+        <a href="#" class="non-pointable fa-stack fa-2x me-5">
+          <fa-icon [icon]="faCircle" class="fa-stack-2x text-center white-fade fa-2xs pe-1 pt-3 add-fix"></fa-icon>
+          <fa-icon [icon]="faCirclePlus" class="fa-stack-1x btn-blue pointable add-fix"></fa-icon>
+        </a>
+        <a href="#" class="non-pointable mx-3">
+          <fa-icon [icon]="faCar" class="fa-2x white-fade pointable"></fa-icon>
+        </a>
+        <a href="#" class="non-pointable mx-3">
+          <fa-icon [icon]="faHouse" class="fa-2x white-fade pointable"></fa-icon>
+        </a>
+
+        <div class="dropdown">
+          <a href="#" id="dropdownMenuLink" class="non-pointable mx-3"
+             role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <fa-icon [icon]="faUser" class="fa-2x white-fade pointable"></fa-icon>
+          </a>
+
+          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuLink">
+            <li>
+              <a class="dropdown-item text-center w-100" href="/login">
+                <button type="button" class="btn btn-success">
+                  <span><fa-icon [icon]="faSignIn" class="white-fade me-2"></fa-icon></span>
+                  <span>Einloggen</span>
+                </button>
+              </a>
+            </li>
+            <!--<li><a class="dropdown-item" href="#">Anoth</a></li>
+            <li><a class="dropdown-item" href="#">Somet</a></li>-->
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
