@@ -23,7 +23,7 @@
             <input [(ngModel)]="password" #passwordInput="ngModel" type="password" class="form-control" name="password"
                    placeholder="Passwort">
             <div><a href="#">Passwort vergessen?</a></div>
-            <div>Noch kein Konto? <a href="#">Hier kannst du dich registrieren</a></div>
+            <div>Noch kein Konto? <a href="/register">Hier kannst du dich registrieren</a></div>
             <span *ngIf="passwordInput.invalid && (passwordInput.dirty || passwordInput.touched)" class="text-danger">
         <span *ngIf="passwordInput.errors && passwordInput.errors['required']">
           Bitte gib dein Passwort ein!

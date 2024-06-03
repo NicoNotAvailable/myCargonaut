@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import {NgOptimizedImage} from "@angular/common";
 import {FaIconComponent} from "@fortawesome/angular-fontawesome";
-import {faCar, faCircle, faCirclePlus, faHouse, faPlus, faUser} from "@fortawesome/free-solid-svg-icons";
+import {faCar, faCircle, faCirclePlus, faHouse, faPlus, faSignIn, faUser} from "@fortawesome/free-solid-svg-icons";
 
 @Component({
   selector: 'app-navbar',
@@ -21,4 +21,5 @@ export class NavbarComponent {
   protected readonly faCirclePlus = faCirclePlus;
   protected readonly faPlus = faPlus;
   protected readonly faCircle = faCircle;
+  protected readonly faSignIn = faSignIn;
 }

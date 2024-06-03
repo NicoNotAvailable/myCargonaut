@@ -4,5 +4,28 @@
 }
 
 .btn-blue {
-  color: #628BC7 !important;
+  color: #628BC7;
+}
+
+/*Font-Awesome*/
+
+.white-fade {
+  color: #fff;
+  transition: color 0.5s;
+}
+
+.white-fade:hover {
+  color: #ccc;
+}
+
+.add-fix {
+  width: 32px;
+}
+
+.non-pointable {
+  cursor: default;
+}
+
+.pointable {
+  cursor: pointer;
 }
