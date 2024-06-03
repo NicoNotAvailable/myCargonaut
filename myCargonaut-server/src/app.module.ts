@@ -12,6 +12,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserService } from './user/user.service';
 import { UserController } from './user/user.controller';
 import { SessionController } from './session/session.controller';
+import { ChatDB } from './database/ChatDB';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { SessionController } from './session/session.controller';
         TrailerDB,
         TripDB,
         VehicleDB,
+        ChatDB,
       ],
       synchronize: true,
     }),
@@ -37,6 +39,7 @@ import { SessionController } from './session/session.controller';
       TrailerDB,
       TripDB,
       VehicleDB,
+      ChatDB,
     ]),
   ],
   controllers: [AppController, UserController, SessionController],
