@@ -10,14 +10,21 @@ input:disabled {
   color: white;
 }
 
-.circle {
+.profileCircle {
   width: 125px;
   height: 125px;
   border-radius: 50%;
 }
 
-.inputSize {
-  width: 500px;
+.circle {
+  border-radius: 50%;
+}
+
+.editButton {
+  background-color: #1A9CC5;
+}
+
+.textareaSize {
   height: 250px;
 }
 
