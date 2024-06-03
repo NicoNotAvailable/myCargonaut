@@ -4,9 +4,9 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { BeforeInsert, BeforeUpdate, Repository } from "typeorm";
+import { Repository } from 'typeorm';
 import { UserDB } from '../database/UserDB';
-import * as bcrypt from "bcryptjs";
+import * as bcrypt from 'bcryptjs';
 
 @Injectable()
 export class UserService {
@@ -55,6 +55,11 @@ export class UserService {
   }
 
   async updateUser(userData: UserDB): Promise<UserDB> {
+    return this.userRepository.save(userData);
+  }
+
+  async updatePassword(userData: UserDB): Promise<UserDB> {
+    userData.password = await bcrypt.hash(userData.password, 10);
     return this.userRepository.save(userData);
   }
 }

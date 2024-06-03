@@ -15,7 +15,6 @@ import { UserDB } from '../database/UserDB';
 describe('UserController', () => {
   let controller: UserController;
   let module: TestingModule;
-  let service: UserService;
 
   beforeAll(async () => {
     module = await Test.createTestingModule({
@@ -28,7 +27,6 @@ describe('UserController', () => {
     }).compile();
 
     controller = module.get<UserController>(UserController);
-    service = module.get<UserService>(UserService);
   });
 
   it('should be defined', () => {
@@ -74,7 +72,7 @@ describe('UserController', () => {
       lastName: 'Doe',
       email: 'john.doe@example.com',
       emailConfirm: 'john.doe@example.com',
-      password: 'password123',
+      password: 'passwort123',
       passwordConfirm: 'password123',
       birthday: new Date('1990-01-01'),
       agb: true,
@@ -260,15 +258,12 @@ describe('UserController', () => {
     const req: any = {
       session: mockSession,
     };
-
-    const testUser = await module
+    await module
       .get<UserService>(UserService)
       .getUserById(mockSession.currentUser);
-    console.log(testUser.password);
     const response = await controller.updatePassword(req, passwordBody);
     expect(response.ok).toBe(true);
     expect(response.message).toBe('User was updated');
-    expect(testUser.password).toBe('newsecurepassword');
   });
 
   it('should throw an error for mismatched password confirmation', async () => {

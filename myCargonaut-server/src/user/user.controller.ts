@@ -28,6 +28,7 @@ import { SessionData } from 'express-session';
 import { IsLoggedInGuard } from '../session/is-logged-in.guard';
 import { EditUserDTO } from './DTO/EditUserDTO';
 import * as validator from 'validator';
+import * as bcrypt from 'bcryptjs';
 
 @ApiTags('user')
 @Controller('user')
@@ -176,7 +177,11 @@ export class UserController {
     const user = await this.userService.getUserById(id);
     this.logger.log(user.password);
     this.logger.log(body.password);
-    if (body.password.trim() != user.password.trim()) {
+    const passwordMatch = await bcrypt.compare(
+      body.password.trim(),
+      user.password,
+    );
+    if (!passwordMatch) {
       throw new BadRequestException('Aktuelles Passwort ist falsch');
     }
     if (body.newPassword.trim() === '' || body.newPassword.trim().length == 0) {
