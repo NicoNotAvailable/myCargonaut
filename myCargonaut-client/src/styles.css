@@ -1,1 +1,31 @@
 /* You can add global styles to this file, and also import other style files */
+.mc-green {
+  background-color: #005B52;
+}
+
+.btn-blue {
+  color: #628BC7;
+}
+
+/*Font-Awesome*/
+
+.white-fade {
+  color: #fff;
+  transition: color 0.5s;
+}
+
+.white-fade:hover {
+  color: #ccc;
+}
+
+.add-fix {
+  width: 32px;
+}
+
+.non-pointable {
+  cursor: default;
+}
+
+.pointable {
+  cursor: pointer;
+}

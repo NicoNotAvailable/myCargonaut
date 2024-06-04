@@ -1,26 +1,24 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
 import { UserDB } from './UserDB';
+import { LocationDB } from './LocationDB';
 import { TripDB } from './TripDB';
 
 @Entity()
-export class ChatDB {
+export class RequestDB {
   @PrimaryGeneratedColumn()
   id: number;
 
   @ManyToOne(() => UserDB)
-  writer: UserDB;
-
-  @ManyToOne(() => UserDB)
-  receiver: UserDB;
+  requesting: UserDB;
 
   @ManyToOne(() => TripDB)
   trip: TripDB;
 
-  @Column()
-  message: string;
+  @ManyToOne(() => LocationDB)
+  startLocation: LocationDB;
 
-  @Column()
-  read: boolean;
+  @ManyToOne(() => LocationDB)
+  endLocation: LocationDB;
 
   @Column({ default: new Date().toISOString() })
   timestamp: string;
