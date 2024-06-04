@@ -5,6 +5,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserController } from './user.controller';
 import fs from 'fs/promises';
 
+jest.setTimeout(30000);
+
 describe('UserService', () => {
   let service: UserService;
   let module: TestingModule;

@@ -11,6 +11,7 @@ import {
 } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { UserDB } from '../database/UserDB';
+import { databaseTest } from '../../testDatabase/databaseTest';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { SessionData } from 'express-session';
@@ -66,7 +67,7 @@ export class SessionController {
   ): Promise<OkDTO> {
     if (body.password === '' || body.email === '') {
       throw new BadRequestException('Felder müssen ausgefüllt sein');
-    };
+    }
     const loggedUser: UserDB = await this.userRepo.findOne({
       where: { email: body.email, password: body.password },
     });

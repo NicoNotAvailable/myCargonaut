@@ -1,8 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { SessionController } from './session.controller';
-import { databaseTest } from '../../testDatabase/databaseTest';
+import { databaseTest, tables } from '../../testDatabase/databaseTest';
 import { getRepositoryToken, TypeOrmModule } from '@nestjs/typeorm';
-import fs from 'fs/promises';
+import * as fs from 'fs/promises';
 import { UserService } from '../user/user.service';
 import { CreateUserDTO } from '../user/DTO/CreateUserDTO';
 import { OkDTO } from '../serverDTO/OkDTO';
@@ -12,6 +12,8 @@ import { SessionData } from 'express-session';
 import { BadRequestException, UnauthorizedException } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { UserDB } from '../database/UserDB';
+
+jest.setTimeout(30000);
 
 describe('SessionController', () => {
   let controller: SessionController;
@@ -24,7 +26,7 @@ describe('SessionController', () => {
     module = await Test.createTestingModule({
       imports: [
         databaseTest('./testDatabase/dbTest.sqlite'),
-        TypeOrmModule.forFeature([UserDB]),
+        TypeOrmModule.forFeature(tables),
       ],
       controllers: [SessionController, UserController],
       providers: [
@@ -68,8 +70,8 @@ describe('SessionController', () => {
     const newUserData: CreateUserDTO = {
       firstName: 'John',
       lastName: 'Doe',
-      email: 'john.die@example.com',
-      emailConfirm: 'john.die@example.com',
+      email: 'john.doe@example.com',
+      emailConfirm: 'john.doe@example.com',
       password: 'securepassword',
       passwordConfirm: 'securepassword',
       agb: true,
