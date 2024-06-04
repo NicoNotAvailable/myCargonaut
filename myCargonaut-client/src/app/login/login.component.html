@@ -1,0 +1,43 @@
+<div class="container m-lg-5">
+  <div class="row justify-content-center">
+    <div class="col-10 col-md-8 col-lg-6 text-center my-5" id="loginField">
+      <div class="row justify-content-center">
+        <div class="text-center mb-5">
+          <h4>Gebe deine Daten zum Login ein</h4>
+        </div>
+      </div>
+      <form (ngSubmit)="!emailInput.invalid && !passwordInput.invalid && userLogin(form)" #form="ngForm">
+        <div class="row justify-content-center mb-4">
+          <div class="col-12 col-md-8 col-lg-6 text-center">
+            <input [(ngModel)]="email" #emailInput="ngModel" type="email" class="form-control" name="email" required
+                   placeholder="Email">
+            <span *ngIf="emailInput.invalid && (emailInput.dirty || emailInput.touched)" class="text-danger">
+        <span *ngIf="emailInput.errors && emailInput.errors['required']">
+          Bitte gib deine Email ein!
+        </span>
+      </span>
+          </div>
+        </div>
+        <div class="row justify-content-center">
+          <div class="col-12 col-md-8 col-lg-6 text-center" id="passwordArea">
+            <input [(ngModel)]="password" #passwordInput="ngModel" type="password" class="form-control" name="password"
+                   placeholder="Passwort">
+            <div><a href="#">Passwort vergessen?</a></div>
+            <div>Noch kein Konto? <a href="/register">Hier kannst du dich registrieren</a></div>
+            <span *ngIf="passwordInput.invalid && (passwordInput.dirty || passwordInput.touched)" class="text-danger">
+        <span *ngIf="passwordInput.errors && passwordInput.errors['required']">
+          Bitte gib dein Passwort ein!
+        </span>
+      </span>
+          </div>
+        </div>
+        <div class="row justify-content-center">
+          <div class="col-12 col-md-8 col-lg-6 mt-5 mb-3 text-center">
+            <button type="submit" class="btn customButton">Einloggen</button>
+            <span class="text-danger"> {{ message }}</span>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

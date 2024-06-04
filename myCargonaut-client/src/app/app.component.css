@@ -1,4 +1,4 @@
-html{
+/*html{
   background-color: azure;
   font-family: Roboto, sans-serif;
 }
@@ -9,6 +9,7 @@ html{
   font-weight: bold;
   border-radius: 15px;
 }
+
 .customButton:hover, .customButton:active, .customButton:focus{
   box-shadow: 0 0 20px #005B52;
-}
+}*/
