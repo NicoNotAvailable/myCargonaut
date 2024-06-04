@@ -11,9 +11,7 @@ import {
 } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { UserDB } from '../database/UserDB';
-import { databaseTest } from '../../testDatabase/databaseTest';
-import { Repository } from 'typeorm';
-import { InjectRepository } from '@nestjs/typeorm';
+import { UserService } from '../user/user.service';
 import { SessionData } from 'express-session';
 import { OkDTO } from '../serverDTO/OkDTO';
 import { LoginDTO } from './DTO/LoginDTO';
@@ -23,10 +21,7 @@ import { IsLoggedInGuard } from './is-logged-in.guard';
 @Controller('session')
 @Injectable()
 export class SessionController {
-  constructor(
-    @InjectRepository(UserDB)
-    private userRepo: Repository<UserDB>,
-  ) {}
+  constructor(private readonly userService: UserService) {}
 
   /*
    *checks if the active is logged in
@@ -68,15 +63,15 @@ export class SessionController {
     if (body.password === '' || body.email === '') {
       throw new BadRequestException('Felder müssen ausgefüllt sein');
     }
-    const loggedUser: UserDB = await this.userRepo.findOne({
-      where: { email: body.email, password: body.password },
-    });
-    if (loggedUser) {
+    const loggedUser: UserDB | undefined =
+      await this.userService.getLoggingUser(body);
+    console.log(loggedUser);
+    if (loggedUser !== undefined) {
       session.currentUser = loggedUser.id;
+      return new OkDTO(true, 'User was logged in');
     } else {
       throw new UnauthorizedException('Passwort oder Email ist falsch');
     }
-    return new OkDTO(true, 'User was logged in');
   }
 
   /*

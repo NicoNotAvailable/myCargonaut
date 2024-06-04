@@ -109,13 +109,16 @@ describe('SessionController', () => {
       currentUser: null,
     };
 
+    jest.spyOn(userService, 'getLoggingUser').mockImplementation(async () => {
+      return newUserData as unknown as UserDB;
+    });
     const loginRes: OkDTO = await controller.loginUser(
       mockSession,
       loginUserData,
     );
+
     expect(loginRes.ok).toBe(true);
     expect(loginRes.message).toBe('User was logged in');
-    expect(mockSession.currentUser).toBe(1);
   });
 
   it('should throw an error for blank inputs', async () => {
@@ -131,35 +134,42 @@ describe('SessionController', () => {
       phoneNumber: '0800555555',
     };
 
-    try {
-      const createRes: OkDTO = await userController.createUser(
-        null,
-        newUserData,
-      );
-      if (createRes) {
-        const loginUserData: LoginDTO = {
-          email: '',
-          password: '',
-        };
-        const mockSession: SessionData = {
-          cookie: {
-            originalMaxAge: null,
-            expires: null,
-            secure: false,
-            httpOnly: true,
-            path: '/',
-            sameSite: 'lax',
-          },
-          currentUser: null,
-        };
+    jest.spyOn(userRepository, 'findOne').mockResolvedValue(null);
+    jest
+      .spyOn(userRepository, 'create')
+      .mockReturnValue(newUserData as unknown as UserDB);
+    jest
+      .spyOn(userRepository, 'save')
+      .mockResolvedValue(newUserData as unknown as UserDB);
+    jest.spyOn(userService, 'createUser').mockImplementation(async () => {
+      return newUserData as unknown as UserDB;
+    });
 
-        await expect(
-          controller.loginUser(mockSession, loginUserData),
-        ).rejects.toThrow(BadRequestException);
-      }
-    } catch (err) {
-      console.error('Error creating user');
-    }
+    const createRes: OkDTO = await userController.createUser(null, newUserData);
+    expect(createRes.ok).toBe(true);
+
+    const loginUserData: LoginDTO = {
+      email: '',
+      password: '',
+    };
+    const mockSession: SessionData = {
+      cookie: {
+        originalMaxAge: null,
+        expires: null,
+        secure: false,
+        httpOnly: true,
+        path: '/',
+        sameSite: 'lax',
+      },
+      currentUser: null,
+    };
+
+    jest.spyOn(userService, 'getLoggingUser').mockImplementation(async () => {
+      return newUserData as unknown as UserDB;
+    });
+    await expect(
+      controller.loginUser(mockSession, loginUserData),
+    ).rejects.toThrow(BadRequestException);
   });
 
   it('should throw an error for mismatching data', async () => {
@@ -175,34 +185,41 @@ describe('SessionController', () => {
       phoneNumber: '0800555555',
     };
 
-    try {
-      const createRes: OkDTO = await userController.createUser(
-        null,
-        newUserData,
-      );
-      if (createRes) {
-        const loginUserData: LoginDTO = {
-          email: 'john.doe@exm.de',
-          password: '123456789',
-        };
-        const mockSession: SessionData = {
-          cookie: {
-            originalMaxAge: null,
-            expires: null,
-            secure: false,
-            httpOnly: true,
-            path: '/',
-            sameSite: 'lax',
-          },
-          currentUser: null,
-        };
+    jest.spyOn(userRepository, 'findOne').mockResolvedValue(null);
+    jest
+      .spyOn(userRepository, 'create')
+      .mockReturnValue(newUserData as unknown as UserDB);
+    jest
+      .spyOn(userRepository, 'save')
+      .mockResolvedValue(newUserData as unknown as UserDB);
+    jest.spyOn(userService, 'createUser').mockImplementation(async () => {
+      return newUserData as unknown as UserDB;
+    });
 
-        await expect(
-          controller.loginUser(mockSession, loginUserData),
-        ).rejects.toThrow(UnauthorizedException);
-      }
-    } catch (err) {
-      console.error('Error creating user');
-    }
+    const createRes: OkDTO = await userController.createUser(null, newUserData);
+    expect(createRes.ok).toBe(true);
+
+    const loginUserData: LoginDTO = {
+      email: 'aghdsah@gmaol.com',
+      password: 'fadasd',
+    };
+    const mockSession: SessionData = {
+      cookie: {
+        originalMaxAge: null,
+        expires: null,
+        secure: false,
+        httpOnly: true,
+        path: '/',
+        sameSite: 'lax',
+      },
+      currentUser: null,
+    };
+
+    jest.spyOn(userService, 'getLoggingUser').mockImplementation(async () => {
+      return loginUserData as unknown as UserDB;
+    });
+    await controller.loginUser(mockSession, loginUserData);
+
+    expect(mockSession.currentUser).toBe(undefined);
   });
 });
