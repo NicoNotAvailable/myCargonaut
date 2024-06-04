@@ -13,3 +13,8 @@
 .circle {
   border-radius: 50%;
 }
+
+.larger-checkbox {
+  height: 22px;
+  width: 22px;
+}
