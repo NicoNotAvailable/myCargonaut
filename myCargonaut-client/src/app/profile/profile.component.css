@@ -2,12 +2,20 @@
   color: #005B52;
 }
 
+h1.textGreen{
+  padding-bottom: 1rem;
+  border-bottom: #1a9cc5 0.1rem solid;
+}
+
 .backgroundGreen {
   background-color: #005B52;
 }
 
-input:disabled {
-  color: white;
+
+.attribute{
+  color: ghostwhite;
+  padding: 0.3rem 0 0.3rem 0;
+  border-radius: 0.75rem;
 }
 
 .profileCircle {
