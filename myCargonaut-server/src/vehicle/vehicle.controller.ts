@@ -1,7 +1,17 @@
-import { Body, Controller, Post, Session, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  NotFoundException,
+  Param,
+  ParseIntPipe,
+  Post,
+  Session,
+  UseGuards,
+} from '@nestjs/common';
 import { VehicleService } from './vehicle.service';
 import { UserService } from '../user/user.service';
-import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { OkDTO } from '../serverDTO/OkDTO';
 import { IsLoggedInGuard } from '../session/is-logged-in.guard';
 import { CreateCarDTO } from './DTO/CreateCarDTO';
@@ -71,6 +81,29 @@ export class VehicleController {
       return new OkDTO(true, 'Trailer was created');
     } catch (err) {
       throw err;
+    }
+  }
+
+  @ApiResponse({
+    type: OkDTO,
+    description: 'removes a vehicle from the database',
+  })
+  @ApiParam({
+    name: 'id',
+    type: 'number',
+    description: 'ID of the vehicle to be deleted',
+  })
+  @Delete(':id')
+  @ApiBearerAuth()
+  @UseGuards(IsLoggedInGuard)
+  async deleteVehicle(@Param('id', ParseIntPipe) id: number): Promise<void> {
+    try {
+      await this.vehicleService.deleteVehicle(id);
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw new NotFoundException(error.message);
+      }
+      throw error;
     }
   }
 }

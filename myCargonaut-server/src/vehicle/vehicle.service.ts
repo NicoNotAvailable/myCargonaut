@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import {Injectable, NotFoundException} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { VehicleDB } from '../database/VehicleDB';
@@ -65,5 +65,15 @@ export class VehicleService {
     newTrailer.isEnclosed = isEnclosed;
 
     return this.trailerRepository.save(newTrailer);
+  }
+
+  async deleteVehicle(vehicleId: number) {
+    const vehicle = await this.vehicleRepository.findOne({
+      where: { id: vehicleId },
+    });
+    if (!vehicle) {
+      throw new NotFoundException('Vehicle not found');
+    }
+    await this.vehicleRepository.remove(vehicle);
   }
 }
