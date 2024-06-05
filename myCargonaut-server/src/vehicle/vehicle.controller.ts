@@ -8,11 +8,19 @@ import {
   ParseIntPipe,
   Post,
   Session,
+  UploadedFile,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { VehicleService } from './vehicle.service';
 import { UserService } from '../user/user.service';
-import { ApiBearerAuth, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiConsumes,
+  ApiParam,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { OkDTO } from '../serverDTO/OkDTO';
 import { IsLoggedInGuard } from '../session/is-logged-in.guard';
 import { CreateCarDTO } from './DTO/CreateCarDTO';
@@ -22,6 +30,9 @@ import { CarDB } from '../database/CarDB';
 import { GetCarDTO } from './DTO/GetCarDTO';
 import { GetTrailerDTO } from './DTO/GetTrailerDTO';
 import { TrailerDB } from '../database/TrailerDB';
+import { extname } from 'path';
+import { diskStorage } from 'multer';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @ApiTags('vehicle')
 @Controller('vehicle')
@@ -87,6 +98,40 @@ export class VehicleController {
     } catch (err) {
       throw err;
     }
+  }
+
+  @ApiResponse({
+    type: OkDTO,
+    description: 'posts a profile picture for a specific user',
+  })
+  @ApiBearerAuth()
+  @UseGuards(IsLoggedInGuard)
+  @Post('carPicture')
+  @ApiConsumes('multipart/form-data')
+  @UseInterceptors(
+    FileInterceptor('file', {
+      storage: diskStorage({
+        destination: './uploads/carPictures',
+        filename: (req: any, file, callback) => {
+          const randomName = Array(32)
+            .fill(null)
+            .map(() => Math.round(Math.random() * 16).toString(16))
+            .join('');
+          callback(null, `${randomName}${extname(file.originalname)}`);
+        },
+      }),
+    }),
+  )
+  async uploadCarPicture(
+    @UploadedFile() file: Express.Multer.File,
+    @Session() session: SessionData,
+  ) {
+    const id = session.currentCar;
+    const car = await this.vehicleService.getCarById(id);
+    car.carPicture = file.filename;
+    await this.vehicleService.updateCar(car);
+
+    return new OkDTO(true, 'Profile Picture Upload successfull');
   }
 
   @ApiResponse({
