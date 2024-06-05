@@ -8,6 +8,7 @@ import { Repository } from 'typeorm';
 import { UserDB } from '../database/UserDB';
 import * as bcrypt from 'bcryptjs';
 import { LoginDTO } from "../session/DTO/LoginDTO";
+import { empty } from "rxjs";
 
 @Injectable()
 export class UserService {
@@ -26,8 +27,10 @@ export class UserService {
 		}
 
 		async getLoggingUser(body: LoginDTO): Promise<UserDB | undefined> {
-				const user: UserDB | undefined = await this.userRepository.findOne({ where: { email: body.email, password: body.password } });
-				return user;
+        const user: UserDB | null = await this.userRepository.findOne({
+            where: { email: body.email },
+        });
+        return user;
 		}
 
 		async createUser(
@@ -70,4 +73,4 @@ export class UserService {
 				userData.password = await bcrypt.hash(userData.password, 10);
 				return this.userRepository.save(userData);
 		}
-		}
+}

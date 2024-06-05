@@ -16,6 +16,7 @@ import { SessionData } from 'express-session';
 import { OkDTO } from '../serverDTO/OkDTO';
 import { LoginDTO } from './DTO/LoginDTO';
 import { IsLoggedInGuard } from './is-logged-in.guard';
+import * as bcrypt from "bcryptjs";
 
 @ApiTags('session')
 @Controller('session')
@@ -37,7 +38,7 @@ export class SessionController {
     if (session.currentUser === undefined) {
       return new OkDTO(false, 'No user is currently logged in');
     } else {
-      return new OkDTO(true, 'User was logged in');
+      return new OkDTO(true, 'User is logged in');
     }
   }
 
@@ -63,10 +64,12 @@ export class SessionController {
     if (body.password === '' || body.email === '') {
       throw new BadRequestException('Felder müssen ausgefüllt sein');
     }
-    const loggedUser: UserDB | undefined =
-      await this.userService.getLoggingUser(body);
-    console.log(loggedUser);
-    if (loggedUser !== undefined) {
+    const loggedUser: UserDB | null = await this.userService.getLoggingUser(body);
+    if (loggedUser == null){
+      throw new UnauthorizedException('Passwort oder Email ist falsch');
+    }
+    const validPassword: boolean = await bcrypt.compare(body.password, loggedUser.password);
+    if (validPassword || body.password === loggedUser.password) {
       session.currentUser = loggedUser.id;
       return new OkDTO(true, 'User was logged in');
     } else {
