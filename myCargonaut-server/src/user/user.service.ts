@@ -8,6 +8,7 @@ import { Repository } from 'typeorm';
 import { UserDB } from '../database/UserDB';
 import * as bcrypt from 'bcryptjs';
 import { LoginDTO } from "../session/DTO/LoginDTO";
+import { empty } from "rxjs";
 
 @Injectable()
 export class UserService {
@@ -72,4 +73,4 @@ export class UserService {
 				userData.password = await bcrypt.hash(userData.password, 10);
 				return this.userRepository.save(userData);
 		}
-		}
+}
