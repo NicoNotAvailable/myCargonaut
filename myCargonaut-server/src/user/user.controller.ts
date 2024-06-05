@@ -158,9 +158,13 @@ export class UserController {
     const id = session.currentUser;
     const user = await this.userService.getUserById(id);
     user.profilePic = file.filename;
-    await this.userService.updateUser(user);
+    try {
+      await this.userService.updateUser(user);
 
-    return new OkDTO(true, 'Profile Picture Upload successfull');
+      return new OkDTO(true, 'Profile Picture Upload successfull');
+    } catch (err) {
+      throw err;
+    }
   }
 
   @ApiResponse({
@@ -197,8 +201,12 @@ export class UserController {
       throw new BadRequestException('Neues Passwort muss übereinstimmen');
     }
     user.password = body.newPassword;
-    await this.userService.updateUser(user);
-    return new OkDTO(true, 'User was updated');
+    try {
+      await this.userService.updateUser(user);
+      return new OkDTO(true, 'User was updated');
+    } catch (err) {
+      throw err;
+    }
   }
 
   @ApiResponse({
@@ -221,8 +229,12 @@ export class UserController {
       throw new BadRequestException('Email muss übereinstimmen');
     }
     user.email = body.newEmail;
-    await this.userService.updateUser(user);
-    return new OkDTO(true, 'User was updated');
+    try {
+      await this.userService.updateUser(user);
+      return new OkDTO(true, 'User was updated');
+    } catch (err) {
+      throw err;
+    }
   }
 
   @ApiResponse({
@@ -260,9 +272,12 @@ export class UserController {
       user.lastName = body.lastName;
     }
     if (body.profileText) user.profileText = body.profileText;
-
-    await this.userService.updateUser(user);
-    return new OkDTO(true, 'User was updated');
+    try {
+      await this.userService.updateUser(user);
+      return new OkDTO(true, 'User was updated');
+    } catch (err) {
+      throw err;
+    }
   }
 
   @ApiResponse({
