@@ -14,6 +14,8 @@ import { UserController } from './user/user.controller';
 import { SessionController } from './session/session.controller';
 import { ChatDB } from './database/ChatDB';
 import {RequestDB} from "./database/RequestDB";
+import { VehicleService } from './vehicle/vehicle.service';
+import { VehicleController } from './vehicle/vehicle.controller';
 
 @Module({
   imports: [
@@ -45,7 +47,7 @@ import {RequestDB} from "./database/RequestDB";
       RequestDB,
     ]),
   ],
-  controllers: [AppController, UserController, SessionController],
-  providers: [AppService, UserService],
+  controllers: [AppController, UserController, SessionController, VehicleController],
+  providers: [AppService, UserService, VehicleService],
 })
 export class AppModule {}

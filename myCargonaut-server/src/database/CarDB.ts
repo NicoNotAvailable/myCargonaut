@@ -5,6 +5,9 @@ import { TripDB } from './TripDB';
 @ChildEntity()
 export class CarDB extends VehicleDB {
   @Column()
+  seats: number;
+
+  @Column()
   hasAC: boolean;
 
   @Column()
