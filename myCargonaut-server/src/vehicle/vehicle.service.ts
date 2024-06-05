@@ -82,6 +82,7 @@ export class VehicleService {
     if (vehicle.owner.id !== userId) {
       throw new UnauthorizedException('Vehicle is not yours!');
     }
+    // TODO: check if theres an active trip with the car
     await this.vehicleRepository.remove(vehicle);
   }
 }
