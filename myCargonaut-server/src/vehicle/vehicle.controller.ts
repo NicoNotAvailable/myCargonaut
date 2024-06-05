@@ -96,14 +96,18 @@ export class VehicleController {
   @Delete(':id')
   @ApiBearerAuth()
   @UseGuards(IsLoggedInGuard)
-  async deleteVehicle(@Param('id', ParseIntPipe) id: number): Promise<void> {
+  async deleteVehicle(
+    @Param('id', ParseIntPipe) id: number,
+    @Session() session: SessionData,
+  ): Promise<OkDTO> {
     try {
-      await this.vehicleService.deleteVehicle(id);
+      await this.vehicleService.deleteVehicle(id, session.currentUser);
     } catch (error) {
       if (error instanceof NotFoundException) {
         throw new NotFoundException(error.message);
       }
       throw error;
     }
+    return new OkDTO(true, 'Trailer was created');
   }
 }
