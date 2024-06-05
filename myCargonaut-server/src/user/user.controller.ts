@@ -29,7 +29,6 @@ import { IsLoggedInGuard } from '../session/is-logged-in.guard';
 import { EditUserDTO } from './DTO/EditUserDTO';
 import * as validator from 'validator';
 import * as bcrypt from 'bcryptjs';
-import { defaultConfiguration } from "@nestjs/cli/lib/configuration/defaults";
 
 @ApiTags('user')
 @Controller('user')
