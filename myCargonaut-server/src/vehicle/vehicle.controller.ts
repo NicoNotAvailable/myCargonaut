@@ -122,6 +122,52 @@ export class VehicleController {
   }
 
   @ApiResponse({
+    type: GetCarDTO,
+    description: 'gets a car by the specific ID from the database',
+  })
+  @ApiParam({
+    name: 'id',
+    type: 'number',
+    description: 'ID of the car to get',
+  })
+  @Get('/car/:id')
+  async getCarById(@Param('id', ParseIntPipe) id: number): Promise<GetCarDTO> {
+    try {
+      const car = await this.vehicleService.getCarById(id);
+      return this.transformCarDBtoGetCarDTO(car);
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw error;
+      }
+      throw new Error('An error occurred while retrieving the vehicle');
+    }
+  }
+
+  @ApiResponse({
+    type: GetTrailerDTO,
+    description: 'gets a trailer by the specific ID from the database',
+  })
+  @ApiParam({
+    name: 'id',
+    type: 'number',
+    description: 'ID of the trailer to get',
+  })
+  @Get('/trailer/:id')
+  async getTrailerById(
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<GetTrailerDTO> {
+    try {
+      const trailer = await this.vehicleService.getTrailerById(id);
+      return this.transformTrailerDBtoGetTrailerDTO(trailer);
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw error;
+      }
+      throw new Error('An error occurred while retrieving the car');
+    }
+  }
+
+  @ApiResponse({
     type: OkDTO,
     description: 'removes a vehicle from the database',
   })

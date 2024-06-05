@@ -85,14 +85,24 @@ export class VehicleService {
     });
   }
 
-  async getVehicleById(vehicleId: number): Promise<VehicleDB> {
-    const vehicle = await this.vehicleRepository.findOne({
-      where: { id: vehicleId },
+  async getCarById(carId: number): Promise<CarDB> {
+    const car = await this.carRepository.findOne({
+      where: { id: carId },
     });
-    if (!vehicle) {
-      throw new NotFoundException('Vehicle not found');
+    if (!car) {
+      throw new NotFoundException('Car not found');
     }
-    return vehicle;
+    return car;
+  }
+
+  async getTrailerById(trailerId: number): Promise<TrailerDB> {
+    const trailer = await this.trailerRepository.findOne({
+      where: { id: trailerId },
+    });
+    if (!trailer) {
+      throw new NotFoundException('Trailer not found');
+    }
+    return trailer;
   }
 
   async updateCar(carData: CarDB): Promise<CarDB> {
