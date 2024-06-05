@@ -29,8 +29,6 @@ export class UserService {
         const user: UserDB | null = await this.userRepository.findOne({
             where: { email: body.email },
         });
-        console.log(await this.userRepository.find());
-        console.log(user);
         return user;
 		}
 

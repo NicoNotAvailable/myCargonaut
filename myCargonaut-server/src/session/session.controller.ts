@@ -38,7 +38,7 @@ export class SessionController {
     if (session.currentUser === undefined) {
       return new OkDTO(false, 'No user is currently logged in');
     } else {
-      return new OkDTO(true, 'User was logged in');
+      return new OkDTO(true, 'User is logged in');
     }
   }
 
