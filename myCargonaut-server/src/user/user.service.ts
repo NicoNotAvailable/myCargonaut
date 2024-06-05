@@ -26,8 +26,12 @@ export class UserService {
 		}
 
 		async getLoggingUser(body: LoginDTO): Promise<UserDB | undefined> {
-				const user: UserDB | undefined = await this.userRepository.findOne({ where: { email: body.email, password: body.password } });
-				return user;
+        const user: UserDB | null = await this.userRepository.findOne({
+            where: { email: body.email },
+        });
+        console.log(await this.userRepository.find());
+        console.log(user);
+        return user;
 		}
 
 		async createUser(
