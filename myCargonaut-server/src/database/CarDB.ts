@@ -4,6 +4,10 @@ import { TripDB } from './TripDB';
 
 @ChildEntity()
 export class CarDB extends VehicleDB {
+
+  @Column({ default: 'empty.png' })
+  carPicture: string;
+
   @Column()
   seats: number;
 
