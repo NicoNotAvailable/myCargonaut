@@ -1,12 +1,12 @@
 import { Body, Controller, Post, Session, UseGuards } from '@nestjs/common';
 import { VehicleService } from './vehicle.service';
 import { UserService } from '../user/user.service';
-import {ApiBearerAuth, ApiResponse, ApiTags} from '@nestjs/swagger';
+import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { OkDTO } from '../serverDTO/OkDTO';
 import { IsLoggedInGuard } from '../session/is-logged-in.guard';
 import { CreateCarDTO } from './DTO/CreateCarDTO';
 import { SessionData } from 'express-session';
-import {CreateTrailerDTO} from "./DTO/CreateTrailerDTO";
+import { CreateTrailerDTO } from './DTO/CreateTrailerDTO';
 
 @ApiTags('vehicle')
 @Controller('vehicle')
@@ -23,10 +23,7 @@ export class VehicleController {
   @Post('/car')
   @ApiBearerAuth()
   @UseGuards(IsLoggedInGuard)
-  async createCar(
-    @Body() body: CreateCarDTO,
-    @Session() session: SessionData,
-  ) {
+  async createCar(@Body() body: CreateCarDTO, @Session() session: SessionData) {
     const owner = await this.userService.getUserById(session.currentUser);
 
     try {
@@ -47,7 +44,6 @@ export class VehicleController {
     }
   }
 
-
   @ApiResponse({
     type: OkDTO,
     description: 'posts a trailer into the database',
@@ -56,21 +52,21 @@ export class VehicleController {
   @ApiBearerAuth()
   @UseGuards(IsLoggedInGuard)
   async createTrailer(
-      @Body() body: CreateTrailerDTO,
-      @Session() session: SessionData,
+    @Body() body: CreateTrailerDTO,
+    @Session() session: SessionData,
   ) {
     const owner = await this.userService.getUserById(session.currentUser);
 
     try {
       await this.vehicleService.createTrailer(
-          owner,
-          body.name.trim(),
-          body.weight,
-          body.length,
-          body.height,
-          body.width,
-          body.isCooled,
-          body.isEnclosed
+        owner,
+        body.name.trim(),
+        body.weight,
+        body.length,
+        body.height,
+        body.width,
+        body.isCooled,
+        body.isEnclosed,
       );
       return new OkDTO(true, 'Trailer was created');
     } catch (err) {
