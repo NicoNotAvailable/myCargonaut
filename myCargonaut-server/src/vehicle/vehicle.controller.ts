@@ -102,7 +102,7 @@ export class VehicleController {
 
   @ApiResponse({
     type: OkDTO,
-    description: 'posts a profile picture for a specific user',
+    description: 'posts a picture for a specific car',
   })
   @ApiBearerAuth()
   @UseGuards(IsLoggedInGuard)
