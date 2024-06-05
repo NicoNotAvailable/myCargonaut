@@ -71,6 +71,34 @@ export class VehicleService {
     return this.trailerRepository.save(newTrailer);
   }
 
+  async getAllCarsForUser(userId: number): Promise<CarDB[]> {
+    return this.carRepository.find({
+      where: { owner: { id: userId } },
+      relations: ['owner'],
+    });
+  }
+
+  async getAllTrailersForUser(userId: number): Promise<TrailerDB[]> {
+    return this.trailerRepository.find({
+      where: { owner: { id: userId } },
+      relations: ['owner'],
+    });
+  }
+
+  async getVehicleById(vehicleId: number): Promise<VehicleDB> {
+    const vehicle = await this.vehicleRepository.findOne({
+      where: { id: vehicleId },
+    });
+    if (!vehicle) {
+      throw new NotFoundException('Vehicle not found');
+    }
+    return vehicle;
+  }
+
+  async updateCar(carData: CarDB): Promise<CarDB> {
+    return await this.carRepository.save(carData);
+  }
+
   async deleteVehicle(vehicleId: number, userId: number) {
     const vehicle = await this.vehicleRepository.findOne({
       where: { id: vehicleId },
