@@ -287,22 +287,22 @@ export class UserController {
   @Put()
   @ApiBearerAuth()
   @UseGuards(IsLoggedInGuard)
-  async deleteUser( @Session() session: SessionData): Promise<OkDTO> {
+  async deleteUser(@Session() session: SessionData): Promise<OkDTO> {
     const id = session.currentUser;
     const user = await this.userService.getUserById(id);
     user.email = null;
-    user.firstName = "";
-    user.lastName = "";
+    user.firstName = '';
+    user.lastName = '';
     user.password = null;
     user.birthday = new Date('2000-01-01');
-    user.profileText = "Dieser Nutzer hat sein konto deaktiviert.";
+    user.profileText = 'Dieser Nutzer hat sein konto deaktiviert.';
     user.profilePic = 'empty.png';
     user.phoneNumber = null;
     try {
       await this.userService.updateUser(user);
       return new OkDTO(true, 'User was deleted');
     } catch (err) {
-      throw new BadRequestException("User could not be deleted");
+      throw new BadRequestException('User could not be deleted');
     }
   }
 }
