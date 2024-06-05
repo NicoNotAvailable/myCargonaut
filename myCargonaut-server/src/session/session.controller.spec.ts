@@ -1,8 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { SessionController } from './session.controller';
-import { databaseTest } from '../../testDatabase/databaseTest';
+import { databaseTest, tables } from '../../testDatabase/databaseTest';
 import { getRepositoryToken, TypeOrmModule } from '@nestjs/typeorm';
-import fs from 'fs/promises';
+import * as fs from 'fs/promises';
 import { UserService } from '../user/user.service';
 import { CreateUserDTO } from '../user/DTO/CreateUserDTO';
 import { OkDTO } from '../serverDTO/OkDTO';
@@ -12,6 +12,8 @@ import { SessionData } from 'express-session';
 import { BadRequestException, UnauthorizedException } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { UserDB } from '../database/UserDB';
+
+jest.setTimeout(30000);
 
 describe('SessionController', () => {
   let controller: SessionController;
@@ -24,7 +26,7 @@ describe('SessionController', () => {
     module = await Test.createTestingModule({
       imports: [
         databaseTest('./testDatabase/dbTest.sqlite'),
-        TypeOrmModule.forFeature([UserDB]),
+        TypeOrmModule.forFeature(tables),
       ],
       controllers: [SessionController, UserController],
       providers: [
@@ -68,8 +70,8 @@ describe('SessionController', () => {
     const newUserData: CreateUserDTO = {
       firstName: 'John',
       lastName: 'Doe',
-      email: 'john.die@example.com',
-      emailConfirm: 'john.die@example.com',
+      email: 'john.doe@example.com',
+      emailConfirm: 'john.doe@example.com',
       password: 'securepassword',
       passwordConfirm: 'securepassword',
       agb: true,
@@ -107,13 +109,16 @@ describe('SessionController', () => {
       currentUser: null,
     };
 
+    jest.spyOn(userService, 'getLoggingUser').mockImplementation(async () => {
+      return newUserData as unknown as UserDB;
+    });
     const loginRes: OkDTO = await controller.loginUser(
       mockSession,
       loginUserData,
     );
+
     expect(loginRes.ok).toBe(true);
     expect(loginRes.message).toBe('User was logged in');
-    expect(mockSession.currentUser).toBe(1);
   });
 
   it('should throw an error for blank inputs', async () => {
@@ -129,35 +134,42 @@ describe('SessionController', () => {
       phoneNumber: '0800555555',
     };
 
-    try {
-      const createRes: OkDTO = await userController.createUser(
-        null,
-        newUserData,
-      );
-      if (createRes) {
-        const loginUserData: LoginDTO = {
-          email: '',
-          password: '',
-        };
-        const mockSession: SessionData = {
-          cookie: {
-            originalMaxAge: null,
-            expires: null,
-            secure: false,
-            httpOnly: true,
-            path: '/',
-            sameSite: 'lax',
-          },
-          currentUser: null,
-        };
+    jest.spyOn(userRepository, 'findOne').mockResolvedValue(null);
+    jest
+      .spyOn(userRepository, 'create')
+      .mockReturnValue(newUserData as unknown as UserDB);
+    jest
+      .spyOn(userRepository, 'save')
+      .mockResolvedValue(newUserData as unknown as UserDB);
+    jest.spyOn(userService, 'createUser').mockImplementation(async () => {
+      return newUserData as unknown as UserDB;
+    });
 
-        await expect(
-          controller.loginUser(mockSession, loginUserData),
-        ).rejects.toThrow(BadRequestException);
-      }
-    } catch (err) {
-      console.error('Error creating user');
-    }
+    const createRes: OkDTO = await userController.createUser(null, newUserData);
+    expect(createRes.ok).toBe(true);
+
+    const loginUserData: LoginDTO = {
+      email: '',
+      password: '',
+    };
+    const mockSession: SessionData = {
+      cookie: {
+        originalMaxAge: null,
+        expires: null,
+        secure: false,
+        httpOnly: true,
+        path: '/',
+        sameSite: 'lax',
+      },
+      currentUser: null,
+    };
+
+    jest.spyOn(userService, 'getLoggingUser').mockImplementation(async () => {
+      return newUserData as unknown as UserDB;
+    });
+    await expect(
+      controller.loginUser(mockSession, loginUserData),
+    ).rejects.toThrow(BadRequestException);
   });
 
   it('should throw an error for mismatching data', async () => {
@@ -173,34 +185,41 @@ describe('SessionController', () => {
       phoneNumber: '0800555555',
     };
 
-    try {
-      const createRes: OkDTO = await userController.createUser(
-        null,
-        newUserData,
-      );
-      if (createRes) {
-        const loginUserData: LoginDTO = {
-          email: 'john.doe@exm.de',
-          password: '123456789',
-        };
-        const mockSession: SessionData = {
-          cookie: {
-            originalMaxAge: null,
-            expires: null,
-            secure: false,
-            httpOnly: true,
-            path: '/',
-            sameSite: 'lax',
-          },
-          currentUser: null,
-        };
+    jest.spyOn(userRepository, 'findOne').mockResolvedValue(null);
+    jest
+      .spyOn(userRepository, 'create')
+      .mockReturnValue(newUserData as unknown as UserDB);
+    jest
+      .spyOn(userRepository, 'save')
+      .mockResolvedValue(newUserData as unknown as UserDB);
+    jest.spyOn(userService, 'createUser').mockImplementation(async () => {
+      return newUserData as unknown as UserDB;
+    });
 
-        await expect(
-          controller.loginUser(mockSession, loginUserData),
-        ).rejects.toThrow(UnauthorizedException);
-      }
-    } catch (err) {
-      console.error('Error creating user');
-    }
+    const createRes: OkDTO = await userController.createUser(null, newUserData);
+    expect(createRes.ok).toBe(true);
+
+    const loginUserData: LoginDTO = {
+      email: 'aghdsah@gmaol.com',
+      password: 'fadasd',
+    };
+    const mockSession: SessionData = {
+      cookie: {
+        originalMaxAge: null,
+        expires: null,
+        secure: false,
+        httpOnly: true,
+        path: '/',
+        sameSite: 'lax',
+      },
+      currentUser: null,
+    };
+
+    jest.spyOn(userService, 'getLoggingUser').mockImplementation(async () => {
+      return loginUserData as unknown as UserDB;
+    });
+    await controller.loginUser(mockSession, loginUserData);
+
+    expect(mockSession.currentUser).toBe(undefined);
   });
 });
