@@ -157,9 +157,13 @@ export class UserController {
     const id = session.currentUser;
     const user = await this.userService.getUserById(id);
     user.profilePic = file.filename;
-    await this.userService.updateUser(user);
+    try {
+      await this.userService.updateUser(user);
 
-    return new OkDTO(true, 'Profile Picture Upload successfull');
+      return new OkDTO(true, 'Profile Picture Upload successfull');
+    } catch (err) {
+      throw err;
+    }
   }
 
   @ApiResponse({
@@ -196,8 +200,12 @@ export class UserController {
       throw new BadRequestException('Neues Passwort muss übereinstimmen');
     }
     user.password = body.newPassword;
-    await this.userService.updateUser(user);
-    return new OkDTO(true, 'User was updated');
+    try {
+      await this.userService.updateUser(user);
+      return new OkDTO(true, 'User was updated');
+    } catch (err) {
+      throw err;
+    }
   }
 
   @ApiResponse({
@@ -220,8 +228,12 @@ export class UserController {
       throw new BadRequestException('Email muss übereinstimmen');
     }
     user.email = body.newEmail;
-    await this.userService.updateUser(user);
-    return new OkDTO(true, 'User was updated');
+    try {
+      await this.userService.updateUser(user);
+      return new OkDTO(true, 'User was updated');
+    } catch (err) {
+      throw err;
+    }
   }
 
   @ApiResponse({
@@ -259,8 +271,37 @@ export class UserController {
       user.lastName = body.lastName;
     }
     if (body.profileText) user.profileText = body.profileText;
+    try {
+      await this.userService.updateUser(user);
+      return new OkDTO(true, 'User was updated');
+    } catch (err) {
+      throw err;
+    }
+  }
 
-    await this.userService.updateUser(user);
-    return new OkDTO(true, 'User was updated');
+  @ApiResponse({
+    type: OkDTO,
+    description: '"deletes" a spefics user by only keeping its id',
+  })
+  @Put()
+  @ApiBearerAuth()
+  @UseGuards(IsLoggedInGuard)
+  async deleteUser(@Session() session: SessionData): Promise<OkDTO> {
+    const id = session.currentUser;
+    const user = await this.userService.getUserById(id);
+    user.email = null;
+    user.firstName = '';
+    user.lastName = '';
+    user.password = null;
+    user.birthday = new Date('2000-01-01');
+    user.profileText = 'Dieser Nutzer hat sein konto deaktiviert.';
+    user.profilePic = 'empty.png';
+    user.phoneNumber = null;
+    try {
+      await this.userService.updateUser(user);
+      return new OkDTO(true, 'User was deleted');
+    } catch (err) {
+      throw new BadRequestException('User could not be deleted');
+    }
   }
 }

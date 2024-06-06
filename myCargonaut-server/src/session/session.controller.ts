@@ -1,21 +1,21 @@
 import {
-  BadRequestException,
   Body,
   Controller,
+  Post,
+  UnauthorizedException,
+  Session,
+  BadRequestException,
+  UseGuards,
   Get,
   Injectable,
-  Post,
-  Session,
-  UnauthorizedException,
-  UseGuards
-} from "@nestjs/common";
-import { ApiResponse, ApiTags } from "@nestjs/swagger";
-import { UserDB } from "../database/UserDB";
-import { UserService } from "../user/user.service";
-import { SessionData } from "express-session";
-import { OkDTO } from "../serverDTO/OkDTO";
-import { LoginDTO } from "./DTO/LoginDTO";
-import { IsLoggedInGuard } from "./is-logged-in.guard";
+} from '@nestjs/common';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { UserDB } from '../database/UserDB';
+import { UserService } from '../user/user.service';
+import { SessionData } from 'express-session';
+import { OkDTO } from '../serverDTO/OkDTO';
+import { LoginDTO } from './DTO/LoginDTO';
+import { IsLoggedInGuard } from './is-logged-in.guard';
 import * as bcrypt from "bcryptjs";
 
 @ApiTags('session')
@@ -38,7 +38,7 @@ export class SessionController {
     if (session.currentUser === undefined) {
       return new OkDTO(false, 'No user is currently logged in');
     } else {
-      return new OkDTO(true, 'User was logged in');
+      return new OkDTO(true, 'User is logged in');
     }
   }
 

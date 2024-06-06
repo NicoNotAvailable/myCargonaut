@@ -19,12 +19,11 @@ export class UserDB {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column( { unique: true, nullable: true })
   @IsEmail()
-  @Index({ unique: true })
   email: string;
 
-  @Column()
+  @Column( {nullable: true })
   password: string;
 
   @Column()
