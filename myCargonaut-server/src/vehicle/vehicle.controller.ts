@@ -55,7 +55,9 @@ export class VehicleController {
         @Session() session: SessionData,
     ) {
         const owner = await this.userService.getUserById(session.currentUser);
-
+        if (!owner) {
+            throw new BadRequestException('User was not found');
+        }
         if (!body.name || body.name.trim().length === 0) {
             throw new BadRequestException('Car name cannot be empty');
         }
