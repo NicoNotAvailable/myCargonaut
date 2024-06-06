@@ -20,12 +20,6 @@ export class VehicleDB {
   name: string;
 
   @Column()
-  carPicture: string;
-
-  @Column()
-  seats: number;
-
-  @Column()
   weight: number;
 
   @Column()

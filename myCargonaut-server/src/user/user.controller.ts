@@ -70,7 +70,6 @@ export class UserController {
   @ApiResponse({ type: OkDTO, description: 'creates a new user' })
   @Post()
   async createUser(
-    @UploadedFile() file: Express.Multer.File,
     @Body() body: CreateUserDTO,
   ) {
     if (!body.agb) {
@@ -106,7 +105,6 @@ export class UserController {
       );
     }
     try {
-      const profilePic = file ? file.filename : 'empty.png';
       await this.userService.createUser(
         body.firstName,
         body.lastName,
@@ -114,7 +112,6 @@ export class UserController {
         body.password.trim(),
         birthday,
         body.phoneNumber,
-        profilePic,
       );
       return new OkDTO(true, 'User was created');
     } catch (err) {
