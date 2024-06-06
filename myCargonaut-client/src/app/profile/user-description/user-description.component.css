@@ -48,6 +48,34 @@
 .border {
   border: #059e4b solid 0.09rem !important;
 }
+.exitButton{
+  position: relative;
+  z-index: 1;
+  margin-top: -1.5rem;
+  background-color: #1a9cc5;
+  padding: 0.5rem 1rem 0.5rem 1rem;
+  font-size: 1.5rem;
+  font-weight: 400;
+}
+.exitButton:hover{
+  box-shadow: #1a9cc5 0 0 20px;
+}
+
+.cancelButton{
+  background-color: #1a9cc5 !important;
+  position: relative;
+  z-index: 2;
+  font-size: 1.5rem;
+  border-radius: 2rem;
+  width: 3.25rem;
+  border-color: transparent;
+  transition: all 0.3s ease;
+  margin-bottom: -1.5rem;
+}
+.cancelButton:hover {
+  box-shadow: #1a9cc5 0 0 20px;
+  text-shadow: ghostwhite 0 0 10px;
+}
 
 #deleteBtn{
   background-color: rgba(0,91,82,0.66) !important;

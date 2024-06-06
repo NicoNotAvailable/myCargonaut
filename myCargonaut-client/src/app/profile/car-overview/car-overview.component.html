@@ -1,6 +1,6 @@
 <div class="container mt-3 mb-3">
   <div class="text-end col-12">
-    <button type="button" class="btn btn-primary cancelButton text-center" id="cancelButton">
+    <button type="button" class="btn btn-primary cancelButton text-center" id="cancelButton" (click)="changeViewCarsState()">
       <i>
         <fa-icon [icon]="faXmark"></fa-icon>
       </i>
@@ -41,13 +41,13 @@
                 <p class="m-0">7m Hoch</p>
                 <p class="m-0">1t Schwer</p>
               </div>
-              <button type="button" class="btn bg-transparent text-light editCar"><h5>Bearbeiten</h5></button>
+              <button type="button" class="btn bg-transparent text-light editCar" (click)="changeAddCarsState(1)"><h5>Bearbeiten</h5></button>
             </div>
             </div>
           </div>
         </div>
         <div class="col-4 my-auto">
-          <button type="button" class="btn backgroundBlue circle p-3">
+          <button type="button" class="btn backgroundBlue circle p-3" (click)="changeAddCarsState(0)">
             <i><fa-icon [icon]="faPlus"></fa-icon></i>
           </button>
         </div>

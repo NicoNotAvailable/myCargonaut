@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { FaIconComponent } from "@fortawesome/angular-fontawesome";
 import { faXmark, faSave } from "@fortawesome/free-solid-svg-icons";
 
@@ -10,6 +10,18 @@ import { faXmark, faSave } from "@fortawesome/free-solid-svg-icons";
   styleUrl: './add-car.component.css'
 })
 export class AddCarComponent {
+  @Input() editingCar!: number;
+  @Output() changeAddCar = new EventEmitter<void>();
+
+
+  saveCar(): void {
+
+    this.changeAddCarState()
+  }
+
+  changeAddCarState(): void {
+    this.changeAddCar.emit();
+  }
 
   protected readonly faXmark = faXmark;
   protected readonly faSave = faSave;
