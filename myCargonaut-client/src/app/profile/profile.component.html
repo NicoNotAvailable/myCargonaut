@@ -1,11 +1,11 @@
 <div class="profile text-center container mb-4">
   <div class="row">
     <div class="col-2">
-      <img class="profileCircle" src="../../assets/empty.png" alt="profile">
+      <img class="profileCircle" [ngSrc]="pathToImage" alt="profile">
     </div>
     <div class="col-8 my-auto">
       <div class="row">
-        <h1 class="textGreen">Profil von Elon Musk</h1>
+        <h1 class="textGreen">Profil von {{ fullName() }}</h1>
       </div>
     </div>
     <div class="col-12">
@@ -20,21 +20,21 @@
         <div class="col-2 backgroundGreen text-center flex-row justify-content-center attribute">
           <span>
             <i class="me-3"><fa-icon [icon]="faUser"></fa-icon></i>
-            <span>Elon Musk</span>
+            <span>{{ fullName() }}</span>
           </span>
         </div>
         <div class="col-1"></div>
         <div class="col-2 backgroundGreen text-center flex-row justify-content-center attribute">
           <span>
             <i class="me-3"><fa-icon [icon]="faCalender"></fa-icon></i>
-            <span>28.06.1971</span>
+            <span>{{ birthday }}</span>
           </span>
         </div>
         <div class="col-1"></div>
         <div class="col-2 backgroundGreen text-center flex-row justify-content-center attribute">
           <span>
             <i class="me-3"><fa-icon [icon]="faSmoking"></fa-icon></i>
-            <span>Raucher</span>
+            <span>Remove this</span>
           </span>
         </div>
       </div>

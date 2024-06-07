@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, inject } from "@angular/core";
 import {FormsModule} from "@angular/forms";
 import {HttpClient, HttpClientModule} from "@angular/common/http";
 import {NgIf} from "@angular/common";
 import {response} from "express";
+import { SessionService } from "../services/session.service";
 
 @Component({
   selector: 'app-login',
@@ -12,12 +13,24 @@ import {response} from "express";
   styleUrl: './login.component.css'
 })
 export class LoginComponent {
+  public sessionService: SessionService = inject(SessionService);
+
+  isLoggedIn: boolean = false;
+
   email: string = "";
   password: string = "";
 
   message: string = "";
 
   constructor(private http: HttpClient) {
+  }
+
+  ngOnInit(): void {
+    //console.log(this.sessionService.checkLogin());
+    this.sessionService.checkLogin().then(isLoggedIn => {
+      console.log('Login status:', isLoggedIn);
+      this.isLoggedIn = isLoggedIn;
+    });
   }
 
   userLogin(form: any): void{
@@ -31,6 +44,12 @@ export class LoginComponent {
         form.resetForm();
         console.log(response);
         this.message = "Anmeldung lief swaggy";
+        this.sessionService.checkLogin().then(isLoggedIn => {
+          console.log('Login status:', isLoggedIn);
+        });
+        this.sessionService.checkLoginNum().then(isLoggedIn => {
+          console.log('Login status: ', isLoggedIn);
+        });
         setTimeout(() =>{
           this.message = "";
         }, 5000);
