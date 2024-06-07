@@ -69,9 +69,7 @@ export class UserController {
 
   @ApiResponse({ type: OkDTO, description: 'creates a new user' })
   @Post()
-  async createUser(
-    @Body() body: CreateUserDTO,
-  ) {
+  async createUser(@Body() body: CreateUserDTO) {
     if (!body.agb) {
       throw new BadRequestException(
         'Du musst die AGB akzeptieren, um dich zu registrieren',
