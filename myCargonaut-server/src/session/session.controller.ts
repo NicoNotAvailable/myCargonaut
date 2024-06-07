@@ -105,7 +105,6 @@ export class SessionController {
    */
   @ApiResponse({ description: 'fetches the currently logged in users ID' })
   @Get('getSessionUser')
-  @UseGuards(IsLoggedInGuard)
   getSessionUser(@Session() session: SessionData): number | undefined {
     return session.currentUser;
   }

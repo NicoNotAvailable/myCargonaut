@@ -56,25 +56,30 @@ export class ProfileComponent {
       this.birthday = DateUtils.parseDate(sqlDate);
       const imagePath: string = "empty.png";
       this.pathToImage = prePath.concat(imagePath);
-      this.sessionService.checkLogin();
+      this.sessionService.checkLoginNum();
     }, 200);
-    this.http.get<any>("http://localhost:8000/user")
-      .subscribe(
-        response => {
-          console.log("Userdata read successfully", response);
-          this.firstName.set(response.firstName);
-          this.lastName.set(response.lastName);
-          this.birthday = DateUtils.parseDate(response.birthday);
-          const imagePath: string = response.profilePic;
-          response.profilePic == "empty.png" ? this.pathToImage = "assets/empty.png"
-            : this.pathToImage = prePath.concat(imagePath);
-          console.log(response)
-        },
-        error => {
+    if (this.sessionService.getUserID() != -1) {
+      this.http.get<any>("http://localhost:8000/user")
+        .subscribe(
+          response => {
+            console.log("Userdata read successfully", response);
+            this.firstName.set(response.firstName);
+            this.lastName.set(response.lastName);
+            this.birthday = DateUtils.parseDate(response.birthday);
+            const imagePath: string = response.profilePic;
+            response.profilePic == "empty.png" ? this.pathToImage = "assets/empty.png"
+              : this.pathToImage = prePath.concat(imagePath);
+            console.log(response)
+          },
+          error => {
 
-          console.error("There was an error!", error);
-        }
-      );
+            console.error("There was an error!", error);
+          }
+        );
+    } else {
+      //Redirect to 404 Page or (you must be logged in Page)
+    }
+
 
 
     //this.fullName = response.firstName + " " + response.lastName;

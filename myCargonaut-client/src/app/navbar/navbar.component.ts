@@ -38,10 +38,6 @@ export class NavbarComponent {
   protected readonly faPencil = faPencil;
 
   ngOnInit(): void {
-    this.sessionService.checkLogin().then(isLoggedIn => {
-      console.log('Login status:', isLoggedIn);
-    });
-
     this.sessionService.checkLoginNum().then(currentUser => {
       console.log(currentUser);
     });
