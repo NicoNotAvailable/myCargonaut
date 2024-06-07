@@ -13,7 +13,7 @@
       </div>
       <div class="row">
         <div class="col-6 col-4-md col-2-sm text-start">
-          <textarea type="text" class="border border-2 rounded-3 col-11 textareaSize mb-3" id="selfNote"></textarea>
+          <textarea [(ngModel)]="profileText" type="text" class="border border-2 rounded-3 col-11 textareaSize mb-3" id="selfNote"></textarea>
           <div class="row mt-4">
             <div class="col-5">
               <button type="button" class="btn border border-2 rounded-3 customButton text-center text-light p-2 ps-5 pe-5" id="cars"><h4>Deine Cars</h4>
@@ -32,13 +32,13 @@
               <i><fa-icon [icon]="faCar"></fa-icon></i>
               <div class="row">
                 <div class="col-4">
-                  <span id="ridesTaken">1337 Fahrten</span>
+                  <span id="ridesTaken">{{ totalDrives() }} Fahrten</span>
                 </div>
                 <div class="col-4">
-                  <span id="ridesOffered">420 angeboten</span>
+                  <span id="ridesOffered">{{ offeredDrives() }} angeboten</span>
                 </div>
                 <div class="col-4">
-                  <span id="ridesSearched">666 gesucht</span>
+                  <span id="ridesSearched"> {{ takenDrives() }} gesucht</span>
                 </div>
               </div>
             </div>
@@ -51,29 +51,29 @@
             <div class="col-2"></div>
             <div class="col-5 border border-2 rounded-3 mt-4">
               <i><fa-icon [icon]="faCompass"></fa-icon></i>
-              <p class="m-0" id="distance">200-300km</p>
+              <p class="m-0" id="distance"> {{ distanceDriven }} km</p>
             </div>
           </div>
           <div class="row">
             <div class="col-5 border border-2 rounded-3 mt-4">
               <i><fa-icon [icon]="faUsers"></fa-icon></i>
-              <p class="m-0" id="passengerCount">69 Mitfahrer</p>
+              <p class="m-0" id="passengerCount">{{ totalPassengers }} Mitfahrer</p>
             </div>
             <div class="col-2"></div>
             <div class="col-5 border border-2 rounded-3 mt-4">
               <i><fa-icon [icon]="faWeight"></fa-icon></i>
-              <p class="m-0" id="weight">3 Tonnen</p>
+              <p class="m-0" id="weight">{{ highestWeight }} Tonnen</p>
             </div>
           </div>
           <div class="row">
             <div class="col-5 border border-2 rounded-3 mt-4">
               <i><fa-icon [icon]="faEnvelope"></fa-icon></i>
-              <p class="m-0" id="email">ElonMuskAtX.de</p>
+              <p class="m-0" id="email">{{ email }}</p>
             </div>
             <div class="col-2"></div>
             <div class="col-5 border border-2 rounded-3 mt-4">
               <i><fa-icon [icon]="faPhone"></fa-icon></i>
-              <p class="m-0" id="phoneNumber">+491337666420</p>
+              <p class="m-0" id="phoneNumber">{{ phoneNumber }}</p>
             </div>
           </div>
           <div class="row" hidden>
