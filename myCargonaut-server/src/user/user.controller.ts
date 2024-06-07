@@ -1,15 +1,15 @@
 import {
   BadRequestException,
   Body,
-  Controller,
+  Controller, Get,
   Logger,
   Post,
   Put,
   Session,
   UploadedFile,
   UseGuards,
-  UseInterceptors,
-} from '@nestjs/common';
+  UseInterceptors
+} from "@nestjs/common";
 import {
   ApiBearerAuth,
   ApiConsumes,
@@ -29,6 +29,7 @@ import { IsLoggedInGuard } from '../session/is-logged-in.guard';
 import { EditUserDTO } from './DTO/EditUserDTO';
 import * as validator from 'validator';
 import * as bcrypt from 'bcryptjs';
+import { UserDB } from "../database/UserDB";
 
 @ApiTags('user')
 @Controller('user')
@@ -65,6 +66,17 @@ export class UserController {
     }
 
     return age >= 18;
+  }
+
+  @ApiResponse({ type: OkDTO, description: 'gets the current user' })
+  @ApiBearerAuth()
+  @Get()
+  async getUser(@Session() session: SessionData): Promise<UserDB> {
+    if (!session.currentUser) {
+      throw new BadRequestException('No user session found');
+    }
+    const user = await this.userService.getUserById(session.currentUser);
+    return user;
   }
 
   @ApiResponse({ type: OkDTO, description: 'creates a new user' })
@@ -248,7 +260,7 @@ export class UserController {
       body.phoneNumber != user.phoneNumber &&
       !this.isValidMobileNumber(body.phoneNumber)
     ) {
-      throw new BadRequestException('Ungültige telefon-Nummer');
+      throw new BadRequestException('Ungültige Telefon-Nummer');
     }
     user.phoneNumber = body.phoneNumber;
     if (body.firstName) {
