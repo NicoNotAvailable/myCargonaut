@@ -33,8 +33,13 @@ export class VehicleService {
     hasTelevision: boolean,
   ): Promise<CarDB> {
     const newCar: CarDB = this.carRepository.create();
-
-    newCar.owner = owner;
+    if (owner instanceof UserDB) {
+      newCar.owner = owner;
+    } else {
+      console.log(owner);
+      throw new Error('Invalid owner type');
+    }
+    // Set the values for the new car
     newCar.name = name;
     newCar.weight = weight;
     newCar.length = length;
@@ -44,7 +49,15 @@ export class VehicleService {
     newCar.hasAC = hasAC;
     newCar.hasTelevision = hasTelevision;
 
-    return this.carRepository.save(newCar);
+    try {
+      // Save the new car
+      const savedCar = await this.carRepository.save(newCar);
+      console.log(savedCar);
+      return savedCar;
+    } catch (error) {
+      console.log('Error saving CarDB:', error);
+      throw new Error('An error occurred while saving the car');
+    }
   }
 
   async createTrailer(

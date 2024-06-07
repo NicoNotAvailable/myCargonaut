@@ -9,7 +9,7 @@ import { OkDTO } from '../serverDTO/OkDTO';
 import { UserController } from '../user/user.controller';
 import { LoginDTO } from './DTO/LoginDTO';
 import { SessionData } from 'express-session';
-import { BadRequestException, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { UserDB } from '../database/UserDB';
 
@@ -90,7 +90,7 @@ describe('SessionController', () => {
       return newUserData as unknown as UserDB;
     });
 
-    const createRes: OkDTO = await userController.createUser(null, newUserData);
+    const createRes: OkDTO = await userController.createUser(newUserData);
     expect(createRes.ok).toBe(true);
 
     const loginUserData: LoginDTO = {
@@ -145,7 +145,7 @@ describe('SessionController', () => {
       return newUserData as unknown as UserDB;
     });
 
-    const createRes: OkDTO = await userController.createUser(null, newUserData);
+    const createRes: OkDTO = await userController.createUser(newUserData);
     expect(createRes.ok).toBe(true);
 
     const loginUserData: LoginDTO = {
@@ -196,7 +196,7 @@ describe('SessionController', () => {
       return newUserData as unknown as UserDB;
     });
 
-    const createRes: OkDTO = await userController.createUser(null, newUserData);
+    const createRes: OkDTO = await userController.createUser(newUserData);
     expect(createRes.ok).toBe(true);
 
     const loginUserData: LoginDTO = {

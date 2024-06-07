@@ -1,8 +1,10 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Delete,
   Get,
+  Logger,
   NotFoundException,
   Param,
   ParseIntPipe,
@@ -41,6 +43,7 @@ export class VehicleController {
     private readonly vehicleService: VehicleService,
     private readonly userService: UserService,
   ) {}
+  private readonly logger = new Logger(VehicleController.name);
 
   @ApiResponse({
     type: OkDTO,
@@ -51,6 +54,38 @@ export class VehicleController {
   @UseGuards(IsLoggedInGuard)
   async createCar(@Body() body: CreateCarDTO, @Session() session: SessionData) {
     const owner = await this.userService.getUserById(session.currentUser);
+    console.log(session.currentUser);
+    if (!owner) {
+      throw new BadRequestException('User was not found');
+    }
+    if (!body.name || body.name.trim().length === 0) {
+      throw new BadRequestException('Car name cannot be empty');
+    }
+    if (body.name.trim().length > 10) {
+      throw new BadRequestException('Car name is too long');
+    }
+    if (!body.weight || body.weight <= 0) {
+      throw new BadRequestException('Car weight must be a positive number');
+    }
+    if (!body.length || body.length <= 0 || body.length > 1000) {
+      throw new BadRequestException('Car length must be between 1 and 1000 cm');
+    }
+    if (!body.height || body.height <= 0 || body.height > 1000) {
+      throw new BadRequestException('Car height must be between 1 and 1000 cm');
+    }
+    if (!body.width || body.width <= 0 || body.width > 1000) {
+      throw new BadRequestException('Car width must be between 1 and 1000 cm');
+    }
+    if (body.seats <= 0 || body.seats > 20) {
+      throw new BadRequestException('Car seats must be between 1 and 20');
+    }
+    console.log('owner');
+    console.log(owner);
+    console.log('body');
+    console.log(body);
+    this.logger.log('through the ifs');
+    this.logger.log(owner);
+    this.logger.log(body);
 
     try {
       await this.vehicleService.createCar(
@@ -66,7 +101,7 @@ export class VehicleController {
       );
       return new OkDTO(true, 'Car was created');
     } catch (err) {
-      throw err;
+      throw new Error('An error occurred' + err);
     }
   }
 
@@ -83,6 +118,31 @@ export class VehicleController {
   ) {
     const owner = await this.userService.getUserById(session.currentUser);
 
+    if (!body.name || body.name.trim().length === 0) {
+      throw new BadRequestException('Trailer name cannot be empty');
+    }
+    if (body.name.trim().length > 10) {
+      throw new BadRequestException('Trailer name is too long');
+    }
+    if (!body.weight || body.weight <= 0) {
+      throw new BadRequestException('Trailer weight must be a positive number');
+    }
+    if (!body.length || body.length <= 0 || body.length > 1000) {
+      throw new BadRequestException(
+        'Trailer length must be between 1 and 1000 cm',
+      );
+    }
+    if (!body.height || body.height <= 0 || body.height > 1000) {
+      throw new BadRequestException(
+        'Trailer height must be between 1 and 1000 cm',
+      );
+    }
+    if (!body.width || body.width <= 0 || body.width > 1000) {
+      throw new BadRequestException(
+        'Trailer width must be between 1 and 1000 cm',
+      );
+    }
+
     try {
       await this.vehicleService.createTrailer(
         owner,
@@ -96,7 +156,7 @@ export class VehicleController {
       );
       return new OkDTO(true, 'Trailer was created');
     } catch (err) {
-      throw err;
+      throw new Error('An error occurred');
     }
   }
 

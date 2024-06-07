@@ -47,7 +47,12 @@ import { VehicleController } from './vehicle/vehicle.controller';
       RequestDB,
     ]),
   ],
-  controllers: [AppController, UserController, SessionController, VehicleController],
+  controllers: [
+    AppController,
+    UserController,
+    SessionController,
+    VehicleController,
+  ],
   providers: [AppService, UserService, VehicleService],
 })
 export class AppModule {}

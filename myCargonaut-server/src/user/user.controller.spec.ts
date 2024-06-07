@@ -61,7 +61,7 @@ describe('UserController', () => {
       phoneNumber: '0800555555',
     };
 
-    const response = await controller.createUser(null, body);
+    const response = await controller.createUser(body);
     expect(response.ok).toBe(true);
     expect(response.message).toBe('User was created');
   });
@@ -78,7 +78,7 @@ describe('UserController', () => {
       agb: true,
       phoneNumber: '0800555555',
     };
-    await expect(controller.createUser(null, body)).rejects.toThrow(
+    await expect(controller.createUser(body)).rejects.toThrow(
       BadRequestException,
     );
   });
@@ -95,7 +95,7 @@ describe('UserController', () => {
       agb: true,
       phoneNumber: '08005555555',
     };
-    await expect(controller.createUser(null, body)).rejects.toThrow(
+    await expect(controller.createUser(body)).rejects.toThrow(
       BadRequestException,
     );
   });
@@ -112,7 +112,7 @@ describe('UserController', () => {
       phoneNumber: '12345',
       agb: true,
     };
-    await expect(controller.createUser(null, body)).rejects.toThrow(
+    await expect(controller.createUser(body)).rejects.toThrow(
       BadRequestException,
     );
   });
@@ -130,7 +130,7 @@ describe('UserController', () => {
       phoneNumber: '0800555555',
     };
 
-    await expect(controller.createUser(null, body)).rejects.toThrow(
+    await expect(controller.createUser(body)).rejects.toThrow(
       BadRequestException,
     );
   });
