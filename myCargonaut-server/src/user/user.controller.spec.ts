@@ -323,4 +323,44 @@ describe('UserController', () => {
       BadRequestException,
     );
   });
+
+  it('should delete a user successfully', async () => {
+    const mockSession: SessionData = {
+      cookie: {
+        originalMaxAge: null,
+        expires: null,
+        secure: false,
+        httpOnly: true,
+        path: '/',
+        sameSite: 'lax',
+      },
+      currentUser: 1, // Set the ID of the user you want to delete
+    };
+
+    // Mock the request object
+    const req: any = {
+      session: mockSession,
+    };
+
+    const response = await controller.deleteUser(req);
+    expect(response.ok).toBe(true);
+    expect(response.message).toBe('User was deleted');
+
+    // Verify that the user has been "deleted" by checking its properties
+    const deletedUser = await module
+      .get<UserService>(UserService)
+      .getUserById(mockSession.currentUser);
+
+    // Assert that the user's properties have been reset as expected
+    expect(deletedUser.email).toBe(null);
+    expect(deletedUser.firstName).toBe('');
+    expect(deletedUser.lastName).toBe('');
+    expect(deletedUser.password).toBe(null);
+    expect(deletedUser.birthday).toEqual(new Date('2000-01-01'));
+    expect(deletedUser.profileText).toBe(
+      'Dieser Nutzer hat sein konto deaktiviert.',
+    );
+    expect(deletedUser.profilePic).toBe('empty.png');
+    expect(deletedUser.phoneNumber).toBe(null);
+  });
 });

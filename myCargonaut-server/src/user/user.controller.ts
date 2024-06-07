@@ -253,7 +253,7 @@ export class UserController {
       body.phoneNumber != user.phoneNumber &&
       !this.isValidMobileNumber(body.phoneNumber)
     ) {
-      throw new BadRequestException('Ungültige telefon-Nummer');
+      throw new BadRequestException('Ungültige Telefon-Nummer');
     }
     user.phoneNumber = body.phoneNumber;
     if (body.firstName) {
