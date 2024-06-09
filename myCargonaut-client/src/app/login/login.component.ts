@@ -2,7 +2,6 @@ import { Component, inject } from "@angular/core";
 import {FormsModule} from "@angular/forms";
 import {HttpClient, HttpClientModule} from "@angular/common/http";
 import { NgClass, NgIf } from "@angular/common";
-import {response} from "express";
 import { SessionService } from "../services/session.service";
 
 @Component({
@@ -31,6 +30,9 @@ export class LoginComponent {
     this.sessionService.checkLoginNum().then(isLoggedIn => {
       console.log('Login status:', isLoggedIn);
       isLoggedIn == -1 ? this.isLoggedIn = false : this.isLoggedIn = true;
+      if (this.isLoggedIn) {
+        window.location.href = "/profile";
+      }
     });
   }
 

@@ -7,8 +7,8 @@ import {
     BadRequestException,
     UseGuards,
     Get,
-    Injectable,
-} from '@nestjs/common';
+    Injectable, Delete
+} from "@nestjs/common";
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { UserDB } from '../database/UserDB';
 import { UserService } from '../user/user.service';
@@ -105,7 +105,7 @@ export class SessionController {
         type: OkDTO,
         description: 'logs out the user and deletes the session data',
     })
-    @Post('logout')
+    @Delete('logout')
     @UseGuards(IsLoggedInGuard)
     logout(@Session() session: SessionData): OkDTO {
         if (session.currentUser !== undefined) {

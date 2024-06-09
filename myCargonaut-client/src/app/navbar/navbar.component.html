@@ -39,11 +39,19 @@
                 </button>
               </a>
             </li>
-            <li>
+            <li *ngIf="!isLoggedIn">
               <a class="dropdown-item text-center w-100" href="/login">
                 <button type="button" class="btn btn-success">
                   <span><fa-icon [icon]="faSignIn" class="white-fade me-2"></fa-icon></span>
                   <span>Einloggen</span>
+                </button>
+              </a>
+            </li>
+            <li *ngIf="isLoggedIn">
+              <a class="dropdown-item text-center w-100" (click)="runLogOut()">
+                <button type="button" class="btn btn-success">
+                  <span><fa-icon [icon]="faSignIn" class="white-fade me-2"></fa-icon></span>
+                  <span>Abmelden</span>
                 </button>
               </a>
             </li>

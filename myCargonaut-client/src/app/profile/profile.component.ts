@@ -27,6 +27,8 @@ import { UserService } from "../services/user.service";
   styleUrl: "./profile.component.css"
 })
 export class ProfileComponent {
+  isLoggedIn: boolean = false;
+
   editState: boolean = false;
   userDesc: boolean = true;
   viewCars: boolean = false;
@@ -57,6 +59,14 @@ export class ProfileComponent {
   }
 
   ngOnInit(): void {
+    this.sessionService.checkLoginNum().then(isLoggedIn => {
+      console.log('Login status:', isLoggedIn);
+      isLoggedIn == -1 ? this.isLoggedIn = false : this.isLoggedIn = true;
+      if (!this.isLoggedIn) {
+        window.location.href = "/";
+      }
+    });
+
     this.readUser();
   }
 
