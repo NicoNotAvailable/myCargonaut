@@ -1,15 +1,15 @@
 import {
     BadRequestException,
     Body,
-    Controller,
+    Controller, Get,
     Logger,
     Post,
     Put,
     Session,
     UploadedFile,
     UseGuards,
-    UseInterceptors,
-} from '@nestjs/common';
+    UseInterceptors
+} from "@nestjs/common";
 import {
     ApiBearerAuth,
     ApiConsumes,
@@ -29,6 +29,8 @@ import { IsLoggedInGuard } from '../session/is-logged-in.guard';
 import { EditUserDTO } from './DTO/EditUserDTO';
 import * as validator from 'validator';
 import * as bcrypt from 'bcryptjs';
+import { GetOwnUserDTO } from "./DTO/GetOwnUserDTO";
+import { UserDB } from "../database/UserDB";
 
 @ApiTags('user')
 @Controller('user')
@@ -66,6 +68,24 @@ export class UserController {
         }
 
         return age >= 18;
+    }
+
+    @ApiResponse({ type: GetOwnUserDTO, description: 'gets the own user' })
+    @Get()
+    async getUser(@Session() session: SessionData): Promise<GetOwnUserDTO> {
+        let user: UserDB;
+        try {
+            user = await this.userService.getUserById(session.currentUser);
+        } catch (err){
+            console.log(err);
+        }
+        let dto: GetOwnUserDTO = new GetOwnUserDTO();
+        dto.lastName = user.lastName;
+        dto.firstName = user.firstName;
+        dto.email = user.email;
+        dto.phoneNumber = user.phoneNumber;
+        dto.birthday = user.birthday;
+        return dto;
     }
 
     @ApiResponse({ type: OkDTO, description: 'creates a new user' })
