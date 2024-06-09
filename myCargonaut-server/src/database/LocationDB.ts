@@ -1,12 +1,19 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  OneToOne,
+  OneToMany,
+} from 'typeorm';
 import { TripDB } from './TripDB';
+import { RequestDB } from './RequestDB';
 
 @Entity()
 export class LocationDB {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => TripDB)
+  @OneToOne(() => TripDB)
   trip: TripDB;
 
   @Column()
@@ -26,4 +33,10 @@ export class LocationDB {
 
   @Column()
   streetNumber: string;
+
+  @OneToMany(() => RequestDB, (request) => request.startLocation)
+  startLocationRequests: Promise<RequestDB[]>;
+
+  @OneToMany(() => RequestDB, (request) => request.endLocation)
+  endLocationRequests: Promise<RequestDB[]>;
 }

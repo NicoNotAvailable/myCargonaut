@@ -17,6 +17,9 @@ export class VehicleDB {
   owner: UserDB;
 
   @Column()
+  name: string;
+
+  @Column()
   carPicture: string;
 
   @Column()

@@ -7,6 +7,8 @@ import { ReviewDB } from '../src/database/ReviewDB';
 import { TrailerDB } from '../src/database/TrailerDB';
 import { TripDB } from '../src/database/TripDB';
 import { VehicleDB } from '../src/database/VehicleDB';
+import { ChatDB } from '../src/database/ChatDB';
+import { RequestDB } from '../src/database/RequestDB';
 
 export const tables: EntityClassOrSchema[] = [
   UserDB,
@@ -16,6 +18,8 @@ export const tables: EntityClassOrSchema[] = [
   TrailerDB,
   TripDB,
   VehicleDB,
+  ChatDB,
+  RequestDB,
 ];
 
 export const databaseTest = (path: string) => {
