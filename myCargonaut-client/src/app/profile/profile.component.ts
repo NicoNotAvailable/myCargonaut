@@ -38,6 +38,7 @@ export class ProfileComponent {
 
   carId: number = 0;
   trailerId: number = 0;
+  smoker: string = "";
 
   public sessionService: SessionService = inject(SessionService);
   public userService: UserService = inject(UserService);
@@ -76,10 +77,6 @@ export class ProfileComponent {
 
     setTimeout(() => {
       this.pathToImage = "";
-      this.firstName.set("Willy");
-      this.lastName.set("Wonka");
-      const sqlDate = "1968-05-16 00:00:00.000";
-      this.birthday = DateUtils.parseDate(sqlDate);
       const imagePath: string = "empty.png";
       this.pathToImage = prePath.concat(imagePath);
       this.sessionService.checkLoginNum();
@@ -92,11 +89,16 @@ export class ProfileComponent {
         this.birthday = DateUtils.parseDate(response.birthday);
         const imagePath: string = response.profilePic;
         this.pathToImage = imagePath === "empty.png" ? "assets/empty.png" : prePath.concat(imagePath);
+        this.smoker = this.formatSmokeBool(response.smoker);
       },
       error => {
         console.error("There was an error!", error);
       }
     );
+  }
+
+  formatSmokeBool(bool: boolean): string{
+    return !bool? "Nicht Raucher" : "Raucher";
   }
 
   toggleEditing(): void {

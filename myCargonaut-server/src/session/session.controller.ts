@@ -7,8 +7,9 @@ import {
     BadRequestException,
     UseGuards,
     Get,
-    Injectable, Delete
-} from "@nestjs/common";
+    Injectable,
+    Delete,
+} from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { UserDB } from '../database/UserDB';
 import { UserService } from '../user/user.service';

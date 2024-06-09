@@ -15,7 +15,7 @@
     </button>
   </div>
   <div class="row">
-    <form #form="ngForm" (ngSubmit)="newEmail && newEmailConfirm && newPhoneNumber && saveUser(form)">
+    <form #form="ngForm" (ngSubmit)="saveUser(form)">
       <div class="pt-2 ps-4 pb-2 pe-4" id="description">
         <div class="col-12">
           <div class="row">
@@ -26,7 +26,7 @@
           <div class="col-6 col-4-md col-2-sm text-start">
             <textarea *ngIf="!editState" [ngModelOptions]="{standalone: true}" [(ngModel)]="profileText" type="text" class="border border-2 rounded-3 col-11 textareaSize mb-3"
                       id="selfNoteDisabled" disabled></textarea>
-            <textarea *ngIf="editState" [ngModelOptions]="{standalone: true}" [(ngModel)]="profileText" type="text" class="border border-2 rounded-3 col-11 textareaSize mb-3"
+            <textarea *ngIf="editState" [ngModelOptions]="{standalone: true}" [(ngModel)]="newProfileText" type="text" class="border border-2 rounded-3 col-11 textareaSize mb-3"
                       id="selfNote"></textarea>
             <div class="row mt-4">
               <div class="col-5">
@@ -64,11 +64,18 @@
               </div>
             </div>
             <div class="row">
-              <div class="col-5 border border-2 rounded-3 mt-4">
+              <div class="col-5 border border-2 rounded-3 mt-4" *ngIf="editState">
                 <i>
                   <fa-icon [icon]="faLanguage"></fa-icon>
                 </i>
-                <p class="m-0" id="languages">Deutsch, Englisch, Französisch</p>
+                <input [(ngModel)]="newLang" [ngModelOptions]="{standalone: true}" type="email" placeholder="Deine Sprachen" id="langInput"
+                       class="form-control mb-3" name="newLang">
+              </div>
+              <div class="col-5 border border-2 rounded-3 mt-4" *ngIf="!editState">
+                <i>
+                  <fa-icon [icon]="faLanguage"></fa-icon>
+                </i>
+                <p class="m-0" id="languages">{{ languages }}</p>
               </div>
               <div class="col-2"></div>
               <div class="col-5 border border-2 rounded-3 mt-4">
@@ -98,10 +105,16 @@
                 <i>
                   <fa-icon [icon]="faEnvelope"></fa-icon>
                 </i>
-                <input [(ngModel)]="newEmail" type="email" placeholder="Neue Email" id="emailInput"
+                <input [(ngModel)]="newEmail" [ngModelOptions]="{standalone: true}" (input)="validateEmailConfirmation()" type="email" placeholder="Neue Email" id="emailInput"
                        class="form-control mb-3" name="newEmail">
-                <input [(ngModel)]="newEmailConfirm" type="email" placeholder="Neue Email bestätigen"
+                <input [(ngModel)]="newEmailConfirm" [ngModelOptions]="{standalone: true}" (input)="validateEmailConfirmation()" type="email" placeholder="Neue Email bestätigen"
                        id="emailInputConfirm" class="form-control" name="newEmailConfirm">
+                <span *ngIf="emailMatchError" class="text-danger">
+                  Die E-Mail Adressen stimmen nicht überein.
+                </span>
+                <span *ngIf="errorMessage !== ''" class="text-danger">
+                  {{ errorMessage }}
+                </span>
               </div>
               <div class="col-5 border border-2 rounded-3 mt-4 pb-3" *ngIf="!editState">
                 <i>
@@ -120,7 +133,7 @@
                 <i>
                   <fa-icon [icon]="faPhone"></fa-icon>
                 </i>
-                <input [(ngModel)]="newPhoneNumber" type="tel" placeholder="Neue Nummer" id="phoneInput"
+                <input [(ngModel)]="newPhoneNumber" [ngModelOptions]="{standalone: true}" type="tel" placeholder="Neue Nummer" id="phoneInput"
                        class="form-control mb-3" name="newPhoneNumber">
               </div>
             </div>

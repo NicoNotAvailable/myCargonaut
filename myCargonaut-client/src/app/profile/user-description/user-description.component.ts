@@ -16,6 +16,7 @@ import { DateUtils } from "../../../../../utils/DateUtils";
 import { HttpClient } from "@angular/common/http";
 import { SessionService } from "../../services/session.service";
 import { UserService } from "../../services/user.service";
+import { response } from "express";
 
 @Component({
   selector: 'app-user-description',
@@ -31,9 +32,10 @@ export class UserDescriptionComponent {
   @Output() changeViewTrailer = new EventEmitter<void>();
 
   newPhoneNumber: string = "";
-
+  newLang: string = "";
   newEmail: string = "";
   newEmailConfirm: string = "";
+  newProfileText: string = "";
 
 
   public userService: UserService = inject(UserService);
@@ -59,7 +61,11 @@ export class UserDescriptionComponent {
   totalPassengers: number = 0;
   highestWeight: number = 0;
   phoneNumber: string = "";
+  languages: string = "";
   email: string = "";
+
+  emailMatchError: boolean = false;
+  errorMessage: string = "";
 
   totalDrives = computed(() => this.offeredDrives() + this.takenDrives());
 
@@ -69,36 +75,62 @@ export class UserDescriptionComponent {
 
   readUser(): void {
     setTimeout(() => {
-      this.profileText = "TestText"
-      this.offeredDrives.set(1234);
-      this.takenDrives.set(123);
-      this.distanceDriven = 0;
-      this.totalPassengers = 12;
-      this.highestWeight = 12;
-      this.phoneNumber = "+12321321";
-      this.email = "elontusk@tesla.jo";
     }, 200)
     this.userService.readUser().subscribe(
       response => {
-        console.log("Userdata read successfully", response);
-        this.profileText = response.profileText;
-        this.offeredDrives.set(response.offeredDrives);
-        this.takenDrives.set(response.takenDrives);
-        this.distanceDriven = response.distanceDriven;
-        this.totalPassengers = response.totalPassengers;
-        this.highestWeight = response.highestWeight;
+        this.profileText = response.profileText == null || response.profileText === "" ? "Deine Beschreibung..." : response.profileText;
+        response.offeredDrives == null? this.offeredDrives.set(1234) : this.offeredDrives.set(response.offeredDrives);
+        response.takenDrives == null? this.takenDrives.set(123) : this.takenDrives.set(response.takenDrives);
+        this.distanceDriven = response.distanceDriven == null? 0 : response.distanceDriven;
+        this.totalPassengers = response.totalPassengers == null? 12 : response.totalPassengers;
+        this.highestWeight = response.highestWeight == null? 12 : response.highestWeight;
         this.phoneNumber = response.phoneNumber;
+        this.languages = response.languages == null || response.languages === "" ? "Keine Sprache angegeben" : response.languages;
         this.email = response.email;
       },
       error => {
         console.error("There was an error!", error);
+        this.errorMessage = "Email ist ungültig";
       }
     );
   }
 
   saveUser(form: any): void {
+    const userData = {
+      email: this.newEmail,
+      phoneNumber: this.newPhoneNumber,
+      languages: this.newLang,
+      profileText: this.newProfileText
+    }
+    if (this.newEmail === "" || this.newEmail === null) {
+      userData.email = this.email;
+    }
+    if (this.newPhoneNumber === "" || this.newPhoneNumber === null) {
+      userData.phoneNumber = this.phoneNumber;
+    }
+    if (this.newProfileText === "" || this.newProfileText === null) {
+      userData.profileText = this.profileText;
+    }
+    if (this.newLang === "" || this.newLang === null) {
+      userData.languages = this.languages;
+    }
+    this.userService.editUser(userData).subscribe(
+      response => {
+        this.readUser();
+      }, error => {
+        console.error("There was an error!", error);
+      }
+    )
 
     this.changeEditState();
+  }
+
+  validateEmailConfirmation() {
+    if (this.newEmail !== this.newEmailConfirm) {
+      this.emailMatchError = true;
+    } else {
+      this.emailMatchError = false;
+    }
   }
 
   changeEditState(): void {

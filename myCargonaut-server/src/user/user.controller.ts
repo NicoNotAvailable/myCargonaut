@@ -1,15 +1,16 @@
 import {
     BadRequestException,
     Body,
-    Controller, Get,
+    Controller,
+    Get,
     Logger,
     Post,
     Put,
     Session,
     UploadedFile,
     UseGuards,
-    UseInterceptors
-} from "@nestjs/common";
+    UseInterceptors,
+} from '@nestjs/common';
 import {
     ApiBearerAuth,
     ApiConsumes,
@@ -30,7 +31,8 @@ import { EditUserDTO } from './DTO/EditUserDTO';
 import * as validator from 'validator';
 import * as bcrypt from 'bcryptjs';
 import { GetOwnUserDTO } from './DTO/GetOwnUserDTO';
-import { UserDB } from "../database/UserDB";
+import { UserDB } from '../database/UserDB';
+import { EditUserProfileDTO } from "./DTO/EditUserProfileDTO";
 
 @ApiTags('user')
 @Controller('user')
@@ -76,22 +78,25 @@ export class UserController {
         let user: UserDB;
         try {
             user = await this.userService.getUserById(session.currentUser);
-        } catch (err){
+        } catch (err) {
             console.log(err);
         }
-        let dto: GetOwnUserDTO = new GetOwnUserDTO();
+        const dto: GetOwnUserDTO = new GetOwnUserDTO();
         dto.lastName = user.lastName;
         dto.firstName = user.firstName;
         dto.email = user.email;
         dto.profilePic = user.profilePic;
         dto.phoneNumber = user.phoneNumber;
         dto.birthday = user.birthday;
+        dto.isSmoker = user.isSmoker;
+        dto.profileText = user.profileText;
+        dto.languages = user.languages;
         return dto;
     }
 
     @ApiResponse({ type: OkDTO, description: 'creates a new user' })
     @Post()
-    async createUser(@Body() body: CreateUserDTO) {
+    async createUser(@Body() body: CreateUserDTO, @Session() session: SessionData) {
         if (!body.agb) {
             throw new BadRequestException(
                 'Du musst die AGB akzeptieren, um dich zu registrieren',
@@ -142,6 +147,11 @@ export class UserController {
                 birthday,
                 body.phoneNumber,
             );
+            const user: UserDB = await this.userService.getUserByEmail(
+                body.email.trim(),
+            );
+            session.currentUser = user.id;
+
             return new OkDTO(true, 'User was created');
         } catch (err) {
             throw err;
@@ -305,6 +315,41 @@ export class UserController {
             user.lastName = body.lastName;
         }
         if (body.profileText) user.profileText = body.profileText;
+        try {
+            await this.userService.updateUser(user);
+            return new OkDTO(true, 'User was updated');
+        } catch (err) {
+            throw err;
+        }
+    }
+
+    @ApiResponse({
+        type: OkDTO,
+        description: 'updates a specifics user with their profile details',
+    })
+    @Put('/profile')
+    @ApiBearerAuth()
+    @UseGuards(IsLoggedInGuard)
+    async updateUserProfile(
+        @Session() session: SessionData,
+        @Body() body: EditUserProfileDTO,
+    ): Promise<OkDTO> {
+        const id = session.currentUser;
+        const user = await this.userService.getUserById(id);
+        console.log('der Nutzer: ' + user, ' Der body: ', body);
+        //todo irgendwas um die language zu guarden
+        if (body.email.trim() !== '' || body.email !== undefined) {
+            user.email = body.email;
+        }
+        if (body.languages !== '' || body.languages !== undefined) {
+            user.languages = body.languages;
+        }
+        if (body.phoneNumber.trim() !== '' || body.phoneNumber !== undefined) {
+            user.phoneNumber = body.phoneNumber;
+        }
+        if (body.profileText.trim() !== '' || body.profileText !== undefined) {
+            user.profileText = body.profileText;
+        }
         try {
             await this.userService.updateUser(user);
             return new OkDTO(true, 'User was updated');

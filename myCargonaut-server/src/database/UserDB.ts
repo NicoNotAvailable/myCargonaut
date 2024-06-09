@@ -1,13 +1,4 @@
-import {
-    Entity,
-    Column,
-    PrimaryGeneratedColumn,
-    OneToMany,
-    Index,
-    BeforeUpdate,
-    BeforeInsert,
-} from 'typeorm';
-import * as bcrypt from 'bcryptjs';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 import { VehicleDB } from './VehicleDB';
 import { TripDB } from './TripDB';
 import { ReviewDB } from './ReviewDB';
@@ -44,6 +35,12 @@ export class UserDB {
 
     @Column({ nullable: true })
     profileText: string;
+
+    @Column({ nullable: true })
+    languages: string;
+
+    @Column({ nullable: true })
+    isSmoker: boolean;
 
     @OneToMany(() => VehicleDB, (car) => car.owner)
     cars: Promise<VehicleDB[]>;
