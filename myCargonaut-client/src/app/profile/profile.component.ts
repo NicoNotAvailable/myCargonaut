@@ -16,6 +16,7 @@ import { HttpClient } from "@angular/common/http";
 import { DateUtils } from "../../../../utils/DateUtils";
 import { NgOptimizedImage } from "@angular/common";
 import { SessionService } from "../services/session.service";
+import { UserService } from "../services/user.service";
 
 
 @Component({
@@ -37,6 +38,8 @@ export class ProfileComponent {
   trailerId: number = 0;
 
   public sessionService: SessionService = inject(SessionService);
+  public userService: UserService = inject(UserService);
+
 
   protected readonly faUser = faUser;
   protected readonly faCalender = faCalendar;
@@ -71,44 +74,40 @@ export class ProfileComponent {
       this.pathToImage = prePath.concat(imagePath);
       this.sessionService.checkLoginNum();
     }, 200);
-    if (this.sessionService.getUserID() != -1) {
-      this.http.get<any>("http://localhost:8000/user")
-        .subscribe(
-          response => {
-            console.log("Userdata read successfully", response);
-            this.firstName.set(response.firstName);
-            this.lastName.set(response.lastName);
-            this.birthday = DateUtils.parseDate(response.birthday);
-            const imagePath: string = response.profilePic;
-            response.profilePic == "empty.png" ? this.pathToImage = "assets/empty.png"
-              : this.pathToImage = prePath.concat(imagePath);
-            console.log(response)
-          },
-          error => {
-
-            console.error("There was an error!", error);
-          }
-        );
-    } else {
-      //Redirect to 404 Page or (you must be logged in Page)
-    }
+    this.userService.readUser().subscribe(
+      response => {
+        console.log("Userdata read successfully", response);
+        this.firstName.set(response.firstName);
+        this.lastName.set(response.lastName);
+        this.birthday = DateUtils.parseDate(response.birthday);
+        const imagePath: string = response.profilePic;
+        this.pathToImage = imagePath === "empty.png" ? "assets/empty.png" : prePath.concat(imagePath);
+      },
+      error => {
+        console.error("There was an error!", error);
+      }
+    );
   }
 
   toggleEditing(): void {
     this.editState = !this.editState;
   }
+
   toggleCarView(): void {
     this.viewCars = !this.viewCars;
     this.userDesc = !this.userDesc;
   }
+
   toggleTrailerView(): void {
     this.viewTrailers = !this.viewTrailers;
     this.userDesc = !this.userDesc;
   }
+
   toggleCarAdd(newCarId: number): void {
     this.addCars = !this.addCars;
     this.viewCars = !this.viewCars;
   }
+
   toggleTrailerAdd(newTrailerId: number): void {
     this.addTrailers = !this.addTrailers;
     this.viewTrailers = !this.viewTrailers;
