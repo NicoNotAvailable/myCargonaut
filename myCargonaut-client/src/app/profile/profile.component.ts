@@ -77,7 +77,6 @@ export class ProfileComponent {
     );
 
 
-
     //this.fullName = response.firstName + " " + response.lastName;
 
 

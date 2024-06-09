@@ -15,26 +15,20 @@ export class SessionService {
     this.userID = -1;
   }
 
-  checkLogin(): Promise<boolean> {
-    return this.http.get<any>("http://localhost:8000/session/checkLogin").toPromise()
-      .then(response => {
-        console.log("======");
-        console.log(response);
-        this.isLoggedIn = response.ok;
-        return this.isLoggedIn
-      })
-      .catch(error => {
-        console.error(error);
-        return false;
-      });
-  }
-
   checkLoginNum(): Promise<number> {
     return this.http.get<any>("http://localhost:8000/session/getSessionUser").toPromise()
-      .then(response => response.currentUser)
+      .then(response => {
+        this.userID = response;
+        console.log(response);
+        return this.userID; // Hier wird sichergestellt, dass ein number zurückgegeben wird
+      })
       .catch(error => {
         console.error(error);
         return -1;
       });
+  }
+
+  getUserID(): number {
+    return this.userID;
   }
 }
