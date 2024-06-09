@@ -13,6 +13,6 @@ export class UserService {
 
 
   readUser(): Observable<any> {
-    return this.http.get<any>("http://localhost:8000/user");
+    return this.http.get<any>("http://localhost:8000/user", { withCredentials: true });
   };
 }

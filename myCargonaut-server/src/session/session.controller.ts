@@ -33,7 +33,6 @@ export class SessionController {
     @ApiResponse({ description: 'fetches the currently logged in users ID' })
     @Get('getSessionUser')
     getSessionUser(@Session() session: SessionData): UserIDDTO {
-        console.log('gette die session: ' + session.currentUser);
         if (session.currentUser === undefined) {
             return new UserIDDTO(-1);
         }
@@ -90,7 +89,6 @@ export class SessionController {
         );
         if (validPassword || body.password === loggedUser.password) {
             session.currentUser = loggedUser.id;
-            console.log('angemeldet: ' + session.currentUser);
             return new OkDTO(true, 'User was logged in');
         } else {
             throw new UnauthorizedException('Passwort oder Email ist falsch');
