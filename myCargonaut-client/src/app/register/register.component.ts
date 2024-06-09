@@ -96,7 +96,7 @@ export class RegisterComponent {
 
     console.log('User Data:', userData);
 
-    this.http.post("http://localhost:8000/user",userData)
+    this.http.post("http://localhost:8000/user",userData, { withCredentials: true })
       .subscribe(
         response => {
           form.resetForm();
@@ -107,7 +107,7 @@ export class RegisterComponent {
             this.http.post("http://localhost:8000/session/login", {
               email: this.email,
               password: this.password,
-            }).subscribe(
+            },{ withCredentials: true }).subscribe(
               response => {
                 window.location.href = "/profile";
               }, error => {
