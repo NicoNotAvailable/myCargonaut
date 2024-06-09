@@ -1,10 +1,10 @@
 import {
-  Entity,
-  Column,
-  PrimaryGeneratedColumn,
-  ManyToOne,
-  OneToMany,
-  OneToOne,
+    Entity,
+    Column,
+    PrimaryGeneratedColumn,
+    ManyToOne,
+    OneToMany,
+    OneToOne,
 } from 'typeorm';
 import { PriceTypeEnum } from './enums/PriceTypeEnum';
 import { UserDB } from './UserDB';
@@ -19,69 +19,69 @@ import { ChatDB } from './ChatDB';
 
 @Entity()
 export class TripDB {
-  @PrimaryGeneratedColumn()
-  id: number;
+    @PrimaryGeneratedColumn()
+    id: number;
 
-  @ManyToOne(() => UserDB)
-  offering: UserDB;
+    @ManyToOne(() => UserDB)
+    offering: UserDB;
 
-  @ManyToOne(() => UserDB)
-  requesting: UserDB;
+    @ManyToOne(() => UserDB)
+    requesting: UserDB;
 
-  @ManyToOne(() => ChatDB)
-  chat: ChatDB;
+    @ManyToOne(() => ChatDB)
+    chat: ChatDB;
 
-  @ManyToOne(() => CarDB)
-  car: CarDB;
+    @ManyToOne(() => CarDB)
+    car: CarDB;
 
-  @ManyToOne(() => TrailerDB)
-  trailer: TrailerDB;
+    @ManyToOne(() => TrailerDB)
+    trailer: TrailerDB;
 
-  @Column()
-  priceType: PriceTypeEnum;
+    @Column()
+    priceType: PriceTypeEnum;
 
-  @Column()
-  price: number;
+    @Column()
+    price: number;
 
-  @Column()
-  date: Date;
+    @Column()
+    date: Date;
 
-  @Column()
-  maxWeight: number;
+    @Column()
+    maxWeight: number;
 
-  @Column()
-  maxLength: number;
+    @Column()
+    maxLength: number;
 
-  @Column()
-  maxHeight: number;
+    @Column()
+    maxHeight: number;
 
-  @Column()
-  maxWidth: number;
+    @Column()
+    maxWidth: number;
 
-  @Column()
-  availableSeats: number;
+    @Column()
+    availableSeats: number;
 
-  @Column()
-  usedSeats: number;
+    @Column()
+    usedSeats: number;
 
-  @Column()
-  animals: boolean;
+    @Column()
+    animals: boolean;
 
-  @Column()
-  smoker: boolean;
+    @Column()
+    smoker: boolean;
 
-  @Column()
-  info: TripInfoEnum;
+    @Column()
+    info: TripInfoEnum;
 
-  @Column()
-  status: StatusEnum;
+    @Column()
+    status: StatusEnum;
 
-  @OneToMany(() => ReviewDB, (review) => review.trip)
-  reviews: Promise<ReviewDB[]>;
+    @OneToMany(() => ReviewDB, (review) => review.trip)
+    reviews: Promise<ReviewDB[]>;
 
-  @OneToMany(() => RequestDB, (request) => request.trip)
-  requests: Promise<RequestDB[]>;
+    @OneToMany(() => RequestDB, (request) => request.trip)
+    requests: Promise<RequestDB[]>;
 
-  @OneToOne(() => LocationDB, (location: { trip: any }) => location.trip)
-  location: Promise<LocationDB>;
+    @OneToOne(() => LocationDB, (location: { trip: any }) => location.trip)
+    location: Promise<LocationDB>;
 }

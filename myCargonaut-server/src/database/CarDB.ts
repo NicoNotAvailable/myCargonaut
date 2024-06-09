@@ -4,18 +4,19 @@ import { TripDB } from './TripDB';
 
 @ChildEntity()
 export class CarDB extends VehicleDB {
-  @Column({ default: 'empty.png' })
-  carPicture: string;
 
-  @Column()
-  seats: number;
+    @Column({ default: 'empty.png' })
+    carPicture: string;
 
-  @Column()
-  hasAC: boolean;
+    @Column()
+    seats: number;
 
-  @Column()
-  hasTelevision: boolean;
+    @Column()
+    hasAC: boolean;
 
-  @OneToMany(() => TripDB, (trip) => trip.car)
-  rides: Promise<TripDB[]>;
+    @Column()
+    hasTelevision: boolean;
+
+    @OneToMany(() => TripDB, (trip) => trip.car)
+    rides: Promise<TripDB[]>;
 }

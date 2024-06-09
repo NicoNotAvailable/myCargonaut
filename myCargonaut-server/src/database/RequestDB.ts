@@ -5,21 +5,21 @@ import { TripDB } from './TripDB';
 
 @Entity()
 export class RequestDB {
-  @PrimaryGeneratedColumn()
-  id: number;
+    @PrimaryGeneratedColumn()
+    id: number;
 
-  @ManyToOne(() => UserDB)
-  requesting: UserDB;
+    @ManyToOne(() => UserDB)
+    requesting: UserDB;
 
-  @ManyToOne(() => TripDB)
-  trip: TripDB;
+    @ManyToOne(() => TripDB)
+    trip: TripDB;
 
-  @ManyToOne(() => LocationDB)
-  startLocation: LocationDB;
+    @ManyToOne(() => LocationDB)
+    startLocation: LocationDB;
 
-  @ManyToOne(() => LocationDB)
-  endLocation: LocationDB;
+    @ManyToOne(() => LocationDB)
+    endLocation: LocationDB;
 
-  @Column({ default: new Date().toISOString() })
-  timestamp: string;
+    @Column({ default: new Date().toISOString() })
+    timestamp: string;
 }
