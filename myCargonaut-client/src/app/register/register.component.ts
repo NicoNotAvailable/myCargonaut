@@ -90,7 +90,17 @@ export class RegisterComponent {
           this.message = "Nutzer erfolgreich angelegt";
           setTimeout(() => {
             this.message = '';
-          }, 5000);
+            this.http.post("http://localhost:8000/session/login", {
+              email: this.email,
+              password: this.password,
+            }).subscribe(
+              response => {
+                window.location.href = "/profile";
+              }, error => {
+                console.log(error);
+              }
+            )
+          }, 2000);
 
         },
         error => {

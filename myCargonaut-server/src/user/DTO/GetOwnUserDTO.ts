@@ -17,6 +17,11 @@ export class GetOwnUserDTO {
   @ApiProperty()
   @IsString()
   @IsNotEmpty()
+  profilePic: string;
+
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
   firstName: string;
 
   @ApiProperty()

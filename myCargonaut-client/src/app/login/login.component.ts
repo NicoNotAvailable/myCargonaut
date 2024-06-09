@@ -46,9 +46,7 @@ export class LoginComponent {
         console.log(response);
         this.textColor = "successText"
         this.message = "Anmeldung lief swaggy";
-        this.sessionService.checkLoginNum().then(isLoggedIn => {
-          isLoggedIn == -1 ? this.isLoggedIn = false : this.isLoggedIn = true;
-        })
+        window.location.href = "/profile";
         setTimeout(() =>{
           this.message = "";
           this.textColor = "errorText"

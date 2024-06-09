@@ -29,7 +29,7 @@ import { IsLoggedInGuard } from '../session/is-logged-in.guard';
 import { EditUserDTO } from './DTO/EditUserDTO';
 import * as validator from 'validator';
 import * as bcrypt from 'bcryptjs';
-import { GetOwnUserDTO } from "./DTO/GetOwnUserDTO";
+import { GetOwnUserDTO } from './DTO/GetOwnUserDTO';
 import { UserDB } from "../database/UserDB";
 
 @ApiTags('user')
@@ -83,6 +83,7 @@ export class UserController {
         dto.lastName = user.lastName;
         dto.firstName = user.firstName;
         dto.email = user.email;
+        dto.profilePic = user.profilePic;
         dto.phoneNumber = user.phoneNumber;
         dto.birthday = user.birthday;
         return dto;
