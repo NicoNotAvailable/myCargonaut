@@ -6,10 +6,7 @@ import { ApiBearerAuth } from '@nestjs/swagger';
 @Injectable()
 @ApiBearerAuth('loggedInGuard')
 export class IsLoggedInGuard implements CanActivate {
-
-    canActivate(
-        context: ExecutionContext,
-    ): boolean | Promise<boolean> {
+    canActivate(context: ExecutionContext): boolean | Promise<boolean> {
         const http = context.switchToHttp();
         const req = http.getRequest<Request>();
         const session: SessionData = req.session;

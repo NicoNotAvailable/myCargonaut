@@ -18,41 +18,41 @@ import { VehicleService } from './vehicle/vehicle.service';
 import { VehicleController } from './vehicle/vehicle.controller';
 
 @Module({
-  imports: [
-    TypeOrmModule.forRoot({
-      type: 'sqlite',
-      database: './db.sqlite',
-      entities: [
-        UserDB,
-        CarDB,
-        LocationDB,
-        ReviewDB,
-        TrailerDB,
-        TripDB,
-        VehicleDB,
-        ChatDB,
-        RequestDB,
-      ],
-      synchronize: true,
-    }),
-    TypeOrmModule.forFeature([
-      UserDB,
-      CarDB,
-      LocationDB,
-      ReviewDB,
-      TrailerDB,
-      TripDB,
-      VehicleDB,
-      ChatDB,
-      RequestDB,
-    ]),
-  ],
-  controllers: [
-    AppController,
-    UserController,
-    SessionController,
-    VehicleController,
-  ],
-  providers: [AppService, UserService, VehicleService],
+    imports: [
+        TypeOrmModule.forRoot({
+            type: 'sqlite',
+            database: './db.sqlite',
+            entities: [
+                UserDB,
+                CarDB,
+                LocationDB,
+                ReviewDB,
+                TrailerDB,
+                TripDB,
+                VehicleDB,
+                ChatDB,
+                RequestDB,
+            ],
+            synchronize: true,
+        }),
+        TypeOrmModule.forFeature([
+            UserDB,
+            CarDB,
+            LocationDB,
+            ReviewDB,
+            TrailerDB,
+            TripDB,
+            VehicleDB,
+            ChatDB,
+            RequestDB,
+        ]),
+    ],
+    controllers: [
+        AppController,
+        UserController,
+        SessionController,
+        VehicleController,
+    ],
+    providers: [AppService, UserService, VehicleService],
 })
 export class AppModule {}

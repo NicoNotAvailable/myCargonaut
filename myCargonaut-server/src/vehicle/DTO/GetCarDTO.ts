@@ -1,33 +1,33 @@
 import { ApiProperty } from '@nestjs/swagger';
 
 export class GetCarDTO {
-  @ApiProperty()
-  id: number;
+    @ApiProperty()
+    id: number;
 
-  @ApiProperty()
-  name: string;
+    @ApiProperty()
+    name: string;
 
-  @ApiProperty()
-  weight: number;
+    @ApiProperty()
+    weight: number;
 
-  @ApiProperty()
-  length: number;
+    @ApiProperty()
+    length: number;
 
-  @ApiProperty()
-  height: number;
+    @ApiProperty()
+    height: number;
 
-  @ApiProperty()
-  width: number;
+    @ApiProperty()
+    width: number;
 
-  @ApiProperty()
-  seats: number;
+    @ApiProperty()
+    seats: number;
 
-  @ApiProperty()
-  hasAC: boolean;
+    @ApiProperty()
+    hasAC: boolean;
 
-  @ApiProperty()
-  hasTelevision: boolean;
+    @ApiProperty()
+    hasTelevision: boolean;
 
-  @ApiProperty()
-  carPicture: string;
+    @ApiProperty()
+    carPicture: string;
 }

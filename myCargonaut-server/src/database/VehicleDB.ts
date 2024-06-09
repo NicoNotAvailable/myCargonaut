@@ -19,11 +19,11 @@ export class VehicleDB {
     @Column()
     name: string;
 
-  @Column()
-  carPicture: string;
+    @Column()
+    carPicture: string;
 
-  @Column()
-  seats: number;
+    @Column()
+    seats: number;
 
     @Column()
     weight: number;
