@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse } from "@angular/common/http";
+import { HttpClient } from "@angular/common/http";
+import { response } from "express";
 
 @Injectable({
   providedIn: 'root'
@@ -16,11 +17,11 @@ export class SessionService {
   }
 
   checkLoginNum(): Promise<number> {
-    return this.http.get<any>("http://localhost:8000/session/getSessionUser").toPromise()
+    return this.http.get<any>("http://localhost:8000/session/getSessionUser", { withCredentials: true }).toPromise()
       .then(response => {
-        this.userID = response;
-        console.log(response);
-        return this.userID; // Hier wird sichergestellt, dass ein number zurückgegeben wird
+        this.userID = response.id;
+        console.log("Ja hallo hier is login", response.id);
+        return this.userID;
       })
       .catch(error => {
         console.error(error);

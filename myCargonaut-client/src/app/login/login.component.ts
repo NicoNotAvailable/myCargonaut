@@ -1,14 +1,14 @@
 import { Component, inject } from "@angular/core";
 import {FormsModule} from "@angular/forms";
 import {HttpClient, HttpClientModule} from "@angular/common/http";
-import {NgIf} from "@angular/common";
+import { NgClass, NgIf } from "@angular/common";
 import {response} from "express";
 import { SessionService } from "../services/session.service";
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [FormsModule, HttpClientModule, NgIf],
+  imports: [FormsModule, HttpClientModule, NgIf, NgClass],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
@@ -21,15 +21,16 @@ export class LoginComponent {
   password: string = "";
 
   message: string = "";
+  textColor: string = "errorText";
 
   constructor(private http: HttpClient) {
   }
 
   ngOnInit(): void {
     //console.log(this.sessionService.checkLogin());
-    this.sessionService.checkLogin().then(isLoggedIn => {
+    this.sessionService.checkLoginNum().then(isLoggedIn => {
       console.log('Login status:', isLoggedIn);
-      this.isLoggedIn = isLoggedIn;
+      isLoggedIn == -1 ? this.isLoggedIn = false : this.isLoggedIn = true;
     });
   }
 
@@ -43,15 +44,14 @@ export class LoginComponent {
       response =>{
         form.resetForm();
         console.log(response);
+        this.textColor = "successText"
         this.message = "Anmeldung lief swaggy";
-        this.sessionService.checkLogin().then(isLoggedIn => {
-          console.log('Login status:', isLoggedIn);
-        });
         this.sessionService.checkLoginNum().then(isLoggedIn => {
           console.log('Login status: ', isLoggedIn);
         });
         setTimeout(() =>{
           this.message = "";
+          this.textColor = "errorText"
         }, 5000);
       },
       error => {

@@ -12,7 +12,6 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { NgIf } from "@angular/common";
 import { FormsModule } from "@angular/forms";
-import { FormsModule } from "@angular/forms";
 import { DateUtils } from "../../../../../utils/DateUtils";
 import { HttpClient } from "@angular/common/http";
 
@@ -34,24 +33,6 @@ export class UserDescriptionComponent {
   newEmail: string = "";
   newEmailConfirm: string = "";
 
-  saveUser(): void {
-
-    this.changeEditState();
-  }
-
-  changeEditState(): void {
-    this.newPhoneNumber = "";
-    this.newEmail = "";
-    this.newEmailConfirm = "";
-    this.changeEdit.emit();
-  }
-
-  changeViewCarState(): void {
-    this.changeViewCar.emit();
-  }
-  changeViewTrailerState(): void {
-    this.changeViewTrailer.emit();
-  }
 
   protected readonly faPenToSquare = faPenToSquare;
   protected readonly faCar = faCar;
@@ -93,5 +74,24 @@ export class UserDescriptionComponent {
       this.phoneNumber = "+12321321";
       this.email = "elontusk@tesla.jo";
     }, 200)
+  }
+
+  saveUser(form: any): void {
+
+    this.changeEditState();
+  }
+
+  changeEditState(): void {
+    this.newPhoneNumber = "";
+    this.newEmail = "";
+    this.newEmailConfirm = "";
+    this.changeEdit.emit();
+  }
+
+  changeViewCarState(): void {
+    this.changeViewCar.emit();
+  }
+  changeViewTrailerState(): void {
+    this.changeViewTrailer.emit();
   }
 }
