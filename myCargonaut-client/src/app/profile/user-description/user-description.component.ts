@@ -1,4 +1,4 @@
-import { Component, computed, signal } from "@angular/core";
+import { Component, computed, inject, signal } from "@angular/core";
 import { FaIconComponent } from "@fortawesome/angular-fontawesome";
 import {
   faPenToSquare,
@@ -13,6 +13,8 @@ import {
 import { FormsModule } from "@angular/forms";
 import { DateUtils } from "../../../../../utils/DateUtils";
 import { HttpClient } from "@angular/common/http";
+import { SessionService } from "../../services/session.service";
+import { UserService } from "../../services/user.service";
 
 @Component({
   selector: 'app-user-description',
@@ -22,6 +24,8 @@ import { HttpClient } from "@angular/common/http";
   styleUrl: './user-description.component.css'
 })
 export class UserDescriptionComponent {
+
+  public userService: UserService = inject(UserService);
 
   protected readonly faPenToSquare = faPenToSquare;
   protected readonly faCar = faCar;
@@ -60,5 +64,21 @@ export class UserDescriptionComponent {
       this.phoneNumber = "+12321321";
       this.email = "elontusk@tesla.jo";
     }, 200)
+    this.userService.readUser().subscribe(
+      response => {
+        console.log("Userdata read successfully", response);
+        this.profileText = response.profileText;
+        this.offeredDrives.set(response.offeredDrives);
+        this.takenDrives.set(response.takenDrives);
+        this.distanceDriven = response.distanceDriven;
+        this.totalPassengers = response.totalPassengers;
+        this.highestWeight = response.highestWeight;
+        this.phoneNumber = response.phoneNumber;
+        this.email = response.email;
+      },
+      error => {
+        console.error("There was an error!", error);
+      }
+    );
   }
 }
