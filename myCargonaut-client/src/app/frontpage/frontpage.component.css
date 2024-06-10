@@ -1,0 +1,65 @@
+.field {
+  background-color: #fff;
+  margin-bottom: 10px;
+  border-radius: 20px;
+  padding-right: 7%;
+  padding-left: 7%;
+  padding-top: 3%;
+  padding-bottom: 3%;
+  transition: all 0.4s ease;
+}
+.field:hover{
+  box-shadow: 0px 0px 20px #005B52;
+}
+
+.greenText{
+  color: #005B52;
+}
+
+.greenButton{
+  background-color: #005B52;
+  color: #fff;
+  border-radius: 20px;
+}
+
+
+
+
+.custom-card {
+  width: 14rem;
+  border: none;
+  overflow: hidden;
+  border-radius: 15px;
+  transition: box-shadow 0.3s ease-in-out;
+  text-align: center;
+  padding: 0;
+  background-color: #005B52;
+  color: white;
+}
+
+.custom-card:hover {
+  box-shadow: 0 0 20px #005B52;
+}
+
+.custom-card img {
+  width: 100%;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+}
+
+.custom-card .card-body {
+  padding: 20px;
+}
+
+.custom-card .card-body h5 {
+  margin-bottom: 20px;
+}
+
+.custom-card .card-footer {
+  background-color: #005B52;
+  border-top: none;
+  padding: 15px;
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: white;
+}
