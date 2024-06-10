@@ -4,7 +4,7 @@ import {FaIconComponent} from "@fortawesome/angular-fontawesome";
 import {
   faCar,
   faCircle,
-  faCirclePlus,
+  faCirclePlus, faComment,
   faHouse, faPencil,
   faPenSquare,
   faPlus,
@@ -38,6 +38,7 @@ export class NavbarComponent {
   protected readonly faSignIn = faSignIn;
   protected readonly faPenSquare = faPenSquare;
   protected readonly faPencil = faPencil;
+  protected readonly faComment = faComment;
 
   isLoggedIn: boolean = false;
 

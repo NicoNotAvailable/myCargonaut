@@ -49,7 +49,7 @@ export class LoginComponent {
         this.textColor = "successText"
         this.message = "Anmeldung lief swaggy";
         window.location.href = "/profile";
-        setTimeout(() =>{
+        setTimeout(() => {
           this.message = "";
           this.textColor = "errorText"
         }, 5000);

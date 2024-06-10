@@ -65,10 +65,10 @@ export class ProfileComponent {
       isLoggedIn == -1 ? this.isLoggedIn = false : this.isLoggedIn = true;
       if (!this.isLoggedIn) {
         window.location.href = "/";
+      } else {
+        this.readUser();
       }
     });
-
-    this.readUser();
   }
 
   readUser(): void {
