@@ -1,25 +1,13 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
-import { UserDB } from './UserDB';
-import { LocationDB } from './LocationDB';
-import { TripDB } from './TripDB';
+import { ChildEntity, OneToMany } from 'typeorm';
+import { DriveDB } from './DriveDB';
+import { CargoDB } from './CargoDB';
+import { RequestTripDB } from './RequestTripDB';
 
-@Entity()
-export class RequestDB {
-    @PrimaryGeneratedColumn()
-    id: number;
+@ChildEntity()
+export class RequestDB extends DriveDB {
+  @OneToMany(() => CargoDB, (cargo) => cargo.request)
+  cargo: Promise<CargoDB[]>;
 
-    @ManyToOne(() => UserDB)
-    requesting: UserDB;
-
-    @ManyToOne(() => TripDB)
-    trip: TripDB;
-
-    @ManyToOne(() => LocationDB)
-    startLocation: LocationDB;
-
-    @ManyToOne(() => LocationDB)
-    endLocation: LocationDB;
-
-    @Column({ default: new Date().toISOString() })
-    timestamp: string;
+  @OneToMany(() => RequestTripDB, (trip) => trip.drive)
+  trips: Promise<RequestTripDB[]>;
 }

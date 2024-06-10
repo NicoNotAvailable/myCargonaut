@@ -1,15 +1,19 @@
 import { Column, ChildEntity, OneToMany } from 'typeorm';
 import { VehicleDB } from './VehicleDB';
-import { TripDB } from './TripDB';
+import { OfferDB } from './OfferDB';
+import { RequestTripDB } from './RequestTripDB';
 
 @ChildEntity()
 export class TrailerDB extends VehicleDB {
-    @Column()
-    isCooled: boolean;
+  @Column()
+  isCooled: boolean;
 
-    @Column()
-    isEnclosed: boolean;
+  @Column()
+  isEnclosed: boolean;
 
-    @OneToMany(() => TripDB, (trip) => trip.trailer)
-    rides: Promise<TripDB[]>;
+  @OneToMany(() => OfferDB, (drive) => drive.trailer)
+  rides: Promise<OfferDB[]>;
+
+  @OneToMany(() => RequestTripDB, (drive) => drive.trailer)
+  requestTrips: Promise<RequestTripDB[]>;
 }

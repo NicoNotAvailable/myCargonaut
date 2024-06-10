@@ -3,60 +3,58 @@ import { VehicleDB } from './VehicleDB';
 import { TripDB } from './TripDB';
 import { ReviewDB } from './ReviewDB';
 import { IsEmail, IsPhoneNumber } from 'class-validator';
-import { ChatDB } from './ChatDB';
+import { MessageDB } from './MessageDB';
+import { DriveDB } from './DriveDB';
 
 @Entity()
 export class UserDB {
-    @PrimaryGeneratedColumn()
-    id: number;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @Column({ unique: true, nullable: true })
-    @IsEmail()
-    email: string;
+  @Column({ unique: true, nullable: true })
+  @IsEmail()
+  email: string;
 
-    @Column({ nullable: true })
-    password: string;
+  @Column({ nullable: true })
+  password: string;
 
-    @Column()
-    firstName: string;
+  @Column()
+  firstName: string;
 
-    @Column()
-    lastName: string;
+  @Column()
+  lastName: string;
 
-    @Column()
-    birthday: Date;
+  @Column()
+  birthday: Date;
 
-    @Column({ nullable: true })
-    @IsPhoneNumber()
-    phoneNumber: string;
+  @Column({ nullable: true })
+  @IsPhoneNumber()
+  phoneNumber: string;
 
-    @Column({ default: 'empty.png' })
-    profilePic: string;
+  @Column({ default: 'empty.png' })
+  profilePic: string;
 
-    @Column({ nullable: true })
-    profileText: string;
+  @Column({ nullable: true })
+  profileText: string;
 
-    @Column({ nullable: true })
-    languages: string;
+  @Column({ nullable: true })
+  languages: string;
 
-    @Column({ nullable: true })
-    isSmoker: boolean;
+  @Column({ nullable: true })
+  isSmoker: boolean;
 
-    @OneToMany(() => VehicleDB, (car) => car.owner)
-    cars: Promise<VehicleDB[]>;
+  @OneToMany(() => VehicleDB, (vehicle) => vehicle.owner)
+  vehicles: Promise<VehicleDB[]>;
 
-    @OneToMany(() => TripDB, (trip) => trip.offering)
-    offers: Promise<TripDB[]>;
+  @OneToMany(() => TripDB, (trip) => trip.requesting)
+  trips: Promise<TripDB[]>;
 
-    @OneToMany(() => TripDB, (trip) => trip.requesting)
-    requests: Promise<TripDB[]>;
+  @OneToMany(() => DriveDB, (drive) => drive.user)
+  drives: Promise<DriveDB[]>;
 
-    @OneToMany(() => ReviewDB, (review) => review.writer)
-    writtenReviews: Promise<ReviewDB[]>;
+  @OneToMany(() => ReviewDB, (review) => review.writer)
+  writtenReviews: Promise<ReviewDB[]>;
 
-    @OneToMany(() => ChatDB, (chat) => chat.writer)
-    writtenChats: Promise<ChatDB[]>;
-
-    @OneToMany(() => ChatDB, (chat) => chat.receiver)
-    receivedChats: Promise<ChatDB[]>;
+  @OneToMany(() => MessageDB, (message) => message.writer)
+  writtenMessages: Promise<MessageDB[]>;
 }
