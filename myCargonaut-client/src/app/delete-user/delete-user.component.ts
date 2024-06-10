@@ -1,7 +1,7 @@
-import {Component} from '@angular/core';
-import {FormsModule} from "@angular/forms";
-import { HttpClient, HttpClientModule} from '@angular/common/http';
-import {NgIf} from "@angular/common";
+import { Component } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { NgIf } from '@angular/common';
 import { Router } from '@angular/router';
 
 
@@ -11,20 +11,21 @@ import { Router } from '@angular/router';
   imports: [
     FormsModule,
     HttpClientModule,
-    NgIf
+    NgIf,
   ],
   templateUrl: './delete-user.component.html',
-  styleUrl: './delete-user.component.css'
+  styleUrl: './delete-user.component.css',
 })
-
 
 
 export class DeleteUserComponent {
 
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(private http: HttpClient, private router: Router) {
+  }
 
-  checkLoginBeforeDeleteUser(): void  {
-    this.http.get('http://localhost:8000/session/checkLogin' , {withCredentials: true})
+
+  checkLoginBeforeDeleteUser(): void {
+    this.http.get('http://localhost:8000/session/checkLogin', { withCredentials: true })
       .subscribe(
         (data: any) => {
           if (data && data.length > 0) {
@@ -35,33 +36,35 @@ export class DeleteUserComponent {
         },
         error => {
           console.error('Error checking login status', error);
-        }
+        },
       );
   }
 
-  deleteUser(): void {
 
+  deleteUser(): void {
     const userData = {
-      firstName: "",
-      lastName: "",
-      email: "",
-      emailConfirm: "",
-      password: "",
-      passwordConfirm: "",
-      birthday: "",
-      phoneNumber: "",
-      agb: "",
+      'email': null,
+      'firstName': '',
+      'lastName': '',
+      'password': null,
+      'birthday': '2000-01-01',
+      'profilText': 'Dieser Nutzer hat sein konto deaktiviert.',
+      'profilPic': 'empty.pn',
+      'phoneNumber': null,
 
     };
 
-    console.log('User Data:', userData);
 
-    this.http.put("http://localhost:8000/user", userData)
-      .subscribe(data => {
-        this.router.navigate(['/'])
-        sessionStorage.clear();
+    this.http.put('http://localhost:8000/user',
+      { userData },
+      {
+        headers: { 'Content-Type': 'application/json' },
+      },
+    ).subscribe(data => {
+      this.router.navigate(['/']);
+      sessionStorage.clear();
 
-      })
+    });
 
   }
 }

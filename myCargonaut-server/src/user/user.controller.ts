@@ -29,12 +29,14 @@ import { IsLoggedInGuard } from '../session/is-logged-in.guard';
 import { EditUserDTO } from './DTO/EditUserDTO';
 import * as validator from 'validator';
 import * as bcrypt from 'bcryptjs';
-import { UserDB } from "../database/UserDB";
+import { UserDB } from '../database/UserDB';
 
 @ApiTags('user')
 @Controller('user')
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(private readonly userService: UserService) {
+  }
+
   private readonly logger = new Logger(UserController.name);
 
   private validateNonEmptyString(value: string, errorMessage: string): void {
@@ -295,7 +297,7 @@ export class UserController {
     type: OkDTO,
     description: '"deletes" a spefics user by only keeping its id',
   })
-  @Put()
+  @Put('delete')
   @ApiBearerAuth()
   @UseGuards(IsLoggedInGuard)
   async deleteUser(@Session() session: SessionData): Promise<OkDTO> {
