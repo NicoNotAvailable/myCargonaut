@@ -61,7 +61,6 @@ export class DeleteUserComponent {
         headers: { 'Content-Type': 'application/json' },
       },
     ).subscribe(data => {
-      this.router.navigate(['/']);
       sessionStorage.clear();
 
     });

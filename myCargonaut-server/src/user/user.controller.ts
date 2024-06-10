@@ -1,15 +1,16 @@
 import {
   BadRequestException,
   Body,
-  Controller, Get,
+  Controller,
+  Get,
   Logger,
   Post,
   Put,
   Session,
   UploadedFile,
   UseGuards,
-  UseInterceptors
-} from "@nestjs/common";
+  UseInterceptors,
+} from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiConsumes,

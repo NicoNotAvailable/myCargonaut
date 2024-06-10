@@ -10,7 +10,7 @@ import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateUserDTO {
   @ApiProperty({
-    description: 'Check if AGB ist True'
+    description: 'Check if AGB ist True',
   })
   @IsBoolean()
   agb: boolean;
