@@ -9,6 +9,8 @@ import { VehicleDB } from '../database/VehicleDB';
 import { CarDB } from '../database/CarDB';
 import { TrailerDB } from '../database/TrailerDB';
 import { UserDB } from '../database/UserDB';
+import { CreateCarDTO } from './DTO/CreateCarDTO';
+import { CreateTrailerDTO } from './DTO/CreateTrailerDTO';
 
 @Injectable()
 export class VehicleService {
@@ -21,17 +23,7 @@ export class VehicleService {
     private trailerRepository: Repository<TrailerDB>,
   ) {}
 
-  async createCar(
-    owner: UserDB,
-    name: string,
-    weight: number,
-    length: number,
-    height: number,
-    width: number,
-    seats: number,
-    hasAC: boolean,
-    hasTelevision: boolean,
-  ): Promise<CarDB> {
+  async createCar(owner: UserDB, body: CreateCarDTO): Promise<CarDB> {
     const newCar: CarDB = this.carRepository.create();
     if (owner instanceof UserDB) {
       newCar.owner = owner;
@@ -40,14 +32,14 @@ export class VehicleService {
       throw new Error('Invalid owner type');
     }
     // Set the values for the new car
-    newCar.name = name;
-    newCar.weight = weight;
-    newCar.length = length;
-    newCar.height = height;
-    newCar.width = width;
-    newCar.seats = seats;
-    newCar.hasAC = hasAC;
-    newCar.hasTelevision = hasTelevision;
+    newCar.name = body.name.trim();
+    newCar.weight = body.weight;
+    newCar.length = body.length;
+    newCar.height = body.height;
+    newCar.width = body.width;
+    newCar.seats = body.seats;
+    newCar.hasAC = body.hasAC;
+    newCar.hasTelevision = body.hasTelevision;
 
     try {
       // Save the new car
@@ -62,24 +54,18 @@ export class VehicleService {
 
   async createTrailer(
     owner: UserDB,
-    name: string,
-    weight: number,
-    length: number,
-    height: number,
-    width: number,
-    isCooled: boolean,
-    isEnclosed: boolean,
+    body: CreateTrailerDTO,
   ): Promise<TrailerDB> {
     const newTrailer: TrailerDB = this.trailerRepository.create();
 
     newTrailer.owner = owner;
-    newTrailer.name = name;
-    newTrailer.weight = weight;
-    newTrailer.length = length;
-    newTrailer.height = height;
-    newTrailer.width = width;
-    newTrailer.isCooled = isCooled;
-    newTrailer.isEnclosed = isEnclosed;
+    newTrailer.name = body.name.trim();
+    newTrailer.weight = body.weight;
+    newTrailer.length = body.length;
+    newTrailer.height = body.height;
+    newTrailer.width = body.width;
+    newTrailer.isCooled = body.isCooled;
+    newTrailer.isEnclosed = body.isEnclosed;
 
     return this.trailerRepository.save(newTrailer);
   }

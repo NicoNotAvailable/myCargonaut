@@ -10,28 +10,34 @@ import { VehicleController } from './vehicle.controller';
 import { VehicleService } from './vehicle.service';
 import { CreateCarDTO } from './DTO/CreateCarDTO';
 import { CreateTrailerDTO } from './DTO/CreateTrailerDTO';
-import { CreateUserDTO } from '../user/DTO/CreateUserDTO';
 import { UserController } from '../user/user.controller';
+import { CarDB } from '../database/CarDB';
 
 jest.setTimeout(30000);
 
 describe('VehicleController', () => {
   let module: TestingModule;
-  let userController: UserController;
   let userService: UserService;
   let userRepository: Repository<UserDB>;
   let vehicleController: VehicleController;
+  let vehicleService: VehicleService;
 
-  const mockUser: CreateUserDTO = {
+  const mockUser: UserDB = {
+    id: 1,
     firstName: 'John',
     lastName: 'Doe',
     email: 'john.doe@example.com',
-    emailConfirm: 'john.doe@example.com',
     password: 'securepassword',
-    passwordConfirm: 'securepassword',
-    agb: true,
     birthday: new Date('2000-01-01'),
     phoneNumber: '0800555555',
+    profileText: '',
+    profilePic: '',
+    offers: undefined,
+    requests: undefined,
+    writtenChats: undefined,
+    writtenReviews: undefined,
+    cars: undefined,
+    receivedChats: undefined,
   };
 
   const mockSession: SessionData = {
@@ -64,7 +70,6 @@ describe('VehicleController', () => {
     }).compile();
 
     userService = module.get<UserService>(UserService);
-    userController = module.get<UserController>(UserController);
     vehicleController = module.get<VehicleController>(VehicleController);
     userRepository = module.get<Repository<UserDB>>(getRepositoryToken(UserDB));
 
@@ -104,7 +109,7 @@ describe('VehicleController', () => {
   });
 
   it('should create a car successfully', async () => {
-    const carBody: CreateCarDTO = {
+    const mockCar: CreateCarDTO = {
       name: 'auto',
       weight: 200,
       height: 200,
@@ -115,9 +120,11 @@ describe('VehicleController', () => {
       hasAC: false,
     };
 
-    const userRes = await userController.createUser(mockUser);
-    expect(userRes.ok).toBe(true);
-    const carResponse = await vehicleController.createCar(carBody, mockSession);
+    jest.spyOn(vehicleService, 'createCar').mockImplementation(async () => {
+      return mockCar as unknown as CarDB;
+    });
+
+    const carResponse = await vehicleController.createCar(mockCar, mockSession);
 
     expect(carResponse.ok).toBe(true);
     expect(carResponse.message).toBe('Car was created');

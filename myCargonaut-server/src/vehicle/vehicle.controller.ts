@@ -79,26 +79,9 @@ export class VehicleController {
     if (body.seats <= 0 || body.seats > 20) {
       throw new BadRequestException('Car seats must be between 1 and 20');
     }
-    console.log('owner');
-    console.log(owner);
-    console.log('body');
-    console.log(body);
-    this.logger.log('through the ifs');
-    this.logger.log(owner);
-    this.logger.log(body);
 
     try {
-      await this.vehicleService.createCar(
-        owner,
-        body.name.trim(),
-        body.weight,
-        body.length,
-        body.height,
-        body.width,
-        body.seats,
-        body.hasAC,
-        body.hasTelevision,
-      );
+      await this.vehicleService.createCar(owner, body);
       return new OkDTO(true, 'Car was created');
     } catch (err) {
       throw new Error('An error occurred' + err);
@@ -144,16 +127,7 @@ export class VehicleController {
     }
 
     try {
-      await this.vehicleService.createTrailer(
-        owner,
-        body.name.trim(),
-        body.weight,
-        body.length,
-        body.height,
-        body.width,
-        body.isCooled,
-        body.isEnclosed,
-      );
+      await this.vehicleService.createTrailer(owner, body);
       return new OkDTO(true, 'Trailer was created');
     } catch (err) {
       throw new Error('An error occurred');
