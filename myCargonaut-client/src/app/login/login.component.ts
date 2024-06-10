@@ -26,9 +26,10 @@ export class LoginComponent {
       password: this.password,
     };
 
-    this.http.post("http://localhost:8080/session/login", userData).subscribe(
+    this.http.post("http://localhost:8000/session/login", userData).subscribe(
       response =>{
         form.resetForm();
+        console.log(response);
         this.message = "Anmeldung lief swaggy";
         setTimeout(() =>{
           this.message = "";

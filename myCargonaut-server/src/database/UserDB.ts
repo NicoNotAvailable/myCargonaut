@@ -19,12 +19,11 @@ export class UserDB {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ unique: true, nullable: true })
   @IsEmail()
-  @Index({ unique: true })
   email: string;
 
-  @Column()
+  @Column({ nullable: true })
   password: string;
 
   @Column()
@@ -63,12 +62,4 @@ export class UserDB {
 
   @OneToMany(() => ChatDB, (chat) => chat.receiver)
   receivedChats: Promise<ChatDB[]>;
-
-  @BeforeInsert()
-  @BeforeUpdate()
-  async hashPassword() {
-    if (this.password) {
-      this.password = await bcrypt.hash(this.password, 10);
-    }
-  }
 }
