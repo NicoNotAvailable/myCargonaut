@@ -1,8 +1,9 @@
-import {Component} from '@angular/core';
+import { Component, inject } from "@angular/core";
 import {FormsModule} from "@angular/forms";
 import {HTTP_INTERCEPTORS, HttpClient, HttpClientModule} from '@angular/common/http';
 import {NgIf} from "@angular/common";
 import {NgbInputDatepicker} from "@ng-bootstrap/ng-bootstrap";
+import { SessionService } from "../services/session.service";
 
 
 @Component({
@@ -18,6 +19,7 @@ import {NgbInputDatepicker} from "@ng-bootstrap/ng-bootstrap";
   styleUrl: './register.component.css'
 })
 export class RegisterComponent {
+  isLoggedIn: boolean = false;
 
   message: string = ""
 
@@ -32,10 +34,22 @@ export class RegisterComponent {
 
   birthDate: any = "";
 
+  public sessionService: SessionService = inject(SessionService);
+
   constructor(private http: HttpClient) {
 
   }
 
+  ngOnInit(): void {
+    //console.log(this.sessionService.checkLogin());
+    this.sessionService.checkLoginNum().then(isLoggedIn => {
+      console.log('Login status:', isLoggedIn);
+      isLoggedIn == -1 ? this.isLoggedIn = false : this.isLoggedIn = true;
+      if (this.isLoggedIn) {
+        window.location.href = "/profile";
+      }
+    });
+  }
 
   emailMatchError: boolean = false;
   passwordMatchError: boolean = false;
@@ -82,7 +96,7 @@ export class RegisterComponent {
 
     console.log('User Data:', userData);
 
-    this.http.post("http://localhost:8000/user",userData)
+    this.http.post("http://localhost:8000/user",userData, { withCredentials: true })
       .subscribe(
         response => {
           form.resetForm();
@@ -90,7 +104,8 @@ export class RegisterComponent {
           this.message = "Nutzer erfolgreich angelegt";
           setTimeout(() => {
             this.message = '';
-          }, 5000);
+            window.location.reload();
+          }, 2000);
 
         },
         error => {

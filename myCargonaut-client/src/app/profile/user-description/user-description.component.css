@@ -1,0 +1,82 @@
+#description{
+  font-weight: 500;
+  position: relative;
+  z-index: 1;
+  transition: all 0.4s ease;
+  border-radius: 1rem;
+  padding-top: 1rem !important;
+  padding-bottom: 2rem !important;
+}
+#description:hover{
+  box-shadow: 0px 0px 20px #005B52;
+}
+
+#description i{
+  font-size: 1.75rem;
+  color: #005B52;
+}
+
+.editButton{
+  position: relative;
+  z-index: 2;
+  font-size: 1.5rem;
+  border-radius: 5rem;
+  border-color: transparent;
+  transition: all 0.3s ease;
+  margin-bottom: -1.5rem;
+}
+.editButton:hover {
+  box-shadow: #1a9cc5 0 0 20px;
+  text-shadow: ghostwhite 0 0 10px;
+}
+
+.editButton {
+  background-color: #1A9CC5;
+}
+
+.textareaSize {
+  height: 250px;
+}
+
+.backgroundGreen {
+  background-color: #005B52;
+}
+
+.textGreen {
+  color: #005B52;
+}
+.border {
+  border: #059e4b solid 0.09rem !important;
+}
+.exitButton{
+  position: relative;
+  z-index: 1;
+  margin-top: -1.5rem;
+  background-color: #1a9cc5;
+  padding: 0.5rem 1rem 0.5rem 1rem;
+  font-size: 1.5rem;
+  font-weight: 400;
+}
+.exitButton:hover{
+  box-shadow: #1a9cc5 0 0 20px;
+}
+
+.cancelButton{
+  background-color: #1a9cc5 !important;
+  position: relative;
+  z-index: 2;
+  font-size: 1.5rem;
+  border-radius: 2rem;
+  width: 3.25rem;
+  border-color: transparent;
+  transition: all 0.3s ease;
+  margin-bottom: -1.5rem;
+}
+.cancelButton:hover {
+  box-shadow: #1a9cc5 0 0 20px;
+  text-shadow: ghostwhite 0 0 10px;
+}
+
+#deleteBtn{
+  background-color: rgba(0,91,82,0.66) !important;
+}

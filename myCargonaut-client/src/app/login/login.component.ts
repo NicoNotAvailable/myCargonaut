@@ -1,23 +1,39 @@
-import { Component } from '@angular/core';
+import { Component, inject } from "@angular/core";
 import {FormsModule} from "@angular/forms";
 import {HttpClient, HttpClientModule} from "@angular/common/http";
-import {NgIf} from "@angular/common";
-import {response} from "express";
+import { NgClass, NgIf } from "@angular/common";
+import { SessionService } from "../services/session.service";
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [FormsModule, HttpClientModule, NgIf],
+  imports: [FormsModule, HttpClientModule, NgIf, NgClass],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
 export class LoginComponent {
+  public sessionService: SessionService = inject(SessionService);
+
+  isLoggedIn: boolean = false;
+
   email: string = "";
   password: string = "";
 
   message: string = "";
+  textColor: string = "errorText";
 
   constructor(private http: HttpClient) {
+  }
+
+  ngOnInit(): void {
+    //console.log(this.sessionService.checkLogin());
+    this.sessionService.checkLoginNum().then(isLoggedIn => {
+      console.log('Login status:', isLoggedIn);
+      isLoggedIn == -1 ? this.isLoggedIn = false : this.isLoggedIn = true;
+      if (this.isLoggedIn) {
+        window.location.href = "/profile";
+      }
+    });
   }
 
   userLogin(form: any): void{
@@ -26,12 +42,16 @@ export class LoginComponent {
       password: this.password,
     };
 
-    this.http.post("http://localhost:8080/session/login", userData).subscribe(
+    this.http.post("http://localhost:8000/session/login", userData, { withCredentials: true }).subscribe(
       response =>{
         form.resetForm();
+        console.log(response);
+        this.textColor = "successText"
         this.message = "Anmeldung lief swaggy";
+        window.location.href = "/profile";
         setTimeout(() =>{
           this.message = "";
+          this.textColor = "errorText"
         }, 5000);
       },
       error => {

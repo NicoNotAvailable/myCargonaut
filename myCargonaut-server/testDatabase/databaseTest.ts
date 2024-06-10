@@ -11,22 +11,22 @@ import { ChatDB } from '../src/database/ChatDB';
 import { RequestDB } from '../src/database/RequestDB';
 
 export const tables: EntityClassOrSchema[] = [
-  UserDB,
-  CarDB,
-  LocationDB,
-  ReviewDB,
-  TrailerDB,
-  TripDB,
-  VehicleDB,
-  ChatDB,
-  RequestDB,
+    UserDB,
+    CarDB,
+    LocationDB,
+    ReviewDB,
+    TrailerDB,
+    TripDB,
+    VehicleDB,
+    ChatDB,
+    RequestDB,
 ];
 
 export const databaseTest = (path: string) => {
-  return TypeOrmModule.forRoot({
-    type: 'sqlite',
-    database: path,
-    entities: tables,
-    synchronize: true,
-  });
+    return TypeOrmModule.forRoot({
+        type: 'sqlite',
+        database: path,
+        entities: tables,
+        synchronize: true,
+    });
 };

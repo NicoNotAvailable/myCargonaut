@@ -1,7 +1,7 @@
 <nav class="navbar navbar-expand-lg bg-body-tertiary p-0">
   <div class="container-fluid mc-green">
     <a class="navbar-brand" href="">
-      <img ngSrc="../../assets/myCargonaut-White.png" alt="myCargonaut-Logo" height="80" width="193"/>
+      <img ngSrc="../../assets/myCargonaut-White.png" alt="myCargonaut-Logo" height="80" width="193" />
     </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
             aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
@@ -32,10 +32,26 @@
 
           <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuLink">
             <li>
+              <a class="dropdown-item text-center w-100" href="/profile">
+                <button type="button" class="btn btn-success">
+                  <span><fa-icon [icon]="faUser" class="white-fade me-2"></fa-icon></span>
+                  <span>Mein Profil</span>
+                </button>
+              </a>
+            </li>
+            <li *ngIf="!isLoggedIn">
               <a class="dropdown-item text-center w-100" href="/login">
                 <button type="button" class="btn btn-success">
                   <span><fa-icon [icon]="faSignIn" class="white-fade me-2"></fa-icon></span>
                   <span>Einloggen</span>
+                </button>
+              </a>
+            </li>
+            <li *ngIf="isLoggedIn">
+              <a class="dropdown-item text-center w-100" (click)="runLogOut()">
+                <button type="button" class="btn btn-success">
+                  <span><fa-icon [icon]="faSignIn" class="white-fade me-2"></fa-icon></span>
+                  <span>Abmelden</span>
                 </button>
               </a>
             </li>

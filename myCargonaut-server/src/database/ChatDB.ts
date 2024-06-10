@@ -4,24 +4,24 @@ import { TripDB } from './TripDB';
 
 @Entity()
 export class ChatDB {
-  @PrimaryGeneratedColumn()
-  id: number;
+    @PrimaryGeneratedColumn()
+    id: number;
 
-  @ManyToOne(() => UserDB)
-  writer: UserDB;
+    @ManyToOne(() => UserDB)
+    writer: UserDB;
 
-  @ManyToOne(() => UserDB)
-  receiver: UserDB;
+    @ManyToOne(() => UserDB)
+    receiver: UserDB;
 
-  @ManyToOne(() => TripDB)
-  trip: TripDB;
+    @ManyToOne(() => TripDB)
+    trip: TripDB;
 
-  @Column()
-  message: string;
+    @Column()
+    message: string;
 
-  @Column()
-  read: boolean;
+    @Column()
+    read: boolean;
 
-  @Column({ default: new Date().toISOString() })
-  timestamp: string;
+    @Column({ default: new Date().toISOString() })
+    timestamp: string;
 }

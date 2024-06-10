@@ -1,0 +1,48 @@
+<div class="profile text-center container mb-4">
+  <div class="row">
+    <div class="col-2">
+      <img class="profileCircle" [ngSrc]="pathToImage" alt="profile" width="150" height="150">
+    </div>
+    <div class="col-8 my-auto">
+      <div class="row">
+        <h1 class="textGreen">Profil von {{ fullName() }}</h1>
+      </div>
+    </div>
+    <div class="col-12">
+      <div class="row">
+        <div class="col-2">
+          <span><fa-icon [icon]="faStar" class="starRating"></fa-icon></span>
+          <span><fa-icon [icon]="faStar" class="starRating"></fa-icon></span>
+          <span><fa-icon [icon]="faStar" class="starRating"></fa-icon></span>
+          <span><fa-icon [icon]="faStar" class="starRating"></fa-icon></span>
+          <span><fa-icon [icon]="faStar" class="starRating"></fa-icon></span>
+        </div>
+        <div class="col-2 backgroundGreen text-center flex-row justify-content-center attribute">
+          <span>
+            <i class="me-3"><fa-icon [icon]="faUser"></fa-icon></i>
+            <span>{{ fullName() }}</span>
+          </span>
+        </div>
+        <div class="col-1"></div>
+        <div class="col-2 backgroundGreen text-center flex-row justify-content-center attribute">
+          <span>
+            <i class="me-3"><fa-icon [icon]="faCalender"></fa-icon></i>
+            <span>{{ birthday }}</span>
+          </span>
+        </div>
+        <div class="col-1"></div>
+        <div class="col-2 backgroundGreen text-center flex-row justify-content-center attribute">
+          <span>
+            <i class="me-3"><fa-icon [icon]="faSmoking"></fa-icon></i>
+            <span>{{ smoker }}</span>
+          </span>
+        </div>
+      </div>
+    </div>
+    <app-user-description [editState]="editState" (changeEdit)="toggleEditing()" *ngIf="userDesc" (changeViewCar)="toggleCarView()" (changeViewTrailer)="toggleTrailerView()"></app-user-description>
+    <app-add-car [editingCar]="carId" (changeAddCar)="toggleCarAdd(0)" *ngIf="addCars"></app-add-car>
+    <app-add-trailer [editingTrailer]="trailerId" (changeAddTrailer)="toggleTrailerAdd(0)" *ngIf="addTrailers"></app-add-trailer>
+    <app-car-overview (changeViewCars)="toggleCarView()" (changeAddCars)="toggleCarAdd($event)" *ngIf="viewCars"></app-car-overview>
+    <app-trailer-overview (changeAddTrailers)="toggleTrailerAdd($event)" (changeViewTrailers)="toggleTrailerView()" *ngIf="viewTrailers"></app-trailer-overview>
+  </div>
+</div>
