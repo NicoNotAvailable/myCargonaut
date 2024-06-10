@@ -1,6 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
-import { RequestDB } from './RequestDB';
 import { OfferTripDB } from './OfferTripDB';
+import { RequestDB } from './DriveDB';
 
 @Entity()
 export class CargoDB {

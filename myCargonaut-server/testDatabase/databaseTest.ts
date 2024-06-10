@@ -8,10 +8,8 @@ import { TrailerDB } from '../src/database/TrailerDB';
 import { TripDB } from '../src/database/TripDB';
 import { VehicleDB } from '../src/database/VehicleDB';
 import { MessageDB } from '../src/database/MessageDB';
-import { RequestDB } from '../src/database/RequestDB';
 import { CargoDB } from '../src/database/CargoDB';
-import { DriveDB } from '../src/database/DriveDB';
-import { OfferDB } from '../src/database/OfferDB';
+import { DriveDB, OfferDB, RequestDB } from '../src/database/DriveDB';
 import { OfferTripDB } from '../src/database/OfferTripDB';
 import { RequestTripDB } from '../src/database/RequestTripDB';
 

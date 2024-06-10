@@ -1,7 +1,7 @@
 import { Column, ChildEntity, OneToMany } from 'typeorm';
 import { VehicleDB } from './VehicleDB';
-import { OfferDB } from './OfferDB';
 import { RequestTripDB } from './RequestTripDB';
+import { OfferDB } from './DriveDB';
 
 @ChildEntity()
 export class TrailerDB extends VehicleDB {

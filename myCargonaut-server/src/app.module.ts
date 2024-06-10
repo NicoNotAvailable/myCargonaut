@@ -13,12 +13,10 @@ import { UserService } from './user/user.service';
 import { UserController } from './user/user.controller';
 import { SessionController } from './session/session.controller';
 import { MessageDB } from './database/MessageDB';
-import { RequestDB } from './database/RequestDB';
 import { VehicleService } from './vehicle/vehicle.service';
 import { VehicleController } from './vehicle/vehicle.controller';
 import { CargoDB } from './database/CargoDB';
-import { DriveDB } from './database/DriveDB';
-import { OfferDB } from './database/OfferDB';
+import { DriveDB, OfferDB, RequestDB } from './database/DriveDB';
 import { OfferTripDB } from './database/OfferTripDB';
 import { RequestTripDB } from './database/RequestTripDB';
 
