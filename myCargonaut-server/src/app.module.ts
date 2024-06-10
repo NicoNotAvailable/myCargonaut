@@ -19,6 +19,8 @@ import { CargoDB } from './database/CargoDB';
 import { DriveDB, OfferDB, RequestDB } from './database/DriveDB';
 import { OfferTripDB } from './database/OfferTripDB';
 import { RequestTripDB } from './database/RequestTripDB';
+import { DriveService } from './drive/drive.service';
+import { DriveController } from './drive/drive.controller';
 
 @Module({
     imports: [
@@ -65,7 +67,8 @@ import { RequestTripDB } from './database/RequestTripDB';
         UserController,
         SessionController,
         VehicleController,
+        DriveController,
     ],
-    providers: [AppService, UserService, VehicleService],
+    providers: [AppService, UserService, VehicleService, DriveService],
 })
 export class AppModule {}
