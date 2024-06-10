@@ -80,3 +80,7 @@
 #deleteBtn{
   background-color: rgba(0,91,82,0.66) !important;
 }
+.larger-checkbox {
+  height: 2rem;
+  width: 2rem;
+}

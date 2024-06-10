@@ -32,7 +32,7 @@ import * as validator from 'validator';
 import * as bcrypt from 'bcryptjs';
 import { GetOwnUserDTO } from './DTO/GetOwnUserDTO';
 import { UserDB } from '../database/UserDB';
-import { EditUserProfileDTO } from "./DTO/EditUserProfileDTO";
+import { EditUserProfileDTO } from './DTO/EditUserProfileDTO';
 
 @ApiTags('user')
 @Controller('user')
@@ -96,7 +96,10 @@ export class UserController {
 
     @ApiResponse({ type: OkDTO, description: 'creates a new user' })
     @Post()
-    async createUser(@Body() body: CreateUserDTO, @Session() session: SessionData) {
+    async createUser(
+        @Body() body: CreateUserDTO,
+        @Session() session: SessionData,
+    ) {
         if (!body.agb) {
             throw new BadRequestException(
                 'Du musst die AGB akzeptieren, um dich zu registrieren',
@@ -334,10 +337,9 @@ export class UserController {
         @Session() session: SessionData,
         @Body() body: EditUserProfileDTO,
     ): Promise<OkDTO> {
-        const id = session.currentUser;
-        const user = await this.userService.getUserById(id);
+        const id: number = session.currentUser;
+        const user: UserDB = await this.userService.getUserById(id);
         console.log('der Nutzer: ' + user, ' Der body: ', body);
-        //todo irgendwas um die language zu guarden
         if (body.email.trim() !== '' || body.email !== undefined) {
             user.email = body.email;
         }
@@ -350,6 +352,7 @@ export class UserController {
         if (body.profileText.trim() !== '' || body.profileText !== undefined) {
             user.profileText = body.profileText;
         }
+        user.isSmoker = body.isSmoker;
         try {
             await this.userService.updateUser(user);
             return new OkDTO(true, 'User was updated');

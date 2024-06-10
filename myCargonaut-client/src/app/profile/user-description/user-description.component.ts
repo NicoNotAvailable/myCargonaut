@@ -36,6 +36,7 @@ export class UserDescriptionComponent {
   newEmail: string = "";
   newEmailConfirm: string = "";
   newProfileText: string = "";
+  startedSmoking: boolean = false;
 
 
   public userService: UserService = inject(UserService);
@@ -87,6 +88,7 @@ export class UserDescriptionComponent {
         this.phoneNumber = response.phoneNumber;
         this.languages = response.languages == null || response.languages === "" ? "Keine Sprache angegeben" : response.languages;
         this.email = response.email;
+        this.startedSmoking = response.isSmoker;
       },
       error => {
         console.error("There was an error!", error);
@@ -100,7 +102,8 @@ export class UserDescriptionComponent {
       email: this.newEmail,
       phoneNumber: this.newPhoneNumber,
       languages: this.newLang,
-      profileText: this.newProfileText
+      profileText: this.newProfileText,
+      isSmoker: this.startedSmoking,
     }
     if (this.newEmail === "" || this.newEmail === null) {
       userData.email = this.email;
@@ -116,7 +119,9 @@ export class UserDescriptionComponent {
     }
     this.userService.editUser(userData).subscribe(
       response => {
-        this.readUser();
+        setTimeout(()=>{
+          window.location.reload();
+        }, 200);
       }, error => {
         console.error("There was an error!", error);
       }

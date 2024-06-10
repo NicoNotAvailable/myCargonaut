@@ -40,6 +40,8 @@ export class ProfileComponent {
   trailerId: number = 0;
   smoker: string = "";
 
+  loaded: boolean = false;
+
   public sessionService: SessionService = inject(SessionService);
   public userService: UserService = inject(UserService);
 
@@ -63,10 +65,13 @@ export class ProfileComponent {
     this.sessionService.checkLoginNum().then(isLoggedIn => {
       console.log('Login status:', isLoggedIn);
       isLoggedIn == -1 ? this.isLoggedIn = false : this.isLoggedIn = true;
-      if (!this.isLoggedIn) {
+      if (!this.isLoggedIn && window !== undefined) {
         window.location.href = "/";
       } else {
         this.readUser();
+        setTimeout(()=>{
+          this.loaded = true;
+        }, 100);
       }
     });
   }
@@ -89,7 +94,7 @@ export class ProfileComponent {
         this.birthday = DateUtils.parseDate(response.birthday);
         const imagePath: string = response.profilePic;
         this.pathToImage = imagePath === "empty.png" ? "assets/empty.png" : prePath.concat(imagePath);
-        this.smoker = this.formatSmokeBool(response.smoker);
+        this.smoker = this.formatSmokeBool(response.isSmoker);
       },
       error => {
         console.error("There was an error!", error);

@@ -145,6 +145,14 @@
                 <button class="btn customButton" type="button" id="deleteBtn">Löschen</button>
               </span>
               </div>
+              <div class="col-5 my-4">
+                <div class="col-1">
+                  <input type="checkbox" [(ngModel)]="startedSmoking" [ngModelOptions]="{standalone: true}" name="smokeCheck" class="form-check-input larger-checkbox mt-2">
+                </div>
+                <div class="text-start my-auto col">
+                  <span>Raucher?</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>

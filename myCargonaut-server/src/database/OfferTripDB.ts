@@ -6,18 +6,18 @@ import { OfferDB } from './DriveDB';
 
 @Entity()
 export class OfferTripDB extends TripDB {
-  @ManyToOne(() => OfferDB)
-  drive: OfferDB;
+    @ManyToOne(() => OfferDB)
+    drive: OfferDB;
 
-  @ManyToOne(() => LocationDB)
-  startLocation: LocationDB;
+    @ManyToOne(() => LocationDB)
+    startLocation: LocationDB;
 
-  @ManyToOne(() => LocationDB)
-  endLocation: LocationDB;
+    @ManyToOne(() => LocationDB)
+    endLocation: LocationDB;
 
-  @Column()
-  usedSeats: number;
+    @Column()
+    usedSeats: number;
 
-  @OneToMany(() => CargoDB, (cargo) => cargo.offerTrip)
-  cargo: Promise<CargoDB[]>;
+    @OneToMany(() => CargoDB, (cargo) => cargo.offerTrip)
+    cargo: Promise<CargoDB[]>;
 }

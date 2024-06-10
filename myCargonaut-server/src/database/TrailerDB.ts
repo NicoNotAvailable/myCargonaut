@@ -5,15 +5,15 @@ import { OfferDB } from './DriveDB';
 
 @ChildEntity()
 export class TrailerDB extends VehicleDB {
-  @Column()
-  isCooled: boolean;
+    @Column()
+    isCooled: boolean;
 
-  @Column()
-  isEnclosed: boolean;
+    @Column()
+    isEnclosed: boolean;
 
-  @OneToMany(() => OfferDB, (drive) => drive.trailer)
-  rides: Promise<OfferDB[]>;
+    @OneToMany(() => OfferDB, (drive) => drive.trailer)
+    rides: Promise<OfferDB[]>;
 
-  @OneToMany(() => RequestTripDB, (drive) => drive.trailer)
-  requestTrips: Promise<RequestTripDB[]>;
+    @OneToMany(() => RequestTripDB, (drive) => drive.trailer)
+    requestTrips: Promise<RequestTripDB[]>;
 }
