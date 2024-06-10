@@ -6,12 +6,10 @@ import { HttpClient } from "@angular/common/http";
 })
 export class SessionService {
 
-  private isLoggedIn: boolean;
-  private userID: number;
+  userID: number;
 
 
   constructor(private http: HttpClient) {
-    this.isLoggedIn = false;
     this.userID = -1;
   }
 
@@ -19,6 +17,8 @@ export class SessionService {
     try {
       const response = await this.http.get<any>("http://localhost:8000/session/getSessionUser", { withCredentials: true }).toPromise();
       this.userID = response.id;
+      console.log("Hallo " + response.id);
+      console.log(this.userID);
       return this.userID;
     } catch (error) {
       console.error(error);

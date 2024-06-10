@@ -68,16 +68,6 @@ export class UserDescriptionComponent {
   }
 
   readUser(): void {
-    setTimeout(() => {
-      this.profileText = "TestText"
-      this.offeredDrives.set(1234);
-      this.takenDrives.set(123);
-      this.distanceDriven = 0;
-      this.totalPassengers = 12;
-      this.highestWeight = 12;
-      this.phoneNumber = "+12321321";
-      this.email = "elontusk@tesla.jo";
-    }, 200)
     this.userService.readUser().subscribe(
       response => {
         console.log("Userdata read successfully", response);

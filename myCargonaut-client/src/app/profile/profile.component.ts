@@ -64,26 +64,16 @@ export class ProfileComponent {
       isLoggedIn == -1 ? this.isLoggedIn = false : this.isLoggedIn = true;
       if (!this.isLoggedIn) {
         window.location.href = "/";
+      } else {
+        this.readUser();
       }
     });
-
-    this.readUser();
   }
 
   readUser(): void {
 
     const prePath: string = "assets/";
 
-    setTimeout(() => {
-      this.pathToImage = "";
-      this.firstName.set("Willy");
-      this.lastName.set("Wonka");
-      const sqlDate = "1968-05-16 00:00:00.000";
-      this.birthday = DateUtils.parseDate(sqlDate);
-      const imagePath: string = "empty.png";
-      this.pathToImage = prePath.concat(imagePath);
-      this.sessionService.checkLoginNum();
-    }, 200);
     this.userService.readUser().subscribe(
       response => {
         console.log("Userdata read successfully", response);
