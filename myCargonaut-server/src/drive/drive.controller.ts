@@ -41,7 +41,7 @@ export class DriveController {
     }
     const trailer = await this.vehicleService.getTrailerById(body.trailerID);
     if (!trailer) {
-      throw new BadRequestException('User was not found');
+      throw new BadRequestException('Trailer was not found');
     }
     if (!body.name || body.name.trim().length === 0) {
       throw new BadRequestException('Offer name cannot be empty');
