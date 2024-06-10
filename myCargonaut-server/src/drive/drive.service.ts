@@ -47,6 +47,7 @@ export class DriveService {
     newOffer.seats = body.seats;
     newOffer.animalsAllowed = body.animalsAllowed;
     newOffer.smokingAllowed = body.smokingAllowed;
+    newOffer.info = body.info;
     newOffer.priceType = body.priceType;
     newOffer.maxCWeight = body.maxCWeight;
     newOffer.maxCWidth = body.maxCWidth;
@@ -59,7 +60,7 @@ export class DriveService {
     try {
       return await this.offerRepository.save(newOffer);
     } catch (error) {
-      throw new Error('An error occurred while saving the car');
+      throw new Error('An error occurred while saving the offer');
     }
   }
 }

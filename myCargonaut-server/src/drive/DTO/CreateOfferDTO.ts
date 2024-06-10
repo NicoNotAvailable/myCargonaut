@@ -10,6 +10,15 @@ export class CreateOfferDTO {
   name: string;
 
   @ApiProperty()
+  @IsNumber()
+  @IsNotEmpty()
+  carID: number;
+
+  @ApiProperty()
+  @IsNumber()
+  trailerID: number;
+
+  @ApiProperty()
   @IsNotEmpty()
   date: Date;
 
