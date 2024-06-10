@@ -20,7 +20,7 @@ import { Router } from '@angular/router';
 
 export class DeleteUserComponent {
 
-  constructor(private http: HttpClient, private router: Router) {
+  constructor(private http: HttpClient) {
   }
 
 
