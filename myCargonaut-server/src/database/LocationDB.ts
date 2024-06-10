@@ -28,12 +28,6 @@ export class LocationDB {
   @Column()
   city: string;
 
-  @Column()
-  street: string;
-
-  @Column()
-  streetNumber: string;
-
   @OneToMany(() => OfferTripDB, (request) => request.startLocation)
   startLocationRequests: Promise<OfferTripDB[]>;
 
