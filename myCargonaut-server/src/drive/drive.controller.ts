@@ -30,10 +30,21 @@ export class DriveController {
   @Post('/offer')
   @ApiBearerAuth()
   @UseGuards(IsLoggedInGuard)
-  async createOffer(@Body() body: CreateOfferDTO, @Session() session: SessionData) {
+  async createOffer(
+    @Body() body: CreateOfferDTO,
+    @Session() session: SessionData,
+  ) {
     const user = await this.userService.getUserById(session.currentUser);
     if (!user) {
       throw new BadRequestException('User was not found');
+    }
+    if (user.profilePic == 'empty.png') {
+      throw new BadRequestException(
+        'You need a profile pic to upload an offer',
+      );
+    }
+    if (user.phoneNumber == null) {
+      throw new BadRequestException('You need a phone number');
     }
     const car = await this.vehicleService.getCarById(body.carID);
     if (!car) {
