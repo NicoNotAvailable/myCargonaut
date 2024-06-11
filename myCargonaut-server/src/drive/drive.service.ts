@@ -21,7 +21,7 @@ export class DriveService {
   async createOffer(
     user: UserDB,
     car: CarDB,
-    trailer: TrailerDB,
+    trailer: TrailerDB | null,
     body: CreateOfferDTO,
   ): Promise<OfferDB> {
     const newOffer: OfferDB = this.offerRepository.create();
@@ -35,10 +35,10 @@ export class DriveService {
     } else {
       throw new Error('Invalid car type');
     }
-    if (trailer instanceof TrailerDB) {
+    if (trailer === null || trailer instanceof TrailerDB) {
       newOffer.trailer = trailer;
     } else {
-      throw new Error('Invalid owner type');
+      throw new Error('Invalid trailer type');
     }
     // Set the values for the new offer
     newOffer.name = body.name.trim();

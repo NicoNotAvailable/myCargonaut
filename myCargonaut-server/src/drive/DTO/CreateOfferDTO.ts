@@ -1,4 +1,4 @@
-import { IsBoolean, IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { IsBoolean, IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { TripInfoEnum } from '../../database/enums/TripInfoEnum';
 import { PriceTypeEnum } from '../../database/enums/PriceTypeEnum';
@@ -15,8 +15,9 @@ export class CreateOfferDTO {
   carID: number;
 
   @ApiProperty()
+  @IsOptional()
   @IsNumber()
-  trailerID: number;
+  trailerID?: number;
 
   @ApiProperty()
   @IsNotEmpty()
@@ -68,19 +69,23 @@ export class CreateOfferDTO {
 
   @ApiProperty()
   @IsNumber()
-  maxTLength: number;
+  @IsOptional()
+  maxTLength?: number;
 
   @ApiProperty()
   @IsNumber()
-  maxTWeight: number;
+  @IsOptional()
+  maxTWeight?: number;
 
   @ApiProperty()
   @IsNumber()
-  maxTHeight: number;
+  @IsOptional()
+  maxTHeight?: number;
 
   @ApiProperty()
   @IsNumber()
-  maxTWidth: number;
+  @IsOptional()
+  maxTWidth?: number;
 
   @ApiProperty()
   @IsNotEmpty()
