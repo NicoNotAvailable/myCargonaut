@@ -37,14 +37,14 @@ import { EditUserProfileDTO } from './DTO/EditUserProfileDTO';
 @ApiTags('user')
 @Controller('user')
 export class UserController {
-    constructor(private readonly userService: UserService) {}
-    private readonly logger = new Logger(UserController.name);
+  constructor(private readonly userService: UserService) {}
+  private readonly logger = new Logger(UserController.name);
 
-    private validateNonEmptyString(value: string, errorMessage: string): void {
-        if (!value?.trim()) {
-            throw new BadRequestException(errorMessage);
-        }
+  private validateNonEmptyString(value: string, errorMessage: string): void {
+    if (!value?.trim()) {
+      throw new BadRequestException(errorMessage);
     }
+  }
 
   private isValidMobileNumber(phoneNumber: string): boolean {
     // Regular expression for validating mobile numbers
@@ -71,94 +71,85 @@ export class UserController {
     return age >= 18;
   }
 
-    @ApiResponse({ type: GetOwnUserDTO, description: 'gets the own user' })
-    @Get()
-    async getUser(@Session() session: SessionData): Promise<GetOwnUserDTO> {
-        let user: UserDB;
-        try {
-            user = await this.userService.getUserById(session.currentUser);
-        } catch (err) {
-            console.log(err);
-        }
-        const dto: GetOwnUserDTO = new GetOwnUserDTO();
-        dto.lastName = user.lastName;
-        dto.firstName = user.firstName;
-        dto.email = user.email;
-        dto.profilePic = user.profilePic;
-        dto.phoneNumber = user.phoneNumber;
-        dto.birthday = user.birthday;
-        dto.isSmoker = user.isSmoker;
-        dto.profileText = user.profileText;
-        dto.languages = user.languages;
-        return dto;
+  @ApiResponse({ type: GetOwnUserDTO, description: 'gets the own user' })
+  @Get()
+  async getUser(@Session() session: SessionData): Promise<GetOwnUserDTO> {
+    let user: UserDB;
+    try {
+      user = await this.userService.getUserById(session.currentUser);
+    } catch (err) {
+      console.log(err);
     }
+    const dto: GetOwnUserDTO = new GetOwnUserDTO();
+    dto.lastName = user.lastName;
+    dto.firstName = user.firstName;
+    dto.email = user.email;
+    dto.profilePic = user.profilePic;
+    dto.phoneNumber = user.phoneNumber;
+    dto.birthday = user.birthday;
+    dto.isSmoker = user.isSmoker;
+    dto.profileText = user.profileText;
+    dto.languages = user.languages;
+    return dto;
+  }
 
-    @ApiResponse({ type: OkDTO, description: 'creates a new user' })
-    @Post()
-    async createUser(
-        @Body() body: CreateUserDTO,
-        @Session() session: SessionData,
-    ) {
-        if (!body.agb) {
-            throw new BadRequestException(
-                'Du musst die AGB akzeptieren, um dich zu registrieren',
-            );
-        }
-        this.validateNonEmptyString(
-            body.password,
-            'Passwort darf nicht leer sein',
-        );
-        if (body.password.trim().length < 8) {
-            throw new BadRequestException(
-                'Passwort muss mindestens 8 Zeichen lang sein',
-            );
-        }
-        if (body.password != body.passwordConfirm) {
-            throw new BadRequestException('Passwort muss übereinstimmen');
-        }
-        this.validateNonEmptyString(body.email, 'Email darf nicht leer sein');
-        if (!this.isValidEmail(body.email)) {
-            throw new BadRequestException('Ungültiges E-Mail-Format');
-        }
-        if (body.email != body.emailConfirm) {
-            throw new BadRequestException('Email muss übereinstimmen');
-        }
-        this.validateNonEmptyString(
-            body.firstName,
-            'Vorname darf nicht leer sein',
-        );
-        this.validateNonEmptyString(
-            body.lastName,
-            'Nachname darf nicht leer sein',
-        );
-        if (body.phoneNumber && !this.isValidMobileNumber(body.phoneNumber)) {
-            throw new BadRequestException('Ungültige Telefon-Nummer');
-        }
-        const birthday = new Date(body.birthday);
-        if (!this.isUserAdult(birthday)) {
-            throw new BadRequestException(
-                'Sie müssen mindestens 18 Jahre alt sein, um sich zu registrieren.',
-            );
-        }
-        try {
-            await this.userService.createUser(
-                body.firstName,
-                body.lastName,
-                body.email.trim(),
-                body.password.trim(),
-                birthday,
-                body.phoneNumber,
-            );
-            const user: UserDB = await this.userService.getUserByEmail(
-                body.email.trim(),
-            );
-            session.currentUser = user.id;
-
-            return new OkDTO(true, 'User was created');
-        } catch (err) {
-            throw err;
-        }
+  @ApiResponse({ type: OkDTO, description: 'creates a new user' })
+  @Post()
+  async createUser(
+    @Body() body: CreateUserDTO,
+    @Session() session: SessionData,
+  ) {
+    if (!body.agb) {
+      throw new BadRequestException(
+        'Du musst die AGB akzeptieren, um dich zu registrieren',
+      );
     }
+    this.validateNonEmptyString(body.password, 'Passwort darf nicht leer sein');
+    if (body.password.trim().length < 8) {
+      throw new BadRequestException(
+        'Passwort muss mindestens 8 Zeichen lang sein',
+      );
+    }
+    if (body.password != body.passwordConfirm) {
+      throw new BadRequestException('Passwort muss übereinstimmen');
+    }
+    this.validateNonEmptyString(body.email, 'Email darf nicht leer sein');
+    if (!this.isValidEmail(body.email)) {
+      throw new BadRequestException('Ungültiges E-Mail-Format');
+    }
+    if (body.email != body.emailConfirm) {
+      throw new BadRequestException('Email muss übereinstimmen');
+    }
+    this.validateNonEmptyString(body.firstName, 'Vorname darf nicht leer sein');
+    this.validateNonEmptyString(body.lastName, 'Nachname darf nicht leer sein');
+    if (body.phoneNumber && !this.isValidMobileNumber(body.phoneNumber)) {
+      throw new BadRequestException('Ungültige Telefon-Nummer');
+    }
+    const birthday = new Date(body.birthday);
+    if (!this.isUserAdult(birthday)) {
+      throw new BadRequestException(
+        'Sie müssen mindestens 18 Jahre alt sein, um sich zu registrieren.',
+      );
+    }
+    try {
+      await this.userService.createUser(
+        body.firstName,
+        body.lastName,
+        body.email.trim(),
+        body.password.trim(),
+        birthday,
+        body.phoneNumber,
+      );
+      const user: UserDB = await this.userService.getUserByEmail(
+        body.email.trim(),
+      );
+      session.currentUser = user.id;
+
+      return new OkDTO(true, 'User was created');
+    } catch (err) {
+      throw err;
+    }
+  }
 
   /*
    * uses the userService to update the profile picture of the current user
@@ -208,7 +199,7 @@ export class UserController {
     type: OkDTO,
     description: 'updates a specifics user password by their id',
   })
-  @Put('editPassword')
+  @Put()
   @ApiBearerAuth()
   @UseGuards(IsLoggedInGuard)
   async updatePassword(
@@ -250,7 +241,7 @@ export class UserController {
     type: OkDTO,
     description: 'updates a specifics user email by their id',
   })
-  @Put('editEmail')
+  @Put()
   @ApiBearerAuth()
   @UseGuards(IsLoggedInGuard)
   async updateEmail(
@@ -291,7 +282,7 @@ export class UserController {
       body.phoneNumber != user.phoneNumber &&
       !this.isValidMobileNumber(body.phoneNumber)
     ) {
-      throw new BadRequestException('Ungültige Telefon-Nummer');
+      throw new BadRequestException('Ungültige telefon-Nummer');
     }
     user.phoneNumber = body.phoneNumber;
     if (body.firstName) {
@@ -309,6 +300,41 @@ export class UserController {
       user.lastName = body.lastName;
     }
     if (body.profileText) user.profileText = body.profileText;
+    try {
+      await this.userService.updateUser(user);
+      return new OkDTO(true, 'User was updated');
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  @ApiResponse({
+    type: OkDTO,
+    description: 'updates a specifics user with their profile details',
+  })
+  @Put('/profile')
+  @ApiBearerAuth()
+  @UseGuards(IsLoggedInGuard)
+  async updateUserProfile(
+    @Session() session: SessionData,
+    @Body() body: EditUserProfileDTO,
+  ): Promise<OkDTO> {
+    const id: number = session.currentUser;
+    const user: UserDB = await this.userService.getUserById(id);
+    console.log('der Nutzer: ' + user, ' Der body: ', body);
+    if (body.email.trim() !== '' || body.email !== undefined) {
+      user.email = body.email;
+    }
+    if (body.languages !== '' || body.languages !== undefined) {
+      user.languages = body.languages;
+    }
+    if (body.phoneNumber.trim() !== '' || body.phoneNumber !== undefined) {
+      user.phoneNumber = body.phoneNumber;
+    }
+    if (body.profileText.trim() !== '' || body.profileText !== undefined) {
+      user.profileText = body.profileText;
+    }
+    user.isSmoker = body.isSmoker;
     try {
       await this.userService.updateUser(user);
       return new OkDTO(true, 'User was updated');
