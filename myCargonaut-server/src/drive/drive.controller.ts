@@ -43,7 +43,7 @@ export class DriveController {
         'You need a profile pic to upload an offer',
       );
     }
-    if (user.phoneNumber == null) {
+    if (!user.phoneNumber) {
       throw new BadRequestException('You need a phone number');
     }
     const car = await this.vehicleService.getCarById(body.carID);
@@ -59,6 +59,56 @@ export class DriveController {
     }
     if (!body.name || body.name.trim().length === 0) {
       throw new BadRequestException('Offer name cannot be empty');
+    }
+    if (body.maxCWeight < 1 || body.maxCWeight > 1000) {
+      throw new BadRequestException(
+        'Max car weight must be between 1 and 10000',
+      );
+    }
+    if (body.maxCLength < 1 || body.maxCLength > 1000) {
+      throw new BadRequestException(
+        'Max car length must be between 1 and 1000',
+      );
+    }
+    if (body.maxCHeight < 1 || body.maxCHeight > 1000) {
+      throw new BadRequestException(
+        'Max car height must be between 1 and 1000',
+      );
+    }
+    if (body.maxCWidth < 1 || body.maxCWidth > 1000) {
+      throw new BadRequestException('Max car width must be between 1 and 1000');
+    }
+    if (
+      body.maxTLength !== undefined &&
+      (body.maxTLength < 1 || body.maxTLength > 1000)
+    ) {
+      throw new BadRequestException(
+        'Max trailer length must be between 1 and 1000',
+      );
+    }
+    if (
+      body.maxTWeight !== undefined &&
+      (body.maxTWeight < 1 || body.maxTWeight > 1000)
+    ) {
+      throw new BadRequestException(
+        'Max trailer weight must be between 1 and 10000',
+      );
+    }
+    if (
+      body.maxTHeight !== undefined &&
+      (body.maxTHeight < 1 || body.maxTHeight > 1000)
+    ) {
+      throw new BadRequestException(
+        'Max trailer height must be between 1 and 1000',
+      );
+    }
+    if (
+      body.maxTWidth !== undefined &&
+      (body.maxTWidth < 1 || body.maxTWidth > 1000)
+    ) {
+      throw new BadRequestException(
+        'Max trailer width must be between 1 and 1000',
+      );
     }
     try {
       await this.driveService.createOffer(user, car, trailer, body);
