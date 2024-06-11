@@ -173,6 +173,7 @@ export class UserDescriptionComponent {
       this.router.navigate(['/'])
     }, error => {
       console.error("There was an error!");
+
     });
   }
 }
