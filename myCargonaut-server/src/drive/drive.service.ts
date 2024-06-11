@@ -6,6 +6,9 @@ import { UserDB } from '../database/UserDB';
 import { CreateOfferDTO } from './DTO/CreateOfferDTO';
 import { CarDB } from '../database/CarDB';
 import { TrailerDB } from '../database/TrailerDB';
+import { CargoDB } from '../database/CargoDB';
+import { CreateCargoDTO } from '../cargo/DTO/CreateCargoDTO';
+import { CreateRequestDTO } from './DTO/CreateRequestDTO';
 
 @Injectable()
 export class DriveService {
@@ -16,6 +19,8 @@ export class DriveService {
     private offerRepository: Repository<OfferDB>,
     @InjectRepository(RequestDB)
     private requestRepository: Repository<RequestDB>,
+    @InjectRepository(CargoDB)
+    private cargoRepository: Repository<CargoDB>,
   ) {}
 
   async createOffer(
@@ -62,5 +67,31 @@ export class DriveService {
     } catch (error) {
       throw new Error('An error occurred while saving the offer');
     }
+  }
+  async createRequest(
+    user: UserDB,
+    body: CreateRequestDTO,
+  ): Promise<RequestDB> {
+    const newRequest = this.requestRepository.create();
+    newRequest.user = user;
+    newRequest.name = body.name;
+    newRequest.date = body.date;
+    newRequest.price = body.price;
+    newRequest.seats = body.seats;
+    newRequest.info = body.info;
+    newRequest.smokingAllowed = body.smokingAllowed;
+    newRequest.animalsAllowed = body.animalsAllowed;
+
+    const savedRequest = await this.requestRepository.save(newRequest);
+
+    const cargoPromises = body.cargo.map((cargoData: CreateCargoDTO) => {
+      const newCargo = this.cargoRepository.create(cargoData);
+      newCargo.request = savedRequest;
+      return this.cargoRepository.save(newCargo);
+    });
+
+    await Promise.all(cargoPromises);
+
+    return savedRequest;
   }
 }

@@ -14,6 +14,7 @@ import { IsLoggedInGuard } from '../session/is-logged-in.guard';
 import { SessionData } from 'express-session';
 import { CreateOfferDTO } from './DTO/CreateOfferDTO';
 import { VehicleService } from '../vehicle/vehicle.service';
+import { CreateRequestDTO } from './DTO/CreateRequestDTO';
 
 @ApiTags('drive')
 @Controller('drive')
@@ -115,6 +116,38 @@ export class DriveController {
       return new OkDTO(true, 'Offer was created');
     } catch (err) {
       throw new Error('An error occurred' + err);
+    }
+  }
+
+  @ApiResponse({
+    type: OkDTO,
+    description: 'Posts a request into the database',
+  })
+  @Post('/request')
+  @ApiBearerAuth()
+  @UseGuards(IsLoggedInGuard)
+  async createRequest(
+    @Body() body: CreateRequestDTO,
+    @Session() session: SessionData,
+  ) {
+    const user = await this.userService.getUserById(session.currentUser);
+    if (!user) {
+      throw new BadRequestException('User was not found');
+    }
+    if (user.profilePic === 'empty.png') {
+      throw new BadRequestException(
+        'You need a profile pic to upload a request',
+      );
+    }
+    if (!user.phoneNumber) {
+      throw new BadRequestException('You need a phone number');
+    }
+
+    try {
+      await this.driveService.createRequest(user, body);
+      return new OkDTO(true, 'Request was created');
+    } catch (err) {
+      throw new BadRequestException('An error occurred: ' + err.message);
     }
   }
 }
