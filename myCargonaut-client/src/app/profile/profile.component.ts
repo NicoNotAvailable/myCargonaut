@@ -63,9 +63,8 @@ export class ProfileComponent {
 
   ngOnInit(): void {
     this.sessionService.checkLoginNum().then(isLoggedIn => {
-      console.log('Login status:', isLoggedIn);
       isLoggedIn == -1 ? this.isLoggedIn = false : this.isLoggedIn = true;
-      if (!this.isLoggedIn && window !== undefined) {
+      if (!this.isLoggedIn && typeof window !== undefined) {
         window.location.href = "/";
       } else {
         this.readUser();
@@ -121,11 +120,13 @@ export class ProfileComponent {
   }
 
   toggleCarAdd(newCarId: number): void {
+    this.carId = newCarId;
     this.addCars = !this.addCars;
     this.viewCars = !this.viewCars;
   }
 
   toggleTrailerAdd(newTrailerId: number): void {
+    this.trailerId = newTrailerId;
     this.addTrailers = !this.addTrailers;
     this.viewTrailers = !this.viewTrailers;
   }

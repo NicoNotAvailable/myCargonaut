@@ -12,6 +12,7 @@ import {
     Session,
     UploadedFile,
     UseGuards,
+    Res,
     UseInterceptors,
 } from '@nestjs/common';
 import { VehicleService } from './vehicle.service';
@@ -23,6 +24,7 @@ import {
     ApiResponse,
     ApiTags,
 } from '@nestjs/swagger';
+import { Response } from 'express';
 import { OkDTO } from '../serverDTO/OkDTO';
 import { IsLoggedInGuard } from '../session/is-logged-in.guard';
 import { CreateCarDTO } from './DTO/CreateCarDTO';
@@ -32,7 +34,7 @@ import { CarDB } from '../database/CarDB';
 import { GetCarDTO } from './DTO/GetCarDTO';
 import { GetTrailerDTO } from './DTO/GetTrailerDTO';
 import { TrailerDB } from '../database/TrailerDB';
-import { extname } from 'path';
+import { extname, join } from 'path';
 import { diskStorage } from 'multer';
 import { FileInterceptor } from '@nestjs/platform-express';
 
@@ -62,33 +64,33 @@ export class VehicleController {
             throw new BadRequestException('User was not found');
         }
         if (!body.name || body.name.trim().length === 0) {
-            throw new BadRequestException('Car name cannot be empty');
+            throw new BadRequestException('Auto Name muss ausgefüllt sein');
         }
-        if (body.name.trim().length > 10) {
-            throw new BadRequestException('Car name is too long');
+        if (body.name.trim().length > 20) {
+            throw new BadRequestException('Auto Name ist zu lang');
         }
         if (!body.weight || body.weight <= 0) {
             throw new BadRequestException(
-                'Car weight must be a positive number',
+                'Maximal Gewicht muss eine positive Zahl sein',
             );
         }
-        if (!body.length || body.length <= 0 || body.length > 1000) {
+        if (!body.length || body.length <= 0 || body.length > 100) {
             throw new BadRequestException(
-                'Car length must be between 1 and 1000 cm',
+                'Auto muss länger al 0m und kürzer als 100m sein',
             );
         }
-        if (!body.height || body.height <= 0 || body.height > 1000) {
+        if (!body.height || body.height <= 0 || body.height > 100) {
             throw new BadRequestException(
-                'Car height must be between 1 and 1000 cm',
+                'Auto muss höher als 0m und kleiner als 100m sein',
             );
         }
-        if (!body.width || body.width <= 0 || body.width > 1000) {
+        if (!body.width || body.width <= 0 || body.width > 100) {
             throw new BadRequestException(
-                'Car width must be between 1 and 1000 cm',
+                'Auto muss breiter als 0m und schmaler als 100m sein',
             );
         }
         if (body.seats <= 0 || body.seats > 20) {
-            throw new BadRequestException('Car seats must be between 1 and 20');
+            throw new BadRequestException('Sitzplätze nur zwischen 1 und 20');
         }
         console.log('owner');
         console.log(owner);
@@ -130,29 +132,29 @@ export class VehicleController {
         const owner = await this.userService.getUserById(session.currentUser);
 
         if (!body.name || body.name.trim().length === 0) {
-            throw new BadRequestException('Trailer name cannot be empty');
+            throw new BadRequestException('Trailer Name muss ausgefüllt sein');
         }
-        if (body.name.trim().length > 10) {
-            throw new BadRequestException('Trailer name is too long');
+        if (body.name.trim().length > 20) {
+            throw new BadRequestException('Trailer Name ist zu lang');
         }
         if (!body.weight || body.weight <= 0) {
             throw new BadRequestException(
                 'Trailer weight must be a positive number',
             );
         }
-        if (!body.length || body.length <= 0 || body.length > 1000) {
+        if (!body.length || body.length <= 0 || body.length > 100) {
             throw new BadRequestException(
-                'Trailer length must be between 1 and 1000 cm',
+                'Trailer muss länger als 0m und kürzer als 100m sein',
             );
         }
-        if (!body.height || body.height <= 0 || body.height > 1000) {
+        if (!body.height || body.height <= 0 || body.height > 100) {
             throw new BadRequestException(
-                'Trailer height must be between 1 and 1000 cm',
+                'Trailer muss höher als 0m und kleiner als 100m sein',
             );
         }
-        if (!body.width || body.width <= 0 || body.width > 1000) {
+        if (!body.width || body.width <= 0 || body.width > 100) {
             throw new BadRequestException(
-                'Trailer width must be between 1 and 1000 cm',
+                'Trailer muss breiter als 0m und dünner als 100m sein',
             );
         }
 
@@ -202,12 +204,31 @@ export class VehicleController {
         @UploadedFile() file: Express.Multer.File,
         @Session() session: SessionData,
     ) {
+        if (!file) {
+            throw new BadRequestException();
+        }
         const id = session.currentCar;
         const car = await this.vehicleService.getCarById(id);
         car.carPicture = file.filename;
         await this.vehicleService.updateCar(car);
 
         return new OkDTO(true, 'Profile Picture Upload successfull');
+    }
+
+    @ApiResponse({ description: 'Fetches the image of a vehicle' })
+    @Get('image/:image')
+    async getImage(@Param('image') image: string, @Res() res: Response) {
+        try {
+            const imgPath: string = join(
+                process.cwd(),
+                'uploads',
+                'carPictures',
+                image,
+            );
+            res.sendFile(imgPath);
+        } catch (err) {
+            throw new BadRequestException(err);
+        }
     }
 
     @ApiResponse({

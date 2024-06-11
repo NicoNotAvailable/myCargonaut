@@ -64,3 +64,18 @@ input{
   height: 2rem;
   width: 2rem;
 }
+
+.selectedSeats{
+  background-color: #1a9cc5;
+}
+.deselectedSeats{
+  background-color: #005B52;
+}
+.deleteButton{
+  background-color: #005B52;
+}
+.trailerInfo{
+  color: #005B52;
+  font-weight: bold;
+  font-size: 1.2rem;
+}
