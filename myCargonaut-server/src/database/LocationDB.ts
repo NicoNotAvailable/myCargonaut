@@ -5,16 +5,16 @@ import {
   OneToOne,
   OneToMany,
 } from 'typeorm';
-import { TripDB } from './TripDB';
-import { RequestDB } from './RequestDB';
+import { OfferTripDB } from './OfferTripDB';
+import { DriveDB } from './DriveDB';
 
 @Entity()
 export class LocationDB {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @OneToOne(() => TripDB)
-  trip: TripDB;
+  @OneToOne(() => DriveDB)
+  drive: DriveDB;
 
   @Column()
   stopNr: number;
@@ -28,15 +28,9 @@ export class LocationDB {
   @Column()
   city: string;
 
-  @Column()
-  street: string;
+  @OneToMany(() => OfferTripDB, (request) => request.startLocation)
+  startLocationRequests: Promise<OfferTripDB[]>;
 
-  @Column()
-  streetNumber: string;
-
-  @OneToMany(() => RequestDB, (request) => request.startLocation)
-  startLocationRequests: Promise<RequestDB[]>;
-
-  @OneToMany(() => RequestDB, (request) => request.endLocation)
-  endLocationRequests: Promise<RequestDB[]>;
+  @OneToMany(() => OfferTripDB, (request) => request.endLocation)
+  endLocationRequests: Promise<OfferTripDB[]>;
 }

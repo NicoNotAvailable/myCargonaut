@@ -1,0 +1,38 @@
+<div class="container mt-3 mb-3">
+  <div class="text-end col-12">
+    <button type="button" class="btn btn-primary cancelButton text-center" id="cancelButton" (click)="changeViewTrailerState()">
+      <i>
+        <fa-icon [icon]="faXmark"></fa-icon>
+      </i>
+    </button>
+  </div>
+  <div class="row">
+    <div class="p-5" id="viewCars">
+      <h1 class="textGreen mb-5">Deine Trailer</h1>
+      <div class="row mb-5">
+        <div class="col-4" *ngFor="let trailer of trailers; let i = index">
+          <div class="card border border-0" style="width: 18rem;">
+            <div class="card-body">
+              <div class="backgroundGreen">
+                <div class="text-light">
+                  <img src="../../../assets/Cybertruck-fremont-cropped.jpg" class="card-img-top img-fluid backgroundGreen mb-4" alt="">
+                  <h5 class="card-title">{{ trailer.name }}</h5>
+                  <p class="m-0">{{ trailer.width }}m Breit</p>
+                  <p class="m-0">{{ trailer.length }}m Lang</p>
+                  <p class="m-0">{{ trailer.height }}m Hoch</p>
+                  <p class="m-0">{{ trailer.weight }}KG Schwer</p>
+                </div>
+                <button type="button" class="btn bg-transparent text-light editCar" (click)="changeAddTrailerState(trailer.id)"><h5>Bearbeiten</h5></button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 text-center my-auto">
+        <button type="button" class="btn backgroundBlue circle p-3" (click)="changeAddTrailerState(0)">
+          <i><fa-icon [icon]="faPlus"></fa-icon></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,39 +1,33 @@
 import {
-  Entity,
-  Column,
-  PrimaryGeneratedColumn,
-  ManyToOne,
-  TableInheritance,
+    Entity,
+    Column,
+    PrimaryGeneratedColumn,
+    ManyToOne,
+    TableInheritance,
 } from 'typeorm';
 import { UserDB } from './UserDB';
 
 @Entity()
 @TableInheritance({ column: { type: 'varchar', name: 'type' } })
 export class VehicleDB {
-  @PrimaryGeneratedColumn()
-  id: number;
+    @PrimaryGeneratedColumn()
+    id: number;
 
-  @ManyToOne(() => UserDB)
-  owner: UserDB;
+    @ManyToOne(() => UserDB)
+    owner: UserDB;
 
-  @Column()
-  name: string;
+    @Column()
+    name: string;
 
-  @Column()
-  carPicture: string;
+    @Column()
+    weight: number;
 
-  @Column()
-  seats: number;
+    @Column()
+    length: number;
 
-  @Column()
-  weight: number;
+    @Column()
+    height: number;
 
-  @Column()
-  length: number;
-
-  @Column()
-  height: number;
-
-  @Column()
-  width: number;
+    @Column()
+    width: number;
 }

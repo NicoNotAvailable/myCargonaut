@@ -1,9 +1,9 @@
 import {
-  Entity,
-  Column,
-  PrimaryGeneratedColumn,
-  ManyToOne,
-  Check,
+    Entity,
+    Column,
+    PrimaryGeneratedColumn,
+    ManyToOne,
+    Check,
 } from 'typeorm';
 import { TripDB } from './TripDB';
 import { UserDB } from './UserDB';
@@ -14,24 +14,24 @@ import { UserDB } from './UserDB';
 @Check(`"comfort" BETWEEN 1 AND 5`)
 @Check(`"damage" BETWEEN 1 AND 5`)
 export class ReviewDB {
-  @PrimaryGeneratedColumn()
-  id: number;
+    @PrimaryGeneratedColumn()
+    id: number;
 
-  @ManyToOne(() => TripDB)
-  trip: TripDB;
+    @ManyToOne(() => TripDB)
+    trip: TripDB;
 
-  @ManyToOne(() => UserDB)
-  writer: UserDB;
+    @ManyToOne(() => UserDB)
+    writer: UserDB;
 
-  @Column()
-  punctuality: number;
+    @Column()
+    punctuality: number;
 
-  @Column()
-  reliability: number;
+    @Column()
+    reliability: number;
 
-  @Column()
-  comfort: number;
+    @Column()
+    comfort: number;
 
-  @Column()
-  damage: number;
+    @Column()
+    damage: number;
 }
