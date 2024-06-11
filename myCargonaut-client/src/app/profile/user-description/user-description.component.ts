@@ -69,6 +69,8 @@ export class UserDescriptionComponent {
   languages: string = '';
   email: string = '';
   deleteBoolean: boolean = false;
+  isLoggedIn: boolean = false;
+
 
 
   emailMatchError: boolean = false;
@@ -170,10 +172,23 @@ export class UserDescriptionComponent {
       headers: { 'Content-Type': 'application/json' },
     }).subscribe(data => {
       console.log(data);
+      this.runLogOut()
       this.router.navigate(['/'])
     }, error => {
       console.error("There was an error!");
 
     });
+  }
+
+  runLogOut(): void {
+    this.http.delete("http://localhost:8000/session/logout", { withCredentials: true }).subscribe(
+      response => {
+        this.isLoggedIn = false;
+        window.location.href = "/";
+      },
+      error => {
+        console.log(error);
+      }
+    )
   }
 }
