@@ -1,7 +1,7 @@
 <nav class="navbar navbar-expand-lg bg-body-tertiary p-0">
   <div class="container-fluid mc-green">
     <a class="navbar-brand" href="">
-      <img ngSrc="../../assets/myCargonaut-White.png" alt="myCargonaut-Logo" height="80" width="193"/>
+      <img ngSrc="../../assets/myCargonaut-White.png" alt="myCargonaut-Logo" height="80" width="193" />
     </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
             aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
@@ -13,14 +13,17 @@
         <a class="nav-link text-white navbar-font mx-3" href="#">Gesuche</a>
       </div>
       <div class="d-flex ms-auto mt-3">
-        <a href="#" class="non-pointable fa-stack fa-2x me-5">
+        <a *ngIf="isLoggedIn" href="#" class="non-pointable fa-stack fa-2x me-5">
           <fa-icon [icon]="faCircle" class="fa-stack-2x text-center white-fade fa-2xs pe-1 pt-3 add-fix"></fa-icon>
           <fa-icon [icon]="faCirclePlus" class="fa-stack-1x btn-blue pointable add-fix"></fa-icon>
         </a>
-        <a href="#" class="non-pointable mx-3">
+        <a *ngIf="isLoggedIn" href="#" class="non-pointable mx-3">
+          <fa-icon [icon]="faComment" class="fa-2x white-fade pointable"></fa-icon>
+        </a>
+        <a *ngIf="isLoggedIn" href="#" class="non-pointable mx-3">
           <fa-icon [icon]="faCar" class="fa-2x white-fade pointable"></fa-icon>
         </a>
-        <a href="#" class="non-pointable mx-3">
+        <a *ngIf="isLoggedIn" href="#" class="non-pointable mx-3">
           <fa-icon [icon]="faHouse" class="fa-2x white-fade pointable"></fa-icon>
         </a>
 
@@ -31,7 +34,15 @@
           </a>
 
           <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuLink">
-            <li>
+            <li *ngIf="isLoggedIn">
+              <a class="dropdown-item text-center w-100" href="/profile">
+                <button type="button" class="btn btn-success">
+                  <span><fa-icon [icon]="faUser" class="white-fade me-2"></fa-icon></span>
+                  <span>Mein Profil</span>
+                </button>
+              </a>
+            </li>
+            <li *ngIf="!isLoggedIn">
               <a class="dropdown-item text-center w-100" href="/login">
                 <button type="button" class="btn btn-success">
                   <span><fa-icon [icon]="faSignIn" class="white-fade me-2"></fa-icon></span>
@@ -39,8 +50,16 @@
                 </button>
               </a>
             </li>
+            <li *ngIf="isLoggedIn">
+              <a class="dropdown-item text-center w-100" (click)="runLogOut()">
+                <button type="button" class="btn btn-danger">
+                  <span><fa-icon [icon]="faSignIn" class="white-fade me-2"></fa-icon></span>
+                  <span>Abmelden</span>
+                </button>
+              </a>
+            </li>
             <li>
-              <a class="dropdown-item text-center w-100" href="/register">
+              <a *ngIf="!isLoggedIn" class="dropdown-item text-center w-100" href="/register">
                 <button type="button" class="btn btn-primary">
                   <span><fa-icon [icon]="faPencil" class="white-fade me-2"></fa-icon></span>
                   <span>Registrieren</span>

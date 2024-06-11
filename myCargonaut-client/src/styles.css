@@ -1,10 +1,34 @@
 /* You can add global styles to this file, and also import other style files */
+::selection{
+  background-color: #005B52;
+  color: ghostwhite;
+}
+
+html{
+  background-color: ghostwhite !important;
+  font-family: Roboto, sans-serif;
+}
+
+.customButton{
+  background-color: #005B52;
+  color: ghostwhite;
+  font-weight: bold;
+  border-radius: 15px;
+  transition: all 0.5s ease;
+}
+
+.customButton:hover, .customButton:active, .customButton:focus {
+  box-shadow: 0 0 20px #005B52;
+  background-color: #005B52;
+  color: ghostwhite;
+}
+
 .mc-green {
   background-color: #005B52;
 }
 
 .btn-blue {
-  color: #628BC7;
+  color: #1a9cc5;
 }
 
 /*Font-Awesome*/
@@ -28,4 +52,8 @@
 
 .pointable {
   cursor: pointer;
+}
+
+.starRating{
+  color: #1a9cc5;
 }

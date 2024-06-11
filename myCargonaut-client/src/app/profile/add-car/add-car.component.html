@@ -1,0 +1,89 @@
+<div class="container mt-3 mb-3">
+  <div class="text-end col-12">
+    <button type="button" class="btn btn-primary cancelButton text-center" id="cancelButton" (click)="changeAddCarState()">
+      <i>
+        <fa-icon [icon]="faXmark"></fa-icon>
+      </i>
+    </button>
+  </div>
+  <form>
+    <div class="row">
+      <div class="p-5" id="addCarArea">
+        <div class="row mb-5">
+          <div class="col-4">
+            <h1 class="textGreen col-7">Sitze:</h1>
+            <div class="row">
+              <div class="col-2"></div>
+              <div class="col-4">
+                <button type="button" class="btn buttonColor rounded-3 pt-4 pb-4 ps-5 pe-5 text-light"><h1>2</h1>
+                </button>
+              </div>
+              <div class="col-1"></div>
+              <div class="col-4">
+                <button type="button" class="btn buttonColor rounded-3 pt-4 pb-4 ps-5 pe-5 text-light"><h1>3</h1>
+                </button>
+              </div>
+              <div class="col-1"></div>
+            </div>
+            <div class="row mt-4">
+              <div class="col-2"></div>
+              <div class="col-4">
+                <button type="button" class="btn buttonColor rounded-3 pt-4 pb-4 ps-5 pe-5 text-light"><h1>4</h1>
+                </button>
+              </div>
+              <div class="col-1"></div>
+              <div class="col-4">
+                <button type="button" class="btn buttonColor rounded-3 pt-4 pb-4 ps-5 pe-5 text-light"><h1>5</h1>
+                </button>
+              </div>
+            </div>
+            <div class="row  mt-3">
+              <div class="col-2 me-2"></div>
+              <input type="text" class="rounded-5 p-2 col-9" placeholder="Sonstiges">
+            </div>
+          </div>
+          <div class="col-4">
+            <h1 class="textGreen col-5">Infos:</h1>
+
+            <div class="col-12">
+              <input type="text" class="rounded-5 p-2 col-12" placeholder="Model" id="carModel">
+            </div>
+            <div class="col-12 mt-5">
+              <p>Bild des Autos</p>
+            </div>
+            <div class="col-12">
+              <button type="button" class="btn customButton text-light rounded-4">Hochladen</button>
+            </div>
+          </div>
+          <div class="col-4">
+            <h1 class="textGreen col-5">Maße:</h1>
+            <div class="col-12">
+              <input type="text" class="rounded-5 p-2 col-12" placeholder="Gewicht" id="carWeight">
+            </div>
+            <div class="col-12 mt-5">
+              <input type="text" class="rounded-5 p-2 col-12" placeholder="Länge" id="carLength">
+            </div>
+            <div class="col-12 mt-5">
+              <input type="text" class="rounded-5 p-2 col-12" placeholder="Breite" id="carWidth">
+            </div>
+            <div class="col-12 mt-5">
+              <input type="text" class="rounded-5 p-2 col-12" placeholder="Höhe" id="carHeight">
+            </div>
+            <div class="col-12 mt-5 form-check text-start flex-row justify-content-start align-items-center">
+              <input type="checkbox" class="form-check-input me-3" id="flexCheckDefault" style="width: 2rem; height: 2rem">
+              <label for="flexCheckDefault" class="form-check-label mt-2">Hat einen Fernseher</label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 align-bottom d-flex justify-content-around align-items-center">
+        <button type="submit" class="btn customButton exitButton text-light">
+          <i>
+            <fa-icon [icon]="faSave"></fa-icon>
+          </i>
+          <span class="ms-3">Speichern</span>
+        </button>
+      </div>
+    </div>
+  </form>
+</div>

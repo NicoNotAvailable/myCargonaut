@@ -1,0 +1,74 @@
+<div class="container mt-3 mb-3">
+  <div class="text-end col-12">
+    <button type="button" class="btn btn-primary cancelButton text-center" id="cancelButton" (click)="changeAddTrailerState()">
+      <i>
+        <fa-icon [icon]="faXmark"></fa-icon>
+      </i>
+    </button>
+  </div>
+  <div class="row">
+    <div class="p-5" id="addTrailerArea">
+      <div class="row mb-5">
+        <div class="col-1"></div>
+        <div class="col-5">
+          <h1 class="textGreen col-7">Infos:</h1>
+          <div class="col-12">
+            <input type="text" class="rounded-5 p-2 col-8" placeholder="Model" id="trailerModel">
+          </div>
+          <div class="col-12 mt-5">
+            <p>Bild des Trailers</p>
+          </div>
+          <div class="col-12">
+            <button type="button" class="btn buttonColor text-light rounded-4">Hochladen</button>
+          </div>
+        </div>
+        <div class="col-5">
+          <h1 class="textGreen col-7">Maße:</h1>
+          <div class="col-12">
+            <input type="text" class="rounded-5 p-2 col-8" placeholder="Gewicht" id="trailerWeight">
+          </div>
+          <div class="col-12 mt-5">
+            <input type="text" class="rounded-5 p-2 col-8" placeholder="Länge" id="trailerLength">
+          </div>
+          <div class="col-12 mt-5">
+            <input type="text" class="rounded-5 p-2 col-8" placeholder="Breite" id="trailerWidth">
+          </div>
+          <div class="col-12 mt-5">
+            <input type="text" class="rounded-5 p-2 col-8" placeholder="Höhe" id="trailerHeight">
+          </div>
+          <div class="col-12 mt-3">
+            <div class="row">
+              <div class="col-2"></div>
+              <div class="col-1">
+                <input type="checkbox" class="form-check-input larger-checkbox mt-2">
+              </div>
+              <div class="text-start my-auto col">
+                <span>Hat eine Klimaanlage</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 mt-3">
+            <div class="row">
+              <div class="col-2"></div>
+              <div class="col-1">
+                <input type="checkbox" class="form-check-input larger-checkbox mt-2">
+              </div>
+              <div class="text-start my-auto col">
+                <span>Ist angeschlossen</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-1"></div>
+      </div>
+    </div>
+    <div class="col-12 align-bottom d-flex justify-content-around align-items-center">
+      <button type="submit" class="btn customButton exitButton text-light">
+        <i>
+          <fa-icon [icon]="faSave"></fa-icon>
+        </i>
+        <span class="ms-3">Speichern</span>
+      </button>
+    </div>
+  </div>
+</div>

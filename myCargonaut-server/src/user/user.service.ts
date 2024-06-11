@@ -31,6 +31,12 @@ export class UserService {
     });
     return user;
   }
+    async getLoggingUser(body: LoginDTO): Promise<UserDB | undefined> {
+        const user: UserDB | null = await this.userRepository.findOne({
+            where: { email: body.email },
+        });
+        return user;
+    }
 
   async createUser(
     firstName: string,
@@ -50,26 +56,44 @@ export class UserService {
         'Es exisitert bereits ein Nutzer mit dieser E-Mail-Adresse.',
       );
     }
+    async createUser(
+        firstName: string,
+        lastName: string,
+        email: string,
+        password: string,
+        birthday: Date,
+        phoneNumber?: string,
+        profilePic?: string,
+    ): Promise<UserDB> {
+        // Check if email already exists
+        const checkUser = await this.userRepository.findOne({
+            where: { email },
+        });
+        if (checkUser) {
+            throw new BadRequestException(
+                'Es exisitert bereits ein Nutzer mit dieser E-Mail-Adresse.',
+            );
+        }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
+        const hashedPassword = await bcrypt.hash(password, 10);
 
-    const newUser: UserDB = this.userRepository.create();
-    newUser.firstName = firstName;
-    newUser.lastName = lastName;
-    newUser.email = email;
-    newUser.password = hashedPassword;
-    newUser.birthday = birthday;
-    newUser.phoneNumber = phoneNumber;
-    newUser.profilePic = profilePic;
-    return this.userRepository.save(newUser);
-  }
+        const newUser: UserDB = this.userRepository.create();
+        newUser.firstName = firstName;
+        newUser.lastName = lastName;
+        newUser.email = email;
+        newUser.password = hashedPassword;
+        newUser.birthday = birthday;
+        newUser.phoneNumber = phoneNumber;
+        newUser.profilePic = profilePic;
+        return this.userRepository.save(newUser);
+    }
 
-  async updateUser(userData: UserDB): Promise<UserDB> {
-    return this.userRepository.save(userData);
-  }
+    async updateUser(userData: UserDB): Promise<UserDB> {
+        return this.userRepository.save(userData);
+    }
 
-  async updatePassword(userData: UserDB): Promise<UserDB> {
-    userData.password = await bcrypt.hash(userData.password, 10);
-    return this.userRepository.save(userData);
-  }
+    async updatePassword(userData: UserDB): Promise<UserDB> {
+        userData.password = await bcrypt.hash(userData.password, 10);
+        return this.userRepository.save(userData);
+    }
 }

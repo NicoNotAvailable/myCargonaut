@@ -28,3 +28,9 @@
   width: 200px;
   height: 200px;
 }
+
+.greenButton{
+  background-color: #005B52;
+  color: #fff;
+  border-radius: 20px;
+}

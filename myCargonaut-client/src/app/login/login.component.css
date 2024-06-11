@@ -47,3 +47,10 @@ html{
 #passwordArea div{
   font-size: 0.8rem;
 }
+
+.errorText{
+  color: darkred;
+}
+.successText{
+  color: #1a9cc5;
+}

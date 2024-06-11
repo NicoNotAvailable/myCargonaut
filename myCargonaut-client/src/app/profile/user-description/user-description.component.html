@@ -1,0 +1,170 @@
+<div class="container mt-3 text-center">
+  <div class="text-end col-12" *ngIf="editState">
+    <button type="button" class="btn btn-primary cancelButton text-center" id="cancelButton"
+            (click)="changeEditState()">
+      <i>
+        <fa-icon [icon]="faXmark"></fa-icon>
+      </i>
+    </button>
+  </div>
+  <div class="text-end col-12" *ngIf="!editState">
+    <button type="button" class="btn btn-primary editButton text-end" id="editButton" (click)="changeEditState()">
+      <i>
+        <fa-icon [icon]="faPenToSquare"></fa-icon>
+      </i>
+    </button>
+  </div>
+  <div class="row">
+    <form #form="ngForm" (ngSubmit)="saveUser(form)">
+      <div class="pt-2 ps-4 pb-2 pe-4" id="description">
+        <div class="col-12">
+          <div class="row">
+            <h3 class="textGreen text-start">Notiz:</h3>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-6 col-4-md col-2-sm text-start">
+            <textarea *ngIf="!editState" [ngModelOptions]="{standalone: true}" [(ngModel)]="profileText" type="text" class="border border-2 rounded-3 col-11 textareaSize mb-3"
+                      id="selfNoteDisabled" disabled></textarea>
+            <textarea *ngIf="editState" [ngModelOptions]="{standalone: true}" [(ngModel)]="newProfileText" type="text" class="border border-2 rounded-3 col-11 textareaSize mb-3"
+                      id="selfNote"></textarea>
+            <div class="row mt-4">
+              <div class="col-5">
+                <button type="button"
+                        class="btn border border-2 rounded-3 customButton text-center text-light p-2 ps-5 pe-5"
+                        id="cars" (click)="changeViewCarState()"><h4>Deine Cars</h4>
+                </button>
+              </div>
+              <div class="col-1"></div>
+              <div class="col-5">
+                <button type="button"
+                        class="btn border border-2 rounded-3 customButton text-center text-light p-2 ps-5 pe-5"
+                        id="trailer" (click)="changeViewTrailerState()"><h4>Deine Trailer</h4>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="col-6 col-4-md col-2-sm">
+            <div class="row justify-content-center">
+              <div class="border border-2 rounded-3 pb-3">
+                <i>
+                  <fa-icon [icon]="faCar"></fa-icon>
+                </i>
+                <div class="row">
+                  <div class="col-4">
+                    <span id="ridesTaken">{{ totalDrives() }} Fahrten</span>
+                  </div>
+                  <div class="col-4">
+                    <span id="ridesOffered">{{ offeredDrives() }} angeboten</span>
+                  </div>
+                  <div class="col-4">
+                    <span id="ridesSearched">{{ takenDrives() }} gesucht</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-5 border border-2 rounded-3 mt-4" *ngIf="editState">
+                <i>
+                  <fa-icon [icon]="faLanguage"></fa-icon>
+                </i>
+                <input [(ngModel)]="newLang" [ngModelOptions]="{standalone: true}" type="email" placeholder="Deine Sprachen" id="langInput"
+                       class="form-control mb-3" name="newLang">
+              </div>
+              <div class="col-5 border border-2 rounded-3 mt-4" *ngIf="!editState">
+                <i>
+                  <fa-icon [icon]="faLanguage"></fa-icon>
+                </i>
+                <p class="m-0" id="languages">{{ languages }}</p>
+              </div>
+              <div class="col-2"></div>
+              <div class="col-5 border border-2 rounded-3 mt-4">
+                <i>
+                  <fa-icon [icon]="faCompass"></fa-icon>
+                </i>
+                <p class="m-0" id="distance">{{ distanceDriven }} km</p>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-5 border border-2 rounded-3 mt-4">
+                <i>
+                  <fa-icon [icon]="faUsers"></fa-icon>
+                </i>
+                <p class="m-0" id="passengerCount">{{ totalPassengers }} Mitfahrer</p>
+              </div>
+              <div class="col-2"></div>
+              <div class="col-5 border border-2 rounded-3 mt-4">
+                <i>
+                  <fa-icon [icon]="faWeight"></fa-icon>
+                </i>
+                <p class="m-0" id="weight">{{ highestWeight }} Tonnen</p>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-5 border border-2 rounded-3 mt-4 pb-3" *ngIf="editState">
+                <i>
+                  <fa-icon [icon]="faEnvelope"></fa-icon>
+                </i>
+                <input [(ngModel)]="newEmail" [ngModelOptions]="{standalone: true}" (input)="validateEmailConfirmation()" type="email" placeholder="Neue Email" id="emailInput"
+                       class="form-control mb-3" name="newEmail">
+                <input [(ngModel)]="newEmailConfirm" [ngModelOptions]="{standalone: true}" (input)="validateEmailConfirmation()" type="email" placeholder="Neue Email bestätigen"
+                       id="emailInputConfirm" class="form-control" name="newEmailConfirm">
+                <span *ngIf="emailMatchError" class="text-danger">
+                  Die E-Mail Adressen stimmen nicht überein.
+                </span>
+                <span *ngIf="errorMessage !== ''" class="text-danger">
+                  {{ errorMessage }}
+                </span>
+              </div>
+              <div class="col-5 border border-2 rounded-3 mt-4 pb-3" *ngIf="!editState">
+                <i>
+                  <fa-icon [icon]="faEnvelope"></fa-icon>
+                </i>
+                <p class="m-0" id="email">{{ email }}</p>
+              </div>
+              <div class="col-2"></div>
+              <div class="col-5 border border-2 rounded-3 mt-4 pb-3" *ngIf="!editState">
+                <i>
+                  <fa-icon [icon]="faPhone"></fa-icon>
+                </i>
+                <p class="m-0" id="phoneNumber">{{ phoneNumber }}</p>
+              </div>
+              <div class="col-5 border border-2 rounded-3 mt-4 pb-3" *ngIf="editState">
+                <i>
+                  <fa-icon [icon]="faPhone"></fa-icon>
+                </i>
+                <input [(ngModel)]="newPhoneNumber" [ngModelOptions]="{standalone: true}" type="tel" placeholder="Neue Nummer" id="phoneInput"
+                       class="form-control mb-3" name="newPhoneNumber">
+              </div>
+            </div>
+            <div class="row" *ngIf="editState">
+              <div class="col-5 my-4">
+                <p>Profilbild ändern</p>
+                <span class="d-flex justify-content-around text-start">
+                <button class="btn customButton" type="button">Hochladen</button>
+                <button class="btn customButton" type="button" id="deleteBtn">Löschen</button>
+              </span>
+              </div>
+              <div class="col-5 my-4">
+                <div class="col-1">
+                  <input type="checkbox" [(ngModel)]="startedSmoking" [ngModelOptions]="{standalone: true}" name="smokeCheck" class="form-check-input larger-checkbox mt-2">
+                </div>
+                <div class="text-start my-auto col">
+                  <span>Raucher?</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 align-bottom d-flex justify-content-around align-items-center" *ngIf="editState">
+        <button type="submit" class="btn customButton exitButton text-light">
+          <i>
+            <fa-icon [icon]="faSave"></fa-icon>
+          </i>
+          <span class="ms-3">Speichern</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
