@@ -184,7 +184,7 @@ export class UserController {
     type: OkDTO,
     description: 'updates a specifics user password by their id',
   })
-  @Put()
+  @Put('editPassword')
   @ApiBearerAuth()
   @UseGuards(IsLoggedInGuard)
   async updatePassword(
@@ -226,7 +226,7 @@ export class UserController {
     type: OkDTO,
     description: 'updates a specifics user email by their id',
   })
-  @Put()
+  @Put('editEmail')
   @ApiBearerAuth()
   @UseGuards(IsLoggedInGuard)
   async updateEmail(
