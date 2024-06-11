@@ -61,6 +61,21 @@ export class DriveController {
     if (!body.name || body.name.trim().length === 0) {
       throw new BadRequestException('Offer name cannot be empty');
     }
+    if (!body.price) {
+      throw new BadRequestException('Price cannot be empty');
+    }
+    if (!body.info) {
+      throw new BadRequestException('Info cannot be empty');
+    }
+    if (body.seats !== undefined && body.seats > 10) {
+      throw new BadRequestException('Too many seats');
+    }
+    if (body.smokingAllowed === undefined) {
+      throw new BadRequestException('Smoking allowed must be specified');
+    }
+    if (body.animalsAllowed === undefined) {
+      throw new BadRequestException('Animals allowed must be specified');
+    }
     if (body.maxCWeight < 1 || body.maxCWeight > 1000) {
       throw new BadRequestException(
         'Max car weight must be between 1 and 10000',
@@ -142,7 +157,48 @@ export class DriveController {
     if (!user.phoneNumber) {
       throw new BadRequestException('You need a phone number');
     }
+    if (!body.name || body.name.trim().length === 0) {
+      throw new BadRequestException('Request name cannot be empty');
+    }
+    if (!body.date) {
+      throw new BadRequestException('Date cannot be empty');
+    }
+    if (!body.price) {
+      throw new BadRequestException('Price cannot be empty');
+    }
+    if (body.seats !== undefined && body.seats > 10) {
+      throw new BadRequestException('Too many seats');
+    }
+    if (body.smokingAllowed === undefined) {
+      throw new BadRequestException('Smoking allowed must be specified');
+    }
+    if (body.animalsAllowed === undefined) {
+      throw new BadRequestException('Animals allowed must be specified');
+    }
 
+    body.cargo.forEach((cargo) => {
+      if (!cargo.description || cargo.description.trim().length === 0) {
+        throw new BadRequestException('Cargo description cannot be empty');
+      }
+      if (cargo.weight < 1 || cargo.weight > 1000) {
+        throw new BadRequestException(
+          'Cargo weight must be between 1 and 1000',
+        );
+      }
+      if (cargo.length < 1 || cargo.length > 1000) {
+        throw new BadRequestException(
+          'Cargo length must be between 1 and 1000',
+        );
+      }
+      if (cargo.height < 1 || cargo.height > 1000) {
+        throw new BadRequestException(
+          'Cargo height must be between 1 and 1000',
+        );
+      }
+      if (cargo.width < 1 || cargo.width > 1000) {
+        throw new BadRequestException('Cargo width must be between 1 and 1000');
+      }
+    });
     try {
       await this.driveService.createRequest(user, body);
       return new OkDTO(true, 'Request was created');
