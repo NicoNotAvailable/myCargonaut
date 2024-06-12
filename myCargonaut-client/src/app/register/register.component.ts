@@ -91,7 +91,6 @@ export class RegisterComponent {
       birthday: date.toISOString().split('T')[0],
       phoneNumber: this.phonenumber,
       agb: this.agb,
-
     };
 
     console.log('User Data:', userData);

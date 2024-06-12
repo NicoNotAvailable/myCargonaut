@@ -6,6 +6,7 @@ import {FrontpageComponent} from "./frontpage/frontpage.component";
 
 export const routes: Routes = [
 
+  {path: '', component: FrontpageComponent},
   { path: 'register', component: RegisterComponent },
   { path: 'login', component: LoginComponent },
 

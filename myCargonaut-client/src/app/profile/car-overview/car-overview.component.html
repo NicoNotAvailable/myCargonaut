@@ -10,47 +10,30 @@
     <div class="p-5" id="viewCars">
       <h1 class="textGreen mb-5">Deine Cars (vroom)</h1>
       <div class="row mb-5">
-        <div class="col-4">
+        <div class="col-4" *ngFor="let car of cars; let i = index">
           <div class="card border border-0" style="width: 18rem;">
             <div class="card-body">
               <div class="backgroundGreen">
-                <img src="../../../assets/Cybertruck-fremont-cropped.jpg" class="card-img-top img-fluid backgroundGreen mb-4" alt="">
+                <img *ngIf="car.carPicture !== 'empty.png'" [ngSrc]="window.location.protocol + '//' + window.location.host.replace('4200', '8000') + '/vehicle/image/'+ car.carPicture" width="70" height="55" class="card-img-top img-fluid backgroundGreen mb-4" alt="">
+                <img *ngIf="car.carPicture === 'empty.png'" src="../../../assets/Cybertruck-fremont-cropped.jpg" class="card-img-top img-fluid backgroundGreen mb-4" alt="">
                 <div class="text-light">
-                  <h5 class="card-title">Tesla Cybertruck</h5>
-                  <p class="m-0">5 Sitze</p>
-                  <p class="m-0">3m Breit</p>
-                  <p class="m-0">5m Lang</p>
-                  <p class="m-0">7m Hoch</p>
-                  <p class="m-0">1t Schwer</p>
+                  <h5 class="card-title">{{ car.name }}</h5>
+                  <p class="m-0">{{ car.seats }} Sitze</p>
+                  <p class="m-0">{{ car.width }}m Breit</p>
+                  <p class="m-0">{{ car.length }}m Lang</p>
+                  <p class="m-0">{{ car.height }}m Hoch</p>
+                  <p class="m-0">{{ car.weight }}KG Max. Gewicht</p>
                 </div>
-                <button type="button" class="btn bg-transparent text-light editCar"><h5>Bearbeiten</h5></button>
+                <button type="button" class="btn bg-transparent text-light editCar" (click)="changeAddCarsState(car.id)"><h5>Bearbeiten</h5></button>
               </div>
             </div>
           </div>
         </div>
-        <div class="col-4">
-          <div class="card border border-0" style="width: 18rem;">
-            <div class="card-body">
-              <div class="backgroundGreen">
-              <img src="../../../assets/Cybertruck-fremont-cropped.jpg" class="card-img-top img-fluid backgroundGreen mb-4" alt="">
-              <div class="text-light">
-                <h5 class="card-title">Tesla Cybertruck</h5>
-                <p class="m-0">5 Sitze</p>
-                <p class="m-0">3m Breit</p>
-                <p class="m-0">5m Lang</p>
-                <p class="m-0">7m Hoch</p>
-                <p class="m-0">1t Schwer</p>
-              </div>
-              <button type="button" class="btn bg-transparent text-light editCar" (click)="changeAddCarsState(1)"><h5>Bearbeiten</h5></button>
-            </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-4 my-auto">
-          <button type="button" class="btn backgroundBlue circle p-3" (click)="changeAddCarsState(0)">
-            <i><fa-icon [icon]="faPlus"></fa-icon></i>
-          </button>
-        </div>
+      </div>
+      <div class="col-12 text-center my-auto">
+        <button type="button" class="btn backgroundBlue circle p-3" (click)="changeAddCarsState(0)">
+          <i><fa-icon [icon]="faPlus"></fa-icon></i>
+        </button>
       </div>
     </div>
   </div>

@@ -64,3 +64,20 @@ input{
   background-color: #1a9cc5;
 }
 
+.selectedSeats{
+  background-color: #1a9cc5;
+}
+
+.deselectedSeats{
+  background-color: #005B52;
+}
+
+.deleteButton{
+  background-color: #005B52;
+}
+
+.carInfo{
+  color: #005B52;
+  font-weight: bold;
+  font-size: 1.5rem;
+}
