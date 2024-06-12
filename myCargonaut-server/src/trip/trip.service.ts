@@ -7,6 +7,11 @@ import { TripDB } from '../database/TripDB';
 import { OfferTripDB } from '../database/OfferTripDB';
 import { RequestTripDB } from '../database/RequestTripDB';
 import { UserDB } from '../database/UserDB';
+import { CreateOfferTripDTO } from './DTO/CreateOfferTripDTO';
+import { CarDB } from '../database/CarDB';
+import { TrailerDB } from '../database/TrailerDB';
+import { CreateCargoDTO } from '../cargo/DTO/CreateCargoDTO';
+import { LocationDB } from '../database/LocationDB';
 
 @Injectable()
 export class TripService {
@@ -25,22 +30,68 @@ export class TripService {
         user: UserDB,
         drive: OfferDB,
         body: CreateOfferTripDTO,
-    ): Promise<OfferDB> {
+        startLocation: LocationDB,
+        endLocation: LocationDB
+    ): Promise<OfferTripDB> {
         const newOfferTrip: OfferTripDB = this.offerTripRepository.create();
         if (user instanceof UserDB) {
             newOfferTrip.requesting = user;
         } else {
             throw new Error('Invalid owner type');
         }
-        if (drive instanceof DriveDB) {
+        if (drive instanceof OfferDB) {
             newOfferTrip.drive = drive;
+        } else {
+            throw new Error('Invalid offer type');
+        }
+        newOfferTrip.usedSeats = body.usedSeats;
+        newOfferTrip.startLocation = startLocation;
+        newOfferTrip.endLocation = endLocation;
+        try {
+            const savedOfferTrip = await this.offerTripRepository.save(newOfferTrip);
+            if (body.cargo) {
+            const cargoPromises = body.cargo.map((cargoData: CreateCargoDTO) => {
+                const newCargo = this.cargoRepository.create(cargoData);
+                newCargo.offerTrip = savedOfferTrip;
+                return this.cargoRepository.save(newCargo);
+            });
+            await Promise.all(cargoPromises);
+            }
+            return newOfferTrip;
+        } catch (error) {
+            throw new Error('An error occurred while saving the Trip');
+        }
+    }
+
+    async createRequestTrip(
+      user: UserDB,
+      drive: OfferDB,
+      car: CarDB,
+      trailer: TrailerDB | null,
+    ): Promise<RequestTripDB> {
+        const newRequestTrip: RequestTripDB = this.requestTripRepository.create();
+        if (user instanceof UserDB) {
+            newRequestTrip.requesting = user;
         } else {
             throw new Error('Invalid owner type');
         }
-        // Set the values for the new offer
-        newOfferTrip.usedSeats = body.usedSeats;
+        if (drive instanceof RequestDB) {
+            newRequestTrip.drive = drive;
+        } else {
+            throw new Error('Invalid request type');
+        }
+        if (car instanceof CarDB) {
+            newRequestTrip.car = car;
+        } else {
+            throw new Error('Invalid car type');
+        }
+        if (trailer === null || trailer instanceof TrailerDB) {
+            newRequestTrip.trailer = trailer;
+        } else {
+            throw new Error('Invalid trailer type');
+        }
         try {
-            return await this.offerTripRepository.save(newOfferTrip);
+            return await this.requestTripRepository.save(newRequestTrip);
         } catch (error) {
             throw new Error('An error occurred while saving the Trip');
         }
