@@ -4,21 +4,21 @@ import { TripDB } from './TripDB';
 
 @Entity()
 export class MessageDB {
-    @PrimaryGeneratedColumn()
-    id: number;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @ManyToOne(() => UserDB)
-    writer: UserDB;
+  @ManyToOne(() => UserDB)
+  writer: UserDB;
 
-    @ManyToOne(() => TripDB)
-    trip: TripDB;
+  @ManyToOne(() => TripDB)
+  trip: TripDB;
 
-    @Column()
-    message: string;
+  @Column()
+  message: string;
 
-    @Column()
-    read: boolean;
+  @Column()
+  read: boolean;
 
-    @Column({ default: new Date().toISOString() })
-    timestamp: string;
+  @Column({ default: new Date().toISOString() })
+  timestamp: string;
 }

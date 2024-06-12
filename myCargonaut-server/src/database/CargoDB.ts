@@ -4,28 +4,28 @@ import { RequestDB } from './DriveDB';
 
 @Entity()
 export class CargoDB {
-    @PrimaryGeneratedColumn()
-    id: number;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @ManyToOne(() => RequestDB, (request) => request.cargo, { nullable: true })
-    request: RequestDB;
+  @ManyToOne(() => RequestDB, (request) => request.cargo, { nullable: true })
+  request: RequestDB;
 
-    @ManyToOne(() => OfferTripDB, (offerTrip) => offerTrip.cargo, {
-        nullable: true,
-    })
-    offerTrip: OfferTripDB;
-    @Column()
-    description: string;
+  @ManyToOne(() => OfferTripDB, (offerTrip) => offerTrip.cargo, {
+    nullable: true,
+  })
+  offerTrip: OfferTripDB;
+  @Column()
+  description: string;
 
-    @Column()
-    weight: number;
+  @Column()
+  weight: number;
 
-    @Column()
-    length: number;
+  @Column()
+  length: number;
 
-    @Column()
-    height: number;
+  @Column()
+  height: number;
 
-    @Column()
-    width: number;
+  @Column()
+  width: number;
 }
