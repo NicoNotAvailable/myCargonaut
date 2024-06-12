@@ -1,29 +1,24 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
-export class CreateCargoDTO {
+export class CreateLocationDTO {
     @ApiProperty()
     @IsString()
     @IsNotEmpty()
-    description: string;
+    country: string;
 
     @ApiProperty()
     @IsNumber()
     @IsNotEmpty()
-    weight: number;
+    zipCode: number;
+
+    @ApiProperty()
+    @IsString()
+    @IsNotEmpty()
+    city: string;
 
     @ApiProperty()
     @IsNumber()
     @IsNotEmpty()
-    length: number;
-
-    @ApiProperty()
-    @IsNumber()
-    @IsNotEmpty()
-    height: number;
-
-    @ApiProperty()
-    @IsNumber()
-    @IsNotEmpty()
-    width: number;
+    stop: number;
 }
