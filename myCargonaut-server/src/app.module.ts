@@ -21,6 +21,7 @@ import { OfferTripDB } from './database/OfferTripDB';
 import { RequestTripDB } from './database/RequestTripDB';
 import { DriveService } from './drive/drive.service';
 import { DriveController } from './drive/drive.controller';
+import { ChatGateway } from "./chat/chat.gateway";
 
 @Module({
   imports: [
@@ -61,6 +62,7 @@ import { DriveController } from './drive/drive.controller';
       OfferTripDB,
       RequestTripDB,
     ]),
+    ChatGateway,
   ],
   controllers: [
     AppController,
