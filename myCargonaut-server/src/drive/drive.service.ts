@@ -67,12 +67,15 @@ export class DriveService {
         try {
             const savedOffer = await this.offerRepository.save(newOffer);
 
-            const locationPromises = body.location.map((locationData: CreateLocationDTO) => {
-                const newLocation = this.locationRepository.create(locationData);
-                newLocation.drive = savedOffer;
-                console.log('Saving new location:', newLocation);
-                return this.locationRepository.save(newLocation);
-            });
+            const locationPromises = body.location.map(
+                (locationData: CreateLocationDTO) => {
+                    const newLocation =
+                        this.locationRepository.create(locationData);
+                    newLocation.drive = savedOffer;
+                    console.log('Saving new location:', newLocation);
+                    this.locationRepository.insert(newLocation);
+                },
+            );
 
             await Promise.all(locationPromises);
 
@@ -97,20 +100,22 @@ export class DriveService {
 
         const savedRequest = await this.requestRepository.save(newRequest);
 
-        if (body.cargo){
-        const cargoPromises = body.cargo.map((cargoData: CreateCargoDTO) => {
-            const newCargo = this.cargoRepository.create(cargoData);
-            newCargo.request = savedRequest;
-            return this.cargoRepository.save(newCargo);
-        });
-        await Promise.all(cargoPromises);
+        if (body.cargo) {
+            const cargoPromises = body.cargo.map(
+                (cargoData: CreateCargoDTO) => {
+                    const newCargo = this.cargoRepository.create(cargoData);
+                    newCargo.request = savedRequest;
+                    return this.cargoRepository.save(newCargo);
+                },
+            );
+            await Promise.all(cargoPromises);
         }
         const locationPromises = body.location.map(
             (locationData: CreateLocationDTO) => {
                 const newLocation =
                     this.locationRepository.create(locationData);
                 newLocation.drive = savedRequest;
-                return this.locationRepository.save(newLocation);
+                return this.locationRepository.insert(newLocation);
             },
         );
 
