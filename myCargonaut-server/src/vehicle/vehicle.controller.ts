@@ -76,7 +76,7 @@ export class VehicleController {
         }
         if (!body.length || body.length <= 0 || body.length > 100) {
             throw new BadRequestException(
-                'Auto muss länger al 0m und kürzer als 100m sein',
+                'Auto muss länger als 0m und kürzer als 100m sein',
             );
         }
         if (!body.height || body.height <= 0 || body.height > 100) {

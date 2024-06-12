@@ -1,14 +1,7 @@
 <div class="container mt-3 mb-3 text-start">
-  <div class="text-end col-12">
-    <button type="button" class="btn btn-primary cancelButton text-center" id="cancelButton" (click)="changeAddCarState()">
-      <i>
-        <fa-icon [icon]="faXmark"></fa-icon>
-      </i>
-    </button>
-  </div>
-  <form #form="ngForm" (ngSubmit)="saveCar(form)">
+  <form #form="ngForm" (ngSubmit)="saveOffer(form)">
     <div class="row">
-      <div class="p-5" id="addCarArea">
+      <div class="p-5" id="addOfferArea">
         <div class="row mb-5">
           <div class="col-4" *ngIf="editingCar == 0">
             <h1 class="textGreen col-7">Sitze:</h1>
