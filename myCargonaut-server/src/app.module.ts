@@ -23,6 +23,7 @@ import { DriveService } from './drive/drive.service';
 import { DriveController } from './drive/drive.controller';
 import { TripService } from './trip/trip.service';
 import { TripController } from './trip/trip.controller';
+import { LocationService } from './location/location.service';
 
 @Module({
     imports: [
@@ -72,6 +73,6 @@ import { TripController } from './trip/trip.controller';
         DriveController,
         TripController,
     ],
-    providers: [AppService, UserService, VehicleService, DriveService, TripService],
+    providers: [AppService, UserService, VehicleService, DriveService, TripService, LocationService],
 })
 export class AppModule {}

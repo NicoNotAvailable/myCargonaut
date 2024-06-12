@@ -31,7 +31,7 @@ export class TripService {
         drive: OfferDB,
         body: CreateOfferTripDTO,
         startLocation: LocationDB,
-        endLocation: LocationDB
+        endLocation: LocationDB,
     ): Promise<OfferTripDB> {
         const newOfferTrip: OfferTripDB = this.offerTripRepository.create();
         if (user instanceof UserDB) {
@@ -48,14 +48,17 @@ export class TripService {
         newOfferTrip.startLocation = startLocation;
         newOfferTrip.endLocation = endLocation;
         try {
-            const savedOfferTrip = await this.offerTripRepository.save(newOfferTrip);
+            const savedOfferTrip =
+                await this.offerTripRepository.save(newOfferTrip);
             if (body.cargo) {
-            const cargoPromises = body.cargo.map((cargoData: CreateCargoDTO) => {
-                const newCargo = this.cargoRepository.create(cargoData);
-                newCargo.offerTrip = savedOfferTrip;
-                return this.cargoRepository.save(newCargo);
-            });
-            await Promise.all(cargoPromises);
+                const cargoPromises = body.cargo.map(
+                    (cargoData: CreateCargoDTO) => {
+                        const newCargo = this.cargoRepository.create(cargoData);
+                        newCargo.offerTrip = savedOfferTrip;
+                        return this.cargoRepository.save(newCargo);
+                    },
+                );
+                await Promise.all(cargoPromises);
             }
             return newOfferTrip;
         } catch (error) {
@@ -64,12 +67,13 @@ export class TripService {
     }
 
     async createRequestTrip(
-      user: UserDB,
-      drive: OfferDB,
-      car: CarDB,
-      trailer: TrailerDB | null,
+        user: UserDB,
+        drive: RequestDB,
+        car: CarDB,
+        trailer: TrailerDB | null,
     ): Promise<RequestTripDB> {
-        const newRequestTrip: RequestTripDB = this.requestTripRepository.create();
+        const newRequestTrip: RequestTripDB =
+            this.requestTripRepository.create();
         if (user instanceof UserDB) {
             newRequestTrip.requesting = user;
         } else {

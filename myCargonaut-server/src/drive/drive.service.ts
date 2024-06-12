@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { DriveDB, OfferDB, RequestDB } from '../database/DriveDB';
@@ -23,7 +23,7 @@ export class DriveService {
         private requestRepository: Repository<RequestDB>,
         @InjectRepository(CargoDB)
         private cargoRepository: Repository<CargoDB>,
-        @InjectRepository(CargoDB)
+        @InjectRepository(LocationDB)
         private locationRepository: Repository<LocationDB>,
     ) {}
 
@@ -49,7 +49,6 @@ export class DriveService {
         } else {
             throw new Error('Invalid trailer type');
         }
-        // Set the values for the new offer
         newOffer.name = body.name.trim();
         newOffer.date = body.date;
         newOffer.price = body.price;
@@ -64,10 +63,20 @@ export class DriveService {
         newOffer.maxCLength = body.maxCLength;
         newOffer.maxTWeight = body.maxTWeight;
         newOffer.maxTWidth = body.maxTWidth;
-        newOffer.maxTWidth = body.maxTWidth;
         newOffer.maxTLength = body.maxTLength;
         try {
-            return await this.offerRepository.save(newOffer);
+            const savedOffer = await this.offerRepository.save(newOffer);
+
+            const locationPromises = body.location.map((locationData: CreateLocationDTO) => {
+                const newLocation = this.locationRepository.create(locationData);
+                newLocation.drive = savedOffer;
+                console.log('Saving new location:', newLocation);
+                return this.locationRepository.save(newLocation);
+            });
+
+            await Promise.all(locationPromises);
+
+            return savedOffer;
         } catch (error) {
             throw new Error('An error occurred while saving the offer');
         }
@@ -101,12 +110,30 @@ export class DriveService {
                 const newLocation =
                     this.locationRepository.create(locationData);
                 newLocation.drive = savedRequest;
-                return this.cargoRepository.save(newLocation);
+                return this.locationRepository.save(newLocation);
             },
         );
 
         await Promise.all(locationPromises);
 
         return savedRequest;
+    }
+    async getOfferById(driveID: number): Promise<OfferDB> {
+        const drive = await this.offerRepository.findOne({
+            where: { id: driveID },
+        });
+        if (!drive) {
+            throw new NotFoundException('Offer not found');
+        }
+        return drive;
+    }
+    async getRequestById(driveID: number): Promise<RequestDB> {
+        const drive = await this.requestRepository.findOne({
+            where: { id: driveID },
+        });
+        if (!drive) {
+            throw new NotFoundException('Request not found');
+        }
+        return drive;
     }
 }

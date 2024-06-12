@@ -3,6 +3,11 @@ import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
 export class CreateLocationDTO {
     @ApiProperty()
+    @IsNumber()
+    @IsNotEmpty()
+    stopNr: number;
+
+    @ApiProperty()
     @IsString()
     @IsNotEmpty()
     country: string;
@@ -16,9 +21,4 @@ export class CreateLocationDTO {
     @IsString()
     @IsNotEmpty()
     city: string;
-
-    @ApiProperty()
-    @IsNumber()
-    @IsNotEmpty()
-    stop: number;
 }
