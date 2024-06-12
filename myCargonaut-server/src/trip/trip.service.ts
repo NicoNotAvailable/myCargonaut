@@ -18,9 +18,9 @@ export class TripService {
     constructor(
         @InjectRepository(DriveDB)
         private tripRepository: Repository<TripDB>,
-        @InjectRepository(OfferDB)
+        @InjectRepository(OfferTripDB)
         private offerTripRepository: Repository<OfferTripDB>,
-        @InjectRepository(RequestDB)
+        @InjectRepository(RequestTripDB)
         private requestTripRepository: Repository<RequestTripDB>,
         @InjectRepository(CargoDB)
         private cargoRepository: Repository<CargoDB>,
@@ -50,16 +50,14 @@ export class TripService {
         try {
             const savedOfferTrip =
                 await this.offerTripRepository.save(newOfferTrip);
-            if (body.cargo) {
-                const cargoPromises = body.cargo.map(
-                    (cargoData: CreateCargoDTO) => {
-                        const newCargo = this.cargoRepository.create(cargoData);
-                        newCargo.offerTrip = savedOfferTrip;
-                        return this.cargoRepository.save(newCargo);
-                    },
-                );
-                await Promise.all(cargoPromises);
-            }
+            const cargoPromises = body.cargo.map(
+                (cargoData: CreateCargoDTO) => {
+                    const newCargo = this.cargoRepository.create(cargoData);
+                    newCargo.offerTrip = savedOfferTrip;
+                    return this.cargoRepository.insert(newCargo);
+                },
+            );
+            await Promise.all(cargoPromises);
             return newOfferTrip;
         } catch (error) {
             throw new Error('An error occurred while saving the Trip');

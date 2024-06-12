@@ -20,10 +20,10 @@ export class TripDB {
     @ManyToOne(() => UserDB)
     requesting: UserDB;
 
-    @Column()
+    @Column({ default: false })
     isAccepted: boolean;
 
-    @Column()
+    @Column({ default: 0 })
     status: StatusEnum;
 
     @OneToMany(() => ReviewDB, (review) => review.trip)

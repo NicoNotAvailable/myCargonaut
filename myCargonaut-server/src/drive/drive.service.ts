@@ -72,7 +72,6 @@ export class DriveService {
                     const newLocation =
                         this.locationRepository.create(locationData);
                     newLocation.drive = savedOffer;
-                    console.log('Saving new location:', newLocation);
                     this.locationRepository.insert(newLocation);
                 },
             );
