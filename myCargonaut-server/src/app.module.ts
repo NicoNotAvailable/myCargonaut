@@ -21,7 +21,9 @@ import { OfferTripDB } from './database/OfferTripDB';
 import { RequestTripDB } from './database/RequestTripDB';
 import { DriveService } from './drive/drive.service';
 import { DriveController } from './drive/drive.controller';
-import { ChatGateway } from "./chat/chat.gateway";
+import { ChatGateway } from './chat/chat.gateway';
+import { ChatController } from './chat/chat.controller';
+import { ChatService } from './chat/chat.service';
 
 @Module({
   imports: [
@@ -62,7 +64,6 @@ import { ChatGateway } from "./chat/chat.gateway";
       OfferTripDB,
       RequestTripDB,
     ]),
-    ChatGateway,
   ],
   controllers: [
     AppController,
@@ -70,7 +71,15 @@ import { ChatGateway } from "./chat/chat.gateway";
     SessionController,
     VehicleController,
     DriveController,
+    ChatController,
   ],
-  providers: [AppService, UserService, VehicleService, DriveService],
+  providers: [
+    AppService,
+    UserService,
+    VehicleService,
+    DriveService,
+    ChatService,
+    ChatGateway,
+  ],
 })
 export class AppModule {}
