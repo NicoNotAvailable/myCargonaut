@@ -3,11 +3,13 @@ import {
     Body,
     Controller,
     Get,
+    Param,
+    ParseIntPipe,
     Post,
     Session,
     UseGuards,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { UserService } from '../user/user.service';
 import { DriveService } from './drive.service';
 import { OkDTO } from '../serverDTO/OkDTO';
@@ -203,6 +205,8 @@ export class DriveController {
         type: [GetOfferDTO],
         description: 'gets all own offers',
     })
+    @ApiBearerAuth()
+    @UseGuards(IsLoggedInGuard)
     @Get('/user/offers')
     async getOwnOffers(@Session() session: SessionData) {
         const user = session.currentUser;
@@ -213,6 +217,24 @@ export class DriveController {
                     return this.transformOfferDBtoGetOfferDTO(offer);
                 }),
             );
+        } catch (err) {
+            throw new BadRequestException('An error occurred: ' + err.message);
+        }
+    }
+    @ApiResponse({
+        type: GetRequestDTO,
+        description: 'gets an offer by its ID',
+    })
+    @ApiParam({
+        name: 'id',
+        type: 'number',
+        description: 'ID of the offer to get',
+    })
+    @Get('/offer/:id')
+    async getOfferByID(@Param('id', ParseIntPipe) id: number) {
+        try {
+            const offer = await this.driveService.getOfferById(id);
+            return this.transformOfferDBtoGetOfferDTO(offer);
         } catch (err) {
             throw new BadRequestException('An error occurred: ' + err.message);
         }
@@ -237,9 +259,11 @@ export class DriveController {
     }
 
     @ApiResponse({
-        type: [GetOfferDTO],
+        type: [GetRequestDTO],
         description: 'gets all own requests',
     })
+    @ApiBearerAuth()
+    @UseGuards(IsLoggedInGuard)
     @Get('/user/requests')
     async getOwnRequests(@Session() session: SessionData) {
         const user = session.currentUser;
@@ -250,6 +274,25 @@ export class DriveController {
                     return this.transformRequestDBtoGetRequestDTO(request);
                 }),
             );
+        } catch (err) {
+            throw new BadRequestException('An error occurred: ' + err.message);
+        }
+    }
+
+    @ApiResponse({
+        type: GetRequestDTO,
+        description: 'gets a request by its ID',
+    })
+    @ApiParam({
+        name: 'id',
+        type: 'number',
+        description: 'ID of the request to get',
+    })
+    @Get('/request/:id')
+    async getRequestByID(@Param('id', ParseIntPipe) id: number) {
+        try {
+            const request = await this.driveService.getRequestById(id);
+            return this.transformRequestDBtoGetRequestDTO(request);
         } catch (err) {
             throw new BadRequestException('An error occurred: ' + err.message);
         }

@@ -125,6 +125,7 @@ export class DriveService {
     async getOfferById(driveID: number): Promise<OfferDB> {
         const drive = await this.offerRepository.findOne({
             where: { id: driveID },
+            relations: ['user', 'car', 'trailer', 'location'],
         });
         if (!drive) {
             throw new NotFoundException('Offer not found');
@@ -134,6 +135,7 @@ export class DriveService {
     async getRequestById(driveID: number): Promise<RequestDB> {
         const drive = await this.requestRepository.findOne({
             where: { id: driveID },
+            relations: ['user', 'cargo', 'location'],
         });
         if (!drive) {
             throw new NotFoundException('Request not found');
