@@ -90,7 +90,7 @@ export class AddCarComponent {
 
   changeSeatCount(num: any) {
     if (num < 1) {
-      this.errorMessage = "Dein Auto kann nicht weniger als einen Sitz haben wth you talking about";
+      this.errorMessage = "Wert muss mindestens 1 sein";
       this.removeErrorMessage();
       return;
     }
