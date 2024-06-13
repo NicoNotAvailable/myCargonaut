@@ -57,3 +57,17 @@ html{
 .starRating{
   color: #1a9cc5;
 }
+
+.backgroundGreen {
+  background-color: #005B52;
+  border-radius: 2rem;
+  transition: all 0.4s ease;
+}
+.backgroundGreen:hover{
+  box-shadow: #005B52 0 0 20px;
+}
+
+.editButton:hover {
+  text-decoration: underline;
+  color: #ffffff;
+}

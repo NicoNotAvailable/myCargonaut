@@ -7,53 +7,57 @@
     <div class="modal-body">
       <form>
         <div class="mb-3">
-          <label for="dateOfBirth">Date of birth</label>
           <div class="input-group">
-            <input
-              id="dateOfBirth"
-              class="form-control"
-              placeholder="yyyy-mm-dd"
-              name="dp"
-              ngbDatepicker
-              #dp="ngbDatepicker"
-            />
-            <button class="btn btn-outline-secondary bi bi-calendar3" (click)="dp.toggle()" type="button"></button>
+            <input [(ngModel)]="description" #descriptionInput="ngModel" type="text" name="descriptionInput"
+                   class="rounded-5 p-2 w-100 mb-3" placeholder="Name des Cargos"
+                   (input)="this.description">
+            <input [(ngModel)]="weight" #weightInput="ngModel" type="text" name="weightInput"
+                   class="rounded-5 p-2 w-100 mb-3" placeholder="Gewicht in kg (Bsp. 5,50)"
+                   (input)="this.weight">
+            <input [(ngModel)]="length" #lengthInput="ngModel" type="text" name="lengthInput"
+                   class="rounded-5 p-2 w-100 mb-3" placeholder="Länge in m (Bsp. 2,30)"
+                   (input)="this.length">
+            <input [(ngModel)]="width" #widthInput="ngModel" type="text" name="widthInput"
+                   class="rounded-5 p-2 w-100 mb-3" placeholder="Breite in m (Bsp. 1,30)"
+                   (input)="this.width">
+            <input [(ngModel)]="height" #heightInput="ngModel" type="text" name="heightInput"
+                   class="rounded-5 p-2 w-100 mb-3" placeholder="Höhe in m (Bsp. 0,80)"
+                   (input)="this.height">
           </div>
         </div>
       </form>
     </div>
-    <div class="modal-footer">
-      <button type="button" class="btn btn-outline-secondary" (click)="modal.close('Save click')">Save</button>
+    <div class="modal-footer justify-content-center">
+      <button type="submit" class="btn customButton exitButton text-light mt-2">
+        <i>
+          <fa-icon [icon]="faSave"></fa-icon>
+        </i>
+        <span class="ms-3">Speichern</span>
+      </button>
     </div>
   </ng-template>
-
-  <button class="btn btn-lg btn-outline-primary" (click)="open(content)">Launch demo modal</button>
-
-  <hr />
-
-  <pre>{{ closeResult }}</pre>
   <form #form="ngForm" (ngSubmit)="saveRequest(form)">
     <div class="row">
       <div class="p-5" id="addOfferArea">
-        <div class="row mb-5">
-          <div class="col-4" *ngIf="editingRequest == 0">
+        <div class="row mb-5 justify-content-between">
+          <div class="col-3" *ngIf="editingRequest == 0">
             <h1 class="textGreen col-7">Sitze:</h1>
             <div class="row mt-4">
               <div class="hstack justify-content-between">
                 <button (click)="changeSeatCount(2)" [ngClass]="seats === 2 ? 'selectedButton' : 'deselectedButton'"
-                        type="button" class="btn rounded-3 py-2 px-4 text-light">
+                        type="button" class="btn rounded-3 py-1 px-3 text-light">
                   <h1>2</h1>
                 </button>
                 <button (click)="changeSeatCount(3)" [ngClass]="seats === 3 ? 'selectedButton' : 'deselectedButton'"
-                        type="button" class="btn rounded-3 py-2 px-4 text-light">
+                        type="button" class="btn rounded-3 py-1 px-3 text-light">
                   <h1>3</h1>
                 </button>
                 <button (click)="changeSeatCount(4)" [ngClass]="seats === 4 ? 'selectedButton' : 'deselectedButton'"
-                        type="button" class="btn rounded-3 py-2 px-4 text-light">
+                        type="button" class="btn rounded-3 py-1 px-3 text-light">
                   <h1>4</h1>
                 </button>
                 <button (click)="changeSeatCount(5)" [ngClass]="seats === 5 ? 'selectedButton' : 'deselectedButton'"
-                        type="button" class="btn rounded-3 py-2 px-4 text-light">
+                        type="button" class="btn rounded-3 py-1 px-3 text-light">
                   <h1>5</h1>
                 </button>
               </div>
@@ -85,90 +89,40 @@
                      (input)="changeRequestedPrice(requestedPriceInput.value)">
             </div>
           </div>
-          <div class="col-4" *ngIf="editingRequest != 0">
-            <h1 class="textGreen col-7">Sitze:</h1>
-            <div class="row">
-              <div class="col-2"></div>
-              <div class="col-4">
-                <button (click)="changeSeatCount(2)" disabled
-                        [ngClass]="seats === 2 ? 'selectedSeats' : 'deselectedSeats'" type="button"
-                        class="btn rounded-3 pt-4 pb-4 ps-5 pe-5 text-light"><h1>2</h1>
-                </button>
-              </div>
-              <div class="col-1"></div>
-              <div class="col-4">
-                <button (click)="changeSeatCount(3)" disabled
-                        [ngClass]="seats === 3 ? 'selectedSeats' : 'deselectedSeats'" type="button"
-                        class="btn rounded-3 pt-4 pb-4 ps-5 pe-5 text-light"><h1>3</h1>
-                </button>
-              </div>
-              <div class="col-1"></div>
-            </div>
-            <div class="row mt-4">
-              <div class="col-2"></div>
-              <div class="col-4">
-                <button (click)="changeSeatCount(4)" disabled
-                        [ngClass]="seats === 4 ? 'selectedSeats' : 'deselectedSeats'" type="button"
-                        class="btn rounded-3 pt-4 pb-4 ps-5 pe-5 text-light"><h1>4</h1>
-                </button>
-              </div>
-              <div class="col-1"></div>
-              <div class="col-4">
-                <button (click)="changeSeatCount(5)" disabled
-                        [ngClass]="seats === 5 ? 'selectedSeats' : 'deselectedSeats'" type="button"
-                        class="btn rounded-3 pt-4 pb-4 ps-5 pe-5 text-light"><h1>5</h1>
-                </button>
-              </div>
-            </div>
-            <div class="row mt-3">
-              <div class="col-2 me-2"></div>
-              <input [(ngModel)]="seats" [ngModelOptions]="{standalone: true}" disabled type="number"
-                     class="rounded-5 p-2 col-9">
-            </div>
-            <div class="col-12 mt-5 align-bottom d-flex justify-content-around align-items-center"
-                 *ngIf="enableDeletion">
-              <button type="button" class="btn customButton deleteButton text-light"
-                      (click)="deleteRequest(editingRequest)">
-                <i>
-                  <fa-icon [icon]="faDeleteLeft"></fa-icon>
-                </i>
-                <span class="ms-3">Auto Löschen</span>
-              </button>
-            </div>
-          </div>
 
           <div class="col-4">
-            <h1 class="textGreen col-5">Infos:</h1>
+            <h1 class="textGreen col-5 mb-3">Infos:</h1>
 
             <div class="col-12" *ngIf="editingRequest == 0">
-              <input [(ngModel)]="model" [ngModelOptions]="{standalone: true}" name="modelInput" required type="text"
-                     class="form-control rounded-5 p-2 col-12" placeholder="Modell" id="carModel">
-            </div>
-            <div class="col-12" *ngIf="editingRequest != 0">
-              <span class="carInfo">{{ model }}</span>
+              <input [(ngModel)]="name" [ngModelOptions]="{standalone: true}" name="nameInput" required type="text"
+                     class="form-control rounded-5 p-2 col-12" placeholder="Name des Trips" id="nameInput">
             </div>
 
             <div class="col-12 mt-3">
+              <p>Fahrer darf folgende Eigenschaften haben:</p>
               <div class="hstack justify-content-between">
-                <div class="col-4 checkboxBorder rounded-pill p-2">
+                <div class="col-5 checkboxBorder rounded-pill p-3">
                   <div class="form-check">
-                    <label class="form-check-label" for="flexCheckDefault">
-                      Raucher
+                    <label class="form-check-label" for="checkSmoker">
+                      Raucher <br>
+                      ‎
                     </label>
-                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                    <input class="form-check-input" type="checkbox" value="" id="checkSmoker">
                   </div>
                 </div>
-                <div class="col-4 checkboxBorder rounded-pill p-2">
+                <div class="col-5 checkboxBorder rounded-pill p-3">
                   <div class="form-check">
-                    <label class="form-check-label" for="flexCheckDefault">
-                      Tiere
+                    <label class="form-check-label" for="checkPets">
+                      Haustier- <br>
+                      besitzer*in <br>
                     </label>
-                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                    <input class="form-check-input" type="checkbox" value="" id="checkPets">
                   </div>
                 </div>
               </div>
             </div>
 
+            <p class="mt-3">Auf der Fahrt:</p>
             <div class="col-12 mt-3">
               <div class="btn-group d-flex" role="group">
                 <input type="radio" class="btn-check" name="musicOrTalk" id="onlyMusic" autocomplete="off"
@@ -190,78 +144,79 @@
 
             <div class="col-12 mt-5">
               <h1 class="textGreen">Fracht:</h1>
-              <button class="btn btn-primary" (click)="open(content)">
-                <fa-icon [icon]="faPlus"></fa-icon>
-                Cargo hinzufügen
-              </button>
+              <div class="card border border-0">
+                <div class="card-body">
+                  <div class="backgroundGreen">
+                    <div class="text-light mx-3 pt-2">
+                      <h4 class="card-title ms-1 text-center"><!--{{ cargo.name }}-->Omas Klavier</h4>
+                      <p class="ms-2"><!--{{ car.weight }}-->100 kg</p>
+                      <div class="row">
+                        <div class="col">
+                          <p class="ms-2"><!--{{ car.length }}-->3,35m Lang</p></div>
+                        <div class="col">
+                          <p class="mx-1"><!--{{ car.width }}-->2,20m Breit</p>
+                        </div>
+                        <div class="col">
+                          <p class="me-2"><!--{{ car.height }}-->1,50m Hoch</p>
+                        </div>
+                      </div>
+                    </div>
+                    <button type="button" class="btn bg-transparent text-light editButton ms-2"><h5>Bearbeiten</h5>
+                    </button>
+                  </div>
+                </div>
+              </div>
             </div>
+
+            <button class="btn btn-primary" (click)="open(content)">
+              <fa-icon [icon]="faPlus"></fa-icon>
+              Cargo hinzufügen
+            </button>
           </div>
 
-          <div class="col-4" *ngIf="editingRequest == 0">
-            <h1 class="textGreen col-12">Zeit & Ort</h1>
+          <div class="col-3" *ngIf="editingRequest == 0">
+            <h1 class="textGreen col-12 mb-3">Zeit & Ort</h1>
             <div class="col-12">
-              <input [(ngModel)]="weight" [ngModelOptions]="{standalone: true}" name="weightInput" required
-                     class="form-control rounded-5 p-2 col-12" placeholder="Datum der Fahrt" id="carWeight"
-                     placeholder="Datum der Fahrt" ngbDatepicker #d="ngbDatepicker">
+              <input [(ngModel)]="date" [ngModelOptions]="{standalone: true}" name="dateInput" required
+                     class="form-control rounded-5 p-2 col-12" placeholder="Datum der Fahrt" id="dateInput"
+                     placeholder="Datum der Fahrt" ngbDatepicker #d="ngbDatepicker" type="text">
             </div>
             <div class="col-12 mt-2">
-              <input [(ngModel)]="length" [ngModelOptions]="{standalone: true}" name="lengthInput" required
-                     type="number" class="rounded-5 p-2 col-12" placeholder="Uhrzeit" id="carLength">
+              <input [(ngModel)]="time" [ngModelOptions]="{standalone: true}" name="timeInput" required
+                     type="text" class="rounded-5 p-2 col-12" placeholder="Uhrzeit" id="timeInput">
             </div>
 
             <h1 class="textGreen col-12 mt-5">Startpunkt</h1>
             <div class="col-12">
-              <input [(ngModel)]="weight" [ngModelOptions]="{standalone: true}" name="weightInput" required
-                     type="number" class="rounded-5 p-2 col-12" placeholder="Land" id="carWeight">
+              <input [(ngModel)]="startLand" [ngModelOptions]="{standalone: true}" name="startLandInput" required
+                     type="text" class="rounded-5 p-2 col-12" placeholder="Land" id="startLandInput">
             </div>
             <div class="hstack justify-content-between">
-              <div class="col-3 mt-2">
-                <input [(ngModel)]="length" [ngModelOptions]="{standalone: true}" name="lengthInput" required
-                       type="number" class="rounded-5 p-2 col-12" placeholder="PLZ" id="carLength">
+              <div class="col-4 mt-2">
+                <input [(ngModel)]="startPLZ" [ngModelOptions]="{standalone: true}" name="startPLZInput" required
+                       type="text" class="rounded-5 p-2 col-12" placeholder="PLZ" id="startPLZInput">
               </div>
-              <div class="col-8 mt-2">
-                <input [(ngModel)]="length" [ngModelOptions]="{standalone: true}" name="lengthInput" required
-                       type="number" class="rounded-5 p-2 col-12" placeholder="Ort" id="carLength">
+              <div class="col-7 mt-2">
+                <input [(ngModel)]="startPlace" [ngModelOptions]="{standalone: true}" name="startPlaceInput" required
+                       type="text" class="rounded-5 p-2 col-12" placeholder="Ort" id="startPlaceInput">
               </div>
             </div>
 
 
             <h1 class="textGreen col-12 mt-5">Zielort</h1>
             <div class="col-12">
-              <input [(ngModel)]="weight" [ngModelOptions]="{standalone: true}" name="weightInput" required
-                     type="number" class="rounded-5 p-2 col-12" placeholder="Land" id="carWeight">
+              <input [(ngModel)]="endLand" [ngModelOptions]="{standalone: true}" name="endLandInput" required
+                     type="text" class="rounded-5 p-2 col-12" placeholder="Land" id="endLandInput">
             </div>
             <div class="hstack justify-content-between">
-              <div class="col-3 mt-2">
-                <input [(ngModel)]="length" [ngModelOptions]="{standalone: true}" name="lengthInput" required
-                       type="number" class="rounded-5 p-2 col-12" placeholder="PLZ" id="carLength">
+              <div class="col-4 mt-2">
+                <input [(ngModel)]="endPLZ" [ngModelOptions]="{standalone: true}" name="endPLZInput" required
+                       type="text" class="rounded-5 p-2 col-12" placeholder="PLZ" id="endPLZInput">
               </div>
-              <div class="col-8 mt-2">
-                <input [(ngModel)]="length" [ngModelOptions]="{standalone: true}" name="lengthInput" required
-                       type="number" class="rounded-5 p-2 col-12" placeholder="Ort" id="carLength">
+              <div class="col-7 mt-2">
+                <input [(ngModel)]="endPlace" [ngModelOptions]="{standalone: true}" name="endPlaceInput" required
+                       type="text" class="rounded-5 p-2 col-12" placeholder="Ort" id="endPlaceInput">
               </div>
-            </div>
-          </div>
-
-          <div class="col-4" *ngIf="editingRequest != 0">
-            <h1 class="textGreen col-5">Zeit & Ort:</h1>
-            <div class="col-12">
-              <span class="carInfo">Datum der Fahrt</span>
-            </div>
-            <div class="col-12 mt-5">
-              <span class="carInfo">Meter lang</span>
-            </div>
-            <div class="col-12 mt-5">
-              <span class="carInfo">Meter breit</span>
-            </div>
-            <div class="col-12 mt-5">
-              <span class="carInfo">Meter hoch</span>
-            </div>
-            <div class="col-12 mt-5 form-check text-start flex-row justify-content-start align-items-center">
-              <span class="carInfo"></span>
-            </div>
-            <div class="col-12 mt-5 form-check text-start flex-row justify-content-start align-items-center">
-              <span class="carInfo"></span>
             </div>
           </div>
         </div>

@@ -11,7 +11,7 @@ export const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'profile', component: ProfileComponent },
   { path: 'offer', component: OfferComponent },
-  { path: 'request', component: RequestComponent },
-  { path: 'register', component: RegisterComponent },
+  { path: 'createrequest', component: RequestComponent },
+  { path: 'createregister', component: RegisterComponent },
   { path: '', component: FrontpageComponent },
 ];

@@ -1,6 +1,6 @@
 import { Component, EventEmitter, inject, Input, Output, TemplateRef } from "@angular/core";
 import { SessionService } from "../../services/session.service";
-import { NgClass, NgIf } from "@angular/common";
+import { NgClass, NgIf, NgOptimizedImage } from "@angular/common";
 import { faCirclePlus, faDeleteLeft, faPlus, faSave } from "@fortawesome/free-solid-svg-icons";
 import { FormsModule } from "@angular/forms";
 import { FaIconComponent } from "@fortawesome/angular-fontawesome";
@@ -16,7 +16,8 @@ import { NgbActiveModal, NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-
     NgClass,
     FormsModule,
     FaIconComponent,
-    NgbInputDatepicker
+    NgbInputDatepicker,
+    NgOptimizedImage
   ],
   templateUrl: './request.component.html',
   styleUrl: './request.component.css'
@@ -28,17 +29,27 @@ export class RequestComponent {
   @Output() changeAddCar = new EventEmitter<void>();
 
   requestedPrice: number | null = null;
-
   talkMode: number | null = null;
 
+  //
   seats: number | null = null;
-  model: string = "";
+
+  //Cargo
+  description: string | null = null;
   length: number | null = null;
   width: number | null = null;
   height: number | null = null;
-  hasTv: boolean = false;
-  hasAc: boolean = false;
   weight: number | null = null;
+
+  name: string = "";
+  date: string = "";
+  time: string = "";
+  startLand: string = "";
+  startPLZ: string = "";
+  startPlace: string = "";
+  endLand: string = "";
+  endPLZ: string = "";
+  endPlace: string = "";
 
   errorMessage: string = "";
 
@@ -155,4 +166,5 @@ export class RequestComponent {
 
   protected readonly faCirclePlus = faCirclePlus;
   protected readonly faPlus = faPlus;
+  protected readonly window = window;
 }
