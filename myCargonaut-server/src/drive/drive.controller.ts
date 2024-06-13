@@ -201,6 +201,7 @@ export class DriveController {
     dto.id = offer.id;
     dto.user = this.transformUserToGetOtherUserDTO(offer.user);
     dto.carID = offer.car.id;
+    dto.carPicture = offer.car.carPicture;
     dto.name = offer.name;
     dto.date = offer.date;
     dto.price = offer.price;

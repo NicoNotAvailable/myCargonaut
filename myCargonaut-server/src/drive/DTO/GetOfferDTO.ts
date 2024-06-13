@@ -19,6 +19,9 @@ export class GetOfferDTO {
   carID: number;
 
   @ApiProperty()
+  carPicture: string;
+
+  @ApiProperty()
   trailerID?: number;
 
   @ApiProperty()
