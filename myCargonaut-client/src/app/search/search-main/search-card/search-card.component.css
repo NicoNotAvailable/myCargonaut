@@ -60,3 +60,7 @@
   box-shadow: 0 0 20px #005B52;
 }
 
+.highlightText{
+  color: black;
+  font-weight: bold;
+}
