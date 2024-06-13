@@ -200,6 +200,25 @@ export class DriveController {
     }
 
     @ApiResponse({
+        type: [GetOfferDTO],
+        description: 'gets all own offers',
+    })
+    @Get('/user/offers')
+    async getOwnOffers(@Session() session: SessionData) {
+        const user = session.currentUser;
+        try {
+            const offers = await this.driveService.getOwnOffers(user);
+            return await Promise.all(
+                offers.map(async (offer) => {
+                    return this.transformOfferDBtoGetOfferDTO(offer);
+                }),
+            );
+        } catch (err) {
+            throw new BadRequestException('An error occurred: ' + err.message);
+        }
+    }
+
+    @ApiResponse({
         type: [GetRequestDTO],
         description: 'gets all requests',
     })
@@ -209,6 +228,25 @@ export class DriveController {
             const requests = await this.driveService.getAllRequests();
             return await Promise.all(
                 requests.map(async (request) => {
+                    return this.transformRequestDBtoGetRequestDTO(request);
+                }),
+            );
+        } catch (err) {
+            throw new BadRequestException('An error occurred: ' + err.message);
+        }
+    }
+
+    @ApiResponse({
+        type: [GetOfferDTO],
+        description: 'gets all own requests',
+    })
+    @Get('/user/requests')
+    async getOwnRequests(@Session() session: SessionData) {
+        const user = session.currentUser;
+        try {
+            const offers = await this.driveService.getOwnRequests(user);
+            return await Promise.all(
+                offers.map(async (request) => {
                     return this.transformRequestDBtoGetRequestDTO(request);
                 }),
             );
