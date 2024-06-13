@@ -35,9 +35,9 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
     @MessageBody() payload: { userId: number },
   ): void {
     this.users.set(payload.userId, client.id);
-    client.join(`user_${payload.userId}`);
+    client.join('user_${payload.userId}');
     console.log(
-      `User ${payload.userId} registered with socket ID ${client.id}`,
+      'User ${payload.userId} registered with socket ID ${client.id}',
     );
   }
 
@@ -54,7 +54,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
     this.server
       .to(roomName)
-      .emit('message', `User ${userId} joined room ${roomName}`);
+      .emit('message', 'User ${userId} joined room ${roomName}');
   }
 
   @SubscribeMessage('message')
