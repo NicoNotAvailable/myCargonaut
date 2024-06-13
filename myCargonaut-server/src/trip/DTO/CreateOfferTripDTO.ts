@@ -10,27 +10,36 @@ import { CreateCargoDTO } from '../../cargo/DTO/CreateCargoDTO';
 import { Type } from 'class-transformer';
 
 export class CreateOfferTripDTO {
-    @ApiProperty()
+    @ApiProperty({ description: 'the id of the desired offer', example: 1 })
     @IsNumber()
     @IsNotEmpty()
     driveID: number;
 
-    @ApiProperty()
+    @ApiProperty({
+        description: 'the id of the desired start location',
+        example: 1,
+    })
     @IsNotEmpty()
     @IsNumber()
     startLocationID: number;
 
-    @ApiProperty()
+    @ApiProperty({
+        description: 'the id of the desired end location',
+        example: 2,
+    })
     @IsNotEmpty()
     @IsNumber()
     endLocationID: number;
 
-    @ApiProperty()
+    @ApiProperty({ description: 'the required seats', example: 1 })
     @IsNumber()
     @IsNotEmpty()
     usedSeats: number;
 
-    @ApiProperty({ type: [CreateCargoDTO] })
+    @ApiProperty({
+        type: [CreateCargoDTO],
+        description: 'the cargo thats to be taken',
+    })
     @IsArray()
     @IsOptional()
     @ValidateNested({ each: true })
