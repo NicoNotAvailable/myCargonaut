@@ -137,16 +137,20 @@ export class DriveService {
     return drive;
   }
   async getAllOffers(): Promise<OfferDB[]> {
-    const offers = await this.offerRepository.find();
+    const offers = await this.offerRepository.find({
+      relations: ['user', 'car', 'trailer', 'location'],
+    });
     if (!offers) {
-      throw new NotFoundException('Request not found');
+      throw new NotFoundException('Offers not found');
     }
     return offers;
   }
   async getAllRequests(): Promise<RequestDB[]> {
-    const requests = await this.requestRepository.find();
+    const requests = await this.requestRepository.find({
+      relations: ['user', 'car', 'trailer', 'location'],
+    });
     if (!requests) {
-      throw new NotFoundException('Request not found');
+      throw new NotFoundException('Requests not found');
     }
     return requests;
   }

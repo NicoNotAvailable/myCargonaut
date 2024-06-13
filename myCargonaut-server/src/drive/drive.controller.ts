@@ -2,6 +2,7 @@ import {
   BadRequestException,
   Body,
   Controller,
+  Get,
   Post,
   Session,
   UseGuards,
@@ -15,6 +16,12 @@ import { SessionData } from 'express-session';
 import { CreateOfferDTO } from './DTO/CreateOfferDTO';
 import { VehicleService } from '../vehicle/vehicle.service';
 import { CreateRequestDTO } from './DTO/CreateRequestDTO';
+import { GetOfferDTO } from './DTO/GetOfferDTO';
+import { OfferDB } from '../database/DriveDB';
+import { CreateLocationDTO } from '../location/DTO/CreateLocationDTO';
+import { LocationDB } from '../database/LocationDB';
+import { UserDB } from '../database/UserDB';
+import { GetOtherUserDTO } from '../user/DTO/GetOtherUserDTO';
 
 @ApiTags('drive')
 @Controller('drive')
@@ -169,5 +176,73 @@ export class DriveController {
     } catch (err) {
       throw new BadRequestException('An error occurred: ' + err.message);
     }
+  }
+
+  @ApiResponse({
+    type: [GetOfferDTO],
+    description: 'gets all offers',
+  })
+  @Get('/all/offers')
+  async getAllOffers() {
+    try {
+      const offers = await this.driveService.getAllOffers();
+      return await Promise.all(
+        offers.map(async (offer) => {
+          return this.transformOfferDBtoGetOfferDTO(offer);
+        }),
+      );
+    } catch (err) {
+      throw new BadRequestException('An error occurred: ' + err.message);
+    }
+  }
+
+  async transformOfferDBtoGetOfferDTO(offer: OfferDB): Promise<GetOfferDTO> {
+    const dto = new GetOfferDTO();
+    dto.id = offer.id;
+    dto.user = this.transformUserToGetOtherUserDTO(offer.user);
+    dto.carID = offer.car.id;
+    dto.name = offer.name;
+    dto.date = offer.date;
+    dto.price = offer.price;
+    dto.seats = offer.seats;
+    dto.animalsAllowed = offer.animalsAllowed;
+    dto.smokingAllowed = offer.smokingAllowed;
+    dto.info = offer.info;
+    dto.maxCWeight = offer.maxCWeight;
+    dto.maxCLength = offer.maxCLength;
+    dto.maxCHeight = offer.maxCHeight;
+    dto.maxCWidth = offer.maxCWidth;
+    if (offer.trailer) {
+      dto.trailerID = offer.trailer.id;
+      dto.maxTLength = offer.maxTLength;
+      dto.maxTWeight = offer.maxTWeight;
+      dto.maxTHeight = offer.maxTHeight;
+      dto.maxTWidth = offer.maxTWidth;
+    }
+    dto.priceType = offer.priceType;
+    const locations = await offer.location;
+    dto.locations = locations.map(this.transformLocationToCreateLocationDTO);
+    return dto;
+  }
+  transformLocationToCreateLocationDTO(
+    location: LocationDB,
+  ): CreateLocationDTO {
+    const dto = new CreateLocationDTO();
+    dto.stopNr = location.stopNr;
+    dto.country = location.country;
+    dto.zipCode = location.zipCode;
+    dto.city = location.city;
+    return dto;
+  }
+  transformUserToGetOtherUserDTO(user: UserDB): GetOtherUserDTO {
+    const dto = new GetOtherUserDTO();
+    dto.id = user.id;
+    dto.profilePic = user.profilePic;
+    dto.firstName = user.firstName;
+    dto.lastName = user.lastName;
+    dto.languages = user.languages;
+    dto.profileText = user.profileText;
+    dto.isSmoker = user.isSmoker;
+    return dto;
   }
 }

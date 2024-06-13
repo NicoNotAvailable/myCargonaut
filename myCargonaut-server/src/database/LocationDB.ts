@@ -3,7 +3,7 @@ import {
     Column,
     PrimaryGeneratedColumn,
     OneToOne,
-    OneToMany,
+    OneToMany, ManyToOne,
 } from 'typeorm';
 import { OfferTripDB } from './OfferTripDB';
 import { DriveDB } from './DriveDB';
@@ -13,7 +13,7 @@ export class LocationDB {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @OneToOne(() => DriveDB)
+    @ManyToOne(() => DriveDB)
     drive: DriveDB;
 
     @Column()
