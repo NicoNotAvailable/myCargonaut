@@ -17,11 +17,14 @@ import { CreateOfferDTO } from './DTO/CreateOfferDTO';
 import { VehicleService } from '../vehicle/vehicle.service';
 import { CreateRequestDTO } from './DTO/CreateRequestDTO';
 import { GetOfferDTO } from './DTO/GetOfferDTO';
-import { OfferDB } from '../database/DriveDB';
+import { OfferDB, RequestDB } from '../database/DriveDB';
 import { CreateLocationDTO } from '../location/DTO/CreateLocationDTO';
 import { LocationDB } from '../database/LocationDB';
 import { UserDB } from '../database/UserDB';
 import { GetOtherUserDTO } from '../user/DTO/GetOtherUserDTO';
+import { GetRequestDTO } from './DTO/GetRequestDTO';
+import { CargoDB } from '../database/CargoDB';
+import { CreateCargoDTO } from '../cargo/DTO/CreateCargoDTO';
 
 @ApiTags('drive')
 @Controller('drive')
@@ -196,6 +199,24 @@ export class DriveController {
     }
   }
 
+  @ApiResponse({
+    type: [GetRequestDTO],
+    description: 'gets all requests',
+  })
+  @Get('/all/requests')
+  async getAllRequests() {
+    try {
+      const requests = await this.driveService.getAllRequests();
+      return await Promise.all(
+        requests.map(async (request) => {
+          return this.transformRequestDBtoGetRequestDTO(request);
+        }),
+      );
+    } catch (err) {
+      throw new BadRequestException('An error occurred: ' + err.message);
+    }
+  }
+
   async transformOfferDBtoGetOfferDTO(offer: OfferDB): Promise<GetOfferDTO> {
     const dto = new GetOfferDTO();
     dto.id = offer.id;
@@ -222,10 +243,29 @@ export class DriveController {
     }
     dto.priceType = offer.priceType;
     const locations = await offer.location;
-    dto.locations = locations.map(this.transformLocationToCreateLocationDTO);
+    dto.locations = locations.map(this.transformLocationDBToCreateLocationDTO);
     return dto;
   }
-  transformLocationToCreateLocationDTO(
+  async transformRequestDBtoGetRequestDTO(
+    request: RequestDB,
+  ): Promise<GetRequestDTO> {
+    const dto = new GetRequestDTO();
+    dto.id = request.id;
+    dto.user = this.transformUserToGetOtherUserDTO(request.user);
+    dto.name = request.name;
+    dto.date = request.date;
+    dto.price = request.price;
+    dto.seats = request.seats;
+    dto.animalsAllowed = request.animalsAllowed;
+    dto.smokingAllowed = request.smokingAllowed;
+    dto.info = request.info;
+    const locations = await request.location;
+    dto.locations = locations.map(this.transformLocationDBToCreateLocationDTO);
+    const cargo = await request.cargo;
+    dto.cargo = cargo.map(this.transformCargoDBToCreateCargoDTO);
+    return dto;
+  }
+  transformLocationDBToCreateLocationDTO(
     location: LocationDB,
   ): CreateLocationDTO {
     const dto = new CreateLocationDTO();
@@ -233,6 +273,15 @@ export class DriveController {
     dto.country = location.country;
     dto.zipCode = location.zipCode;
     dto.city = location.city;
+    return dto;
+  }
+  transformCargoDBToCreateCargoDTO(cargo: CargoDB): CreateCargoDTO {
+    const dto = new CreateCargoDTO();
+    dto.weight = cargo.weight;
+    dto.length = cargo.length;
+    dto.height = cargo.height;
+    dto.width = cargo.width;
+    dto.description = cargo.description;
     return dto;
   }
   transformUserToGetOtherUserDTO(user: UserDB): GetOtherUserDTO {

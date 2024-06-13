@@ -147,7 +147,7 @@ export class DriveService {
   }
   async getAllRequests(): Promise<RequestDB[]> {
     const requests = await this.requestRepository.find({
-      relations: ['user', 'car', 'trailer', 'location'],
+      relations: ['user', 'cargo', 'location'],
     });
     if (!requests) {
       throw new NotFoundException('Requests not found');
