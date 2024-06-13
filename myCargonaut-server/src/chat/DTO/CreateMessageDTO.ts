@@ -1,9 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-export class CreateMessageDto {
-  @ApiProperty()
-  userId: number;
-
+export class CreateMessageDTO {
   @ApiProperty()
   targetUserId: number;
 
