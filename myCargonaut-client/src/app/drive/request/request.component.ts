@@ -6,7 +6,7 @@ import { FormsModule } from "@angular/forms";
 import { FaIconComponent } from "@fortawesome/angular-fontawesome";
 import { NgbInputDatepicker } from "@ng-bootstrap/ng-bootstrap";
 import { NgbActiveModal, NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
-import { MatDialog } from '@angular/material/dialog';
+//import { MatDialog } from '@angular/material/dialog';
 import { DriveModalComponent } from '../drive-modal/drive-modal.component';
 
 @Component({
@@ -60,9 +60,9 @@ export class RequestComponent {
 
   closeResult = '';
 
-  constructor(private modalService: NgbModal, public dialog: MatDialog) {}
+  constructor(private modalService: NgbModal, /*public dialog: MatDialog*/) {}
 
-  openCargoDialog(): void {
+  /*openCargoDialog(): void {
     const dialogRef = this.dialog.open(DriveModalComponent, {
       width: '250px',
       data: { template: 'tripCargo' }
@@ -72,7 +72,7 @@ export class RequestComponent {
       console.log('The weight dialog was closed. Result:', result);
     });
   }
-
+*/
   open(content: TemplateRef<any>) {
     this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
       this.closeResult = `Closed with: ${result}`;
