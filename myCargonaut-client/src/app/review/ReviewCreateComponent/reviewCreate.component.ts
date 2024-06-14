@@ -5,6 +5,7 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { NgForOf, NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import {MatTooltipModule} from "@angular/material/tooltip";
+import { HttpClient } from '@angular/common/http';
 
 
 
@@ -24,10 +25,26 @@ import {MatTooltipModule} from "@angular/material/tooltip";
 
 
 export class ReviewCreateComponent {
+
+  constructor(private http: HttpClient) {
+
+  }
+
+
+
   protected readonly faSave = faSave;
 
   faStar = faStar;  // Filled star icon
   faStarRegular = faStarRegular;  // Empty star icon
+
+  message: string = ""
+  punctuality: number | undefined
+  reliability: number | undefined
+  comfort: number | undefined
+  damage: number | undefined
+  tripId: number | undefined
+  writerId: number | undefined
+
 
   starsFilledOne: boolean[] = [false, false, false, false, false];
   starsFilledTwo: boolean[] = [false, false, false, false, false];
@@ -36,28 +53,109 @@ export class ReviewCreateComponent {
 
   averageStarsFilled: boolean[] = [false, false, false, false, false];
 
-  // Method to handle star clicks and fill stars accordingly for individual sets
+  /**
+   * Creates a new review by sending a POST request to the server with review data,
+   * then handles the server response and any errors.
+   */
+  createReview(){
+    console.log("createReview");
+
+    const reviewData = {
+      punctuality: this.punctuality,
+      reliability: this.reliability,
+      comfort: this.comfort,
+      damage: this.damage,
+      tripId: this.tripId,
+      writerId: this.writerId,
+    };
+
+    this.http.post("http://localhost:8000/review",reviewData, { withCredentials: true })
+      .subscribe(
+        response => {
+          console.log('Review added successfully', response);
+          setTimeout(() => {
+            window.location.reload();
+          }, 2000);
+
+        },
+        error => {
+
+          console.error('There was an error!', error);
+          this.message = error.error.message || "Bitte überprüfen Sie die Eingabe";
+          setTimeout(() => {
+            this.message = '';
+          }, 5000);
+        }
+      );
+
+  }
+
+
+  /**
+   * Handles star clicks and updates the star rating for punctuality.
+   * Fills stars in starsFilledOne array up to the clicked index.
+   * Updates the punctuality rating based on the clicked index.
+   * Updates the average star ratings across all categories.
+   *
+   * @param index The index of the star clicked (0-based).
+   */
   handleStarClickQOne(index: number) {
-    this.updateStars(this.starsFilledOne, index);
-    this.updateAverageStars();
+    this.updateStars(this.starsFilledOne, index); // Update stars for punctuality
+    this.punctuality = index + 1; // Update punctuality rating
+    this.updateAverageStars(); // Update average star ratings
   }
 
+  /**
+   * Handles star clicks and updates the star rating for reliability.
+   * Fills stars in starsFilledTwo array up to the clicked index.
+   * Updates the reliability rating based on the clicked index.
+   * Updates the average star ratings across all categories.
+   *
+   * @param index The index of the star clicked (0-based).
+   */
   handleStarClickQTwo(index: number) {
-    this.updateStars(this.starsFilledTwo, index);
-    this.updateAverageStars();
+    this.updateStars(this.starsFilledTwo, index); // Update stars for reliability
+    this.reliability = index + 1; // Update reliability rating
+    this.updateAverageStars(); // Update average star ratings
   }
 
+  /**
+   * Handles star clicks and updates the star rating for comfort.
+   * Fills stars in starsFilledThree array up to the clicked index.
+   * Updates the comfort rating based on the clicked index.
+   * Updates the average star ratings across all categories.
+   *
+   * @param index The index of the star clicked (0-based).
+   */
   handleStarClickQThree(index: number) {
-    this.updateStars(this.starsFilledThree, index);
-    this.updateAverageStars();
+    this.updateStars(this.starsFilledThree, index); // Update stars for comfort
+    this.comfort = index + 1; // Update comfort rating
+    this.updateAverageStars(); // Update average star ratings
   }
 
+  /**
+   * Handles star clicks and updates the star rating for damage.
+   * Fills stars in starsFilledFour array up to the clicked index.
+   * Updates the damage rating based on the clicked index.
+   * Updates the average star ratings across all categories.
+   *
+   * @param index The index of the star clicked (0-based).
+   */
   handleStarClickQFour(index: number) {
-    this.updateStars(this.starsFilledFour, index);
-    this.updateAverageStars();
+    this.updateStars(this.starsFilledFour, index); // Update stars for damage
+    this.damage = index + 1; // Update damage rating
+    this.updateAverageStars(); // Update average star ratings
   }
 
-  // Helper method to update the stars
+
+  /**
+   * Helper method to update the star states in a star array up to the given index.
+   * Sets stars in the array to true up to the specified index (inclusive),
+   * and sets stars beyond that index to false.
+   *
+   * @param starsArray The array representing the star states (true for filled, false for empty).
+   * @param index The index up to which stars should be filled (0-based).
+   */
   updateStars(starsArray: boolean[], index: number) {
     for (let i = 0; i <= index; i++) {
       starsArray[i] = true;
@@ -67,8 +165,14 @@ export class ReviewCreateComponent {
     }
   }
 
-  // Method to update the average stars
+  /**
+   * Method to update the average filled stars across all star arrays.
+   * Calculates the total number of filled stars from all star arrays,
+   * computes the average number of filled stars, and updates the
+   * averageStarsFilled array accordingly.
+   */
   updateAverageStars() {
+    // Array of all star arrays
     const allStarsArrays = [
       this.starsFilledOne,
       this.starsFilledTwo,
@@ -76,16 +180,21 @@ export class ReviewCreateComponent {
       this.starsFilledFour
     ];
 
+    // Total number of stars across all categories
     const totalStars = allStarsArrays.length * this.starsFilledOne.length;
-    let filledStarsCount = 0;
 
+    // Count of filled stars across all arrays
+    let filledStarsCount = 0;
     allStarsArrays.forEach(starsArray => {
       starsArray.forEach(star => {
         if (star) filledStarsCount++;
       });
     });
 
+    // Calculate the average number of filled stars
     const averageFilledStars = Math.round(filledStarsCount / allStarsArrays.length);
+
+    // Update averageStarsFilled array based on the average filled stars
     for (let i = 0; i < this.averageStarsFilled.length; i++) {
       this.averageStarsFilled[i] = i < averageFilledStars;
     }
