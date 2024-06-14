@@ -18,12 +18,12 @@ import {MatTooltipModule} from "@angular/material/tooltip";
     NgIf,
     MatTooltipModule,
   ],
-  templateUrl: './reviewCreate.component.html',
-  styleUrl: './reviewCreate.component.css'
+  templateUrl: './reviewDriverCreate.component.html',
+  styleUrl: './reviewDriverCreate.component.css'
 })
 
 
-export class ReviewCreateComponent {
+export class ReviewDriverCreateComponent {
   protected readonly faSave = faSave;
 
   faStar = faStar;  // Filled star icon

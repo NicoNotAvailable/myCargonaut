@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
-import { ReviewCreateComponent } from './ReviewCreateComponent/reviewCreate.component';
+import { ReviewDriverCreateComponent } from './ReviewDriverCreateComponent/reviewDriverCreate.component';
 import { FrontpageComponent } from '../frontpage/frontpage.component';
 import { ReviewReadComponent } from './ReviewReadComponent/review-read.component';
+import { ReviewPassangerCreateComponent } from './ReviewPassangerCreateComponent/review-passanger-create.component';
 
 
 
@@ -9,8 +10,9 @@ import { ReviewReadComponent } from './ReviewReadComponent/review-read.component
   selector: 'app-review',
   standalone: true,
   imports: [
-    ReviewCreateComponent,
+    ReviewDriverCreateComponent,
     ReviewReadComponent,
+    ReviewPassangerCreateComponent,
 
   ],
   templateUrl: './review.component.html',
