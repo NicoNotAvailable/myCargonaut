@@ -80,14 +80,16 @@ export class TripController {
   }
   @ApiResponse({
     type: [GetOfferTripDTO],
-    description: 'gets all trips for a specific offer',
+    description: 'gets all offer trips for a specific user',
   })
   @ApiBearerAuth()
   @UseGuards(IsLoggedInGuard)
-  @Get('/offer/:offerID')
-  async getTripsForOffer(@Param('offerID', ParseIntPipe) id: number) {
+  @Get('/offer/user')
+  async getOwnOfferTrips(@Session() session: SessionData) {
     try {
-      const offerTrips = await this.tripService.getAllOfferTrips(id);
+      const offerTrips = await this.tripService.getOwnOfferTrips(
+        session.currentUser,
+      );
       return await Promise.all(
         offerTrips.map(async (offerTrip) => {
           return this.utilsService.transformOfferTripDBToGetOfferTripDTO(
@@ -101,16 +103,14 @@ export class TripController {
   }
   @ApiResponse({
     type: [GetOfferTripDTO],
-    description: 'gets all offer trips for a specific user',
+    description: 'gets all trips for a specific offer',
   })
   @ApiBearerAuth()
   @UseGuards(IsLoggedInGuard)
-  @Get('/offer/user')
-  async getOwnOfferTrips(@Session() session: SessionData) {
+  @Get('/offer/offerTrips/:offerID')
+  async getTripsForOffer(@Param('offerID', ParseIntPipe) id: number) {
     try {
-      const offerTrips = await this.tripService.getOwnOfferTrips(
-        session.currentUser,
-      );
+      const offerTrips = await this.tripService.getAllOfferTrips(id);
       return await Promise.all(
         offerTrips.map(async (offerTrip) => {
           return this.utilsService.transformOfferTripDBToGetOfferTripDTO(
@@ -155,17 +155,18 @@ export class TripController {
       throw new BadRequestException('An error occurred: ' + err.message);
     }
   }
-
   @ApiResponse({
     type: [GetRequestTripDTO],
-    description: 'gets all trips for a specific request',
+    description: 'gets all request trips for specific user',
   })
   @ApiBearerAuth()
   @UseGuards(IsLoggedInGuard)
-  @Get('/request/:requestID')
-  async getTripsforRequest(@Param('requestID', ParseIntPipe) id: number) {
+  @Get('/request/user')
+  async getOwnRequestTrips(@Session() session: SessionData) {
     try {
-      const requestTrips = await this.tripService.getAllRequestTrips(id);
+      const requestTrips = await this.tripService.getOwnRequestTrips(
+        session.currentUser,
+      );
       return await Promise.all(
         requestTrips.map(async (requestTrip) => {
           return this.utilsService.transformRequestTripDBToGetRequestTripDTO(
@@ -179,16 +180,14 @@ export class TripController {
   }
   @ApiResponse({
     type: [GetRequestTripDTO],
-    description: 'gets all request trips for specific user',
+    description: 'gets all trips for a specific request',
   })
   @ApiBearerAuth()
   @UseGuards(IsLoggedInGuard)
-  @Get('/request/user')
-  async getOwnRequestTrips(@Session() session: SessionData) {
+  @Get('/request/requestTrips/:requestID')
+  async getTripsForRequest(@Param('requestID', ParseIntPipe) id: number) {
     try {
-      const requestTrips = await this.tripService.getOwnRequestTrips(
-        session.currentUser,
-      );
+      const requestTrips = await this.tripService.getAllRequestTrips(id);
       return await Promise.all(
         requestTrips.map(async (requestTrip) => {
           return this.utilsService.transformRequestTripDBToGetRequestTripDTO(
