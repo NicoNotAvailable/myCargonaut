@@ -1,25 +1,35 @@
-import { BadRequestException, Body, Controller, Post, Session, UseGuards } from '@nestjs/common';
+import {
+  BadRequestException,
+  Body,
+  Controller,
+  Post,
+  Session,
+  UseGuards,
+} from '@nestjs/common';
 import { DriveService } from '../drive/drive.service';
 import { UserService } from '../user/user.service';
 import { VehicleService } from '../vehicle/vehicle.service';
 import { TripService } from './trip.service';
-import { ApiBearerAuth, ApiProperty, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { OkDTO } from '../serverDTO/OkDTO';
 import { IsLoggedInGuard } from '../session/is-logged-in.guard';
 import { SessionData } from 'express-session';
 import { CreateOfferTripDTO } from './DTO/CreateOfferTripDTO';
 import { LocationService } from '../location/location.service';
 import { CreateRequestTripDTO } from './DTO/CreateRequestTripDTO';
+import { UtilsService } from '../utils/utils.service';
 
 @ApiTags('trip')
 @Controller('trip')
-export class TripController { constructor(
-  private readonly driveService: DriveService,
-  private readonly userService: UserService,
-  private readonly vehicleService: VehicleService,
-  private readonly tripService: TripService,
-  private readonly locationService: LocationService
-) {}
+export class TripController {
+  constructor(
+    private readonly driveService: DriveService,
+    private readonly userService: UserService,
+    private readonly vehicleService: VehicleService,
+    private readonly tripService: TripService,
+    private readonly locationService: LocationService,
+    private readonly utilsService: UtilsService,
+  ) {}
   @ApiResponse({
     type: OkDTO,
     description: 'Posts a trip for an offer into the database',
@@ -44,10 +54,20 @@ export class TripController { constructor(
       throw new BadRequestException('You need a phone number');
     }
     const offer = await this.driveService.getOfferById(body.driveID);
-    const startLocation = await this.locationService.getLocationById(body.startLocationID);
-    const endLocation = await this.locationService.getLocationById(body.endLocationID);
+    const startLocation = await this.locationService.getLocationById(
+      body.startLocationID,
+    );
+    const endLocation = await this.locationService.getLocationById(
+      body.endLocationID,
+    );
     try {
-      await this.tripService.createOfferTrip(user,offer, body, startLocation, endLocation);
+      await this.tripService.createOfferTrip(
+        user,
+        offer,
+        body,
+        startLocation,
+        endLocation,
+      );
       return new OkDTO(true, 'Request for the offer was created');
     } catch (err) {
       throw new BadRequestException('An error occurred: ' + err.message);
@@ -80,10 +100,31 @@ export class TripController { constructor(
     const car = await this.vehicleService.getCarById(body.carID);
     const trailer = await this.vehicleService.getTrailerById(body.trailerID);
     try {
-      await this.tripService.createRequestTrip(user,request, car, trailer);
+      await this.tripService.createRequestTrip(user, request, car, trailer);
       return new OkDTO(true, 'Request for the offer was created');
     } catch (err) {
       throw new BadRequestException('An error occurred: ' + err.message);
     }
   }
+
+  /* @ApiResponse({
+    type: [GetRequestTripDTO],
+    description: 'gets all trips for a specific request',
+  })
+  @ApiBearerAuth()
+  @UseGuards(IsLoggedInGuard)
+  @Get('/requests/:id')
+  async getRequestTrips(@Param('id', ParseIntPipe) id: number) {
+    const request = id;
+    try {
+      const requestTrips = await this.tripService.getAllRequestTrips(request);
+      return await Promise.all(
+        requestTrips.map(async (requestTrip) => {
+          return transformRequestTripToGetRequestTripDTO(requestTrip);
+        }),
+      );
+    } catch (err) {
+      throw new BadRequestException('An error occurred: ' + err.message);
+    }
+  } */
 }
