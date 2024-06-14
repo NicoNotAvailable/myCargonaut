@@ -1,0 +1,68 @@
+<div *ngIf="data.template === 'tripCargo'">
+  <h1 mat-dialog-title>Cargo Hinzufügen</h1>
+  <div mat-dialog-content>
+    <mat-form-field>
+      <input matInput placeholder="Name des Cargo" [(ngModel)]="cargoDescription">
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput placeholder="Gewicht" [(ngModel)]="cargoWeight">
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput placeholder="Länge" [(ngModel)]="cargoLength">
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput placeholder="Breite" [(ngModel)]="cargoWidth">
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput placeholder="Höhe" [(ngModel)]="cargoHeight">
+    </mat-form-field>
+  </div>
+  <div mat-dialog-actions>
+    <button mat-button (click)="onClose()">Close</button>
+    <button mat-button (click)="onSubmit()">Submit</button>
+  </div>
+</div>
+
+<div *ngIf="data.template === 'tripCar'">
+  <h1 mat-dialog-title>Auto hinzufügen</h1>
+  <div mat-dialog-content>
+    <mat-form-field>
+      <input matInput placeholder="Gewicht" [(ngModel)]="carWeight">
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput placeholder="Länge" [(ngModel)]="carLength">
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput placeholder="Breite" [(ngModel)]="carWidth">
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput placeholder="Höhe" [(ngModel)]="carHeight">
+    </mat-form-field>
+  </div>
+  <div mat-dialog-actions>
+    <button mat-button (click)="onClose()">Close</button>
+    <button mat-button (click)="onSubmit()">Submit</button>
+  </div>
+</div>
+
+<div *ngIf="data.template === 'tripTrailer'">
+  <h1 mat-dialog-title>Eth</h1>
+  <div mat-dialog-content>
+    <mat-form-field>
+      <input matInput placeholder="Gewicht" [(ngModel)]="carWeight">
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput placeholder="Länge" [(ngModel)]="carLength">
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput placeholder="Breite" [(ngModel)]="carWidth">
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput placeholder="Höhe" [(ngModel)]="carHeight">
+    </mat-form-field>
+  </div>
+  <div mat-dialog-actions>
+    <button mat-button (click)="onClose()">Close</button>
+    <button mat-button (click)="onSubmit()">Submit</button>
+  </div>
+</div>
