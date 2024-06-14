@@ -2,6 +2,9 @@ import {
   BadRequestException,
   Body,
   Controller,
+  Get,
+  Param,
+  ParseIntPipe,
   Post,
   Session,
   UseGuards,
@@ -18,6 +21,8 @@ import { CreateOfferTripDTO } from './DTO/CreateOfferTripDTO';
 import { LocationService } from '../location/location.service';
 import { CreateRequestTripDTO } from './DTO/CreateRequestTripDTO';
 import { UtilsService } from '../utils/utils.service';
+import { GetRequestTripDTO } from './DTO/GetRequestTripDTO';
+import { GetOfferTripDTO } from './DTO/GetOfferTripDTO';
 
 @ApiTags('trip')
 @Controller('trip')
@@ -74,6 +79,27 @@ export class TripController {
     }
   }
   @ApiResponse({
+    type: [GetOfferTripDTO],
+    description: 'gets all trips for a specific offer',
+  })
+  @ApiBearerAuth()
+  @UseGuards(IsLoggedInGuard)
+  @Get('/offer/:id')
+  async getOfferTrips(@Param('id', ParseIntPipe) id: number) {
+    try {
+      const offerTrips = await this.tripService.getAllOfferTrips(id);
+      return await Promise.all(
+        offerTrips.map(async (offerTrip) => {
+          return this.utilsService.transformOfferTripDBToGetOfferTripDTO(
+            offerTrip,
+          );
+        }),
+      );
+    } catch (err) {
+      throw new BadRequestException('An error occurred: ' + err.message);
+    }
+  }
+  @ApiResponse({
     type: OkDTO,
     description: 'Posts a trip for a request into the database',
   })
@@ -107,24 +133,25 @@ export class TripController {
     }
   }
 
-  /* @ApiResponse({
+  @ApiResponse({
     type: [GetRequestTripDTO],
     description: 'gets all trips for a specific request',
   })
   @ApiBearerAuth()
   @UseGuards(IsLoggedInGuard)
-  @Get('/requests/:id')
+  @Get('/request/:id')
   async getRequestTrips(@Param('id', ParseIntPipe) id: number) {
-    const request = id;
     try {
-      const requestTrips = await this.tripService.getAllRequestTrips(request);
+      const requestTrips = await this.tripService.getAllRequestTrips(id);
       return await Promise.all(
         requestTrips.map(async (requestTrip) => {
-          return transformRequestTripToGetRequestTripDTO(requestTrip);
+          return this.utilsService.transformRequestTripDBToGetRequestTripDTO(
+            requestTrip,
+          );
         }),
       );
     } catch (err) {
       throw new BadRequestException('An error occurred: ' + err.message);
     }
-  } */
+  }
 }

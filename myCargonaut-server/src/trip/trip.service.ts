@@ -62,8 +62,8 @@ export class TripService {
   }
   async getAllOfferTrips(offer: number): Promise<OfferTripDB[]> {
     const offerTrips = await this.offerTripRepository.find({
-      where: { drive: { id: offer }, status: 0 || 1 },
-      relations: ['user', 'startLocation', 'endLocation', 'drive'],
+      where: { drive: { id: offer } },
+      relations: ['requesting', 'startLocation', 'endLocation', 'drive'],
     });
     if (!offerTrips) {
       throw new NotFoundException('Request Trips not found');
@@ -105,8 +105,8 @@ export class TripService {
   }
   async getAllRequestTrips(request: number): Promise<RequestTripDB[]> {
     const requestTrips = await this.requestTripRepository.find({
-      where: { drive: { id: request }, status: 0 || 1 },
-      relations: ['user', 'car', 'trailer', 'drive'],
+      where: { drive: { id: request } },
+      relations: ['requesting', 'car', 'trailer', 'drive'],
     });
     if (!requestTrips) {
       throw new NotFoundException('Request Trips not found');

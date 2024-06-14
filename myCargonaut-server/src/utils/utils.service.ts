@@ -16,6 +16,12 @@ import { UserService } from '../user/user.service';
 import { VehicleService } from '../vehicle/vehicle.service';
 import { TripService } from '../trip/trip.service';
 import { LocationService } from '../location/location.service';
+import { CarDB } from '../database/CarDB';
+import { GetCarDTO } from '../vehicle/DTO/GetCarDTO';
+import { TrailerDB } from '../database/TrailerDB';
+import { GetTrailerDTO } from '../vehicle/DTO/GetTrailerDTO';
+import { OfferTripDB } from '../database/OfferTripDB';
+import { GetOfferTripDTO } from '../trip/DTO/GetOfferTripDTO';
 
 @ApiTags('trip')
 @Controller('trip')
@@ -27,11 +33,61 @@ export class UtilsService {
     private readonly tripService: TripService,
     private readonly locationService: LocationService,
   ) {}
-  transformRequestTripToGetRequestTripDTO(request: RequestTripDB): string {
+  transformRequestTripDBToGetRequestTripDTO(
+    request: RequestTripDB,
+  ): GetRequestTripDTO {
     const dto = new GetRequestTripDTO();
     dto.id = request.id;
     dto.requesting = this.transformUserToGetOtherUserDTO(request.requesting);
-    return 're';
+    dto.car = this.transformCarDBtoGetCarDTO(request.car);
+    if (request.trailer) {
+      dto.trailer = this.transformTrailerDBtoGetTrailerDTO(request.trailer);
+    }
+    return dto;
+  }
+  async transformOfferTripDBToGetOfferTripDTO(
+    offer: OfferTripDB,
+  ): Promise<GetOfferTripDTO> {
+    const dto = new GetOfferTripDTO();
+    dto.id = offer.id;
+    dto.requesting = this.transformUserToGetOtherUserDTO(offer.requesting);
+    dto.usedSeats = offer.usedSeats;
+    dto.startLocation = this.transformLocationDBToCreateLocationDTO(
+      offer.startLocation,
+    );
+    dto.endLocation = this.transformLocationDBToCreateLocationDTO(
+      offer.endLocation,
+    );
+    const cargo = await offer.cargo;
+    dto.cargo = cargo.map(this.transformCargoDBToCreateCargoDTO);
+    return dto;
+  }
+  transformCarDBtoGetCarDTO(car: CarDB): GetCarDTO {
+    const dto = new GetCarDTO();
+    dto.id = car.id;
+    dto.name = car.name;
+    dto.weight = car.weight;
+    dto.length = car.length;
+    dto.height = car.height;
+    dto.width = car.width;
+    dto.seats = car.seats;
+    dto.hasAC = car.hasAC;
+    dto.hasTelevision = car.hasTelevision;
+    dto.carPicture = car.carPicture;
+    return dto;
+  }
+
+  transformTrailerDBtoGetTrailerDTO(trailer: TrailerDB): GetTrailerDTO {
+    const dto = new GetTrailerDTO();
+    dto.id = trailer.id;
+    dto.name = trailer.name;
+    dto.weight = trailer.weight;
+    dto.length = trailer.length;
+    dto.height = trailer.height;
+    dto.width = trailer.width;
+    dto.isCooled = trailer.isCooled;
+    dto.isEnclosed = trailer.isEnclosed;
+    return dto;
   }
   transformLocationDBToCreateLocationDTO(
     location: LocationDB,
