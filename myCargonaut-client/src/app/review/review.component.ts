@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { ReviewCreateComponent } from './ReviewCreateComponent/reviewCreate.component';
 import { FrontpageComponent } from '../frontpage/frontpage.component';
+import { ReviewReadComponent } from './ReviewReadComponent/review-read.component';
 
 
 
@@ -9,6 +10,7 @@ import { FrontpageComponent } from '../frontpage/frontpage.component';
   standalone: true,
   imports: [
     ReviewCreateComponent,
+    ReviewReadComponent,
 
   ],
   templateUrl: './review.component.html',
