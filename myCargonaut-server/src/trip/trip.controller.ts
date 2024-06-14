@@ -123,6 +123,23 @@ export class TripController {
     }
   }
   @ApiResponse({
+    type: GetOfferTripDTO,
+    description: 'gets a single offer trip by its ID',
+  })
+  @ApiBearerAuth()
+  @UseGuards(IsLoggedInGuard)
+  @Get('/offer/:offerTripID')
+  async getOfferTripById(@Param('offerID', ParseIntPipe) id: number) {
+    try {
+      const offerTrip = await this.tripService.getOfferTripById(id);
+      return await this.utilsService.transformOfferTripDBToGetOfferTripDTO(
+        offerTrip,
+      );
+    } catch (err) {
+      throw new BadRequestException('An error occurred: ' + err.message);
+    }
+  }
+  @ApiResponse({
     type: OkDTO,
     description: 'Posts a trip for a request into the database',
   })
@@ -194,6 +211,23 @@ export class TripController {
             requestTrip,
           );
         }),
+      );
+    } catch (err) {
+      throw new BadRequestException('An error occurred: ' + err.message);
+    }
+  }
+  @ApiResponse({
+    type: GetRequestTripDTO,
+    description: 'gets single request trip by its ID',
+  })
+  @ApiBearerAuth()
+  @UseGuards(IsLoggedInGuard)
+  @Get('/request/:requestTripID')
+  async getRequestTripById(@Param('requestTripID', ParseIntPipe) id: number) {
+    try {
+      const requestTrip = await this.tripService.getRequestTripById(id);
+      return this.utilsService.transformRequestTripDBToGetRequestTripDTO(
+        requestTrip,
       );
     } catch (err) {
       throw new BadRequestException('An error occurred: ' + err.message);
