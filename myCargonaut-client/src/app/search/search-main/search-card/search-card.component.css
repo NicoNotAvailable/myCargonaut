@@ -1,66 +1,81 @@
-.greenText{
+.greenText {
   color: #005B52;
-
 }
-.searchBanner{
+
+.searchBanner {
   color: white;
   background-color: #005B52;
   border-radius: 15px;
 }
-.blueButton{
+
+.blueButton {
   background-color: #1A9CC5;
   border-radius: 15px;
-
 }
-.blueText{
+
+.blueText {
   color: #1A9CC5;
 }
-.inputBanner{
+
+.inputBanner {
   border-radius: 20px;
 }
-.inputBanner::placeholder{
-  color:black;
+
+.inputBanner::placeholder {
+  color: black;
 }
-.inputLowBanner{
+
+.inputLowBanner {
   border-radius: 10px;
   border-color: #005B52;
   color: #005B52;
   height: 30px;
 }
-.inputLowBanner::placeholder{
+
+.inputLowBanner::placeholder {
   color: #005B52;
   opacity: 50%;
 }
+
 .vertical-center {
   display: flex;
   align-items: center;
   justify-content: center;
   height: 100%;
-  font-size: large ;
+  font-size: large;
 }
 
 .horizontal-right {
   display: flex;
   justify-content: end;
 }
+
 .horizontal-center {
   display: flex;
   justify-content: center;
 }
-.greenButton{
+
+.greenButton {
   background-color: #005B52;
   color: white;
   border-radius: 15px;
 }
-.card{
+
+.card {
+  border: 1px solid #005B52;  /* Hier wird der Rahmen korrekt definiert */
   border-radius: 10px;
-  border-color: #005B52;
+  overflow: hidden;  /* Hilft bei runden Ecken */
 }
-.card:hover{
+
+.card:hover {
   box-shadow: 0 0 20px #005B52;
 }
 
-.highlightText{
+.highlightText {
   color: black;
   font-weight: bold;
+}
+
+.bild {
+  border: none;
 }
