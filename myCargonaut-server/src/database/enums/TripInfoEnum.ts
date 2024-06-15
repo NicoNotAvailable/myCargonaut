@@ -1,5 +1,5 @@
 export enum TripInfoEnum {
-    music,
-    conversation,
-    adapting,
+  music = 1,
+  conversation = 2,
+  adapting = 3,
 }

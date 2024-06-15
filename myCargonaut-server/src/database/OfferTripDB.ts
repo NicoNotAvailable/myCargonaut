@@ -1,10 +1,10 @@
-import { Entity, ManyToOne, Column, OneToMany } from 'typeorm';
+import { ManyToOne, Column, OneToMany, ChildEntity } from 'typeorm';
 import { LocationDB } from './LocationDB';
 import { CargoDB } from './CargoDB';
 import { TripDB } from './TripDB';
 import { OfferDB } from './DriveDB';
 
-@Entity()
+@ChildEntity()
 export class OfferTripDB extends TripDB {
     @ManyToOne(() => OfferDB)
     drive: OfferDB;
