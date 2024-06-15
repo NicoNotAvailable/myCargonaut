@@ -7,8 +7,8 @@ import {
   NotFoundException,
   Param,
   ParseIntPipe,
-  Patch,
-  Post, Put,
+  Post,
+  Put,
   Session,
   UseGuards,
 } from '@nestjs/common';
@@ -243,7 +243,10 @@ export class TripController {
   @ApiBearerAuth()
   @UseGuards(IsLoggedInGuard)
   @Put('accept/:id')
-  async acceptTrip(@Session() session: SessionData,@Param('id', ParseIntPipe) tripId: number): Promise<OkDTO> {
+  async acceptTrip(
+    @Session() session: SessionData,
+    @Param('id', ParseIntPipe) tripId: number,
+  ): Promise<OkDTO> {
     const userId = session.currentUser;
     try {
       await this.tripService.acceptTrip(tripId, userId);
