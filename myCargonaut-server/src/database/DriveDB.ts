@@ -16,6 +16,7 @@ import { PriceTypeEnum } from './enums/PriceTypeEnum';
 import { OfferTripDB } from './OfferTripDB';
 import { CargoDB } from './CargoDB';
 import { RequestTripDB } from './RequestTripDB';
+import { StatusEnum } from './enums/StatusEnum';
 
 @Entity()
 @TableInheritance({ column: { type: 'varchar', name: 'type' } })
@@ -50,7 +51,12 @@ export class DriveDB {
   @Column({ default: new Date().toISOString() })
   timestamp: string;
 
-  @OneToMany(() => LocationDB, (location) => location.drive)
+  @Column({ default: 0 })
+  status: StatusEnum;
+
+  @OneToMany(() => LocationDB, (location) => location.drive, {
+    onDelete: 'CASCADE',
+  })
   location: Promise<LocationDB[]>;
 }
 
@@ -89,15 +95,15 @@ export class OfferDB extends DriveDB {
   @Column()
   maxTWidth: number;
 
-  @OneToMany(() => OfferTripDB, (trip) => trip.drive)
+  @OneToMany(() => OfferTripDB, (trip) => trip.drive, { onDelete: 'CASCADE' })
   trips: Promise<OfferTripDB[]>;
 }
 
 @ChildEntity()
 export class RequestDB extends DriveDB {
-  @OneToMany(() => CargoDB, (cargo) => cargo.request)
+  @OneToMany(() => CargoDB, (cargo) => cargo.request, { onDelete: 'CASCADE' })
   cargo: Promise<CargoDB[]>;
 
-  @OneToMany(() => RequestTripDB, (trip) => trip.drive)
+  @OneToMany(() => RequestTripDB, (trip) => trip.drive, { onDelete: 'CASCADE' })
   trips: Promise<RequestTripDB[]>;
 }

@@ -2,7 +2,9 @@ import {
   BadRequestException,
   Body,
   Controller,
+  Delete,
   Get,
+  NotFoundException,
   Param,
   ParseIntPipe,
   Post,
@@ -21,7 +23,6 @@ import { CreateRequestDTO } from './DTO/CreateRequestDTO';
 import { GetOfferDTO } from './DTO/GetOfferDTO';
 import { GetRequestDTO } from './DTO/GetRequestDTO';
 import { UtilsService } from '../utils/utils.service';
-
 
 @ApiTags('drive')
 @Controller('drive')
@@ -292,5 +293,32 @@ export class DriveController {
     } catch (err) {
       throw new BadRequestException('An error occurred: ' + err.message);
     }
+  }
+
+  @ApiResponse({
+    type: OkDTO,
+    description: 'removes a drive from the database',
+  })
+  @ApiParam({
+    name: 'id',
+    type: 'number',
+    description: 'ID of the drive to be deleted',
+  })
+  @Delete(':id')
+  @ApiBearerAuth()
+  @UseGuards(IsLoggedInGuard)
+  async deleteDrive(
+    @Param('id', ParseIntPipe) id: number,
+    @Session() session: SessionData,
+  ): Promise<OkDTO> {
+    try {
+      await this.driveService.deleteDrive(id, session.currentUser);
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw new NotFoundException(error.message);
+      }
+      throw error;
+    }
+    return new OkDTO(true, 'drive was deleted');
   }
 }

@@ -17,7 +17,7 @@ export class ReviewDB {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @ManyToOne(() => TripDB)
+    @ManyToOne(() => TripDB, { onDelete: 'CASCADE' })
     trip: TripDB;
 
     @ManyToOne(() => UserDB)
