@@ -50,8 +50,9 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
       'User ${payload.userId} registered with socket ID ${client.id}',
     );
 
-    const trips = await this.tripService.getUserTrips(payload.userId);
-    trips.forEach((trip) => {
+    const tripsObject = await this.tripService.getUserTrips(payload.userId);
+
+    tripsObject.offerTrips.forEach((trip) => {
       const roomName = `trip_${trip.id}`;
       client.join(roomName);
       this.addUserToRoom(payload.userId, trip.id);
@@ -60,8 +61,19 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
         .emit('message', `User ${payload.userId} joined room ${roomName}`);
     });
 
-    // Emit event to client to join all their rooms
-    const tripIds = trips.map((trip) => trip.id);
+    tripsObject.requestTrips.forEach((trip) => {
+      const roomName = `trip_${trip.id}`;
+      client.join(roomName);
+      this.addUserToRoom(payload.userId, trip.id);
+      this.server
+        .to(roomName)
+        .emit('message', `User ${payload.userId} joined room ${roomName}`);
+    });
+
+    const tripIds = [
+      ...tripsObject.offerTrips.map((trip) => trip.id),
+      ...tripsObject.requestTrips.map((trip) => trip.id),
+    ];
     client.emit('joinRooms', tripIds);
   }
 
@@ -82,7 +94,6 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
       .to(roomName)
       .emit('message', `User ${userId} joined room ${roomName}`);
   }
-
 
   @SubscribeMessage('message')
   handleMessage(
@@ -108,7 +119,6 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
       this.activeRooms.set(tripId, room);
     }
   }
-
 
   removeUserFromRooms(client: Socket): void {
     const userId = client.data.userId;
