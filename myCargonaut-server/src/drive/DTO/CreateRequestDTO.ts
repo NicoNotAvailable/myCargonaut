@@ -49,7 +49,7 @@ export class CreateRequestDTO {
 
     @ApiProperty({
         description: 'the desired vibe for the drive',
-        example: 2,
+        example: TripInfoEnum.adapting,
     })
     @IsNotEmpty()
     info: TripInfoEnum;
