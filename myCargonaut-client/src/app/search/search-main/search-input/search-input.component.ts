@@ -39,7 +39,5 @@ export class SearchInputComponent {
       this.placeholderInput = "verfügbare Plätze";
 
     }
-
-
   }
 }

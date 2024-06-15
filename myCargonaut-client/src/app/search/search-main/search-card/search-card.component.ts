@@ -1,11 +1,17 @@
-import {Component} from '@angular/core';
+import {Component, Input} from '@angular/core';
 import {NavigationEnd, Router} from "@angular/router";
 import {filter} from "rxjs/operators";
+
+import {offer} from "../../offers"
+import {DateFormatPipe} from "../../date-format.pipe";
+
 
 @Component({
   selector: 'app-search-card',
   standalone: true,
-  imports: [],
+  imports: [
+    DateFormatPipe
+  ],
   templateUrl: './search-card.component.html',
   styleUrl: './search-card.component.css'
 })
@@ -14,6 +20,8 @@ export class SearchCardComponent {
   buttonText: string = "";
   plaetze: string = "";
   href:string ="";
+
+  @Input() allOffers!: offer[];
 
   constructor(private router: Router) {
   }
