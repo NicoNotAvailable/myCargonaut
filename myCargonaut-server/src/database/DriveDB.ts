@@ -16,6 +16,7 @@ import { PriceTypeEnum } from './enums/PriceTypeEnum';
 import { OfferTripDB } from './OfferTripDB';
 import { CargoDB } from './CargoDB';
 import { RequestTripDB } from './RequestTripDB';
+import { StatusEnum } from './enums/StatusEnum';
 
 @Entity()
 @TableInheritance({ column: { type: 'varchar', name: 'type' } })
@@ -49,6 +50,9 @@ export class DriveDB {
 
   @Column({ default: new Date().toISOString() })
   timestamp: string;
+
+  @Column({ default: 0 })
+  status: StatusEnum;
 
   @OneToMany(() => LocationDB, (location) => location.drive)
   location: Promise<LocationDB[]>;
