@@ -5,7 +5,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DriveDB, OfferDB, RequestDB } from '../database/DriveDB';
+import { OfferDB, RequestDB } from '../database/DriveDB';
 import { Repository } from 'typeorm';
 import { CargoDB } from '../database/CargoDB';
 import { TripDB } from '../database/TripDB';
@@ -21,7 +21,7 @@ import { LocationDB } from '../database/LocationDB';
 @Injectable()
 export class TripService {
   constructor(
-    @InjectRepository(DriveDB)
+    @InjectRepository(TripDB)
     private tripRepository: Repository<TripDB>,
     @InjectRepository(OfferTripDB)
     private offerTripRepository: Repository<OfferTripDB>,
@@ -161,7 +161,7 @@ export class TripService {
   async deleteTrip(tripId: number, userId: number) {
     const trip = await this.tripRepository.findOne({
       where: { id: tripId },
-      relations: ['user'],
+      relations: ['requesting'],
     });
     if (!trip) {
       throw new NotFoundException('Trip not found');

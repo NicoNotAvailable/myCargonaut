@@ -1,10 +1,10 @@
-import { Entity, ManyToOne } from 'typeorm';
+import { ChildEntity, ManyToOne } from 'typeorm';
 import { CarDB } from './CarDB';
 import { TrailerDB } from './TrailerDB';
 import { TripDB } from './TripDB';
 import { RequestDB } from './DriveDB';
 
-@Entity()
+@ChildEntity()
 export class RequestTripDB extends TripDB {
     @ManyToOne(() => RequestDB, { onDelete: 'CASCADE' })
     drive: RequestDB;
