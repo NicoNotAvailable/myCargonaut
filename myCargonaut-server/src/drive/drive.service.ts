@@ -1,4 +1,9 @@
-import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { DriveDB, OfferDB, RequestDB } from '../database/DriveDB';
@@ -11,6 +16,9 @@ import { CreateCargoDTO } from '../cargo/DTO/CreateCargoDTO';
 import { CreateRequestDTO } from './DTO/CreateRequestDTO';
 import { LocationDB } from '../database/LocationDB';
 import { CreateLocationDTO } from '../location/DTO/CreateLocationDTO';
+import { StatusEnum } from '../database/enums/StatusEnum';
+import { OfferTripDB } from '../database/OfferTripDB';
+import { RequestTripDB } from '../database/RequestTripDB';
 
 @Injectable()
 export class DriveService {
@@ -25,6 +33,10 @@ export class DriveService {
     private cargoRepository: Repository<CargoDB>,
     @InjectRepository(LocationDB)
     private locationRepository: Repository<LocationDB>,
+    @InjectRepository(OfferTripDB)
+    private offerTripRepository: Repository<OfferTripDB>,
+    @InjectRepository(RequestTripDB)
+    private requestTripRepository: Repository<RequestTripDB>,
   ) {}
 
   async createOffer(
@@ -187,8 +199,34 @@ export class DriveService {
     if (drive.user.id !== userId) {
       throw new UnauthorizedException('Drive is not yours!');
     }
+    if (drive.status !== StatusEnum.created) {
+      throw new BadRequestException(
+        'Drive cannot be deleted because it is not in the created status',
+      );
+    }
+    const acceptedOfferTrip = await this.offerTripRepository.findOne({
+      where: {
+        drive: { id: driveId },
+        isAccepted: true,
+      },
+    });
+    if (acceptedOfferTrip) {
+      throw new BadRequestException(
+        'Drive cannot be deleted because there are accepted offer trips associated with it',
+      );
+    }
+    const acceptedRequestTrip = await this.requestTripRepository.findOne({
+      where: {
+        drive: { id: driveId },
+        isAccepted: true,
+      },
+    });
 
-    // TODO: check if theres an active trip with the drive
+    if (acceptedRequestTrip) {
+      throw new BadRequestException(
+        'Drive cannot be deleted because there are accepted request trips associated with it',
+      );
+    }
     await this.driveRepository.remove(drive);
   }
 }

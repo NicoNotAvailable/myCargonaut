@@ -7,7 +7,6 @@ import {
     TableInheritance,
 } from 'typeorm';
 import { UserDB } from './UserDB';
-import { StatusEnum } from './enums/StatusEnum';
 import { ReviewDB } from './ReviewDB';
 import { MessageDB } from './MessageDB';
 
