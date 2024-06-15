@@ -306,6 +306,6 @@ export class VehicleController {
       }
       throw error;
     }
-    return new OkDTO(true, 'Trailer was created');
+    return new OkDTO(true, 'Vehicle was deleted');
   }
 }

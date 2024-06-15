@@ -22,7 +22,7 @@ export class TripDB {
     @Column({ default: false })
     isAccepted: boolean;
 
-    @OneToMany(() => ReviewDB, (review) => review.trip)
+    @OneToMany(() => ReviewDB, (review) => review.trip, { cascade: true })
     reviews: Promise<ReviewDB[]>;
 
     @OneToMany(() => MessageDB, (message) => message.trip ,{ cascade: true })

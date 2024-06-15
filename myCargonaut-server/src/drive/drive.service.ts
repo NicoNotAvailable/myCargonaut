@@ -191,7 +191,7 @@ export class DriveService {
   async deleteDrive(driveId: number, userId: number) {
     const drive = await this.driveRepository.findOne({
       where: { id: driveId },
-      relations: ['owner'],
+      relations: ['user'],
     });
     if (!drive) {
       throw new NotFoundException('Drive not found');
