@@ -1,0 +1,34 @@
+.horizontal-center {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+}
+.greenText{
+  color: #005B52;
+
+}
+.img-fluid {
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.img-fluid {
+  width: 100px;
+  height: 100px;
+  object-fit: cover; /* Wichtig: Beschnitten, um das Seitenverhältnis zu erhalten */
+  object-position: center center; /* Optional: Zentriert das Bild im Container */
+  display: block;
+  border-width: 50px ;
+}
+.greenButton{
+  background-color: #005B52;
+  color: white;
+  border-radius: 15px;
+  font-size: 10px;
+}
+.vertical-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
