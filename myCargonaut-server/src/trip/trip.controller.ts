@@ -7,7 +7,8 @@ import {
   NotFoundException,
   Param,
   ParseIntPipe,
-  Post,
+  Patch,
+  Post, Put,
   Session,
   UseGuards,
 } from '@nestjs/common';
@@ -234,6 +235,28 @@ export class TripController {
     } catch (err) {
       throw new BadRequestException('An error occurred: ' + err.message);
     }
+  }
+  @ApiResponse({
+    type: OkDTO,
+    description: 'accepts a trip',
+  })
+  @ApiBearerAuth()
+  @UseGuards(IsLoggedInGuard)
+  @Put('accept/:id')
+  async acceptTrip(@Session() session: SessionData,@Param('id', ParseIntPipe) tripId: number): Promise<OkDTO> {
+    const userId = session.currentUser;
+    try {
+      await this.tripService.acceptTrip(tripId, userId);
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw new NotFoundException(error.message);
+      }
+      if (error instanceof BadRequestException) {
+        throw new BadRequestException(error.message);
+      }
+      throw error;
+    }
+    return new OkDTO(true, 'trip was accepted');
   }
   @ApiResponse({
     type: OkDTO,

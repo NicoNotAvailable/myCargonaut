@@ -158,6 +158,54 @@ export class TripService {
     }
     return requestTrip;
   }
+
+  async acceptTrip(tripId: number, userId: number): Promise<void> {
+    const trip = await this.tripRepository.findOne({
+      where: { id: tripId },
+    });
+    if (trip instanceof OfferTripDB) {
+      await this.acceptOfferTrip(tripId, userId);
+    }
+    if (trip instanceof RequestTripDB) {
+      await this.acceptRequestTrip(tripId, userId);
+    }
+  }
+  async acceptOfferTrip(tripId: number, userId: number): Promise<void> {
+    const trip = await this.offerTripRepository.findOne({
+      where: { id: tripId },
+      relations: ['drive', 'drive.user'],
+    });
+    if (!trip) {
+      throw new NotFoundException('Trip not found');
+    }
+    if (trip.drive.user.id !== userId) {
+      throw new UnauthorizedException('You are not the creator of this drive');
+    }
+    trip.isAccepted = true;
+    await this.tripRepository.save(trip);
+    const otherTrips = await this.offerTripRepository.find({
+      where: { drive: trip.drive, isAccepted: false },
+    });
+    await this.tripRepository.remove(otherTrips);
+  }
+  async acceptRequestTrip(tripId: number, userId: number): Promise<void> {
+    const trip = await this.requestTripRepository.findOne({
+      where: { id: tripId },
+      relations: ['drive', 'drive.user'],
+    });
+    if (!trip) {
+      throw new NotFoundException('Trip not found');
+    }
+    if (trip.drive.user.id !== userId) {
+      throw new UnauthorizedException('You are not the creator of this drive');
+    }
+    trip.isAccepted = true;
+    await this.tripRepository.save(trip);
+    const otherTrips = await this.requestTripRepository.find({
+      where: { drive: trip.drive, isAccepted: false },
+    });
+    await this.tripRepository.remove(otherTrips);
+  }
   async deleteTrip(tripId: number, userId: number) {
     const trip = await this.tripRepository.findOne({
       where: { id: tripId },
