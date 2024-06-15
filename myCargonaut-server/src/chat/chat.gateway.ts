@@ -10,7 +10,6 @@ import {
 import { Server, Socket } from 'socket.io';
 import { ChatService } from './chat.service';
 import { TripService } from '../trip/trip.service';
-import { UserService } from "../user/user.service";
 
 interface ActiveRoom {
   tripId: number;
