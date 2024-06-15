@@ -309,12 +309,23 @@ export class DriveController {
   @Put('offer/:id')
   async updateOffer(
     @Param('id') offerId: number,
-    @Body() updateOfferDTO: CreateOfferDTO,
+    @Body() body: CreateOfferDTO,
     @Session() session: SessionData,
   ): Promise<OkDTO> {
     const userId = session.currentUser;
+    const car = await this.vehicleService.getCarById(body.carID);
+    if (!car) {
+      throw new BadRequestException('Car was not found');
+    }
+    const trailer = body.trailerID
+      ? await this.vehicleService.getTrailerById(body.trailerID)
+      : null;
+    if (body.trailerID && !trailer) {
+      throw new BadRequestException('Trailer was not found');
+    }
+    this.validateOfferInput(body);
     try {
-      await this.driveService.updateOffer(offerId, userId, updateOfferDTO);
+      await this.driveService.updateOffer(offerId, userId, body);
     } catch (error) {
       if (error instanceof NotFoundException) {
         throw new NotFoundException(error.message);
@@ -339,15 +350,12 @@ export class DriveController {
   async updateRequest(
     @Param('id') requestId: number,
     @Session() session: SessionData,
-    @Body() updateRequestDTO: CreateRequestDTO,
+    @Body() body: CreateRequestDTO,
   ): Promise<OkDTO> {
     const userId = session.currentUser;
+    this.validateRequestInput(body);
     try {
-      await this.driveService.updateRequest(
-        requestId,
-        userId,
-        updateRequestDTO,
-      );
+      await this.driveService.updateRequest(requestId, userId, body);
     } catch (error) {
       if (error instanceof NotFoundException) {
         throw new NotFoundException(error.message);
