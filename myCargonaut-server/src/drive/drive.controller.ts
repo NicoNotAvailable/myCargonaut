@@ -8,6 +8,7 @@ import {
   Param,
   ParseIntPipe,
   Post,
+  Put,
   Session,
   UseGuards,
 } from '@nestjs/common';
@@ -293,6 +294,67 @@ export class DriveController {
     } catch (err) {
       throw new BadRequestException('An error occurred: ' + err.message);
     }
+  }
+  @ApiResponse({
+    type: OkDTO,
+    description: 'update an offer',
+  })
+  @ApiBearerAuth()
+  @UseGuards(IsLoggedInGuard)
+  @ApiParam({
+    name: 'id',
+    type: 'number',
+    description: 'ID of the offer to be updated',
+  })
+  @Put('offer/:id')
+  async updateOffer(
+    @Param('id') offerId: number,
+    @Body() updateOfferDTO: CreateOfferDTO,
+    @Session() session: SessionData,
+  ): Promise<OkDTO> {
+    const userId = session.currentUser;
+    try {
+      await this.driveService.updateOffer(offerId, userId, updateOfferDTO);
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw new NotFoundException(error.message);
+      }
+      throw error;
+    }
+    return new OkDTO(true, 'offer was updated');
+  }
+
+  @ApiResponse({
+    type: OkDTO,
+    description: 'updates a request',
+  })
+  @ApiBearerAuth()
+  @UseGuards(IsLoggedInGuard)
+  @ApiParam({
+    name: 'id',
+    type: 'number',
+    description: 'ID of the request to be updated',
+  })
+  @Put('request/:id')
+  async updateRequest(
+    @Param('id') requestId: number,
+    @Session() session: SessionData,
+    @Body() updateRequestDTO: CreateRequestDTO,
+  ): Promise<OkDTO> {
+    const userId = session.currentUser;
+    try {
+      await this.driveService.updateRequest(
+        requestId,
+        userId,
+        updateRequestDTO,
+      );
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw new NotFoundException(error.message);
+      }
+      throw error;
+    }
+    return new OkDTO(true, 'request was updated');
   }
 
   @ApiResponse({
