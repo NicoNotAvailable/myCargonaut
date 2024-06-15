@@ -1,34 +1,40 @@
-import { Component, Inject } from '@angular/core';
+import {Component, Inject} from '@angular/core';
 import {
   MAT_DIALOG_DATA,
+  MatDialog,
+  MatDialogClose,
   MatDialogActions,
   MatDialogContent,
   MatDialogRef,
   MatDialogTitle
 } from "@angular/material/dialog";
-import { MatFormField } from "@angular/material/form-field";
-import { FormsModule } from "@angular/forms";
-import { MatInput } from "@angular/material/input";
-import { MatButton } from "@angular/material/button";
+import {MatFormField} from "@angular/material/form-field";
+import {FormsModule} from "@angular/forms";
+import {MatInput} from "@angular/material/input";
+import {MatButton} from "@angular/material/button";
+import {MatButtonModule} from "@angular/material/button";
+import {NgIf} from "@angular/common";
 
 @Component({
   selector: 'app-drive-modal',
   standalone: true,
   imports: [
-    //MatFormField,
+    MatFormField,
     FormsModule,
     MatDialogTitle,
     MatFormField,
     MatDialogContent,
     MatInput,
     MatDialogActions,
-    MatButton
-    /*,
-       MatDialogTitle,
-       MatDialogContent,
-       MatInput,
-       MatButton,
-       MatDialogActions*/
+    MatButton,
+    NgIf,
+    MatDialogTitle,
+    MatDialogContent,
+    MatInput,
+    MatButton,
+    MatDialogActions,
+    MatButtonModule,
+    MatDialogClose,
   ],
   templateUrl: './drive-modal.component.html',
   styleUrl: './drive-modal.component.css'
@@ -62,16 +68,22 @@ export class DriveModalComponent {
   onSubmit(): void {
     if (this.data.template === 'tripCargo') {
       console.log('Weight:', this.cargoWeight);
-      this.dialogRef.close({ cargoDescription: this.cargoDescription, cargoWeight: this.cargoWeight,
-        cargoLength: this.cargoLength, cargoWidth: this.cargoWidth, cargoHeight: this.cargoHeight });
+      this.dialogRef.close({
+        cargoDescription: this.cargoDescription, cargoWeight: this.cargoWeight,
+        cargoLength: this.cargoLength, cargoWidth: this.cargoWidth, cargoHeight: this.cargoHeight
+      });
     } else if (this.data.template === 'tripCar') {
       console.log('Car Weight:', this.carWeight, 'Car Length:', this.carLength);
-      this.dialogRef.close({carWeight: this.carWeight,
-        carLength: this.carLength, carWidth: this.carWidth, carHeight: this.carHeight });
+      this.dialogRef.close({
+        carWeight: this.carWeight,
+        carLength: this.carLength, carWidth: this.carWidth, carHeight: this.carHeight
+      });
     } else if (this.data.template === 'tripTrailer') {
       console.log('Trailer Weight:', this.trailerWeight, 'Trailer Length:', this.trailerLength);
-      this.dialogRef.close({trailerWeight: this.trailerWeight,
-        trailerLength: this.trailerLength, trailerWidth: this.trailerWidth, trailerHeight: this.trailerHeight });
+      this.dialogRef.close({
+        trailerWeight: this.trailerWeight,
+        trailerLength: this.trailerLength, trailerWidth: this.trailerWidth, trailerHeight: this.trailerHeight
+      });
     }
   }
 }

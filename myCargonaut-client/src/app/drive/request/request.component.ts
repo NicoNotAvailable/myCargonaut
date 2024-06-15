@@ -6,7 +6,7 @@ import { FormsModule } from "@angular/forms";
 import { FaIconComponent } from "@fortawesome/angular-fontawesome";
 import { NgbInputDatepicker } from "@ng-bootstrap/ng-bootstrap";
 import { NgbActiveModal, NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
-import { MatDialog } from '@angular/material/dialog';
+import {MatDialog, MatDialogRef} from '@angular/material/dialog';
 import { DriveModalComponent } from '../drive-modal/drive-modal.component';
 
 @Component({
@@ -18,7 +18,7 @@ import { DriveModalComponent } from '../drive-modal/drive-modal.component';
     FormsModule,
     FaIconComponent,
     NgbInputDatepicker,
-    NgOptimizedImage
+    NgOptimizedImage,
   ],
   templateUrl: './request.component.html',
   styleUrl: './request.component.css'
