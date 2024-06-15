@@ -1,241 +1,265 @@
 <div class="container">
   <div class="row m-2 mt-4">
-    <span>20 passende Angebote gefunden</span>
+    @if (offerBool){
+      <span>{{ allOffers.length }} passende Angebote gefunden</span>
+    } @else if (requestBool) {
+      <span>{{ allRequests.length }} passende Suchen gefunden</span>
+    }
   </div>
 
   <div class="container">
-    <div class="row">
-      <div class="col-lg-12 col-12">
-        <div class="card m-4">
-          <div class="row no-gutters flex-column flex-lg-row card-horizontal">
-            <div class="col-lg-3">
-              <div class="horizontal-center">
 
-                <img src="./assets/searchCard/cutout-car-images.jpg" class="img-fluid rounded-start bild" alt="...">
+    @if (offerBool){
+      <!-- Cards für Offer -->
+      @for (element of allOffers; track $index) {
+        <div class="row">
+          <div class="col-lg-12 col-12">
+            <div class="card m-4">
+              <div class="row no-gutters flex-column flex-lg-row card-horizontal">
+                <div class="col-lg-3">
+                  <div class="horizontal-center">
 
-              </div>
-            </div>
-            <div class="col-lg-9">
-              <div class="card-body">
-                <div class="container-fluid">
-                  <div class="row mb-4">
-                    <div class="col-12 col-lg-6">
-                      <div class="row">
-                        <h5 class="card-title greenText">Test name dies das</h5>
-                      </div>
-                      <div class="row">
-                        <div class="col-6">
-                          <span>Elon Musk</span>
-                        </div>
-                        <div class="col-6">
-                          <img src="./assets/star-fill.svg" alt="star1" class="blueText">
-                          <img src="./assets/star-fill.svg" alt="star1" class="blueText">
-                          <img src="./assets/star-fill.svg" alt="star1" class="blueText">
-                          <img src="./assets/star-fill.svg" alt="star1" class="blueText">
-                          <img src="./assets/star-fill.svg" alt="star1" class="blueText">
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-6 col-lg-3">
-                      <h5 class="greenText">06.09.4002</h5>
-                    </div>
-                    <div class="col-6 col-lg-3">
-                      <div class="horizontal-right">
-                        <h5 class="blueText">69€</h5>
-                      </div>
-                    </div>
+                    <img src="{{element.carPicture}}" class="img-fluid rounded-start bild" alt="...">
+
                   </div>
-
-                  <div class="row">
-                    <div class="col-12 col-lg-3">
-                      <div class="row">
-                        <div class="col-6 col-lg-4">
-                          <span>von:</span>
-                        </div>
-                        <div class="col-6 col-lg-8">
-                          <span class="highlightText">30324 LA</span>
-                        </div>
-                      </div>
-                      <div class="row">
-                        <div class="col-6 col-lg-4">
-                          <span>nach:</span>
-                        </div>
-                        <div class="col-6 col-lg-8">
-                          <span class="highlightText">35390 Gießen</span>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div class="col-12 col-lg-4">
-                      <div class="row">
-                        <div class="col-6">
-                          <span>max Gewicht:</span>
-                        </div>
-                        <div class="col-6">
-                          <span class="highlightText">30000 Kilo</span>
-                        </div>
-                      </div>
-                      <div class="row">
-                        <div class="col-6">
-                          <span>max Maße:</span>
-                        </div>
-                        <div class="col-6">
-                          <span class="highlightText">5m / 3m / 2m</span>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div class="col-12 col-lg-3">
-                      <div class="row">
-                        <div class="col-6">
-                          <span>{{ plaetze }}:</span>
-                        </div>
-                        <div class="col-6">
-                          <span class="highlightText">3</span>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div class="col-12 col-lg-2">
-                      <div class="horizontal-right">
-                        <a href="{{href}}">
-                          <button type="button" class="btn btn-primary greenButton">{{ buttonText }}</button>
-                        </a>
-                      </div>
-                    </div>
-                  </div>
-
                 </div>
-
-              </div>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-
-    @for (element of allOffers; track $index) {
-      <div class="row">
-        <div class="col-lg-12 col-12">
-          <div class="card m-4">
-            <div class="row no-gutters flex-column flex-lg-row card-horizontal">
-              <div class="col-lg-3">
-                <div class="horizontal-center">
-
-                  <img src="{{element.carPicture}}" class="img-fluid rounded-start bild" alt="...">
-
-                </div>
-              </div>
-              <div class="col-lg-9">
-                <div class="card-body">
-                  <div class="container-fluid">
-                    <div class="row mb-4">
-                      <div class="col-12 col-lg-6">
-                        <div class="row">
-                          <h5 class="card-title greenText">{{ element.name }}</h5>
-                        </div>
-                        <div class="row">
-                          <div class="col-6">
-                            <span>{{ element.user.firstName }} {{ element.user.lastName }}</span>
+                <div class="col-lg-9">
+                  <div class="card-body">
+                    <div class="container-fluid">
+                      <div class="row mb-4">
+                        <div class="col-12 col-lg-6">
+                          <div class="row">
+                            <h5 class="card-title greenText">{{ element.name }}</h5>
                           </div>
-                          <div class="col-6">
-                            <img src="./assets/star-fill.svg" alt="star1" class="blueText">
-                            <img src="./assets/star-fill.svg" alt="star1" class="blueText">
-                            <img src="./assets/star-fill.svg" alt="star1" class="blueText">
-                            <img src="./assets/star-fill.svg" alt="star1" class="blueText">
-                            <img src="./assets/star-fill.svg" alt="star1" class="blueText">
+                          <div class="row">
+                            <div class="col-6">
+                              <span>{{ element.user.firstName }} {{ element.user.lastName }}</span>
+                            </div>
+                            <div class="col-6">
+                              <img src="./assets/star-fill.svg" alt="star1" class="blueText">
+                              <img src="./assets/star-fill.svg" alt="star1" class="blueText">
+                              <img src="./assets/star-fill.svg" alt="star1" class="blueText">
+                              <img src="./assets/star-fill.svg" alt="star1" class="blueText">
+                              <img src="./assets/star-fill.svg" alt="star1" class="blueText">
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-6 col-lg-3">
+                          <h5 class="greenText">{{ element.date | dateFormat }}</h5>
+                        </div>
+                        <div class="col-6 col-lg-3">
+                          <div class="horizontal-right">
+                            <h5 class="blueText">{{ element.price }}€</h5>
                           </div>
                         </div>
                       </div>
-                      <div class="col-6 col-lg-3">
-                        <h5 class="greenText">{{ element.date | dateFormat }}</h5>
-                      </div>
-                      <div class="col-6 col-lg-3">
-                        <div class="horizontal-right">
-                          <h5 class="blueText">{{ element.price }}€</h5>
-                        </div>
-                      </div>
-                    </div>
 
-                    <div class="row">
-                      <div class="col-12 col-lg-3">
-                        <div class="row">
-                          <div class="col-6 col-lg-4">
-                            <span>von:</span>
-                          </div>
-                          <div class="col-6 col-lg-8">
-                            @for (location of element.locations; track $index) {
-                              @if (location.stopNr == 1) {
-                                <span class="highlightText">{{ location.zipCode }} {{ location.city }}</span>
+                      <div class="row">
+                        <div class="col-12 col-lg-3">
+                          <div class="row">
+                            <div class="col-6 col-lg-4">
+                              <span>von:</span>
+                            </div>
+                            <div class="col-6 col-lg-8">
+                              @for (location of element.locations; track $index) {
+                                @if (location.stopNr == 1) {
+                                  <span class="highlightText">{{ location.zipCode }} {{ location.city }}</span>
+                                }
                               }
-                            }
+                            </div>
                           </div>
-                        </div>
-                        <div class="row">
-                          <div class="col-6 col-lg-4">
-                            <span>nach:</span>
-                          </div>
-                          <div class="col-6 col-lg-8">
-                            @for (location of element.locations; track $index) {
-                              @if (location.stopNr == 100) {
-                                <span class="highlightText">{{ location.zipCode }} {{ location.city }}</span>
+                          <div class="row">
+                            <div class="col-6 col-lg-4">
+                              <span>nach:</span>
+                            </div>
+                            <div class="col-6 col-lg-8">
+                              @for (location of element.locations; track $index) {
+                                @if (location.stopNr == 100) {
+                                  <span class="highlightText">{{ location.zipCode }} {{ location.city }}</span>
+                                }
                               }
-                            }
+                            </div>
                           </div>
                         </div>
-                      </div>
 
-                      <div class="col-12 col-lg-4">
-                        <div class="row">
-                          <div class="col-6">
-                            <span>max Gewicht:</span>
+                        <div class="col-12 col-lg-4">
+                          <div class="row ">
+                            <div class="col-6">
+                              <span>Gesamtgewicht:</span>
+                            </div>
+                            <div class="col-6" >
+                              <span class="highlightText">{{ element.maxCWeight }} kg</span>
+                            </div>
                           </div>
-                          <div class="col-6">
-                            <span class="highlightText">{{ element.maxCWeight }} kg</span>
-                          </div>
-                        </div>
-                        <div class="row">
-                          <div class="col-6">
-                            <span>max Maße:</span>
-                          </div>
-                          <div class="col-6">
+                          <div class="row">
+                            <div class="col-6">
+                              <span>max Maße:</span>
+                            </div>
+                            <div class="col-6">
                             <span class="highlightText">{{ element.maxCLength }} cm/ {{ element.maxCWidth }}
                               cm / {{ element.maxCHeight }} cm</span>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="col-12 col-lg-3">
+                          <div class="row">
+                            <div class="col-6">
+                              <span>{{ plaetze }}:</span>
+                            </div>
+                            <div class="col-6">
+                              <span class="highlightText">{{ element.seats }}</span>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="col-12 col-lg-2">
+                          <div class="horizontal-right">
+                            <a href="{{href}}">
+                              <button type="button" class="btn btn-primary greenButton">{{ buttonText }}</button>
+                            </a>
                           </div>
                         </div>
                       </div>
 
-                      <div class="col-12 col-lg-3">
-                        <div class="row">
-                          <div class="col-6">
-                            <span>{{ plaetze }}:</span>
-                          </div>
-                          <div class="col-6">
-                            <span class="highlightText">{{ element.seats }}</span>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div class="col-12 col-lg-2">
-                        <div class="horizontal-right">
-                          <a href="{{href}}">
-                            <button type="button" class="btn btn-primary greenButton">{{ buttonText }}</button>
-                          </a>
-                        </div>
-                      </div>
                     </div>
 
                   </div>
-
                 </div>
               </div>
             </div>
-          </div>
 
+          </div>
         </div>
-      </div>
+      }
+
+    } @else if (requestBool) {
+      <!-- Cards für Request -->
+
+      @for (element of allRequests; track $index) {
+        <div class="row">
+          <div class="col-lg-12 col-12">
+            <div class="card m-4">
+              <div class="row no-gutters flex-column flex-lg-row card-horizontal">
+                <div class="col-lg-3">
+                  <div class="horizontal-center">
+
+                    <img src="{{element.user.profilePic}}" class="img-fluid rounded-start bild" alt="...">
+
+                  </div>
+                </div>
+                <div class="col-lg-9">
+                  <div class="card-body">
+                    <div class="container-fluid">
+                      <div class="row mb-4">
+                        <div class="col-12 col-lg-6">
+                          <div class="row">
+                            <h5 class="card-title greenText">{{ element.name }}</h5>
+                          </div>
+                          <div class="row">
+                            <div class="col-6">
+                              <span>{{ element.user.firstName }} {{ element.user.lastName }}</span>
+                            </div>
+                            <div class="col-6">
+                              <img src="./assets/star-fill.svg" alt="star1" class="blueText">
+                              <img src="./assets/star-fill.svg" alt="star1" class="blueText">
+                              <img src="./assets/star-fill.svg" alt="star1" class="blueText">
+                              <img src="./assets/star-fill.svg" alt="star1" class="blueText">
+                              <img src="./assets/star-fill.svg" alt="star1" class="blueText">
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-6 col-lg-3">
+                          <h5 class="greenText">{{ element.date | dateFormat }}</h5>
+                        </div>
+                        <div class="col-6 col-lg-3">
+                          <div class="horizontal-right">
+                            <h5 class="blueText">{{ element.price }}€</h5>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="row">
+                        <div class="col-12 col-lg-3">
+                          <div class="row">
+                            <div class="col-6 col-lg-4">
+                              <span>von:</span>
+                            </div>
+                            <div class="col-6 col-lg-8">
+                              @for (location of element.locations; track $index) {
+                                @if (location.stopNr == 1) {
+                                  <span class="highlightText">{{ location.zipCode }} {{ location.city }}</span>
+                                }
+                              }
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-6 col-lg-4">
+                              <span>nach:</span>
+                            </div>
+                            <div class="col-6 col-lg-8">
+                              @for (location of element.locations; track $index) {
+                                @if (location.stopNr == 100) {
+                                  <span class="highlightText">{{ location.zipCode }} {{ location.city }}</span>
+                                }
+                              }
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="col-12 col-lg-4">
+                          <div class="row ">
+                            <div class="col-6">
+                              <span>Gesamtgewicht:</span>
+                            </div>
+                            <div class="col-6" >
+
+                              <span class="highlightText">{{gewichte[$index]}}kg</span>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-6">
+                              <span>Gesamtmaße:</span>
+                            </div>
+                            <div class="col-6">
+                             <span class="highlightText">{{ masse[ ( $index * 3 ) ] }} cm/ {{ masse[ ( $index * 3 ) +1]  }}
+                               cm / {{ masse[ ( $index * 3 ) + 2 ]  }} cm</span>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="col-12 col-lg-3">
+                          <div class="row">
+                            <div class="col-6">
+                              <span>{{ plaetze }}:</span>
+                            </div>
+                            <div class="col-6">
+                              <span class="highlightText">{{ element.seats }}</span>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="col-12 col-lg-2">
+                          <div class="horizontal-right">
+                            <a href="{{href}}">
+                              <button type="button" class="btn btn-primary greenButton">{{ buttonText }}</button>
+                            </a>
+                          </div>
+                        </div>
+                      </div>
+
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      }
     }
+
 
 
   </div>

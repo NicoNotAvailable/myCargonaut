@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import {SearchCardComponent} from "../../search-main/search-card/search-card.component";
 import {SearchInputComponent} from "../../search-main/search-input/search-input.component";
+import {HttpClient} from "@angular/common/http";
+import {request} from "../../requests";
 
 @Component({
   selector: 'app-search-main-gesucht',
@@ -14,4 +16,58 @@ import {SearchInputComponent} from "../../search-main/search-input/search-input.
 })
 export class SearchMainGesuchtComponent {
 
+  allRequests: request[] = [];
+  requestBool: boolean = true;
+
+  gesamtgewicht: number = 0;
+  gewichte : number[] = [];
+
+  gesamtLength : number = 0;
+  gesamtWidth: number = 0;
+  gesamtHeight: number = 0;
+
+  masse : number[] = [];
+  alleMasse : number[] = [];
+
+  constructor(private http: HttpClient) { }
+
+  ngOnInit(): void {
+    this.http.get("http://localhost:8000/drive/all/requests", { withCredentials: true })
+      .subscribe(
+        (response: any) => {
+          this.allRequests = response;
+
+          console.log(this.allRequests[0]);
+
+          for (let elements of this.allRequests) {
+            for (let cargo of elements.cargo) {
+                this.gesamtgewicht = this.gesamtgewicht + cargo.weight;
+            }
+            this.gewichte.push(this.gesamtgewicht);
+            this.gesamtgewicht = 0;
+          }
+
+          for (let elements of this.allRequests) {
+            for (let cargo of elements.cargo) {
+              this.gesamtLength = this.gesamtLength + cargo.length;
+              this.gesamtHeight = this.gesamtHeight + cargo.height;
+              this.gesamtWidth = this.gesamtWidth + cargo.width;
+            }
+
+            this.masse.push(this.gesamtLength);
+            this.masse.push(this.gesamtHeight);
+            this.masse.push(this.gesamtWidth);
+
+            this.gesamtWidth = 0;
+            this.gesamtLength = 0;
+            this.gesamtHeight = 0;
+
+          }
+
+        },
+        (error: { error: { message: string; }; }) => {
+          console.error('Fehler beim Abrufen der Angebote:', error);
+        }
+      );
+  }
 }

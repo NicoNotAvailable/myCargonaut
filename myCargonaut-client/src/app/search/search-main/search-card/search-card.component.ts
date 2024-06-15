@@ -3,14 +3,18 @@ import {NavigationEnd, Router} from "@angular/router";
 import {filter} from "rxjs/operators";
 
 import {offer} from "../../offers"
+import {request} from "../../requests"
+
 import {DateFormatPipe} from "../../date-format.pipe";
+import {NgIf} from "@angular/common";
 
 
 @Component({
   selector: 'app-search-card',
   standalone: true,
   imports: [
-    DateFormatPipe
+    DateFormatPipe,
+    NgIf
   ],
   templateUrl: './search-card.component.html',
   styleUrl: './search-card.component.css'
@@ -22,6 +26,11 @@ export class SearchCardComponent {
   href:string ="";
 
   @Input() allOffers!: offer[];
+  @Input() allRequests!: request[];
+  @Input() gewichte!: number[];
+  @Input() masse!: number[];
+  @Input() requestBool!: boolean;
+  @Input() offerBool!: boolean;
 
   constructor(private router: Router) {
   }
