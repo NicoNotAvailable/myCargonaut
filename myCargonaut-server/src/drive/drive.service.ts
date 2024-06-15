@@ -80,10 +80,12 @@ export class DriveService {
       const savedOffer = await this.offerRepository.save(newOffer);
 
       const locationPromises = body.location.map(
-        (locationData: CreateLocationDTO) => {
+        (locationData: CreateLocationDTO, index: number) => {
           const newLocation = this.locationRepository.create(locationData);
           newLocation.drive = savedOffer;
-          this.locationRepository.insert(newLocation);
+          newLocation.stopNr =
+            index === body.location.length - 1 ? 100 : locationData.stopNr;
+          return this.locationRepository.insert(newLocation);
         },
       );
 
@@ -119,9 +121,11 @@ export class DriveService {
       await Promise.all(cargoPromises);
     }
     const locationPromises = body.location.map(
-      (locationData: CreateLocationDTO) => {
+      (locationData: CreateLocationDTO, index: number) => {
         const newLocation = this.locationRepository.create(locationData);
         newLocation.drive = savedRequest;
+        newLocation.stopNr =
+          index === body.location.length - 1 ? 100 : locationData.stopNr;
         return this.locationRepository.insert(newLocation);
       },
     );
