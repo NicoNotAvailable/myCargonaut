@@ -1,4 +1,9 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DriveDB, OfferDB, RequestDB } from '../database/DriveDB';
 import { Repository } from 'typeorm';
@@ -152,5 +157,21 @@ export class TripService {
       throw new NotFoundException('Request Trip not found');
     }
     return requestTrip;
+  }
+  async deleteTrip(tripId: number, userId: number) {
+    const trip = await this.tripRepository.findOne({
+      where: { id: tripId },
+      relations: ['user'],
+    });
+    if (!trip) {
+      throw new NotFoundException('Trip not found');
+    }
+    if (trip.requesting.id !== userId) {
+      throw new UnauthorizedException('Trip is not yours!');
+    }
+    if (trip.isAccepted) {
+      throw new BadRequestException('Your trip already has been accepted');
+    }
+    await this.tripRepository.remove(trip);
   }
 }
