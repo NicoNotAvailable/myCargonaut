@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { DriveDB, OfferDB, RequestDB } from '../database/DriveDB';
@@ -175,5 +175,20 @@ export class DriveService {
       throw new NotFoundException('Requests not found');
     }
     return requests;
+  }
+  async deleteDrive(driveId: number, userId: number) {
+    const drive = await this.driveRepository.findOne({
+      where: { id: driveId },
+      relations: ['owner'],
+    });
+    if (!drive) {
+      throw new NotFoundException('Drive not found');
+    }
+    if (drive.user.id !== userId) {
+      throw new UnauthorizedException('Drive is not yours!');
+    }
+
+    // TODO: check if theres an active trip with the drive
+    await this.driveRepository.remove(drive);
   }
 }

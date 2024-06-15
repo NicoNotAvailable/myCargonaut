@@ -1,4 +1,9 @@
-import { IsPhoneNumber, IsString } from 'class-validator';
+import {
+  IsBoolean,
+  IsNotEmpty,
+  IsPhoneNumber,
+  IsString,
+} from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class EditUserDTO {
@@ -18,4 +23,13 @@ export class EditUserDTO {
   @ApiProperty()
   @IsString()
   profileText: string;
+
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  languages: string;
+
+  @ApiProperty()
+  @IsBoolean()
+  isSmoker: boolean;
 }
