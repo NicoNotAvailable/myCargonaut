@@ -1,10 +1,10 @@
 import {
-    Entity,
-    Column,
-    PrimaryGeneratedColumn,
-    ManyToOne,
-    OneToMany,
-    TableInheritance,
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  ManyToOne,
+  OneToMany,
+  TableInheritance,
 } from 'typeorm';
 import { UserDB } from './UserDB';
 import { StatusEnum } from './enums/StatusEnum';
@@ -14,21 +14,21 @@ import { MessageDB } from './MessageDB';
 @Entity()
 @TableInheritance({ column: { type: 'varchar', name: 'type' } })
 export class TripDB {
-    @PrimaryGeneratedColumn()
-    id: number;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @ManyToOne(() => UserDB)
-    requesting: UserDB;
+  @ManyToOne(() => UserDB)
+  requesting: UserDB;
 
-    @Column({ default: false })
-    isAccepted: boolean;
+  @Column({ default: false })
+  isAccepted: boolean;
 
-    @Column({ default: 0 })
-    status: StatusEnum;
+  @Column({ default: 0 })
+  status: StatusEnum;
 
-    @OneToMany(() => ReviewDB, (review) => review.trip)
-    reviews: Promise<ReviewDB[]>;
+  @OneToMany(() => ReviewDB, (review) => review.trip)
+  reviews: Promise<ReviewDB[]>;
 
-    @OneToMany(() => MessageDB, (message) => message.trip)
-    messages: Promise<MessageDB[]>;
+  @OneToMany(() => MessageDB, (message) => message.trip)
+  messages: Promise<MessageDB[]>;
 }

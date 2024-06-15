@@ -1,5 +1,5 @@
 export enum PriceTypeEnum {
-    perTrip,
-    perPerson,
-    perKG,
+  perTrip,
+  perPerson,
+  perKG,
 }
