@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import {Component, Input} from '@angular/core';
+import {NavigationEnd, Router} from "@angular/router";
+import {filter} from "rxjs/operators";
 
 @Component({
   selector: 'app-search-input',
@@ -8,5 +10,36 @@ import { Component } from '@angular/core';
   styleUrl: './search-input.component.css'
 })
 export class SearchInputComponent {
+  currentRoute: string = '';
+  topText: string = "";
+  placeholderInput: string = "";
 
+
+  constructor(private router: Router) {
+  }
+
+  ngOnInit(): void {
+    this.updateCurrentRoute();
+
+    this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd)
+    ).subscribe(() => {
+      this.updateCurrentRoute();
+    });
+  }
+
+  private updateCurrentRoute(): void {
+    const route = this.router.url.split('/').pop();
+    this.currentRoute = route ? route : '';
+    if (this.currentRoute === "search-request") {
+      this.topText = "Suche";
+      this.placeholderInput = "benötigte Plätze";
+    } else if (this.currentRoute === "search-offer") {
+      this.topText = "Fahrt";
+      this.placeholderInput = "verfügbare Plätze";
+
+    }
+
+
+  }
 }

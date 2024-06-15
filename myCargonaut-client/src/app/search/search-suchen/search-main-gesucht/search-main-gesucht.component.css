@@ -1,0 +1,14 @@
+.img-fluid {
+  border-radius: 50%;
+  overflow: hidden;
+  background-color: #1a9cc5;
+}
+
+.img-fluid {
+  width: 200px;
+  height: 200px;
+  object-fit: cover; /* Wichtig: Beschnitten, um das Seitenverhältnis zu erhalten */
+  object-position: center center; /* Optional: Zentriert das Bild im Container */
+  display: block;
+  border-width: 100px;
+}

@@ -14,7 +14,6 @@ import {NgClass} from "@angular/common";
 })
 export class TopAuswahlComponent implements OnInit {
   currentRoute: string = '';
-
   constructor(private router: Router) {}
 
   ngOnInit(): void {
@@ -30,5 +29,6 @@ export class TopAuswahlComponent implements OnInit {
   private updateCurrentRoute(): void {
     const route = this.router.url.split('/').pop();
     this.currentRoute = route ? route : '';
+
   }
 }
