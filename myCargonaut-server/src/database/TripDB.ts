@@ -23,9 +23,6 @@ export class TripDB {
     @Column({ default: false })
     isAccepted: boolean;
 
-    @Column({ default: 0 })
-    status: StatusEnum;
-
     @OneToMany(() => ReviewDB, (review) => review.trip)
     reviews: Promise<ReviewDB[]>;
 
