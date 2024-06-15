@@ -19,6 +19,7 @@ import { DateFormatPipe } from '../date-format.pipe';
 export class SearchMainComponent implements OnInit {
 
   allOffers: offer[] = [];
+  offerBool: boolean = true;
 
   constructor(private http: HttpClient) { }
 
