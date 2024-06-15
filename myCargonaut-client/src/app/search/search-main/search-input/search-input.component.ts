@@ -31,10 +31,10 @@ export class SearchInputComponent {
   private updateCurrentRoute(): void {
     const route = this.router.url.split('/').pop();
     this.currentRoute = route ? route : '';
-    if (this.currentRoute === "search-request") {
+    if (this.currentRoute === "searchRequest") {
       this.topText = "Suche";
       this.placeholderInput = "benötigte Plätze";
-    } else if (this.currentRoute === "search-offer") {
+    } else if (this.currentRoute === "searchOffer") {
       this.topText = "Fahrt";
       this.placeholderInput = "verfügbare Plätze";
 
