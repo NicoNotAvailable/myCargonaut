@@ -9,6 +9,8 @@ import {SearchMainGesuchtComponent} from "./search/search-suchen/search-main-ges
 import {MeineAnfragenComponent} from "./meineAnfragenGesuche/meine-anfragen/meine-anfragen.component";
 import {MeineGesucheComponent} from "./meineAnfragenGesuche/meine-gesuche/meine-gesuche.component";
 
+import {RequestAufAnfrageOSucheComponent} from "./meineAnfragenGesuche/request-auf-anfrage-osuche/request-auf-anfrage-osuche.component";
+
 export const routes: Routes = [
 
   {path: '', component: FrontpageComponent},
@@ -18,7 +20,10 @@ export const routes: Routes = [
   {path: 'profile', component: ProfileComponent},
   {path: 'searchOffer', component: SearchMainComponent},
   {path: 'searchRequest', component: SearchMainGesuchtComponent},
+
   {path: 'myOffer', component: MeineAnfragenComponent},
   {path: 'myRequest', component: MeineGesucheComponent},
+
+  {path: 'request', component: RequestAufAnfrageOSucheComponent},
 
 ];

@@ -13,6 +13,7 @@ export class SearchCardComponent {
   currentRoute: string = '';
   buttonText: string = "";
   plaetze: string = "";
+  href:string ="";
 
   constructor(private router: Router) {
   }
@@ -30,21 +31,23 @@ export class SearchCardComponent {
   private updateCurrentRoute(): void {
     const route = this.router.url.split('/').pop();
     this.currentRoute = route ? route : '';
-    if (this.currentRoute === "search-request") {
+    if (this.currentRoute === "searchRequest") {
       this.buttonText = "Suche ansehen";
       this.plaetze = "ben. Plätze";
 
-    } else if (this.currentRoute === "search-offer") {
+    } else if (this.currentRoute === "searchOffer") {
       this.buttonText = "Fahrt ansehen";
       this.plaetze = "verf. Plätze";
 
     } else if (this.currentRoute === "myOffer") {
       this.buttonText = "Anfragen ansehen";
       this.plaetze = "verf. Plätze";
+      this.href = "request";
 
     }else if (this.currentRoute === "myRequest") {
       this.buttonText = "Anfragen ansehen";
       this.plaetze = "ben. Plätze";
+      this.href = "request";
 
     }
 
