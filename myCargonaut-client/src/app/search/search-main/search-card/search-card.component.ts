@@ -40,8 +40,12 @@ export class SearchCardComponent {
 
     } else if (this.currentRoute === "myOffer") {
       this.buttonText = "Anfragen ansehen";
+      this.plaetze = "verf. Plätze";
+
     }else if (this.currentRoute === "myRequest") {
       this.buttonText = "Anfragen ansehen";
+      this.plaetze = "ben. Plätze";
+
     }
 
 

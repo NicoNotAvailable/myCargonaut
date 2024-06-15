@@ -16,8 +16,8 @@ export const routes: Routes = [
   { path: 'login', component: LoginComponent },
 
   {path: 'profile', component: ProfileComponent},
-  {path: 'search-offer', component: SearchMainComponent},
-  {path: 'search-request', component: SearchMainGesuchtComponent},
+  {path: 'searchOffer', component: SearchMainComponent},
+  {path: 'searchRequest', component: SearchMainGesuchtComponent},
   {path: 'myOffer', component: MeineAnfragenComponent},
   {path: 'myRequest', component: MeineGesucheComponent},
 
