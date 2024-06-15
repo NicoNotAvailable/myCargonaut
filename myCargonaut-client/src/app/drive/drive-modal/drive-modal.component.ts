@@ -1,27 +1,34 @@
 import { Component, Inject } from '@angular/core';
-/*import {
+import {
   MAT_DIALOG_DATA,
   MatDialogActions,
   MatDialogContent,
   MatDialogRef,
   MatDialogTitle
 } from "@angular/material/dialog";
-import { MatFormField } from "@angular/material/form-field";*/
+import { MatFormField } from "@angular/material/form-field";
 import { FormsModule } from "@angular/forms";
-/*import { MatInput } from "@angular/material/input";
-import { MatButton } from "@angular/material/button";*/
+import { MatInput } from "@angular/material/input";
+import { MatButton } from "@angular/material/button";
 
 @Component({
   selector: 'app-drive-modal',
   standalone: true,
   imports: [
     //MatFormField,
-    FormsModule /*,
+    FormsModule,
     MatDialogTitle,
+    MatFormField,
     MatDialogContent,
     MatInput,
-    MatButton,
-    MatDialogActions*/
+    MatDialogActions,
+    MatButton
+    /*,
+       MatDialogTitle,
+       MatDialogContent,
+       MatInput,
+       MatButton,
+       MatDialogActions*/
   ],
   templateUrl: './drive-modal.component.html',
   styleUrl: './drive-modal.component.css'
@@ -42,7 +49,7 @@ export class DriveModalComponent {
   trailerHeight: number = 0;
 
 
-  /*constructor(
+  constructor(
     public dialogRef: MatDialogRef<DriveModalComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
@@ -66,5 +73,5 @@ export class DriveModalComponent {
       this.dialogRef.close({trailerWeight: this.trailerWeight,
         trailerLength: this.trailerLength, trailerWidth: this.trailerWidth, trailerHeight: this.trailerHeight });
     }
-  }*/
+  }
 }
