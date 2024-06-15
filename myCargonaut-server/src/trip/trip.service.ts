@@ -157,26 +157,8 @@ export class TripService {
   async getUserTrips(
     userId: number,
   ): Promise<{ offerTrips: OfferTripDB[]; requestTrips: RequestTripDB[] }> {
-    try {
-      const offerTrips = await this.offerTripRepository.find({
-        where: { requesting: { id: userId } },
-        relations: [
-          'requesting',
-          'startLocation',
-          'endLocation',
-          'drive',
-          'cargo',
-        ],
-      });
-
-      const requestTrips = await this.requestTripRepository.find({
-        where: { requesting: { id: userId } },
-        relations: ['requesting', 'car', 'trailer', 'drive'],
-      });
-
-      return { offerTrips, requestTrips };
-    } catch (error) {
-      throw new NotFoundException('Trips not found');
-    }
+    const offerTrips = await this.getOwnOfferTrips(userId);
+    const requestTrips = await this.getOwnRequestTrips(userId);
+    return { offerTrips, requestTrips };
   }
 }
