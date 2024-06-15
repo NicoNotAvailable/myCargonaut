@@ -33,6 +33,7 @@ import * as bcrypt from 'bcryptjs';
 import { GetOwnUserDTO } from './DTO/GetOwnUserDTO';
 import { UserDB } from '../database/UserDB';
 import { EditUserProfileDTO } from './DTO/EditUserProfileDTO';
+import { GetOtherUserDTO } from './DTO/GetOtherUserDTO';
 
 @ApiTags('user')
 @Controller('user')

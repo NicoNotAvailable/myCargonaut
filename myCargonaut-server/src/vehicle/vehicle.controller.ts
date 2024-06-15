@@ -30,13 +30,12 @@ import { IsLoggedInGuard } from '../session/is-logged-in.guard';
 import { CreateCarDTO } from './DTO/CreateCarDTO';
 import { SessionData } from 'express-session';
 import { CreateTrailerDTO } from './DTO/CreateTrailerDTO';
-import { CarDB } from '../database/CarDB';
 import { GetCarDTO } from './DTO/GetCarDTO';
 import { GetTrailerDTO } from './DTO/GetTrailerDTO';
-import { TrailerDB } from '../database/TrailerDB';
 import { extname, join } from 'path';
 import { diskStorage } from 'multer';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { UtilsService } from '../utils/utils.service';
 
 @ApiTags('vehicle')
 @Controller('vehicle')
@@ -44,6 +43,7 @@ export class VehicleController {
   constructor(
     private readonly vehicleService: VehicleService,
     private readonly userService: UserService,
+    private readonly utilsService: UtilsService,
   ) {}
   private readonly logger = new Logger(VehicleController.name);
 
@@ -216,7 +216,7 @@ export class VehicleController {
       session.currentUser,
     );
     return cars.map((car) => {
-      return this.transformCarDBtoGetCarDTO(car);
+      return this.utilsService.transformCarDBtoGetCarDTO(car);
     });
   }
 
@@ -232,7 +232,7 @@ export class VehicleController {
       session.currentUser,
     );
     return trailers.map((trailer) => {
-      return this.transformTrailerDBtoGetTrailerDTO(trailer);
+      return this.utilsService.transformTrailerDBtoGetTrailerDTO(trailer);
     });
   }
 
@@ -249,7 +249,7 @@ export class VehicleController {
   async getCarById(@Param('id', ParseIntPipe) id: number): Promise<GetCarDTO> {
     try {
       const car = await this.vehicleService.getCarById(id);
-      return this.transformCarDBtoGetCarDTO(car);
+      return this.utilsService.transformCarDBtoGetCarDTO(car);
     } catch (error) {
       if (error instanceof NotFoundException) {
         throw error;
@@ -273,7 +273,7 @@ export class VehicleController {
   ): Promise<GetTrailerDTO> {
     try {
       const trailer = await this.vehicleService.getTrailerById(id);
-      return this.transformTrailerDBtoGetTrailerDTO(trailer);
+      return this.utilsService.transformTrailerDBtoGetTrailerDTO(trailer);
     } catch (error) {
       if (error instanceof NotFoundException) {
         throw error;
@@ -307,33 +307,5 @@ export class VehicleController {
       throw error;
     }
     return new OkDTO(true, 'Trailer was created');
-  }
-
-  transformCarDBtoGetCarDTO(car: CarDB): GetCarDTO {
-    const dto = new GetCarDTO();
-    dto.id = car.id;
-    dto.name = car.name;
-    dto.weight = car.weight;
-    dto.length = car.length;
-    dto.height = car.height;
-    dto.width = car.width;
-    dto.seats = car.seats;
-    dto.hasAC = car.hasAC;
-    dto.hasTelevision = car.hasTelevision;
-    dto.carPicture = car.carPicture;
-    return dto;
-  }
-
-  transformTrailerDBtoGetTrailerDTO(trailer: TrailerDB): GetTrailerDTO {
-    const dto = new GetTrailerDTO();
-    dto.id = trailer.id;
-    dto.name = trailer.name;
-    dto.weight = trailer.weight;
-    dto.length = trailer.length;
-    dto.height = trailer.height;
-    dto.width = trailer.width;
-    dto.isCooled = trailer.isCooled;
-    dto.isEnclosed = trailer.isEnclosed;
-    return dto;
   }
 }

@@ -51,7 +51,7 @@ export class DriveDB {
   timestamp: string;
 
   @OneToMany(() => LocationDB, (location) => location.drive)
-  location: Promise<LocationDB>;
+  location: Promise<LocationDB[]>;
 }
 
 @ChildEntity()

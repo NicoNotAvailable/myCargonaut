@@ -24,6 +24,10 @@ import { DriveController } from './drive/drive.controller';
 import { ChatGateway } from './chat/chat.gateway';
 import { ChatController } from './chat/chat.controller';
 import { ChatService } from './chat/chat.service';
+import { TripService } from './trip/trip.service';
+import { TripController } from './trip/trip.controller';
+import { LocationService } from './location/location.service';
+import { UtilsService } from './utils/utils.service';
 
 @Module({
   imports: [
@@ -72,6 +76,7 @@ import { ChatService } from './chat/chat.service';
     VehicleController,
     DriveController,
     ChatController,
+    TripController,
   ],
   providers: [
     AppService,
@@ -80,6 +85,9 @@ import { ChatService } from './chat/chat.service';
     DriveService,
     ChatService,
     ChatGateway,
+    LocationService,
+    UtilsService,
+    TripService,
   ],
 })
 export class AppModule {}
