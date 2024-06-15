@@ -25,6 +25,6 @@ export class TripDB {
     @OneToMany(() => ReviewDB, (review) => review.trip)
     reviews: Promise<ReviewDB[]>;
 
-    @OneToMany(() => MessageDB, (message) => message.trip)
+    @OneToMany(() => MessageDB, (message) => message.trip ,{ cascade: true })
     messages: Promise<MessageDB[]>;
 }

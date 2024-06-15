@@ -54,7 +54,7 @@ export class DriveDB {
   @Column({ default: 0 })
   status: StatusEnum;
 
-  @OneToMany(() => LocationDB, (location) => location.drive)
+  @OneToMany(() => LocationDB, (location) => location.drive, { cascade: true })
   location: Promise<LocationDB[]>;
 }
 
@@ -93,15 +93,15 @@ export class OfferDB extends DriveDB {
   @Column()
   maxTWidth: number;
 
-  @OneToMany(() => OfferTripDB, (trip) => trip.drive)
+  @OneToMany(() => OfferTripDB, (trip) => trip.drive, { cascade: true })
   trips: Promise<OfferTripDB[]>;
 }
 
 @ChildEntity()
 export class RequestDB extends DriveDB {
-  @OneToMany(() => CargoDB, (cargo) => cargo.request)
+  @OneToMany(() => CargoDB, (cargo) => cargo.request, { cascade: true })
   cargo: Promise<CargoDB[]>;
 
-  @OneToMany(() => RequestTripDB, (trip) => trip.drive)
+  @OneToMany(() => RequestTripDB, (trip) => trip.drive, { cascade: true })
   trips: Promise<RequestTripDB[]>;
 }

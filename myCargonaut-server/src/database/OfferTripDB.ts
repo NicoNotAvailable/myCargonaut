@@ -18,6 +18,6 @@ export class OfferTripDB extends TripDB {
     @Column()
     usedSeats: number;
 
-    @OneToMany(() => CargoDB, (cargo) => cargo.offerTrip)
+    @OneToMany(() => CargoDB, (cargo) => cargo.offerTrip, { cascade: true })
     cargo: Promise<CargoDB[]>;
 }
