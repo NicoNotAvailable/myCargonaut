@@ -3,6 +3,7 @@ import {FormsModule} from "@angular/forms";
 import {HttpClient, HttpClientModule} from "@angular/common/http";
 import { NgClass, NgIf } from "@angular/common";
 import { SessionService } from "../services/session.service";
+import { SocketService } from '../services/socket.service';
 
 @Component({
   selector: 'app-login',
@@ -13,6 +14,7 @@ import { SessionService } from "../services/session.service";
 })
 export class LoginComponent {
   public sessionService: SessionService = inject(SessionService);
+  public socketService: SocketService = inject(SocketService);
 
   isLoggedIn: boolean = false;
 
@@ -31,6 +33,13 @@ export class LoginComponent {
       console.log('Login status:', isLoggedIn);
       isLoggedIn == -1 ? this.isLoggedIn = false : this.isLoggedIn = true;
       if (this.isLoggedIn) {
+        const userId = this.sessionService.checkLoginNum();
+        this.socketService.emit('register', { userId: userId });
+        this.socketService.on('joinRooms').subscribe((trips: number[]) => {
+          trips.forEach(tripId => {
+            this.socketService.emit('createOrJoinRoom', { userId: userId, tripId });
+          });
+        });
         window.location.href = "/profile";
       }
     });
@@ -48,6 +57,15 @@ export class LoginComponent {
         console.log(response);
         this.textColor = "successText"
         this.message = "Anmeldung lief swaggy";
+
+        const userId = this.sessionService.checkLoginNum();
+        this.socketService.emit('register', { userId });
+        this.socketService.on('joinRooms').subscribe((trips: number[]) => {
+          trips.forEach(tripId => {
+            this.socketService.emit('createOrJoinRoom', { userId: userId, tripId });
+          });
+        });
+
         window.location.href = "/profile";
         setTimeout(() => {
           this.message = "";
