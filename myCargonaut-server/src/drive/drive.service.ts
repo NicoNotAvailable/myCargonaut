@@ -221,7 +221,6 @@ export class DriveService {
         isAccepted: true,
       },
     });
-
     if (acceptedRequestTrip) {
       throw new BadRequestException(
         'Drive cannot be deleted because there are accepted request trips associated with it',

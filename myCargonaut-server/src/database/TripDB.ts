@@ -22,9 +22,9 @@ export class TripDB {
     @Column({ default: false })
     isAccepted: boolean;
 
-    @OneToMany(() => ReviewDB, (review) => review.trip, { cascade: true })
+    @OneToMany(() => ReviewDB, (review) => review.trip, { onDelete: 'CASCADE' })
     reviews: Promise<ReviewDB[]>;
 
-    @OneToMany(() => MessageDB, (message) => message.trip ,{ cascade: true })
+    @OneToMany(() => MessageDB, (message) => message.trip ,{ onDelete: 'CASCADE' })
     messages: Promise<MessageDB[]>;
 }
