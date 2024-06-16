@@ -28,7 +28,6 @@ export class SearchMainComponent implements OnInit {
       .subscribe(
         (response: any) => {
           this.allOffers = response;
-          console.log(this.allOffers[0].locations[0].stopNr);
         },
         (error: { error: { message: string; }; }) => {
           console.error('Fehler beim Abrufen der Angebote:', error);

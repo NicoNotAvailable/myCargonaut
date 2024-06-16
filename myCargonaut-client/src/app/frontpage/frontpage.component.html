@@ -41,15 +41,19 @@
     </div>
 
     <div class="row">
-        <div class="card custom-card mx-auto">
-          <img src="https://via.placeholder.com/300x150" class="card-img-top" alt="Auto Bild">
-          <div class="card-body">
-            <h5 class="card-title">Entspannte fahrt in meinem Tesla</h5>
+      @for (element of allOffers; track $index) {
+
+          <div class="card custom-card mx-auto mt-3">
+            <img src="{{element.carPicture}}" class="card-img-top" alt="Auto Bild">
+            <div class="card-body">
+              <h5 class="card-title">{{element.name}}</h5>
+            </div>
+            <a href="" class="card-footer">
+              Zur Fahrt
+            </a>
           </div>
-          <a href="" class="card-footer">
-            Zur Fahrt
-          </a>
-        </div>
+
+      }
 
 
     </div>
