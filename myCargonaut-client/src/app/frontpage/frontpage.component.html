@@ -44,7 +44,9 @@
       @for (element of allOffers; track $index) {
 
           <div class="card custom-card mx-auto mt-3">
-            <img src="{{element.carPicture}}" class="card-img-top" alt="Auto Bild">
+            <div class="sizeRegulator">
+              <img [ngSrc]="window.location.protocol + '//' + window.location.host.replace('4200', '8000') + pathToImageArray[$index]" width="300" height="200" class="img-fluid " alt="">
+            </div>
             <div class="card-body">
               <h5 class="card-title">{{element.name}}</h5>
             </div>

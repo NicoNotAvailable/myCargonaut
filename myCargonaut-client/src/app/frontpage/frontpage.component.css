@@ -22,9 +22,6 @@
   border-radius: 20px;
 }
 
-
-
-
 .custom-card {
   width: 14rem;
   border: none;
@@ -63,3 +60,20 @@
   font-weight: bold;
   color: white;
 }
+.sizeRegulator {
+  height: 100px;
+  width: 100%; /* Optional: Kann je nach Bedarf festgelegt werden */
+  overflow: hidden; /* Verhindert das Überschreiten der Bildgrenzen */
+  position: relative;
+}
+
+.sizeRegulator img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  height: auto;
+  width: 100%; /* Passt das Bild an die Breite des Containers an */
+  transform: translate(-50%, -50%);
+  object-fit: cover; /* Beschneidet das Bild, um die gewünschte Höhe beizubehalten */
+}
+
