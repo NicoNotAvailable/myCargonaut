@@ -1,5 +1,10 @@
 <app-top-auswahl></app-top-auswahl>
 
-<app-search-card>
+<app-search-card
+  [allRequests] = "this.allRequests"
+  [gewichte] = "this.gewichte"
+  [masse] = "this.masse"
+  [requestBool] = "this.requestBool"
+>
   <img src="./assets/searchCard/cutout-car-images.jpg" class="img-fluid" alt="...">
 </app-search-card>

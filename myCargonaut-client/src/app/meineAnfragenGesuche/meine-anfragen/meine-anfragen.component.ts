@@ -22,10 +22,6 @@ export class MeineAnfragenComponent {
   offerBool: boolean = true;
 
 
-
-
-  buttonText: string = "Anfragen ansehen";
-
   constructor(private http: HttpClient, private router: Router) {
   }
 
@@ -38,6 +34,8 @@ export class MeineAnfragenComponent {
       .subscribe(
         (response: any) => {
           this.allOffers = response;
+
+          console.log(this.allOffers)
         },
         (error: { error: { message: string; }; }) => {
           console.error('Fehler beim Abrufen der Angebote:', error);

@@ -1,4 +1,4 @@
-export class requestOffer {
+export class offerTrips {
   id: number;
   requesting: { id: number, profilePic: string, firstName: string, lastName: string, languages: string, profileText: string, isSmoker: boolean };
   usedSeats: number;
