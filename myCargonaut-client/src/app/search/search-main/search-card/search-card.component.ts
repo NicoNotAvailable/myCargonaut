@@ -25,6 +25,8 @@ export class SearchCardComponent {
   plaetze: string = "";
   href:string ="";
 
+  bewertungsDummy : number = 4;
+
   @Input() allOffers!: offer[];
   @Input() allRequests!: request[];
   @Input() gewichte!: number[];
