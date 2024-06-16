@@ -1,14 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { UserDB } from '../database/UserDB';
-import { OfferDB } from '../database/DriveDB';
 import { OfferTripDB } from '../database/OfferTripDB';
-import { CreateCargoDTO } from '../cargo/DTO/CreateCargoDTO';
 import { TripDB } from '../database/TripDB';
 import { ReviewDB } from '../database/ReviewDB';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { RequestTripDB } from '../database/RequestTripDB';
-import { CargoDB } from '../database/CargoDB';
 import { CreateReviewDTO } from './DTO/CreateReviewDTO';
 
 @Injectable()
@@ -16,7 +12,7 @@ export class ReviewService {
   constructor(
     @InjectRepository(TripDB)
     private tripRepository: Repository<TripDB>,
-    @InjectRepository(OfferTripDB)
+    @InjectRepository(ReviewDB)
     private reviewRepository: Repository<ReviewDB>,
   ) {}
 
@@ -42,8 +38,7 @@ export class ReviewService {
     newReview.reliability = body.reliability;
     newReview.text = body.text;
     try {
-      const savedReview = await this.reviewRepository.save(newReview);
-      return newReview;
+      return await this.reviewRepository.save(newReview);
     } catch (error) {
       throw new Error('An error occurred while saving the review');
     }

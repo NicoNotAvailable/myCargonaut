@@ -5,10 +5,10 @@ import {
 } from 'class-validator';
 
 export class CreateReviewDTO {
-  @ApiProperty({ description: 'the id of the desired offer', example: 1 })
+  @ApiProperty({ description: 'the id of the trip', example: 1 })
   @IsNumber()
   @IsNotEmpty()
-  driveID: number;
+  tripID: number;
 
 
   @ApiProperty({ description: 'was the user punctual?', example: 2 })
