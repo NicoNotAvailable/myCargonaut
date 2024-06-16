@@ -75,3 +75,11 @@
   color: black;
   font-weight: bold;
 }
+.rounded-img {
+  border-radius: 50%;
+  overflow: hidden;
+  width: 200px;
+  height: 200px;
+  object-fit: cover; /* Wichtig: Beschnitten, um das Seitenverhältnis zu erhalten */
+  object-position: center center; /* Optional: Zentriert das Bild im Container */
+}

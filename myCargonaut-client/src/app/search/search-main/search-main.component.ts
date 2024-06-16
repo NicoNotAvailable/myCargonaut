@@ -32,7 +32,6 @@ export class SearchMainComponent implements OnInit {
 
     const prePath: string = "/vehicle/image/";
 
-    console.log("rtest")
 
     this.http.get("http://localhost:8000/drive/all/offers", { withCredentials: true })
       .subscribe(
@@ -43,7 +42,6 @@ export class SearchMainComponent implements OnInit {
             this.pathToImage = imagePath === "empty.png" ? "/empty.png" : prePath.concat(imagePath);
             this.pathToImageArray.push(this.pathToImage);
           }
-          console.log(this.pathToImageArray);
 
 
           this.allOffers = response;

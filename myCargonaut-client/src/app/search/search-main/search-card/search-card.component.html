@@ -19,7 +19,7 @@
                 <div class="col-lg-3">
                   <div class="horizontal-center vertical-center">
 
-                    <img [ngSrc]="window.location.protocol + '//' + window.location.host.replace('4200', '8000') + pathToImageArray[$index]" width="300" height="200" class="img-fluid rounded-start bild " alt="">
+                    <img [ngSrc]="window.location.protocol + '//' + window.location.host.replace('4200', '8000') + pathToImageArray[$index]" width="400" height="300" class="img-fluid rounded-start bild " alt="">
 
                   </div>
                 </div>
@@ -141,7 +141,7 @@
                 <div class="col-lg-3">
                   <div class="horizontal-center">
 
-                    <img src="{{element.user.profilePic}}" class="img-fluid rounded-start bild" alt="...">
+                    <img [ngSrc]="window.location.protocol + '//' + window.location.host.replace('4200', '8000') + pathToImageArray[$index]" width="300" height="200" class="img-fluid rounded-img " alt="">
 
                   </div>
                 </div>
@@ -259,6 +259,7 @@
             <div class="row no-gutters flex-column flex-lg-row card-horizontal">
               <div class="col-lg-3">
                 <div class="horizontal-center">
+
                   <ng-content></ng-content>
 
                 </div>

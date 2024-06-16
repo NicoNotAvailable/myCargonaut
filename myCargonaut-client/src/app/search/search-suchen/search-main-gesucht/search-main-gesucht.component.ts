@@ -29,13 +29,29 @@ export class SearchMainGesuchtComponent {
   masse : number[] = [];
   alleMasse : number[] = [];
 
+
+  pathToImage: string = "empty.png";
+
+  pathToImageArray: string[] = [];
+
   constructor(private http: HttpClient) { }
 
   ngOnInit(): void {
+
+    const prePath: string = "/user/image/";
+
     this.http.get("http://localhost:8000/drive/all/requests", { withCredentials: true })
       .subscribe(
         (response: any) => {
           this.allRequests = response;
+
+          for (let element of response) {
+            const imagePath: string = element.user.profilePic;
+            this.pathToImage = imagePath === "empty.png" ? "/empty.png" : prePath.concat(imagePath);
+            this.pathToImageArray.push(this.pathToImage);
+          }
+
+          console.log(this.pathToImageArray);
 
 
           for (let elements of this.allRequests) {
