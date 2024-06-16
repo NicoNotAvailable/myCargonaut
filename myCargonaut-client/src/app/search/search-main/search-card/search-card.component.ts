@@ -6,7 +6,7 @@ import {offer} from "../../offers"
 import {request} from "../../requests"
 
 import {DateFormatPipe} from "../../date-format.pipe";
-import {NgIf} from "@angular/common";
+import {NgForOf, NgIf} from "@angular/common";
 
 
 @Component({
@@ -14,7 +14,8 @@ import {NgIf} from "@angular/common";
   standalone: true,
   imports: [
     DateFormatPipe,
-    NgIf
+    NgIf,
+    NgForOf
   ],
   templateUrl: './search-card.component.html',
   styleUrl: './search-card.component.css'
@@ -25,7 +26,11 @@ export class SearchCardComponent {
   plaetze: string = "";
   href:string ="";
 
+  starFillSrc: string = './assets/star-fill.svg';
+  starEmptySrc: string = './assets/star.svg';
+
   bewertungsDummy : number = 4;
+  stars: number[] = [1, 2, 3, 4, 5];
 
   @Input() allOffers!: offer[];
   @Input() allRequests!: request[];

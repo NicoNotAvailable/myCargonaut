@@ -36,11 +36,9 @@
                               <span>{{ element.user.firstName }} {{ element.user.lastName }}</span>
                             </div>
                             <div class="col-6">
-                              <img src="./assets/star-fill.svg" alt="star1" class="blueText">
-                              <img src="./assets/star-fill.svg" alt="star1" class="blueText">
-                              <img src="./assets/star-fill.svg" alt="star1" class="blueText">
-                              <img src="./assets/star-fill.svg" alt="star1" class="blueText">
-                              <img src="./assets/star-fill.svg" alt="star1" class="blueText">
+                              <ng-container *ngFor="let star of stars; let i = index">
+                                <img [src]="i < bewertungsDummy ? starFillSrc : starEmptySrc" alt="star{{i + 1}}" class="blueText">
+                              </ng-container>
                             </div>
                           </div>
                         </div>
@@ -162,11 +160,9 @@
                               <span>{{ element.user.firstName }} {{ element.user.lastName }}</span>
                             </div>
                             <div class="col-6">
-                              <img src="./assets/star-fill.svg" alt="star1" class="blueText">
-                              <img src="./assets/star-fill.svg" alt="star1" class="blueText">
-                              <img src="./assets/star-fill.svg" alt="star1" class="blueText">
-                              <img src="./assets/star-fill.svg" alt="star1" class="blueText">
-                              <img src="./assets/star-fill.svg" alt="star1" class="blueText">
+                              <ng-container *ngFor="let star of stars; let i = index">
+                                <img [src]="i < bewertungsDummy ? starFillSrc : starEmptySrc" alt="star{{i + 1}}" class="blueText">
+                              </ng-container>
                             </div>
                           </div>
                         </div>
@@ -284,11 +280,9 @@
                             <span>Elon Musk</span>
                           </div>
                           <div class="col-6">
-                            <img src="./assets/star-fill.svg" alt="star1" class="blueText">
-                            <img src="./assets/star-fill.svg" alt="star1" class="blueText">
-                            <img src="./assets/star-fill.svg" alt="star1" class="blueText">
-                            <img src="./assets/star-fill.svg" alt="star1" class="blueText">
-                            <img src="./assets/star-fill.svg" alt="star1" class="blueText">
+                            <ng-container *ngFor="let star of stars; let i = index">
+                              <img [src]="i < bewertungsDummy ? starFillSrc : starEmptySrc" alt="star{{i + 1}}" class="blueText">
+                            </ng-container>
                           </div>
                         </div>
                       </div>
