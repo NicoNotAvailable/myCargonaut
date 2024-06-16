@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import { Component, inject, OnInit } from "@angular/core";
 import {ActivatedRoute, NavigationEnd, Router} from "@angular/router";
 import {offerTrips} from "../offerTrips";
 import {HttpClient} from "@angular/common/http";
@@ -6,6 +6,8 @@ import {filter} from "rxjs/operators";
 import { offer } from "../../search/offers";
 import { request } from "../../search/requests";
 import { requestTrips } from "../requestTrips";
+import { SessionService } from "../../services/session.service";
+import { UserService } from "../../services/user.service";
 
 @Component({
   selector: 'app-request-auf-anfrage-osuche',
@@ -41,7 +43,20 @@ export class RequestAufAnfrageOSucheComponent  implements OnInit {
 
   constructor(private route: ActivatedRoute, private http: HttpClient,  private router: Router) { }
 
+  isLoggedIn: boolean = false;
+  public sessionService: SessionService = inject(SessionService);
+  public userService: UserService = inject(UserService);
+
   ngOnInit(): void {
+
+    this.sessionService.checkLoginNum().then(isLoggedIn => {
+      isLoggedIn == -1 ? this.isLoggedIn = false : this.isLoggedIn = true;
+      if (!this.isLoggedIn && typeof window !== undefined) {
+        window.location.href = "/";
+      } else {
+
+      }
+    });
 
     this.id = Number(this.route.snapshot.paramMap.get('id'));    // Jetzt kannst du mit der ID arbeiten
     console.log('Request ID:', this.id);

@@ -1,10 +1,12 @@
-import { Component } from '@angular/core';
+import { Component, inject } from "@angular/core";
 import {SearchCardComponent} from "../../search/search-main/search-card/search-card.component";
 import {TopAuswahlComponent} from "../top-auswahl/top-auswahl.component";
 import { HttpClient } from "@angular/common/http";
 import { Router } from "@angular/router";
 import { offer } from "../../search/offers";
 import { request } from "../../search/requests";
+import { SessionService } from "../../services/session.service";
+import { UserService } from "../../services/user.service";
 
 
 @Component({
@@ -37,9 +39,21 @@ export class MeineGesucheComponent {
   constructor(private http: HttpClient, private router: Router) {
   }
 
+  isLoggedIn: boolean = false;
+  public sessionService: SessionService = inject(SessionService);
+  public userService: UserService = inject(UserService);
+
   ngOnInit(): void {
 
 
+    this.sessionService.checkLoginNum().then(isLoggedIn => {
+      isLoggedIn == -1 ? this.isLoggedIn = false : this.isLoggedIn = true;
+      if (!this.isLoggedIn && typeof window !== undefined) {
+        window.location.href = "/";
+      } else {
+
+      }
+    });
      this.http.get("http://localhost:8000/drive/user/requests", { withCredentials: true })
         .subscribe(
           (response: any) => {
