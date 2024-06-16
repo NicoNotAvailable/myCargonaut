@@ -2,11 +2,8 @@ import { BadRequestException, Body, Controller, NotFoundException, Post, Session
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { OkDTO } from '../serverDTO/OkDTO';
 import { IsLoggedInGuard } from '../session/is-logged-in.guard';
-import { CreateOfferTripDTO } from '../trip/DTO/CreateOfferTripDTO';
 import { SessionData } from 'express-session';
-import { DriveService } from '../drive/drive.service';
 import { UserService } from '../user/user.service';
-import { VehicleService } from '../vehicle/vehicle.service';
 import { UtilsService } from '../utils/utils.service';
 import { ReviewService } from './review.service';
 import { CreateReviewDTO } from './DTO/CreateReviewDTO';

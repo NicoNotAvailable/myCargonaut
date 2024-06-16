@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { UserDB } from '../database/UserDB';
-import { OfferTripDB } from '../database/OfferTripDB';
 import { TripDB } from '../database/TripDB';
 import { ReviewDB } from '../database/ReviewDB';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -32,10 +31,7 @@ export class ReviewService {
     } else {
       throw new Error('Invalid trip type');
     }
-    newReview.punctuality = body.punctuality;
-    newReview.comfort = body.comfort;
-    newReview.damage = body.damage;
-    newReview.reliability = body.reliability;
+    newReview.rating = body.rating;
     newReview.text = body.text;
     try {
       return await this.reviewRepository.save(newReview);
