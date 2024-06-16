@@ -44,6 +44,18 @@
                         id="trailer" (click)="changeViewTrailerState()"><h4>Deine Trailer</h4>
                 </button>
               </div>
+              <div class="col-6 my-4" *ngIf="editState">
+                <span>Neuer Vorname</span>
+                  <input [(ngModel)]="newFirstname" [ngModelOptions]="{standalone: true}" type="text"
+                         placeholder="Neuer Vorname?" id="firstnameInput"
+                         class="form-control mb-3">
+              </div>
+              <div class="col-6 my-4" *ngIf="editState">
+                <span>Neuer Nachname (Gratuliere)</span>
+                  <input [(ngModel)]="newLastname" [ngModelOptions]="{standalone: true}" type="text"
+                         placeholder="Neuer Nachname (Gratulation)" id="lastnameInput"
+                         class="form-control mb-3">
+              </div>
             </div>
           </div>
           <div class="col-6 col-4-md col-2-sm">
@@ -148,8 +160,8 @@
               <div class="col-5 my-4">
                 <p>Profilbild ändern</p>
                 <span class="d-flex justify-content-around text-start">
-                <button class="btn customButton" type="button">Hochladen</button>
-                <button class="btn customButton" type="button" id="deleteBtn">Löschen</button>
+                <button class="btn customButton" type="button" (click)="enableImgUpload()">Hochladen</button>
+                <input (change)="onFileChange($event)" *ngIf="imgUpload" type="file" required name="carImgInput" class="customButton"><br>
               </span>
               </div>
               <div class="col-5 my-4">

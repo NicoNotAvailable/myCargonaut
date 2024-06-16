@@ -3,14 +3,14 @@ import {
   Body,
   Controller,
   Get,
-  Logger,
+  Logger, Param,
   Post,
-  Put,
+  Put, Res,
   Session,
   UploadedFile,
   UseGuards,
-  UseInterceptors,
-} from '@nestjs/common';
+  UseInterceptors
+} from "@nestjs/common";
 import {
   ApiBearerAuth,
   ApiConsumes,
@@ -20,7 +20,7 @@ import {
 import { UserService } from './user.service';
 import { CreateUserDTO } from './DTO/CreateUserDTO';
 import { OkDTO } from '../serverDTO/OkDTO';
-import { extname } from 'path';
+import { extname, join } from "path";
 import { diskStorage } from 'multer';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { EditPasswordDTO } from './DTO/EditPasswordDTO';
@@ -33,6 +33,7 @@ import * as bcrypt from 'bcryptjs';
 import { GetOwnUserDTO } from './DTO/GetOwnUserDTO';
 import { UserDB } from '../database/UserDB';
 import { GetOtherUserDTO } from './DTO/GetOtherUserDTO';
+import { Response } from "express";
 
 @ApiTags('user')
 @Controller('user')
@@ -309,6 +310,22 @@ export class UserController {
       return new OkDTO(true, 'User was updated');
     } catch (err) {
       throw err;
+    }
+  }
+
+  @ApiResponse({ description: 'Fetches the image of a vehicle' })
+  @Get('image/:image')
+  async getImage(@Param('image') image: string, @Res() res: Response) {
+    try {
+      const imgPath: string = join(
+        process.cwd(),
+        'uploads',
+        'profilePictures',
+        image,
+      );
+      res.sendFile(imgPath);
+    } catch (err) {
+      throw new BadRequestException(err);
     }
   }
 
