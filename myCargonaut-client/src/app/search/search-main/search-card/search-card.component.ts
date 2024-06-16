@@ -6,7 +6,7 @@ import {offer} from "../../offers"
 import {request} from "../../requests"
 
 import {DateFormatPipe} from "../../date-format.pipe";
-import {NgForOf, NgIf} from "@angular/common";
+import { NgForOf, NgIf, NgOptimizedImage } from "@angular/common";
 
 
 @Component({
@@ -15,7 +15,8 @@ import {NgForOf, NgIf} from "@angular/common";
   imports: [
     DateFormatPipe,
     NgIf,
-    NgForOf
+    NgForOf,
+    NgOptimizedImage
   ],
   templateUrl: './search-card.component.html',
   styleUrl: './search-card.component.css'
@@ -38,6 +39,7 @@ export class SearchCardComponent {
   @Input() masse!: number[];
   @Input() requestBool!: boolean;
   @Input() offerBool!: boolean;
+  @Input() pathToImage!: string;
 
   constructor(private router: Router) {
   }
@@ -77,4 +79,6 @@ export class SearchCardComponent {
 
 
   }
+
+  protected readonly window = window;
 }

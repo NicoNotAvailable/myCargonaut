@@ -21,12 +21,24 @@ export class SearchMainComponent implements OnInit {
   allOffers: offer[] = [];
   offerBool: boolean = true;
 
+  pathToImage: string = "empty.png";
+
+
   constructor(private http: HttpClient) { }
 
   ngOnInit(): void {
+
+    const prePath: string = "/vehicle/image/";
+
     this.http.get("http://localhost:8000/drive/all/offers", { withCredentials: true })
       .subscribe(
         (response: any) => {
+
+          console.log(response[0].carPicture)
+          const imagePath: string = response[0].carPicture;
+          this.pathToImage = imagePath === "empty.png" ? "/empty.png" : prePath.concat(imagePath);
+
+
           this.allOffers = response;
         },
         (error: { error: { message: string; }; }) => {

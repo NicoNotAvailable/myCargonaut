@@ -17,9 +17,9 @@
             <div class="card m-4">
               <div class="row no-gutters flex-column flex-lg-row card-horizontal">
                 <div class="col-lg-3">
-                  <div class="horizontal-center">
+                  <div class="horizontal-center vertical-center">
 
-                    <img src="{{element.carPicture}}" class="img-fluid rounded-start bild" alt="...">
+                    <img [ngSrc]="window.location.protocol + '//' + window.location.host.replace('4200', '8000') + pathToImage" width="373" height="135" class="img-fluid rounded-start bild " alt="">
 
                   </div>
                 </div>
