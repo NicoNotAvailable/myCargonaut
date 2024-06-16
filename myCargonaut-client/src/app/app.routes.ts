@@ -4,6 +4,7 @@ import {LoginComponent} from "./login/login.component";
 import { ProfileComponent } from "./profile/profile.component";
 import {FrontpageComponent} from "./frontpage/frontpage.component";
 import {SearchMainComponent} from "./search/search-main/search-main.component";
+import { ChatComponent } from "./chat/chat.component";
 
 export const routes: Routes = [
 
@@ -13,5 +14,6 @@ export const routes: Routes = [
 
   {path: 'profile', component: ProfileComponent},
   {path: 'search', component: SearchMainComponent},
+  {path: 'chats', component:ChatComponent},
 
 ];
