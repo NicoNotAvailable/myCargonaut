@@ -34,4 +34,7 @@ export class ReviewDB {
 
     @Column()
     damage: number;
+
+    @Column()
+    text: string;
 }
