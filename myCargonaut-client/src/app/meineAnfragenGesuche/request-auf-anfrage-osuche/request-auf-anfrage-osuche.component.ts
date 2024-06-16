@@ -1,7 +1,8 @@
 import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, NavigationEnd, Router} from "@angular/router";
 import {requestOffer} from "../requestOffer";
 import {HttpClient} from "@angular/common/http";
+import {filter} from "rxjs/operators";
 
 @Component({
   selector: 'app-request-auf-anfrage-osuche',
@@ -15,6 +16,8 @@ export class RequestAufAnfrageOSucheComponent  implements OnInit {
 
   allTrips: requestOffer[] = [];
 
+  currentRoute: string = '';
+
   gesamtgewicht: number = 0;
   gewichte : number[] = [];
 
@@ -24,9 +27,21 @@ export class RequestAufAnfrageOSucheComponent  implements OnInit {
 
   masse : number[] = [];
 
-  constructor(private route: ActivatedRoute, private http: HttpClient) { }
+  constructor(private route: ActivatedRoute, private http: HttpClient,  private router: Router) { }
 
   ngOnInit(): void {
+
+
+    this.updateCurrentRoute();
+
+    this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd)
+    ).subscribe(() => {
+      this.updateCurrentRoute();
+    });
+
+
+
     this.id = Number(this.route.snapshot.paramMap.get('id'));    // Jetzt kannst du mit der ID arbeiten
     console.log('Request ID:', this.id);
 
@@ -71,7 +86,25 @@ export class RequestAufAnfrageOSucheComponent  implements OnInit {
 
   }
 
+  private updateCurrentRoute(): void {
+    const route = this.router.url.split('/');
 
+    if (route.length > 1 && route[1]) {
+      this.currentRoute = route[1];
+    } else {
+      this.currentRoute = '';
+    }
+
+    if (this.currentRoute === "offer") {
+
+
+    } else if (this.currentRoute === "request") {
+
+
+    }
+
+
+  }
 
 
 

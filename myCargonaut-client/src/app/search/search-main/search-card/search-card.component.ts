@@ -66,7 +66,7 @@ export class SearchCardComponent {
     } else if (this.currentRoute === "myOffer") {
       this.buttonText = "Anfragen ansehen";
       this.plaetze = "verf. Plätze";
-      this.href = "request";
+      this.href = "offer";
 
     }else if (this.currentRoute === "myRequest") {
       this.buttonText = "Anfragen ansehen";

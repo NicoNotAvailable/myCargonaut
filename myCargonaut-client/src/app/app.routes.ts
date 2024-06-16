@@ -25,5 +25,7 @@ export const routes: Routes = [
   {path: 'myRequest', component: MeineGesucheComponent},
 
   {path: 'request/:id', component: RequestAufAnfrageOSucheComponent},
+  {path: 'offer/:id', component: RequestAufAnfrageOSucheComponent},
+
 
 ];
