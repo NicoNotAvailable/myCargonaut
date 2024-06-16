@@ -1,6 +1,6 @@
 <div class="container">
   <div class="row m-2 mt-4">
-    @if (offerBool){
+    @if (offerBool) {
       <span>{{ allOffers.length }} passende Angebote gefunden</span>
     } @else if (requestBool) {
       <span>{{ allRequests.length }} passende Suchen gefunden</span>
@@ -9,7 +9,7 @@
 
   <div class="container">
 
-    @if (offerBool){
+    @if (offerBool) {
       <!-- Cards für Offer -->
       @for (element of allOffers; track $index) {
         <div class="row">
@@ -87,7 +87,7 @@
                             <div class="col-6">
                               <span>Gesamtgewicht:</span>
                             </div>
-                            <div class="col-6" >
+                            <div class="col-6">
                               <span class="highlightText">{{ element.maxCWeight }} kg</span>
                             </div>
                           </div>
@@ -115,7 +115,7 @@
 
                         <div class="col-12 col-lg-2">
                           <div class="horizontal-right">
-                            <a href="{{href}}">
+                            <a href="{{href}}/{{element.id}}">
                               <button type="button" class="btn btn-primary greenButton">{{ buttonText }}</button>
                             </a>
                           </div>
@@ -133,7 +133,8 @@
         </div>
       }
 
-    } @else if (requestBool) {
+    }
+    @else if (requestBool) {
       <!-- Cards für Request -->
 
       @for (element of allRequests; track $index) {
@@ -212,9 +213,9 @@
                             <div class="col-6">
                               <span>Gesamtgewicht:</span>
                             </div>
-                            <div class="col-6" >
+                            <div class="col-6">
 
-                              <span class="highlightText">{{gewichte[$index]}}kg</span>
+                              <span class="highlightText">{{ gewichte[$index] }}kg</span>
                             </div>
                           </div>
                           <div class="row">
@@ -222,8 +223,8 @@
                               <span>Gesamtmaße:</span>
                             </div>
                             <div class="col-6">
-                             <span class="highlightText">{{ masse[ ( $index * 3 ) ] }} cm/ {{ masse[ ( $index * 3 ) +1]  }}
-                               cm / {{ masse[ ( $index * 3 ) + 2 ]  }} cm</span>
+                             <span class="highlightText">{{ masse[($index * 3)] }} cm/ {{ masse[($index * 3) + 1] }}
+                               cm / {{ masse[($index * 3) + 2] }} cm</span>
                             </div>
                           </div>
                         </div>
@@ -258,7 +259,8 @@
           </div>
         </div>
       }
-    } @else {
+    }
+    @else {
       <div class="row">
         <div class="col-lg-12 col-12">
           <div class="card m-4">
@@ -352,7 +354,9 @@
 
                       <div class="col-12 col-lg-2">
                         <div class="horizontal-right">
-                          <a href="{{href}}" ><button type="button" class="btn btn-primary greenButton" >{{buttonText}}</button> </a>
+                          <a href="{{href}}">
+                            <button type="button" class="btn btn-primary greenButton">{{ buttonText }}</button>
+                          </a>
                         </div>
                       </div>
                     </div>
@@ -367,7 +371,6 @@
         </div>
       </div>
     }
-
 
 
   </div>

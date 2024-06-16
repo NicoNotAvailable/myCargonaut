@@ -37,7 +37,6 @@ export class SearchMainGesuchtComponent {
         (response: any) => {
           this.allRequests = response;
 
-          console.log(this.allRequests[0]);
 
           for (let elements of this.allRequests) {
             for (let cargo of elements.cargo) {
