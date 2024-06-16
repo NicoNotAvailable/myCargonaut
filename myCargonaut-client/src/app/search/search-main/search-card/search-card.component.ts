@@ -57,20 +57,20 @@ export class SearchCardComponent {
     this.currentRoute = route ? route : '';
     if (this.currentRoute === "searchRequest") {
       this.buttonText = "Suche ansehen";
-      this.plaetze = "ben. Plätze";
+      this.plaetze = "benötigte Plätze";
 
     } else if (this.currentRoute === "searchOffer") {
       this.buttonText = "Fahrt ansehen";
-      this.plaetze = "verf. Plätze";
+      this.plaetze = "verfügbare Plätze";
 
     } else if (this.currentRoute === "myOffer") {
       this.buttonText = "Anfragen ansehen";
-      this.plaetze = "verf. Plätze";
+      this.plaetze = "verfügbare Plätze";
       this.href = "offer";
 
     }else if (this.currentRoute === "myRequest") {
       this.buttonText = "Anfragen ansehen";
-      this.plaetze = "ben. Plätze";
+      this.plaetze = "benötigte Plätze";
       this.href = "request";
 
     }
