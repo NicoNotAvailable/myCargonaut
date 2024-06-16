@@ -23,6 +23,8 @@ export class SearchMainComponent implements OnInit {
 
   pathToImage: string = "empty.png";
 
+  pathToImageArray: string[] = [];
+
 
   constructor(private http: HttpClient) { }
 
@@ -30,13 +32,18 @@ export class SearchMainComponent implements OnInit {
 
     const prePath: string = "/vehicle/image/";
 
+    console.log("rtest")
+
     this.http.get("http://localhost:8000/drive/all/offers", { withCredentials: true })
       .subscribe(
         (response: any) => {
 
-          console.log(response[0].carPicture)
-          const imagePath: string = response[0].carPicture;
-          this.pathToImage = imagePath === "empty.png" ? "/empty.png" : prePath.concat(imagePath);
+          for (let element of response) {
+            const imagePath: string = element.carPicture;
+            this.pathToImage = imagePath === "empty.png" ? "/empty.png" : prePath.concat(imagePath);
+            this.pathToImageArray.push(this.pathToImage);
+          }
+          console.log(this.pathToImageArray);
 
 
           this.allOffers = response;
