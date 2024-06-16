@@ -1,12 +1,13 @@
 import { Component, OnInit, OnDestroy, inject } from "@angular/core";
 import { SocketService } from '../services/socket.service';
 import { SessionService } from "../services/session.service";
-import { UserService } from "../services/user.service";
+import { CommonModule } from '@angular/common';
+import { FormsModule } from "@angular/forms";
 
 @Component({
   selector: 'app-chat',
   standalone: true,
-  imports: [],
+  imports: [CommonModule, FormsModule],
   templateUrl: './chat.component.html',
   styleUrl: './chat.component.css'
 })
