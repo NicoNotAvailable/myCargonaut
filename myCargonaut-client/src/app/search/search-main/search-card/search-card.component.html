@@ -18,9 +18,11 @@
               <div class="row no-gutters flex-column flex-lg-row card-horizontal">
                 <div class="col-lg-3">
                   <div class="horizontal-center vertical-center">
-
-                    <img [ngSrc]="window.location.protocol + '//' + window.location.host.replace('4200', '8000') + pathToImageArray[$index]" width="400" height="300" class="img-fluid rounded-start bild " alt="">
-
+                    <div class="sizeRegulator">
+                      <img
+                        [ngSrc]="window.location.protocol + '//' + window.location.host.replace('4200', '8000') + pathToImageArray[$index]"
+                        width="400" height="300" class="img-fluid rounded-start bild " alt="">
+                    </div>
                   </div>
                 </div>
                 <div class="col-lg-9">
@@ -37,7 +39,8 @@
                             </div>
                             <div class="col-6">
                               <ng-container *ngFor="let star of stars; let i = index">
-                                <img [src]="i < bewertungsDummy ? starFillSrc : starEmptySrc" alt="star{{i + 1}}" class="blueText">
+                                <img [src]="i < bewertungsDummy ? starFillSrc : starEmptySrc" alt="star{{i + 1}}"
+                                     class="blueText">
                               </ng-container>
                             </div>
                           </div>
@@ -94,7 +97,8 @@
                               <span>max Maße:</span>
                             </div>
                             <div class="col-6">
-                            <span class="highlightText">{{ element.maxCLength }}cm / {{ element.maxCWidth }}cm / {{ element.maxCHeight }}cm</span>
+                              <span class="highlightText">{{ element.maxCLength }}cm / {{ element.maxCWidth }}
+                                cm / {{ element.maxCHeight }}cm</span>
                             </div>
                           </div>
                           <div class="row">
@@ -106,7 +110,6 @@
                             </div>
                           </div>
                         </div>
-
 
 
                         <div class="col-12 col-lg-3">
@@ -129,8 +132,7 @@
         </div>
       }
 
-    }
-    @else if (requestBool) {
+    } @else if (requestBool) {
       <!-- Cards für Request -->
 
       @for (element of allRequests; track $index) {
@@ -140,8 +142,10 @@
               <div class="row no-gutters flex-column flex-lg-row card-horizontal">
                 <div class="col-lg-3">
                   <div class="horizontal-center">
+                    <img
+                      [ngSrc]="window.location.protocol + '//' + window.location.host.replace('4200', '8000') + pathToImageArray[$index]"
+                      width="300" height="200" class="img-fluid rounded-img " alt="">
 
-                    <img [ngSrc]="window.location.protocol + '//' + window.location.host.replace('4200', '8000') + pathToImageArray[$index]" width="300" height="200" class="img-fluid rounded-img " alt="">
 
                   </div>
                 </div>
@@ -159,7 +163,8 @@
                             </div>
                             <div class="col-6">
                               <ng-container *ngFor="let star of stars; let i = index">
-                                <img [src]="i < bewertungsDummy ? starFillSrc : starEmptySrc" alt="star{{i + 1}}" class="blueText">
+                                <img [src]="i < bewertungsDummy ? starFillSrc : starEmptySrc" alt="star{{i + 1}}"
+                                     class="blueText">
                               </ng-container>
                             </div>
                           </div>
@@ -251,8 +256,7 @@
           </div>
         </div>
       }
-    }
-    @else {
+    } @else {
       <div class="row">
         <div class="col-lg-12 col-12">
           <div class="card m-4">
@@ -278,7 +282,8 @@
                           </div>
                           <div class="col-6">
                             <ng-container *ngFor="let star of stars; let i = index">
-                              <img [src]="i < bewertungsDummy ? starFillSrc : starEmptySrc" alt="star{{i + 1}}" class="blueText">
+                              <img [src]="i < bewertungsDummy ? starFillSrc : starEmptySrc" alt="star{{i + 1}}"
+                                   class="blueText">
                             </ng-container>
                           </div>
                         </div>
