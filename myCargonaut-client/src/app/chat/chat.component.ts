@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, inject } from "@angular/core";
+import { Component, OnInit, inject } from "@angular/core";
 import { SocketService } from '../services/socket.service';
 import { SessionService } from "../services/session.service";
 import { CommonModule } from '@angular/common';
@@ -11,7 +11,7 @@ import { FormsModule } from "@angular/forms";
   templateUrl: './chat.component.html',
   styleUrl: './chat.component.css'
 })
-export class ChatComponent implements OnInit, OnDestroy {
+export class ChatComponent implements OnInit {
   isLoggedIn: boolean = false;
   messages: { [key: string]: string[] } = {};
   userId: number | undefined;
@@ -20,40 +20,18 @@ export class ChatComponent implements OnInit, OnDestroy {
   rooms: string[] = [];
 
   private sessionService: SessionService = inject(SessionService);
-
-  constructor(private socketService: SocketService) {}
+  private socketService: SocketService = inject(SocketService);
 
   ngOnInit(): void {
     this.sessionService.checkLoginNum().then(async isLoggedIn => {
       isLoggedIn == -1 ? this.isLoggedIn = false : this.isLoggedIn = true;
+      console.log("islogged" + isLoggedIn);
       if (!this.isLoggedIn && typeof window !== 'undefined') {
         window.location.href = "/";
       } else {
-        this.userId = await this.sessionService.checkLoginNum();
-        setTimeout(() => {
-          this.socketService.on('message').subscribe((data: any) => {
-            if (this.room) {
-              this.messages[this.room].push(data);
-            }
-          });
-
-          this.socketService.on('joinRooms').subscribe((rooms: string[]) => {
-            this.rooms = rooms;
-            rooms.forEach(room => {
-              if (!this.messages[room]) {
-                this.messages[room] = [];
-              }
-            });
-          });
-
-          this.socketService.emit('register', { userId: this.userId });
-        }, 1000);
+        console.log("hä");
       }
     });
-  }
-
-  ngOnDestroy(): void {
-    this.socketService.disconnect();
   }
 
   initiateChat(targetUserId: number): void {

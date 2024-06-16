@@ -46,7 +46,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
     this.users.set(payload.userId, client.id);
     client.join('user_${payload.userId}');
     console.log(
-      'User ${payload.userId} registered with socket ID ${client.id}',
+      'User ' + payload.userId + ' registered with socket ID ' + client.id,
     );
 
     const tripsObject = await this.tripService.getUserTrips(payload.userId);

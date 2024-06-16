@@ -1,11 +1,16 @@
 <div class="chat-container">
   <div class="chat-list">
     <h3>Chats</h3>
-    <ul>
-      <li *ngFor="let room of rooms" (click)="selectRoom(room)">
-        {{ room }}
-      </li>
-    </ul>
+    <div *ngIf="rooms.length === 0; else chatList">
+      <p>Bisher hast Du keine Chats!</p>
+    </div>
+    <ng-template #chatList>
+      <ul>
+        <li *ngFor="let room of rooms" (click)="selectRoom(room)">
+          {{ room }}
+        </li>
+      </ul>
+    </ng-template>
   </div>
   <div class="chat-window">
     <h3>Chat Window</h3>

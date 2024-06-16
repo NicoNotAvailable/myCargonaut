@@ -14,6 +14,6 @@ export const routes: Routes = [
 
   {path: 'profile', component: ProfileComponent},
   {path: 'search', component: SearchMainComponent},
-  {path: 'chats', component:ChatComponent},
+  {path: 'chats', component: ChatComponent},
 
 ];
