@@ -1,13 +1,28 @@
-<div>
-  <h1>WebSocket Chat</h1>
-  <div>
-    <input #messageInput type="text" placeholder="Enter message" />
-    <button (click)="sendMessage(messageInput.value)">Send Message</button>
-  </div>
-  <div>
-    <h2>Messages:</h2>
+<div class="chat-container">
+  <div class="chat-list">
+    <h3>Chats</h3>
     <ul>
-      <li *ngFor="let message of messages">{{ message }}</li>
+      <li *ngFor="let room of rooms" (click)="selectRoom(room)">
+        {{ room }}
+      </li>
     </ul>
+  </div>
+  <div class="chat-window">
+    <h3>Chat Window</h3>
+    <div *ngIf="room">
+      <h4>Room: {{ room }}</h4>
+      <div class="messages">
+        <p *ngFor="let message of messages[room]">
+          {{ message }}
+        </p>
+      </div>
+      <input type="text" #messageInput placeholder="Type a message" />
+      <button (click)="sendMessage(messageInput.value); messageInput.value=''">
+        Send
+      </button>
+    </div>
+    <div *ngIf="!room">
+      <p>Select a chat to start messaging.</p>
+    </div>
   </div>
 </div>

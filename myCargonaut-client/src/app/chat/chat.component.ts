@@ -12,29 +12,41 @@ import { UserService } from "../services/user.service";
 })
 export class ChatComponent implements OnInit, OnDestroy {
   isLoggedIn: boolean = false;
-  messages: string[] = [];
+  messages: { [key: string]: string[] } = {};
   userId: number | undefined;
   targetUserId: number | undefined;
   room: string | undefined;
+  rooms: string[] = [];
 
-  public sessionService: SessionService = inject(SessionService);
+  private sessionService: SessionService = inject(SessionService);
 
-  constructor(private socketService: SocketService) {
-  }
+  constructor(private socketService: SocketService) {}
 
   ngOnInit(): void {
     this.sessionService.checkLoginNum().then(async isLoggedIn => {
       isLoggedIn == -1 ? this.isLoggedIn = false : this.isLoggedIn = true;
-      if (!this.isLoggedIn && typeof window !== undefined) {
+      if (!this.isLoggedIn && typeof window !== 'undefined') {
         window.location.href = "/";
       } else {
         this.userId = await this.sessionService.checkLoginNum();
         setTimeout(() => {
           this.socketService.on('message').subscribe((data: any) => {
-          console.log('Message received:', data);
-          this.messages.push(data);
-          })
-          ;}, 1000)
+            if (this.room) {
+              this.messages[this.room].push(data);
+            }
+          });
+
+          this.socketService.on('joinRooms').subscribe((rooms: string[]) => {
+            this.rooms = rooms;
+            rooms.forEach(room => {
+              if (!this.messages[room]) {
+                this.messages[room] = [];
+              }
+            });
+          });
+
+          this.socketService.emit('register', { userId: this.userId });
+        }, 1000);
       }
     });
   }
@@ -45,17 +57,27 @@ export class ChatComponent implements OnInit, OnDestroy {
 
   initiateChat(targetUserId: number): void {
     this.targetUserId = targetUserId;
-    if(this.userId) {
+    if (this.userId) {
       this.room = this.getRoomName(this.userId, this.targetUserId);
+    }
+    if (this.room && !this.messages[this.room]) {
+      this.messages[this.room] = [];
     }
     this.socketService.emit('createOrJoinRoom', { userId: this.userId, targetUserId: this.targetUserId });
   }
 
   sendMessage(message: string): void {
-    this.socketService.emit('message', { room: this.room, message: message });
+    if (this.room) {
+      this.socketService.emit('message', { room: this.room, message });
+      this.messages[this.room].push(`Me: ${message}`);
+    }
   }
 
   private getRoomName(userId1: number, userId2: number): string {
     return [userId1, userId2].sort((a, b) => a - b).join('-');
+  }
+
+  selectRoom(room: string): void {
+    this.room = room;
   }
 }
