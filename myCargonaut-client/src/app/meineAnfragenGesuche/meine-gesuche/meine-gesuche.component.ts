@@ -36,6 +36,11 @@ export class MeineGesucheComponent {
   masse : number[] = [];
   alleMasse : number[] = [];
 
+  pathToImage: string = "empty.png";
+
+  pathToImageArray: string[] = [];
+
+
   constructor(private http: HttpClient, private router: Router) {
   }
 
@@ -44,6 +49,7 @@ export class MeineGesucheComponent {
   public userService: UserService = inject(UserService);
 
   ngOnInit(): void {
+    const prePath: string = "/user/image/";
 
 
     this.sessionService.checkLoginNum().then(isLoggedIn => {
@@ -57,6 +63,15 @@ export class MeineGesucheComponent {
      this.http.get("http://localhost:8000/drive/user/requests", { withCredentials: true })
         .subscribe(
           (response: any) => {
+
+            for (let element of response) {
+              const imagePath: string = element.user.profilePic;
+              this.pathToImage = imagePath === "empty.png" ? "/empty.png" : prePath.concat(imagePath);
+              this.pathToImageArray.push(this.pathToImage);
+            }
+
+
+
             this.allRequests = response;
 
 

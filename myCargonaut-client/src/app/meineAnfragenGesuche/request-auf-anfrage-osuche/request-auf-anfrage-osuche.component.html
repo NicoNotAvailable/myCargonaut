@@ -14,7 +14,7 @@
                 <div class="row">
                   <div class="col-5">
                     <div class="ms-2">
-                      <img src="./assets/searchCard/cutout-car-images.jpg" class="img-fluid" alt="...">
+                      <img [ngSrc]="window.location.protocol + '//' + window.location.host.replace('4200', '8000') + pathToImageArray[$index]" width="300" height="200" class="img-fluid rounded-img " alt="">
                     </div>
                   </div>
                   <div class="col-6">
@@ -129,7 +129,8 @@
                 <div class="row">
                   <div class="col-5">
                     <div class="ms-2">
-                      <img src="./assets/searchCard/cutout-car-images.jpg" class="img-fluid" alt="...">
+                      <img [ngSrc]="window.location.protocol + '//' + window.location.host.replace('4200', '8000') + pathToImageArray[$index]" width="300" height="200" class="img-fluid rounded-img " alt="">
+
                     </div>
                   </div>
                   <div class="col-6">

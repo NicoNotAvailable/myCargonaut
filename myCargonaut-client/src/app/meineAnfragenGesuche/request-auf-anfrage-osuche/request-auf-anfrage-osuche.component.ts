@@ -8,11 +8,14 @@ import { request } from "../../search/requests";
 import { requestTrips } from "../requestTrips";
 import { SessionService } from "../../services/session.service";
 import { UserService } from "../../services/user.service";
+import {NgOptimizedImage} from "@angular/common";
 
 @Component({
   selector: 'app-request-auf-anfrage-osuche',
   standalone: true,
-  imports: [],
+  imports: [
+    NgOptimizedImage
+  ],
   templateUrl: './request-auf-anfrage-osuche.component.html',
   styleUrl: './request-auf-anfrage-osuche.component.css'
 })
@@ -40,6 +43,14 @@ export class RequestAufAnfrageOSucheComponent  implements OnInit {
   gesamtHeight: number = 0;
 
   masse : number[] = [];
+
+  prePath: string = "/user/image/";
+
+
+  pathToImage: string = "empty.png";
+
+  pathToImageArray: string[] = [];
+
 
   constructor(private route: ActivatedRoute, private http: HttpClient,  private router: Router) { }
 
@@ -86,6 +97,8 @@ export class RequestAufAnfrageOSucheComponent  implements OnInit {
       this.requestBool = false;
 
 
+
+
       this.http.get(`http://localhost:8000/drive/offer/${this.id}`, {withCredentials: true})
         .subscribe(
           (response: any) => {
@@ -102,6 +115,15 @@ export class RequestAufAnfrageOSucheComponent  implements OnInit {
         .subscribe(
           (response: any) => {
             this.allTripsOffer = response;
+
+
+            this.prePath = "/user/image/"
+
+            for (let element of response) {
+              const imagePath: string = element.requesting.profilePic;
+              this.pathToImage = imagePath === "empty.png" ? "/empty.png" : this.prePath.concat(imagePath);
+              this.pathToImageArray.push(this.pathToImage);
+            }
 
             for (let elements of this.allTripsOffer) {
               for (let cargo of elements.cargo) {
@@ -144,6 +166,8 @@ export class RequestAufAnfrageOSucheComponent  implements OnInit {
       this.http.get(`http://localhost:8000/drive/request/${this.id}`, {withCredentials: true})
         .subscribe(
           (response: any) => {
+
+
             this.thisRequestLocations = response.locations;
             this.thisRequestName = response.name;
           },
@@ -157,6 +181,16 @@ export class RequestAufAnfrageOSucheComponent  implements OnInit {
         .subscribe(
           (response: any) => {
             this.allTripsRequest = response;
+
+            this.prePath = "/user/image/"
+
+            for (let element of response) {
+              console.log(element)
+              const imagePath: string = element.requesting.profilePic;
+              this.pathToImage = imagePath === "empty.png" ? "/empty.png" : this.prePath.concat(imagePath);
+              this.pathToImageArray.push(this.pathToImage);
+            }
+            console.log(this.pathToImageArray);
 
           },
           (error: { error: { message: string; }; }) => {
@@ -172,5 +206,5 @@ export class RequestAufAnfrageOSucheComponent  implements OnInit {
   }
 
 
-
+  protected readonly window = window;
 }

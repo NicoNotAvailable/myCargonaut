@@ -23,6 +23,10 @@ export class MeineAnfragenComponent {
   allOffers: offer[] = [];
   offerBool: boolean = true;
 
+  pathToImage: string = "empty.png";
+
+  pathToImageArray: string[] = [];
+
 
   constructor(private http: HttpClient, private router: Router) {
   }
@@ -33,6 +37,7 @@ export class MeineAnfragenComponent {
 
   ngOnInit(): void {
 
+    const prePath: string = "/vehicle/image/";
 
     this.sessionService.checkLoginNum().then(isLoggedIn => {
       isLoggedIn == -1 ? this.isLoggedIn = false : this.isLoggedIn = true;
@@ -47,6 +52,13 @@ export class MeineAnfragenComponent {
       .subscribe(
         (response: any) => {
           this.allOffers = response;
+
+          for (let element of response) {
+            const imagePath: string = element.carPicture;
+            this.pathToImage = imagePath === "empty.png" ? "/empty.png" : prePath.concat(imagePath);
+            this.pathToImageArray.push(this.pathToImage);
+          }
+
 
           console.log(this.allOffers)
         },
