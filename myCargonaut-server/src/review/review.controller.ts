@@ -9,6 +9,7 @@ import { ReviewService } from './review.service';
 import { CreateReviewDTO } from './DTO/CreateReviewDTO';
 import { TripService } from '../trip/trip.service';
 import { TripDB } from 'src/database/TripDB';
+import { DriveService } from '../drive/drive.service';
 
 @ApiTags('review')
 @Controller('review')
@@ -18,6 +19,7 @@ export class ReviewController {
     private readonly reviewService: ReviewService,
     private readonly utilsService: UtilsService,
     private readonly tripService: TripService,
+    private readonly driveService: DriveService,
   ) {
   }
 
@@ -36,7 +38,6 @@ export class ReviewController {
     if (!user) {
       throw new BadRequestException('User was not found');
     }
-
     let trip: TripDB;
     try {
       trip = await this.tripService.getOfferTripById(body.tripID);
