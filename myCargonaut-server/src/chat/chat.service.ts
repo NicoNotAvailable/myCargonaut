@@ -38,4 +38,24 @@ export class ChatService {
 
     return this.messageRepository.save(newMessage);
   }
+
+  async getMessages(
+    userId: number,
+    targetUserId: number,
+    tripId: number,
+  ): Promise<MessageDB[]> {
+    const messages = await this.messageRepository.find({
+      where: [
+        { writer: { id: userId }, trip: { id: tripId } },
+        { writer: { id: targetUserId }, trip: { id: tripId } },
+      ],
+      order: { timestamp: 'ASC' },
+      relations: ['writer', 'trip'],
+    });
+
+    if (!messages) {
+      throw new NotFoundException('Messages not found');
+    }
+    return messages;
+  }
 }
