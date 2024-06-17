@@ -1,15 +1,16 @@
 import {
   BadRequestException,
   Body,
-  Controller, Get,
+  Controller,
+  Get,
   Logger,
   Post,
   Put,
   Session,
   UploadedFile,
   UseGuards,
-  UseInterceptors
-} from "@nestjs/common";
+  UseInterceptors,
+} from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiConsumes,
@@ -29,7 +30,7 @@ import { IsLoggedInGuard } from '../session/is-logged-in.guard';
 import { EditUserDTO } from './DTO/EditUserDTO';
 import * as validator from 'validator';
 import * as bcrypt from 'bcryptjs';
-import { UserDB } from "../database/UserDB";
+import { UserDB } from '../database/UserDB';
 
 @ApiTags('user')
 @Controller('user')
