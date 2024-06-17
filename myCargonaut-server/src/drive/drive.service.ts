@@ -1,4 +1,9 @@
-import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { DriveDB, OfferDB, RequestDB } from '../database/DriveDB';
@@ -11,6 +16,9 @@ import { CreateCargoDTO } from '../cargo/DTO/CreateCargoDTO';
 import { CreateRequestDTO } from './DTO/CreateRequestDTO';
 import { LocationDB } from '../database/LocationDB';
 import { CreateLocationDTO } from '../location/DTO/CreateLocationDTO';
+import { StatusEnum } from '../database/enums/StatusEnum';
+import { OfferTripDB } from '../database/OfferTripDB';
+import { RequestTripDB } from '../database/RequestTripDB';
 
 @Injectable()
 export class DriveService {
@@ -25,6 +33,10 @@ export class DriveService {
     private cargoRepository: Repository<CargoDB>,
     @InjectRepository(LocationDB)
     private locationRepository: Repository<LocationDB>,
+    @InjectRepository(OfferTripDB)
+    private offerTripRepository: Repository<OfferTripDB>,
+    @InjectRepository(RequestTripDB)
+    private requestTripRepository: Repository<RequestTripDB>,
   ) {}
 
   async createOffer(
@@ -68,10 +80,12 @@ export class DriveService {
       const savedOffer = await this.offerRepository.save(newOffer);
 
       const locationPromises = body.location.map(
-        (locationData: CreateLocationDTO) => {
+        (locationData: CreateLocationDTO, index: number) => {
           const newLocation = this.locationRepository.create(locationData);
           newLocation.drive = savedOffer;
-          this.locationRepository.insert(newLocation);
+          newLocation.stopNr =
+            index === body.location.length - 1 ? 100 : locationData.stopNr;
+          return this.locationRepository.insert(newLocation);
         },
       );
 
@@ -107,9 +121,11 @@ export class DriveService {
       await Promise.all(cargoPromises);
     }
     const locationPromises = body.location.map(
-      (locationData: CreateLocationDTO) => {
+      (locationData: CreateLocationDTO, index: number) => {
         const newLocation = this.locationRepository.create(locationData);
         newLocation.drive = savedRequest;
+        newLocation.stopNr =
+          index === body.location.length - 1 ? 100 : locationData.stopNr;
         return this.locationRepository.insert(newLocation);
       },
     );
@@ -176,10 +192,59 @@ export class DriveService {
     }
     return requests;
   }
+  async updateOffer(
+    offerId: number,
+    userId: number,
+    updateData: CreateOfferDTO,
+  ): Promise<OfferDB> {
+    const offer = await this.offerRepository.findOne({
+      where: { id: offerId },
+      relations: ['user'],
+    });
+    if (!offer) {
+      throw new NotFoundException('Offer not found');
+    }
+    if (offer.user.id !== userId) {
+      throw new UnauthorizedException('You are not the owner of this offer');
+    }
+
+    Object.assign(offer, updateData);
+
+    try {
+      return await this.offerRepository.save(offer);
+    } catch (error) {
+      throw new Error('An error occurred while updating the offer');
+    }
+  }
+
+  async updateRequest(
+    requestId: number,
+    userId: number,
+    updateData: CreateRequestDTO,
+  ): Promise<RequestDB> {
+    const request = await this.requestRepository.findOne({
+      where: { id: requestId },
+      relations: ['user'],
+    });
+    if (!request) {
+      throw new NotFoundException('Request not found');
+    }
+    if (request.user.id !== userId) {
+      throw new UnauthorizedException('You are not the owner of this request');
+    }
+
+    Object.assign(request, updateData);
+
+    try {
+      return await this.requestRepository.save(request);
+    } catch (error) {
+      throw new Error('An error occurred while updating the request');
+    }
+  }
   async deleteDrive(driveId: number, userId: number) {
     const drive = await this.driveRepository.findOne({
       where: { id: driveId },
-      relations: ['owner'],
+      relations: ['user'],
     });
     if (!drive) {
       throw new NotFoundException('Drive not found');
@@ -187,8 +252,33 @@ export class DriveService {
     if (drive.user.id !== userId) {
       throw new UnauthorizedException('Drive is not yours!');
     }
-
-    // TODO: check if theres an active trip with the drive
+    if (drive.status !== StatusEnum.created) {
+      throw new BadRequestException(
+        'Drive cannot be deleted because it is not in the created status',
+      );
+    }
+    const acceptedOfferTrip = await this.offerTripRepository.findOne({
+      where: {
+        drive: { id: driveId },
+        isAccepted: true,
+      },
+    });
+    if (acceptedOfferTrip) {
+      throw new BadRequestException(
+        'Drive cannot be deleted because there are accepted offer trips associated with it',
+      );
+    }
+    const acceptedRequestTrip = await this.requestTripRepository.findOne({
+      where: {
+        drive: { id: driveId },
+        isAccepted: true,
+      },
+    });
+    if (acceptedRequestTrip) {
+      throw new BadRequestException(
+        'Drive cannot be deleted because there are accepted request trips associated with it',
+      );
+    }
     await this.driveRepository.remove(drive);
   }
 }

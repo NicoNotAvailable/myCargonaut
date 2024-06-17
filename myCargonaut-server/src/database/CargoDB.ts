@@ -7,11 +7,15 @@ export class CargoDB {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => RequestDB, (request) => request.cargo, { nullable: true })
+  @ManyToOne(() => RequestDB, (request) => request.cargo, {
+    nullable: true,
+    onDelete: 'CASCADE',
+  })
   request: RequestDB;
 
   @ManyToOne(() => OfferTripDB, (offerTrip) => offerTrip.cargo, {
     nullable: true,
+    onDelete: 'CASCADE',
   })
   offerTrip: OfferTripDB;
   @Column()

@@ -10,8 +10,8 @@ export class MessageDB {
   @ManyToOne(() => UserDB)
   writer: UserDB;
 
-  @ManyToOne(() => TripDB)
-  trip: TripDB;
+    @ManyToOne(() => TripDB, { onDelete: 'CASCADE' })
+    trip: TripDB;
 
   @Column()
   message: string;

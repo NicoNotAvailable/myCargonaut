@@ -157,7 +157,7 @@ export class VehicleController {
   })
   @ApiBearerAuth()
   @UseGuards(IsLoggedInGuard)
-  @Post('carPicture')
+  @Post('carPicture/:id')
   @ApiConsumes('multipart/form-data')
   @UseInterceptors(
     FileInterceptor('file', {
@@ -175,12 +175,11 @@ export class VehicleController {
   )
   async uploadCarPicture(
     @UploadedFile() file: Express.Multer.File,
-    @Session() session: SessionData,
+    @Param('id', ParseIntPipe) id: number,
   ) {
     if (!file) {
       throw new BadRequestException();
     }
-    const id = session.currentCar;
     const car = await this.vehicleService.getCarById(id);
     car.carPicture = file.filename;
     await this.vehicleService.updateCar(car);
@@ -306,6 +305,6 @@ export class VehicleController {
       }
       throw error;
     }
-    return new OkDTO(true, 'Trailer was created');
+    return new OkDTO(true, 'Vehicle was deleted');
   }
 }
