@@ -10,7 +10,7 @@ import {
   Query,
 } from '@nestjs/common';
 import { ChatService } from './chat.service';
-import { ChatGateway } from './chat.gateway';
+import { SocketGateway } from '../socket.gateway';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { CreateMessageDTO } from './DTO/CreateMessageDTO';
 import { SessionData } from 'express-session';
@@ -22,7 +22,7 @@ import { GetMessageDTO } from './DTO/GetMessageDTO';
 export class ChatController {
   constructor(
     private readonly chatService: ChatService,
-    private readonly chatGateway: ChatGateway,
+    private readonly chatGateway: SocketGateway,
   ) {}
 
   @Post('join')

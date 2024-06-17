@@ -8,8 +8,8 @@ import {
   ConnectedSocket,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
-import { ChatService } from './chat.service';
-import { TripService } from '../trip/trip.service';
+import { ChatService } from './chat/chat.service';
+import { TripService } from './trip/trip.service';
 
 interface ActiveRoom {
   tripId: number;
@@ -23,7 +23,7 @@ interface ActiveRoom {
     credentials: true,
   },
 })
-export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
+export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @WebSocketServer()
   server: Server;
 
@@ -47,32 +47,33 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @SubscribeMessage('register')
   async handleRegister(
     @ConnectedSocket() client: Socket,
-    @MessageBody() payload: { userId: number },
+    @MessageBody() userId: number,
   ): Promise<void> {
-    this.users.set(payload.userId, client.id);
+    this.users.set(userId, client.id);
+    console.log('1111111111111111' + userId);
     client.join('user_${payload.userId}');
-    console.log(
-      'User ' + payload.userId + ' registered with socket ID ' + client.id,
-    );
+    console.log('User ' + userId + ' registered with socket ID ' + client.id);
 
-    const tripsObject = await this.tripService.getUserTrips(payload.userId);
+    const tripsObject = await this.tripService.getUserTrips(userId);
 
     tripsObject.offerTrips.forEach((trip) => {
       const roomName = `trip_${trip.id}`;
       client.join(roomName);
-      this.addUserToRoom(payload.userId, trip.id);
+      this.addUserToRoom(userId, trip.id);
       this.server
         .to(roomName)
-        .emit('message', `User ${payload.userId} joined room ${roomName}`);
+        .emit('message', `User ${userId} joined room ${roomName}`);
+      console.log('joined room  ' + roomName);
     });
 
     tripsObject.requestTrips.forEach((trip) => {
       const roomName = `trip_${trip.id}`;
       client.join(roomName);
-      this.addUserToRoom(payload.userId, trip.id);
+      this.addUserToRoom(userId, trip.id);
       this.server
         .to(roomName)
-        .emit('message', `User ${payload.userId} joined room ${roomName}`);
+        .emit('message', `User ${userId} joined room ${roomName}`);
+      console.log('joined room  ' + roomName);
     });
 
     const tripIds = [

@@ -21,7 +21,7 @@ import { OfferTripDB } from './database/OfferTripDB';
 import { RequestTripDB } from './database/RequestTripDB';
 import { DriveService } from './drive/drive.service';
 import { DriveController } from './drive/drive.controller';
-import { ChatGateway } from './chat/chat.gateway';
+import { SocketGateway } from './socket.gateway';
 import { ChatController } from './chat/chat.controller';
 import { ChatService } from './chat/chat.service';
 import { TripService } from './trip/trip.service';
@@ -84,7 +84,7 @@ import { UtilsService } from './utils/utils.service';
     VehicleService,
     DriveService,
     ChatService,
-    ChatGateway,
+    SocketGateway,
     LocationService,
     UtilsService,
     TripService,

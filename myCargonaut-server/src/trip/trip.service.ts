@@ -222,4 +222,10 @@ export class TripService {
     }
     await this.tripRepository.remove(trip);
   }
+
+  public async getUserTrips(userId: number) {
+    const offerTrips = await this.getOwnOfferTrips(userId);
+    const requestTrips = await this.getOwnRequestTrips(userId);
+    return { offerTrips, requestTrips };
+  }
 }

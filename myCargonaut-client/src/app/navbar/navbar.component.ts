@@ -54,6 +54,8 @@ export class NavbarComponent {
     this.sessionService.checkLoginNum().then(currentUser => {
       if (currentUser != -1){
         this.isLoggedIn = true;
+        console.log(currentUser + ' heyyyyyyyyyyyyyyyyyyyyyyy');
+        this.socketService.emit('register', currentUser);
       } else {
         this.isLoggedIn = false;
       }
