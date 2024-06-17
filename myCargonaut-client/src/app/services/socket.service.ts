@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 })
 export class SocketService {
   private socket: Socket | undefined;
-  private readonly url: string = '//localhost:8000';
+  private readonly url: string = 'http://localhost:8000';
   private socketInitialized: boolean = false;
 
   constructor() {}
