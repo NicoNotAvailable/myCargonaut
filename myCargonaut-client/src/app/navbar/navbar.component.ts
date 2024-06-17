@@ -1,5 +1,5 @@
-import { Component, inject } from "@angular/core";
-import { NgIf, NgOptimizedImage } from "@angular/common";
+import { Component, Inject, inject, PLATFORM_ID } from "@angular/core";
+import { isPlatformBrowser, NgIf, NgOptimizedImage } from "@angular/common";
 import {FaIconComponent} from "@fortawesome/angular-fontawesome";
 import {
   faCar,
@@ -13,6 +13,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { SessionService } from "../services/session.service";
 import { HttpClient, HttpClientModule } from "@angular/common/http";
+import { SocketService } from '../services/socket.service';
 
 @Component({
   selector: 'app-navbar',
@@ -28,6 +29,7 @@ import { HttpClient, HttpClientModule } from "@angular/common/http";
 export class NavbarComponent {
 
   public sessionService: SessionService = inject(SessionService);
+  private socketService: SocketService = inject(SocketService);
 
   protected readonly faCar = faCar;
   protected readonly faHouse = faHouse;
@@ -42,7 +44,10 @@ export class NavbarComponent {
 
   isLoggedIn: boolean = false;
 
-  constructor(private http: HttpClient) {
+  constructor(@Inject(PLATFORM_ID) private platformId: Object, private http: HttpClient) {
+    if (isPlatformBrowser(this.platformId)) {
+      this.socketService.init();
+    }
   }
 
   ngOnInit(): void {
