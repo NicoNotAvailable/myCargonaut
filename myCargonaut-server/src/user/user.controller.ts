@@ -32,7 +32,6 @@ import * as validator from 'validator';
 import * as bcrypt from 'bcryptjs';
 import { GetOwnUserDTO } from './DTO/GetOwnUserDTO';
 import { UserDB } from '../database/UserDB';
-import { EditUserProfileDTO } from './DTO/EditUserProfileDTO';
 import { GetOtherUserDTO } from './DTO/GetOtherUserDTO';
 
 @ApiTags('user')
@@ -270,7 +269,7 @@ export class UserController {
     type: OkDTO,
     description: 'updates a specifics user details',
   })
-  @Put()
+  @Put('/profile')
   @ApiBearerAuth()
   @UseGuards(IsLoggedInGuard)
   async updateUser(
@@ -300,42 +299,11 @@ export class UserController {
       );
       user.lastName = body.lastName;
     }
-    if (body.profileText) user.profileText = body.profileText;
-    try {
-      await this.userService.updateUser(user);
-      return new OkDTO(true, 'User was updated');
-    } catch (err) {
-      throw err;
-    }
-  }
-
-  @ApiResponse({
-    type: OkDTO,
-    description: 'updates a specifics user with their profile details',
-  })
-  @Put('/profile')
-  @ApiBearerAuth()
-  @UseGuards(IsLoggedInGuard)
-  async updateUserProfile(
-    @Session() session: SessionData,
-    @Body() body: EditUserProfileDTO,
-  ): Promise<OkDTO> {
-    const id: number = session.currentUser;
-    const user: UserDB = await this.userService.getUserById(id);
-    console.log('der Nutzer: ' + user, ' Der body: ', body);
-    if (body.email.trim() !== '' || body.email !== undefined) {
-      user.email = body.email;
-    }
     if (body.languages !== '' || body.languages !== undefined) {
       user.languages = body.languages;
     }
-    if (body.phoneNumber.trim() !== '' || body.phoneNumber !== undefined) {
-      user.phoneNumber = body.phoneNumber;
-    }
-    if (body.profileText.trim() !== '' || body.profileText !== undefined) {
-      user.profileText = body.profileText;
-    }
-    user.isSmoker = body.isSmoker;
+    if (body.isSmoker) user.isSmoker = body.isSmoker;
+    if (body.profileText) user.profileText = body.profileText;
     try {
       await this.userService.updateUser(user);
       return new OkDTO(true, 'User was updated');
