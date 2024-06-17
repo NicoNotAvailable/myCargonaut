@@ -18,8 +18,8 @@ export class TripsCreateComponent {
   bewertungsDummy : number = 4;
   stars: number[] = [1, 2, 3, 4, 5];
 
-  offerBool: boolean = false;
-  requestBool: boolean = true;
+  offerBool: boolean = true;
+  requestBool: boolean = false;
 
   protected readonly window = window;
 }
