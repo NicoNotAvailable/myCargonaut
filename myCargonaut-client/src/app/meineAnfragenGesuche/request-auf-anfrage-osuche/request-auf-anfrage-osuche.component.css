@@ -1,3 +1,37 @@
+.horizontal-center {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+}
+.greenText{
+  color: #005B52;
+
+}
+.img-fluid {
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.img-fluid {
+  width: 100px;
+  height: 100px;
+  object-fit: cover; /* Wichtig: Beschnitten, um das Seitenverhältnis zu erhalten */
+  object-position: center center; /* Optional: Zentriert das Bild im Container */
+  display: block;
+  border-width: 50px ;
+}
+.greenButton{
+  background-color: #005B52;
+  color: white;
+  border-radius: 15px;
+  font-size: 10px;
+}
+.vertical-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
 .greenText {
   color: #005B52;
 }
@@ -75,28 +109,4 @@
   color: black;
   font-weight: bold;
 }
-.rounded-img {
-  border-radius: 50%;
-  overflow: hidden;
-  width: 200px;
-  height: 200px;
-  object-fit: cover; /* Wichtig: Beschnitten, um das Seitenverhältnis zu erhalten */
-  object-position: center center; /* Optional: Zentriert das Bild im Container */
-}
 
-  .sizeRegulator {
-    height: 200px;
-    width: 100%; /* Optional: Kann je nach Bedarf festgelegt werden */
-    overflow: hidden; /* Verhindert das Überschreiten der Bildgrenzen */
-    position: relative;
-  }
-
-  .sizeRegulator img {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    height: auto;
-    width: 100%; /* Passt das Bild an die Breite des Containers an */
-    transform: translate(-50%, -50%);
-    object-fit: cover; /* Beschneidet das Bild, um die gewünschte Höhe beizubehalten */
-  }

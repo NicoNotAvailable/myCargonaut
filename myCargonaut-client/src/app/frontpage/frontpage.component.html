@@ -41,15 +41,21 @@
     </div>
 
     <div class="row">
-        <div class="card custom-card mx-auto">
-          <img src="https://via.placeholder.com/300x150" class="card-img-top" alt="Auto Bild">
-          <div class="card-body">
-            <h5 class="card-title">Entspannte fahrt in meinem Tesla</h5>
+      @for (element of allOffers; track $index) {
+
+          <div class="card custom-card mx-auto mt-3">
+            <div class="sizeRegulator">
+              <img [ngSrc]="window.location.protocol + '//' + window.location.host.replace('4200', '8000') + pathToImageArray[$index]" width="300" height="200" class="img-fluid " alt="">
+            </div>
+            <div class="card-body">
+              <h5 class="card-title">{{element.name}}</h5>
+            </div>
+            <a href="" class="card-footer">
+              Zur Fahrt
+            </a>
           </div>
-          <a href="" class="card-footer">
-            Zur Fahrt
-          </a>
-        </div>
+
+      }
 
 
     </div>

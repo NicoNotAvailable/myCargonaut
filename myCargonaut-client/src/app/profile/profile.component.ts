@@ -63,6 +63,7 @@ export class ProfileComponent {
   }
 
   ngOnInit(): void {
+
     this.sessionService.checkLoginNum().then(isLoggedIn => {
       isLoggedIn == -1 ? this.isLoggedIn = false : this.isLoggedIn = true;
       if (!this.isLoggedIn && typeof window !== undefined) {
