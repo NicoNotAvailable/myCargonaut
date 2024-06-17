@@ -7,7 +7,6 @@ import {
     TableInheritance,
 } from 'typeorm';
 import { UserDB } from './UserDB';
-import { StatusEnum } from './enums/StatusEnum';
 import { ReviewDB } from './ReviewDB';
 import { MessageDB } from './MessageDB';
 
@@ -23,9 +22,9 @@ export class TripDB {
     @Column({ default: false })
     isAccepted: boolean;
 
-    @OneToMany(() => ReviewDB, (review) => review.trip)
+    @OneToMany(() => ReviewDB, (review) => review.trip, { onDelete: 'CASCADE' })
     reviews: Promise<ReviewDB[]>;
 
-    @OneToMany(() => MessageDB, (message) => message.trip)
+    @OneToMany(() => MessageDB, (message) => message.trip ,{ onDelete: 'CASCADE' })
     messages: Promise<MessageDB[]>;
 }

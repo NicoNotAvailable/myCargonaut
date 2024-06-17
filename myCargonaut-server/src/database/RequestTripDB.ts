@@ -6,7 +6,7 @@ import { RequestDB } from './DriveDB';
 
 @ChildEntity()
 export class RequestTripDB extends TripDB {
-    @ManyToOne(() => RequestDB)
+    @ManyToOne(() => RequestDB, { onDelete: 'CASCADE' })
     drive: RequestDB;
 
     @ManyToOne(() => CarDB)
