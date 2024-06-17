@@ -1,0 +1,13 @@
+<div class="container">
+  <div class="row m-5">
+    <div class="col-lg-4 horizontal-center  mb-2 mt-2">
+      <a href="myOffer" class="link p-3 m-3" [ngClass]="{'currentLink': currentRoute === 'myOffer'}">Deine Angebote</a>
+    </div>
+    <div class="col-lg-4 horizontal-center mb-2 mt-2">
+      <a href="myRequest" class="link p-3" [ngClass]="{'currentLink': currentRoute === 'myRequest'}">Deine Gesuche</a>
+    </div>
+    <div class="col-lg-4 horizontal-center mb-2 mt-2">
+      <a class="link p-3 "  [ngClass]="{'currentLink': currentRoute === 'deineAngebote'}">Deine Anfragen</a>
+    </div>
+  </div>
+</div>

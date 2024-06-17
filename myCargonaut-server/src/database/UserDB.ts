@@ -49,8 +49,8 @@ export class UserDB {
   @OneToMany(() => TripDB, (trip) => trip.requesting)
   trips: Promise<TripDB[]>;
 
-    @OneToMany(() => DriveDB, (drive) => drive.user)
-    drives: DriveDB[];
+  @OneToMany(() => DriveDB, (drive) => drive.user)
+  drives: DriveDB[];
 
   @OneToMany(() => ReviewDB, (review) => review.writer)
   writtenReviews: Promise<ReviewDB[]>;
