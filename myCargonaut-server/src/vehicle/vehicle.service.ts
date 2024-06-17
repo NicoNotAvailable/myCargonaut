@@ -105,7 +105,7 @@ export class VehicleService {
     }
 
     async updateCar(carData: CarDB): Promise<CarDB> {
-        return await this.carRepository.save(carData);
+        return this.carRepository.save(carData);
     }
 
     async deleteVehicle(vehicleId: number, userId: number) {
