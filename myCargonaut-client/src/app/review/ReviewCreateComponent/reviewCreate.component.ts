@@ -37,13 +37,10 @@ export class ReviewCreateComponent {
   faStar = faStar;  // Filled star icon
   faStarRegular = faStarRegular;  // Empty star icon
 
+
   message: string = ""
-  punctuality: number | undefined
-  reliability: number | undefined
-  comfort: number | undefined
-  damage: number | undefined
   tripId: number | undefined
-  writerId: number | undefined
+  text: string | undefined
 
 
   starsFilledOne: boolean[] = [false, false, false, false, false];
@@ -61,12 +58,9 @@ export class ReviewCreateComponent {
     console.log("createReview");
 
     const reviewData = {
-      punctuality: this.punctuality,
-      reliability: this.reliability,
-      comfort: this.comfort,
-      damage: this.damage,
       tripId: this.tripId,
-      writerId: this.writerId,
+      rating: this.averageStarsFilled,
+      text: this.text,
     };
 
     this.http.post("http://localhost:8000/review",reviewData, { withCredentials: true })
@@ -101,7 +95,6 @@ export class ReviewCreateComponent {
    */
   handleStarClickQOne(index: number) {
     this.updateStars(this.starsFilledOne, index); // Update stars for punctuality
-    this.punctuality = index + 1; // Update punctuality rating
     this.updateAverageStars(); // Update average star ratings
   }
 
@@ -115,7 +108,6 @@ export class ReviewCreateComponent {
    */
   handleStarClickQTwo(index: number) {
     this.updateStars(this.starsFilledTwo, index); // Update stars for reliability
-    this.reliability = index + 1; // Update reliability rating
     this.updateAverageStars(); // Update average star ratings
   }
 
@@ -129,7 +121,6 @@ export class ReviewCreateComponent {
    */
   handleStarClickQThree(index: number) {
     this.updateStars(this.starsFilledThree, index); // Update stars for comfort
-    this.comfort = index + 1; // Update comfort rating
     this.updateAverageStars(); // Update average star ratings
   }
 
@@ -143,7 +134,6 @@ export class ReviewCreateComponent {
    */
   handleStarClickQFour(index: number) {
     this.updateStars(this.starsFilledFour, index); // Update stars for damage
-    this.damage = index + 1; // Update damage rating
     this.updateAverageStars(); // Update average star ratings
   }
 
