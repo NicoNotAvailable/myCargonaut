@@ -84,3 +84,21 @@
   height: 2rem;
   width: 2rem;
 }
+
+.language-selector {
+  max-width: 300px;
+  margin: auto;
+}
+
+.selected-languages p {
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+  padding: 5px;
+  margin: 2px 0;
+}
+
+.expanded-height {
+  height: 300px; /* Adjust the height as needed */
+  transition: height 0.3s ease-in-out;
+}
