@@ -40,10 +40,10 @@
     <h3 class="greenText fw-semibold">Aktuelle Fahrten</h3>
     </div>
 
-    <div class="row">
+    <div class="row horizontal-center">
       @for (element of allOffers; track $index) {
 
-          <div class="card custom-card mx-auto mt-3">
+          <div class="card custom-card m-1 mt-3">
             <div class="sizeRegulator">
               <img [ngSrc]="window.location.protocol + '//' + window.location.host.replace('4200', '8000') + pathToImageArray[$index]" width="300" height="200" class="img-fluid " alt="">
             </div>
