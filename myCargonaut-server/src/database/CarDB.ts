@@ -5,21 +5,21 @@ import { OfferDB } from './DriveDB';
 
 @ChildEntity()
 export class CarDB extends VehicleDB {
-  @Column({ default: 'empty.png' })
-  carPicture: string;
+    @Column({ default: 'empty.png' })
+    carPicture: string;
 
-  @Column()
-  seats: number;
+    @Column()
+    seats: number;
 
-  @Column()
-  hasAC: boolean;
+    @Column()
+    hasAC: boolean;
 
-  @Column()
-  hasTelevision: boolean;
+    @Column()
+    hasTelevision: boolean;
 
-  @OneToMany(() => OfferDB, (drive) => drive.car)
-  rides: Promise<OfferDB[]>;
+    @OneToMany(() => OfferDB, (drive) => drive.car)
+    rides: Promise<OfferDB[]>;
 
-  @OneToMany(() => RequestTripDB, (drive) => drive.car)
-  requestTrips: Promise<RequestTripDB[]>;
+    @OneToMany(() => RequestTripDB, (drive) => drive.car)
+    requestTrips: Promise<RequestTripDB[]>;
 }

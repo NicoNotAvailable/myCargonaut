@@ -1,6 +1,4 @@
-import {
-  ValidateNested,
-} from 'class-validator';
+import { ValidateNested } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { TripInfoEnum } from '../../database/enums/TripInfoEnum';
 import { PriceTypeEnum } from '../../database/enums/PriceTypeEnum';
@@ -9,71 +7,71 @@ import { Type } from 'class-transformer';
 import { GetOtherUserDTO } from '../../user/DTO/GetOtherUserDTO';
 
 export class GetOfferDTO {
-  @ApiProperty()
-  id: number;
+    @ApiProperty()
+    id: number;
 
-  @ApiProperty()
-  user: GetOtherUserDTO;
+    @ApiProperty()
+    user: GetOtherUserDTO;
 
-  @ApiProperty()
-  carID: number;
+    @ApiProperty()
+    carID: number;
 
-  @ApiProperty()
-  carPicture: string;
+    @ApiProperty()
+    carPicture: string;
 
-  @ApiProperty()
-  trailerID?: number;
+    @ApiProperty()
+    trailerID?: number;
 
-  @ApiProperty()
-  name: string;
+    @ApiProperty()
+    name: string;
 
-  @ApiProperty()
-  date: Date;
+    @ApiProperty()
+    date: Date;
 
-  @ApiProperty()
-  price: number;
+    @ApiProperty()
+    price: number;
 
-  @ApiProperty()
-  seats: number;
+    @ApiProperty()
+    seats: number;
 
-  @ApiProperty()
-  animalsAllowed: boolean;
+    @ApiProperty()
+    animalsAllowed: boolean;
 
-  @ApiProperty()
-  smokingAllowed: boolean;
+    @ApiProperty()
+    smokingAllowed: boolean;
 
-  @ApiProperty()
-  info: TripInfoEnum;
+    @ApiProperty()
+    info: TripInfoEnum;
 
-  @ApiProperty()
-  maxCWeight: number;
+    @ApiProperty()
+    maxCWeight: number;
 
-  @ApiProperty()
-  maxCLength: number;
+    @ApiProperty()
+    maxCLength: number;
 
-  @ApiProperty()
-  maxCHeight: number;
+    @ApiProperty()
+    maxCHeight: number;
 
-  @ApiProperty()
-  maxCWidth: number;
+    @ApiProperty()
+    maxCWidth: number;
 
-  @ApiProperty()
-  maxTLength?: number;
+    @ApiProperty()
+    maxTLength?: number;
 
-  @ApiProperty()
-  maxTWeight?: number;
+    @ApiProperty()
+    maxTWeight?: number;
 
-  @ApiProperty()
-  maxTHeight?: number;
+    @ApiProperty()
+    maxTHeight?: number;
 
-  @ApiProperty()
-  maxTWidth?: number;
+    @ApiProperty()
+    maxTWidth?: number;
 
-  @ApiProperty()
-  priceType: PriceTypeEnum;
+    @ApiProperty()
+    priceType: PriceTypeEnum;
 
-  @ApiProperty({ type: [CreateLocationDTO] })
-  @ValidateNested({ each: true })
-  @Type(() => CreateLocationDTO)
-  locations: CreateLocationDTO[];
+    @ApiProperty({ type: [CreateLocationDTO] })
+    @ValidateNested({ each: true })
+    @Type(() => CreateLocationDTO)
+    locations: CreateLocationDTO[];
 }

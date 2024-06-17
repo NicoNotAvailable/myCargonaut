@@ -3,7 +3,8 @@ import {
     Column,
     PrimaryGeneratedColumn,
     OneToOne,
-    OneToMany, ManyToOne,
+    OneToMany,
+    ManyToOne,
 } from 'typeorm';
 import { OfferTripDB } from './OfferTripDB';
 import { DriveDB } from './DriveDB';

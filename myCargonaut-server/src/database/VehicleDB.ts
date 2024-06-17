@@ -1,9 +1,9 @@
 import {
-  Entity,
-  Column,
-  PrimaryGeneratedColumn,
-  ManyToOne,
-  TableInheritance,
+    Entity,
+    Column,
+    PrimaryGeneratedColumn,
+    ManyToOne,
+    TableInheritance,
 } from 'typeorm';
 import { UserDB } from './UserDB';
 
@@ -19,8 +19,8 @@ export class VehicleDB {
     @Column()
     name: string;
 
-  @Column()
-  weight: number;
+    @Column()
+    weight: number;
 
     @Column()
     length: number;

@@ -8,43 +8,43 @@ import { GetOtherUserDTO } from '../../user/DTO/GetOtherUserDTO';
 import { CreateCargoDTO } from '../../cargo/DTO/CreateCargoDTO';
 
 export class GetRequestDTO {
-  @ApiProperty()
-  id: number;
+    @ApiProperty()
+    id: number;
 
-  @ApiProperty()
-  user: GetOtherUserDTO;
+    @ApiProperty()
+    user: GetOtherUserDTO;
 
-  @ApiProperty()
-  name: string;
+    @ApiProperty()
+    name: string;
 
-  @ApiProperty()
-  date: Date;
+    @ApiProperty()
+    date: Date;
 
-  @ApiProperty()
-  price: number;
+    @ApiProperty()
+    price: number;
 
-  @ApiProperty()
-  seats: number;
+    @ApiProperty()
+    seats: number;
 
-  @ApiProperty()
-  animalsAllowed: boolean;
+    @ApiProperty()
+    animalsAllowed: boolean;
 
-  @ApiProperty()
-  smokingAllowed: boolean;
+    @ApiProperty()
+    smokingAllowed: boolean;
 
-  @ApiProperty()
-  info: TripInfoEnum;
+    @ApiProperty()
+    info: TripInfoEnum;
 
-  @ApiProperty()
-  priceType: PriceTypeEnum;
+    @ApiProperty()
+    priceType: PriceTypeEnum;
 
-  @ApiProperty({ type: [CreateLocationDTO] })
-  @ValidateNested({ each: true })
-  @Type(() => CreateLocationDTO)
-  locations: CreateLocationDTO[];
+    @ApiProperty({ type: [CreateLocationDTO] })
+    @ValidateNested({ each: true })
+    @Type(() => CreateLocationDTO)
+    locations: CreateLocationDTO[];
 
-  @ApiProperty({ type: [CreateCargoDTO] })
-  @ValidateNested({ each: true })
-  @Type(() => CreateCargoDTO)
-  cargo: CreateCargoDTO[];
+    @ApiProperty({ type: [CreateCargoDTO] })
+    @ValidateNested({ each: true })
+    @Type(() => CreateCargoDTO)
+    cargo: CreateCargoDTO[];
 }
