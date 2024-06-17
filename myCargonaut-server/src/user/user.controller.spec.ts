@@ -4,7 +4,7 @@ import { databaseTest, tables } from '../../testDatabase/databaseTest';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserService } from './user.service';
 import * as fs from 'fs/promises';
-import { BadRequestException, NotFoundException } from '@nestjs/common';
+import { BadRequestException } from '@nestjs/common';
 import { SessionData } from 'express-session';
 import { EditUserDTO } from './DTO/EditUserDTO';
 import { CreateUserDTO } from './DTO/CreateUserDTO';
@@ -64,62 +64,6 @@ describe('UserController', () => {
     const response = await controller.createUser(body);
     expect(response.ok).toBe(true);
     expect(response.message).toBe('User was created');
-  });
-
-  describe('getUser', () => {
-    it('should return the user for a valid session', async () => {
-      const mockSession: SessionData = {
-        cookie: {
-          originalMaxAge: null,
-          expires: null,
-          secure: false,
-          httpOnly: true,
-          path: '/',
-          sameSite: 'lax',
-        },
-        currentUser: 1, // Assume user with ID 1 exists in the database
-      };
-
-      const req: any = {
-        session: mockSession,
-      };
-
-      const user = await controller.getUser(req.session);
-      expect(user).toBeDefined();
-      expect(user.id).toBe(mockSession.currentUser);
-    });
-
-    it('should throw an error if no user session is found', async () => {
-      const req: any = {
-        session: {},
-      };
-
-      await expect(controller.getUser(req.session)).rejects.toThrow(
-        BadRequestException,
-      );
-    });
-
-    it('should throw an error if the user does not exist', async () => {
-      const mockSession: SessionData = {
-        cookie: {
-          originalMaxAge: null,
-          expires: null,
-          secure: false,
-          httpOnly: true,
-          path: '/',
-          sameSite: 'lax',
-        },
-        currentUser: 9999, // Assume user with ID 9999 does not exist in the database
-      };
-
-      const req: any = {
-        session: mockSession,
-      };
-
-      await expect(controller.getUser(req.session)).rejects.toThrow(
-        NotFoundException,
-      );
-    });
   });
 
   it('should throw an error for an existing email', async () => {

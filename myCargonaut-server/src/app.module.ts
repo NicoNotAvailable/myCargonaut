@@ -12,10 +12,19 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserService } from './user/user.service';
 import { UserController } from './user/user.controller';
 import { SessionController } from './session/session.controller';
-import { ChatDB } from './database/ChatDB';
-import { RequestDB } from './database/RequestDB';
+import { MessageDB } from './database/MessageDB';
 import { VehicleService } from './vehicle/vehicle.service';
 import { VehicleController } from './vehicle/vehicle.controller';
+import { CargoDB } from './database/CargoDB';
+import { DriveDB, OfferDB, RequestDB } from './database/DriveDB';
+import { OfferTripDB } from './database/OfferTripDB';
+import { RequestTripDB } from './database/RequestTripDB';
+import { DriveService } from './drive/drive.service';
+import { DriveController } from './drive/drive.controller';
+import { TripService } from './trip/trip.service';
+import { TripController } from './trip/trip.controller';
+import { LocationService } from './location/location.service';
+import { UtilsService } from './utils/utils.service';
 
 @Module({
   imports: [
@@ -24,27 +33,37 @@ import { VehicleController } from './vehicle/vehicle.controller';
       database: './db.sqlite',
       entities: [
         UserDB,
+        DriveDB,
         CarDB,
         LocationDB,
         ReviewDB,
         TrailerDB,
         TripDB,
         VehicleDB,
-        ChatDB,
+        MessageDB,
         RequestDB,
+        CargoDB,
+        OfferDB,
+        OfferTripDB,
+        RequestTripDB,
       ],
       synchronize: true,
     }),
     TypeOrmModule.forFeature([
       UserDB,
+      DriveDB,
       CarDB,
       LocationDB,
       ReviewDB,
       TrailerDB,
       TripDB,
       VehicleDB,
-      ChatDB,
+      MessageDB,
       RequestDB,
+      CargoDB,
+      OfferDB,
+      OfferTripDB,
+      RequestTripDB,
     ]),
   ],
   controllers: [
@@ -52,7 +71,17 @@ import { VehicleController } from './vehicle/vehicle.controller';
     UserController,
     SessionController,
     VehicleController,
+    DriveController,
+    TripController,
   ],
-  providers: [AppService, UserService, VehicleService],
+  providers: [
+    AppService,
+    UserService,
+    VehicleService,
+    DriveService,
+    TripService,
+    LocationService,
+    UtilsService,
+  ],
 })
 export class AppModule {}

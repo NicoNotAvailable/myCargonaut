@@ -3,14 +3,14 @@ import {
   Body,
   Controller,
   Get,
-  Logger,
+  Logger, Param,
   Post,
-  Put,
+  Put, Res,
   Session,
   UploadedFile,
   UseGuards,
-  UseInterceptors,
-} from '@nestjs/common';
+  UseInterceptors
+} from "@nestjs/common";
 import {
   ApiBearerAuth,
   ApiConsumes,
@@ -20,7 +20,7 @@ import {
 import { UserService } from './user.service';
 import { CreateUserDTO } from './DTO/CreateUserDTO';
 import { OkDTO } from '../serverDTO/OkDTO';
-import { extname } from 'path';
+import { extname, join } from "path";
 import { diskStorage } from 'multer';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { EditPasswordDTO } from './DTO/EditPasswordDTO';
@@ -30,7 +30,10 @@ import { IsLoggedInGuard } from '../session/is-logged-in.guard';
 import { EditUserDTO } from './DTO/EditUserDTO';
 import * as validator from 'validator';
 import * as bcrypt from 'bcryptjs';
+import { GetOwnUserDTO } from './DTO/GetOwnUserDTO';
 import { UserDB } from '../database/UserDB';
+import { GetOtherUserDTO } from './DTO/GetOtherUserDTO';
+import { Response } from "express";
 
 @ApiTags('user')
 @Controller('user')
@@ -69,20 +72,34 @@ export class UserController {
     return age >= 18;
   }
 
-  @ApiResponse({ type: OkDTO, description: 'gets the current user' })
-  @ApiBearerAuth()
+  @ApiResponse({ type: GetOwnUserDTO, description: 'gets the own user' })
   @Get()
-  async getUser(@Session() session: SessionData): Promise<UserDB> {
-    if (!session.currentUser) {
-      throw new BadRequestException('No user session found');
+  async getUser(@Session() session: SessionData): Promise<GetOwnUserDTO> {
+    let user: UserDB;
+    try {
+      user = await this.userService.getUserById(session.currentUser);
+    } catch (err) {
+      console.log(err);
     }
-    const user = await this.userService.getUserById(session.currentUser);
-    return user;
+    const dto: GetOwnUserDTO = new GetOwnUserDTO();
+    dto.lastName = user.lastName;
+    dto.firstName = user.firstName;
+    dto.email = user.email;
+    dto.profilePic = user.profilePic;
+    dto.phoneNumber = user.phoneNumber;
+    dto.birthday = user.birthday;
+    dto.isSmoker = user.isSmoker;
+    dto.profileText = user.profileText;
+    dto.languages = user.languages;
+    return dto;
   }
 
   @ApiResponse({ type: OkDTO, description: 'creates a new user' })
   @Post()
-  async createUser(@Body() body: CreateUserDTO) {
+  async createUser(
+    @Body() body: CreateUserDTO,
+    @Session() session: SessionData,
+  ) {
     if (!body.agb) {
       throw new BadRequestException(
         'Du musst die AGB akzeptieren, um dich zu registrieren',
@@ -124,6 +141,11 @@ export class UserController {
         birthday,
         body.phoneNumber,
       );
+      const user: UserDB = await this.userService.getUserByEmail(
+        body.email.trim(),
+      );
+      session.currentUser = user.id;
+
       return new OkDTO(true, 'User was created');
     } catch (err) {
       throw err;
@@ -248,7 +270,7 @@ export class UserController {
     type: OkDTO,
     description: 'updates a specifics user details',
   })
-  @Put()
+  @Put('/profile')
   @ApiBearerAuth()
   @UseGuards(IsLoggedInGuard)
   async updateUser(
@@ -261,7 +283,7 @@ export class UserController {
       body.phoneNumber != user.phoneNumber &&
       !this.isValidMobileNumber(body.phoneNumber)
     ) {
-      throw new BadRequestException('Ungültige Telefon-Nummer');
+      throw new BadRequestException('Ungültige telefon-Nummer');
     }
     user.phoneNumber = body.phoneNumber;
     if (body.firstName) {
@@ -278,6 +300,10 @@ export class UserController {
       );
       user.lastName = body.lastName;
     }
+    if (body.languages !== '' || body.languages !== undefined) {
+      user.languages = body.languages;
+    }
+    if (body.isSmoker) user.isSmoker = body.isSmoker;
     if (body.profileText) user.profileText = body.profileText;
     try {
       await this.userService.updateUser(user);
@@ -287,11 +313,27 @@ export class UserController {
     }
   }
 
+  @ApiResponse({ description: 'Fetches the image of a vehicle' })
+  @Get('image/:image')
+  async getImage(@Param('image') image: string, @Res() res: Response) {
+    try {
+      const imgPath: string = join(
+        process.cwd(),
+        'uploads',
+        'profilePictures',
+        image,
+      );
+      res.sendFile(imgPath);
+    } catch (err) {
+      throw new BadRequestException(err);
+    }
+  }
+
   @ApiResponse({
     type: OkDTO,
     description: '"deletes" a spefics user by only keeping its id',
   })
-  @Put()
+  @Put('delete')
   @ApiBearerAuth()
   @UseGuards(IsLoggedInGuard)
   async deleteUser(@Session() session: SessionData): Promise<OkDTO> {

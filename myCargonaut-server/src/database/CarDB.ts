@@ -1,6 +1,7 @@
 import { Column, ChildEntity, OneToMany } from 'typeorm';
 import { VehicleDB } from './VehicleDB';
-import { TripDB } from './TripDB';
+import { RequestTripDB } from './RequestTripDB';
+import { OfferDB } from './DriveDB';
 
 @ChildEntity()
 export class CarDB extends VehicleDB {
@@ -16,6 +17,9 @@ export class CarDB extends VehicleDB {
   @Column()
   hasTelevision: boolean;
 
-  @OneToMany(() => TripDB, (trip) => trip.car)
-  rides: Promise<TripDB[]>;
+  @OneToMany(() => OfferDB, (drive) => drive.car)
+  rides: Promise<OfferDB[]>;
+
+  @OneToMany(() => RequestTripDB, (drive) => drive.car)
+  requestTrips: Promise<RequestTripDB[]>;
 }

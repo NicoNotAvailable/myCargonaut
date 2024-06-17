@@ -1,0 +1,81 @@
+.buttonColor {
+  background-color: #005B52;
+}
+
+.textGreen {
+  color: #005B52;
+}
+
+.backgroundBlue {
+  background-color: #1A9CC5;
+}
+
+.circle {
+  border-radius: 50%;
+}
+
+#addTrailerArea{
+  font-weight: 500;
+  position: relative;
+  z-index: 1;
+  transition: all 0.4s ease;
+  border-radius: 1rem;
+  padding-top: 1rem !important;
+  padding-bottom: 2rem !important;
+}
+#addTrailerArea:hover{
+  box-shadow: 0px 0px 20px #005B52;
+}
+
+.cancelButton{
+  background-color: #1a9cc5 !important;
+  position: relative;
+  z-index: 2;
+  font-size: 1.5rem;
+  border-radius: 2rem;
+  width: 3.25rem;
+  border-color: transparent;
+  transition: all 0.3s ease;
+  margin-bottom: -1.5rem;
+}
+.cancelButton:hover {
+  box-shadow: #1a9cc5 0 0 20px;
+  text-shadow: ghostwhite 0 0 10px;
+}
+
+.exitButton{
+  position: relative;
+  z-index: 1;
+  margin-top: -1.5rem;
+  background-color: #1a9cc5;
+  padding: 0.5rem 1rem 0.5rem 1rem;
+  font-size: 1.5rem;
+  font-weight: 400;
+}
+.exitButton:hover{
+  box-shadow: #1a9cc5 0 0 20px;
+}
+
+input{
+  border: solid #005B52 0.1rem;
+}
+
+.larger-checkbox {
+  height: 2rem;
+  width: 2rem;
+}
+
+.selectedSeats{
+  background-color: #1a9cc5;
+}
+.deselectedSeats{
+  background-color: #005B52;
+}
+.deleteButton{
+  background-color: #005B52;
+}
+.trailerInfo{
+  color: #005B52;
+  font-weight: bold;
+  font-size: 1.2rem;
+}

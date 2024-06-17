@@ -34,7 +34,7 @@
         <div class="row justify-content-center">
           <div class="col-12 col-md-8 col-lg-6 mt-5 mb-3 text-center">
             <button type="submit" class="btn customButton">Einloggen</button>
-            <span class="text-danger"> {{ message }}</span>
+            <span [ngClass]="textColor"> {{ message }}</span>
           </div>
         </div>
       </form>

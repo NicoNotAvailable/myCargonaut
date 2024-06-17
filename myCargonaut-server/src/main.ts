@@ -6,10 +6,10 @@ import * as express from 'express';
 import { CorsOptions } from '@nestjs/common/interfaces/external/cors-options.interface';
 
 declare module 'express-session' {
-  interface SessionData {
-    currentUser?: number;
-    currentCar?: number;
-  }
+    interface SessionData {
+        currentUser?: number;
+        currentCar?: number;
+    }
 }
 
 async function bootstrap() {
@@ -24,13 +24,17 @@ async function bootstrap() {
   };
   app.enableCors(corsOptions);
 
-  app.use(
-    session({
-      secret: 'my-secret',
-      resave: false,
-      saveUninitialized: false,
-    }),
-  );
+    app.use(
+        session({
+            secret: 'my-secret',
+            resave: false,
+            saveUninitialized: false,
+            cookie: {
+                secure: false,
+                maxAge: 3600000,
+            },
+        }),
+    );
 
   const config = new DocumentBuilder()
     .setTitle('My Cargonaut')
