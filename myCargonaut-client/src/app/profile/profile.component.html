@@ -1,7 +1,8 @@
 <div class="profile text-center container mb-4" *ngIf="loaded">
   <div class="row">
     <div class="col-2">
-      <img class="profileCircle" [ngSrc]="pathToImage" alt="profile" width="150" height="150">
+      <img *ngIf="profilePic === 'empty.png' " class="profileCircle" [ngSrc]="pathToImage" alt="profile" width="150" height="150">
+      <img *ngIf="profilePic !== 'empty.png' " [ngSrc]="window.location.protocol + '//' + window.location.host.replace('4200', '8000') + '/user/image/'+ profilePic" width="70" height="55" class="card-img-top img-fluid backgroundGreen profileCircle my-4" alt="">
     </div>
     <div class="col-8 my-auto">
       <div class="row">
