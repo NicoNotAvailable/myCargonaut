@@ -24,6 +24,7 @@ import { CreateRequestDTO } from './DTO/CreateRequestDTO';
 import { GetOfferDTO } from './DTO/GetOfferDTO';
 import { GetRequestDTO } from './DTO/GetRequestDTO';
 import { UtilsService } from '../utils/utils.service';
+import { ChangeStatusDTO } from './DTO/ChangeStatusDTO';
 
 @ApiTags('drive')
 @Controller('drive')
@@ -356,6 +357,34 @@ export class DriveController {
     this.validateRequestInput(body);
     try {
       await this.driveService.updateRequest(requestId, userId, body);
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw new NotFoundException(error.message);
+      }
+      throw error;
+    }
+    return new OkDTO(true, 'request was updated');
+  }
+  @ApiResponse({
+    type: OkDTO,
+    description: 'updates the status of a drive',
+  })
+  @ApiBearerAuth()
+  @UseGuards(IsLoggedInGuard)
+  @ApiParam({
+    name: 'id',
+    type: 'number',
+    description: 'ID of the drive to be updated',
+  })
+  @Put('status/:id')
+  async updateStatus(
+    @Param('id') driveId: number,
+    @Session() session: SessionData,
+    @Body() body: ChangeStatusDTO,
+  ): Promise<OkDTO> {
+    const userId = session.currentUser;
+    try {
+      await this.driveService.updateStatus(driveId, userId, body);
     } catch (error) {
       if (error instanceof NotFoundException) {
         throw new NotFoundException(error.message);

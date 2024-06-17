@@ -41,6 +41,9 @@ export class UserDescriptionComponent {
   newEmailConfirm: string = '';
   newProfileText: string = '';
   startedSmoking: boolean = false;
+  newFirstname: string = '';
+  newLastname: string = '';
+  newPfp: any = "";
 
 
   public userService: UserService = inject(UserService);
@@ -76,6 +79,8 @@ export class UserDescriptionComponent {
   emailMatchError: boolean = false;
   errorMessage: string = '';
 
+  imgUpload: boolean = false;
+
   totalDrives = computed(() => this.offeredDrives() + this.takenDrives());
 
   ngOnInit(): void {
@@ -87,6 +92,8 @@ export class UserDescriptionComponent {
     }, 200);
     this.userService.readUser().subscribe(
       response => {
+        this.newFirstname = response.firstName;
+        this.newLastname = response.lastName;
         this.profileText = response.profileText == null || response.profileText === '' ? 'Deine Beschreibung...' : response.profileText;
         response.offeredDrives == null ? this.offeredDrives.set(1234) : this.offeredDrives.set(response.offeredDrives);
         response.takenDrives == null ? this.takenDrives.set(123) : this.takenDrives.set(response.takenDrives);
@@ -101,6 +108,7 @@ export class UserDescriptionComponent {
       error => {
         console.error('There was an error!', error);
         this.errorMessage = 'Email ist ungültig';
+        this.removeErrorMessage();
       },
     );
   }
@@ -112,6 +120,8 @@ export class UserDescriptionComponent {
       languages: this.newLang,
       profileText: this.newProfileText,
       isSmoker: this.startedSmoking,
+      firstName: this.newFirstname,
+      lastName: this.newLastname,
     };
     if (this.newEmail === '' || this.newEmail === null) {
       userData.email = this.email;
@@ -136,6 +146,43 @@ export class UserDescriptionComponent {
     );
 
     this.changeEditState();
+  }
+
+  enableImgUpload(): void {
+    this.imgUpload = !this.imgUpload;
+  }
+
+  onFileChange(event: any) {
+    const file = event.target.files[0];
+    if (file) {
+      const reader: FileReader = new FileReader();
+      reader.onload = (e: any) => {
+        this.newPfp = e.target.result;
+      };
+      reader.readAsDataURL(file);
+      const formData: FormData = new FormData();
+      formData.append("file", file);
+
+      this.http.post("http://localhost:8000/user/upload-profile-picture", formData, { withCredentials: true }).subscribe(
+        response => {
+          this.enableImgUpload();
+        },
+        error => {
+          console.error(error);
+          this.errorMessage = "Etwas ist schiefgelaufen";
+          this.removeErrorMessage();
+        }
+      );
+      return;
+    }
+    this.errorMessage = "Bitte lade ein Bild von deinem Auto hoch.";
+    this.removeErrorMessage();
+  }
+
+  removeErrorMessage(): void {
+    setTimeout(() =>{
+      this.errorMessage = "";
+    }, 5000);
   }
 
   validateEmailConfirmation() {
