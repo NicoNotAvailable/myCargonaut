@@ -1,5 +1,4 @@
-import { Injectable, PLATFORM_ID, Inject } from '@angular/core';
-import { isPlatformBrowser } from '@angular/common';
+import { Injectable } from '@angular/core';
 import { io, Socket } from 'socket.io-client';
 import { Observable } from 'rxjs';
 
@@ -8,19 +7,17 @@ import { Observable } from 'rxjs';
 })
 export class SocketService {
   private socket: Socket | undefined;
-  private readonly url: string = 'ws://localhost:8000';
+  private readonly url: string = '//localhost:8000';
   private socketInitialized: boolean = false;
 
-  constructor(@Inject(PLATFORM_ID) private platformId: Object) {
-    if (isPlatformBrowser(this.platformId)) {
-      this.init();
-    }
-  }
+  constructor() {}
 
-  private init(): void {
+  public init(): void {
     console.log('Socket initialization started...');
     if (!this.socketInitialized) {
-      this.socket = io(this.url);
+      this.socket = io(this.url, {
+        autoConnect: true
+      });
       this.socketInitialized = true;
       console.log('Socket initialized:', this.socketInitialized);
     }

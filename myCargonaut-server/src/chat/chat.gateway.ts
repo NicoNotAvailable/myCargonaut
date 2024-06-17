@@ -16,7 +16,13 @@ interface ActiveRoom {
   users: Set<number>;
 }
 
-@WebSocketGateway()
+@WebSocketGateway({
+  cors: {
+    origin: 'http://localhost:4200',
+    methods: ['GET', 'POST'],
+    credentials: true,
+  },
+})
 export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @WebSocketServer()
   server: Server;
@@ -31,11 +37,11 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   handleConnection(client: Socket) {
     console.log('Client connected:', client.id);
-    this.removeUserFromRooms(client);
   }
 
   handleDisconnect(client: Socket) {
     console.log('Client disconnected:', client.id);
+    this.removeUserFromRooms(client);
   }
 
   @SubscribeMessage('register')

@@ -1,7 +1,7 @@
-import { Component, OnInit, inject } from "@angular/core";
+import { Component, OnInit, inject, Inject, PLATFORM_ID } from "@angular/core";
 import { SocketService } from '../services/socket.service';
 import { SessionService } from "../services/session.service";
-import { CommonModule } from '@angular/common';
+import { CommonModule, isPlatformBrowser } from "@angular/common";
 import { FormsModule } from "@angular/forms";
 
 @Component({
@@ -22,14 +22,18 @@ export class ChatComponent implements OnInit {
   private sessionService: SessionService = inject(SessionService);
   private socketService: SocketService = inject(SocketService);
 
+  constructor(@Inject(PLATFORM_ID) private platformId: Object) {
+    if (isPlatformBrowser(this.platformId)) {
+      this.socketService.init();
+    }
+  }
+
   ngOnInit(): void {
     this.sessionService.checkLoginNum().then(async isLoggedIn => {
       isLoggedIn == -1 ? this.isLoggedIn = false : this.isLoggedIn = true;
       console.log("islogged" + isLoggedIn);
-      if (!this.isLoggedIn && typeof window !== 'undefined') {
+      if (!this.isLoggedIn) {
         window.location.href = "/";
-      } else {
-        console.log("hä");
       }
     });
   }

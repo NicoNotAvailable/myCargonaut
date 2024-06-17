@@ -4,11 +4,27 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import * as session from 'express-session';
 import * as express from 'express';
 import { CorsOptions } from '@nestjs/common/interfaces/external/cors-options.interface';
+import { IoAdapter } from '@nestjs/platform-socket.io';
 
 declare module 'express-session' {
   interface SessionData {
     currentUser?: number;
     currentCar?: number;
+  }
+}
+
+class MyIoAdapter extends IoAdapter {
+  createIOServer(port: number, options?: any): any {
+    options = {
+      ...options,
+      cors: {
+        origin: 'http://localhost:4200',
+        methods: ['GET', 'POST'],
+        credentials: true,
+      },
+    };
+    const server = super.createIOServer(port, options);
+    return server;
   }
 }
 
@@ -47,6 +63,8 @@ async function bootstrap() {
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
   app.use(express.json({ limit: '50mb' }));
+
+  app.useWebSocketAdapter(new MyIoAdapter(app));
 
   await app.listen(8000);
 }
