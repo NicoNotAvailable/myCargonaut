@@ -41,6 +41,7 @@ export class ReviewCreateComponent {
   message: string = ""
   tripId: number | undefined
   text: string | undefined
+  averageFilledStars: number | undefined
 
 
   starsFilledOne: boolean[] = [false, false, false, false, false];
@@ -58,8 +59,8 @@ export class ReviewCreateComponent {
     console.log("createReview");
 
     const reviewData = {
-      tripId: this.tripId,
-      rating: this.averageStarsFilled,
+      tripId: 1,
+      rating: this.averageFilledStars,
       text: this.text,
     };
 
@@ -182,11 +183,11 @@ export class ReviewCreateComponent {
     });
 
     // Calculate the average number of filled stars
-    const averageFilledStars = Math.round(filledStarsCount / allStarsArrays.length);
+    this.averageFilledStars = Math.round(filledStarsCount / allStarsArrays.length);
 
     // Update averageStarsFilled array based on the average filled stars
     for (let i = 0; i < this.averageStarsFilled.length; i++) {
-      this.averageStarsFilled[i] = i < averageFilledStars;
+      this.averageStarsFilled[i] = i < this.averageFilledStars;
     }
   }
 
