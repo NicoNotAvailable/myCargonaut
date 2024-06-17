@@ -5,12 +5,19 @@
   border-color: #005B52 ;
 
 }
+.greenButton:hover {
+  box-shadow: 0 0 20px #005B52;
+}
 .blueButton {
   background-color: #1A9CC5;
   color: white;
   border-radius: 15px;
   border-color: #1A9CC5 ;
 }
+.blueButton:hover {
+  box-shadow: 0 0 20px #1A9CC5;
+}
+
 .greenText {
   color: #005B52;
 }
@@ -20,7 +27,9 @@
 }
 .inputField{
   border-radius: 15px;
-
+}
+.roundedABit{
+  border-radius: 10%;
 }
 
 
@@ -44,3 +53,15 @@
 .transform{
     transform: translateY(30px); /* Verschiebt das Element 50px nach unten */
 }
+
+.backgroundGreen {
+  background-color: #005B52;
+}
+
+.profileCircle {
+  border-radius: 10%;
+  box-shadow: 5px 5px 5px #005B52;
+}
+
+
+

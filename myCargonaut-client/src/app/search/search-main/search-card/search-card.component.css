@@ -12,6 +12,9 @@
   background-color: #1A9CC5;
   border-radius: 15px;
 }
+.blueButton:hover {
+  box-shadow: 0 0 20px #1A9CC5;
+}
 
 .blueText {
   color: #1A9CC5;
@@ -59,6 +62,9 @@
   background-color: #005B52;
   color: white;
   border-radius: 15px;
+}
+.greenButton:hover {
+  box-shadow: 0 0 20px #005B52;
 }
 
 .card {
