@@ -8,13 +8,14 @@ import { request } from "../../search/requests";
 import { requestTrips } from "../requestTrips";
 import { SessionService } from "../../services/session.service";
 import { UserService } from "../../services/user.service";
-import {NgOptimizedImage} from "@angular/common";
+import { NgForOf, NgOptimizedImage } from "@angular/common";
 
 @Component({
   selector: 'app-request-auf-anfrage-osuche',
   standalone: true,
   imports: [
-    NgOptimizedImage
+    NgOptimizedImage,
+    NgForOf
   ],
   templateUrl: './request-auf-anfrage-osuche.component.html',
   styleUrl: './request-auf-anfrage-osuche.component.css'
@@ -51,6 +52,13 @@ export class RequestAufAnfrageOSucheComponent  implements OnInit {
 
   pathToImageArray: string[] = [];
 
+
+
+  starFillSrc: string = './assets/star-fill.svg';
+  starEmptySrc: string = './assets/star.svg';
+
+  bewertungsDummy : number = 4;
+  stars: number[] = [1, 2, 3, 4, 5];
 
   constructor(private route: ActivatedRoute, private http: HttpClient,  private router: Router) { }
 
