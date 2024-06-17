@@ -1,4 +1,4 @@
-import {Component, Inject} from '@angular/core';
+import {Component, Inject, ViewEncapsulation} from '@angular/core';
 import {
   MAT_DIALOG_DATA,
   MatDialog,
@@ -37,22 +37,29 @@ import {NgIf} from "@angular/common";
     MatDialogClose,
   ],
   templateUrl: './drive-modal.component.html',
-  styleUrl: './drive-modal.component.css'
+  styleUrls: [
+    './drive-modal.component.css',
+    '../../../../node_modules/@angular/material/prebuilt-themes/indigo-pink.css'
+  ],
+  encapsulation: ViewEncapsulation.None // Oder ViewEncapsulation.Emulated
 })
 export class DriveModalComponent {
   cargoDescription: string = "";
-  cargoWeight: string = "";
-  cargoLength: number = 0;
-  cargoWidth: number = 0;
-  cargoHeight: number = 0;
-  carWeight: number = 0;
-  carLength: number = 0;
-  carWidth: number = 0;
-  carHeight: number = 0;
-  trailerWeight: number = 0;
-  trailerLength: number = 0;
-  trailerWidth: number = 0;
-  trailerHeight: number = 0;
+  cargoWeight:  number | null | null = null;
+  cargoLength:  number | null = null;
+  cargoWidth:  number | null = null;
+  cargoHeight:  number | null = null;
+  carWeight:  number | null = null;
+  carLength:  number | null = null;
+  carWidth:  number | null = null;
+  carHeight:  number | null = null;
+  trailerWeight:  number | null = null;
+  trailerLength:  number | null = null;
+  trailerWidth:  number | null = null;
+  trailerHeight:  number | null = null;
+  stopLand: string = "";
+  stopPLZ: string = "";
+  stopPlace: string = "";
 
 
   constructor(

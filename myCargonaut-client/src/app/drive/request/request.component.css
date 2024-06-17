@@ -1,3 +1,5 @@
+@import '@angular/material/prebuilt-themes/indigo-pink.css';
+
 .buttonColor {
   background-color: #005B52;
 }

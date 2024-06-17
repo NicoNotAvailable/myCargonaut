@@ -1,142 +1,259 @@
-<!--<div class="container mt-3 mb-3 text-start">
+<div *ngIf="isLoggedIn" class="container mt-3 mb-3 text-start">
   <form #form="ngForm" (ngSubmit)="saveOffer(form)">
     <div class="row">
       <div class="p-5" id="addOfferArea">
-        <div class="row mb-5">
-          <div class="col-4" *ngIf="editingCar == 0">
-            <h1 class="textGreen col-7">Sitze:</h1>
-            <div class="row">
-              <div class="col-2"></div>
-              <div class="col-4">
-                <button (click)="changeSeatCount(2)" [ngClass]="seats === 2 ? 'selectedSeats' : 'deselectedSeats'" type="button" class="btn rounded-3 pt-4 pb-4 ps-5 pe-5 text-light"><h1>2</h1>
-                </button>
-              </div>
-              <div class="col-1"></div>
-              <div class="col-4">
-                <button (click)="changeSeatCount(3)" [ngClass]="seats === 3 ? 'selectedSeats' : 'deselectedSeats'" type="button" class="btn rounded-3 pt-4 pb-4 ps-5 pe-5 text-light"><h1>3</h1>
-                </button>
-              </div>
-              <div class="col-1"></div>
-            </div>
+        <div class="row mb-5 justify-content-between">
+          <div class="col-3" *ngIf="editingOffer == 0">
+            <h2 class="textGreen col-7">Sitze:</h2>
             <div class="row mt-4">
-              <div class="col-2"></div>
-              <div class="col-4">
-                <button (click)="changeSeatCount(4)" [ngClass]="seats === 4 ? 'selectedSeats' : 'deselectedSeats'" type="button" class="btn rounded-3 pt-4 pb-4 ps-5 pe-5 text-light"><h1>4</h1>
+              <div class="hstack justify-content-between">
+                <button (click)="changeSeatCount(2)" [ngClass]="seats === 2 ? 'selectedButton' : 'deselectedButton'"
+                        type="button" class="btn rounded-3 py-1 px-3 text-light">
+                  <h2>2</h2>
                 </button>
-              </div>
-              <div class="col-1"></div>
-              <div class="col-4">
-                <button (click)="changeSeatCount(5)" [ngClass]="seats === 5 ? 'selectedSeats' : 'deselectedSeats'" type="button" class="btn rounded-3 pt-4 pb-4 ps-5 pe-5 text-light"><h1>5</h1>
+                <button (click)="changeSeatCount(3)" [ngClass]="seats === 3 ? 'selectedButton' : 'deselectedButton'"
+                        type="button" class="btn rounded-3 py-1 px-3 text-light">
+                  <h2>3</h2>
+                </button>
+                <button (click)="changeSeatCount(4)" [ngClass]="seats === 4 ? 'selectedButton' : 'deselectedButton'"
+                        type="button" class="btn rounded-3 py-1 px-3 text-light">
+                  <h2>4</h2>
+                </button>
+                <button (click)="changeSeatCount(5)" [ngClass]="seats === 5 ? 'selectedButton' : 'deselectedButton'"
+                        type="button" class="btn rounded-3 py-1 px-3 text-light">
+                  <h2>5</h2>
                 </button>
               </div>
             </div>
-            <div class="row mt-3">
-              <div class="col-2 me-2"></div>
-              <input [(ngModel)]="seats" #seatsInput="ngModel" type="number" name="seatsInput" class="rounded-5 p-2 col-9" placeholder="Andere Anzahl" (input)="changeSeatCount(seatsInput.value)">
+            <div class="mt-3 justify-content-center">
+              <input [(ngModel)]="seats" #seatsInput="ngModel" type="number" name="seatsInput"
+                     class="rounded-5 p-2 w-100" placeholder="Andere Anzahl"
+                     (input)="changeSeatCount(seatsInput.value)">
             </div>
-          </div>
-          <div class="col-4" *ngIf="editingCar != 0">
-            <h1 class="textGreen col-7">Sitze:</h1>
             <div class="row">
-              <div class="col-2"></div>
-              <div class="col-4">
-                <button (click)="changeSeatCount(2)" disabled [ngClass]="seats === 2 ? 'selectedSeats' : 'deselectedSeats'" type="button" class="btn rounded-3 pt-4 pb-4 ps-5 pe-5 text-light"><h1>2</h1>
-                </button>
-              </div>
-              <div class="col-1"></div>
-              <div class="col-4">
-                <button (click)="changeSeatCount(3)" disabled [ngClass]="seats === 3 ? 'selectedSeats' : 'deselectedSeats'" type="button" class="btn rounded-3 pt-4 pb-4 ps-5 pe-5 text-light"><h1>3</h1>
-                </button>
-              </div>
-              <div class="col-1"></div>
-            </div>
-            <div class="row mt-4">
-              <div class="col-2"></div>
-              <div class="col-4">
-                <button (click)="changeSeatCount(4)" disabled [ngClass]="seats === 4 ? 'selectedSeats' : 'deselectedSeats'" type="button" class="btn rounded-3 pt-4 pb-4 ps-5 pe-5 text-light"><h1>4</h1>
-                </button>
-              </div>
-              <div class="col-1"></div>
-              <div class="col-4">
-                <button (click)="changeSeatCount(5)" disabled [ngClass]="seats === 5 ? 'selectedSeats' : 'deselectedSeats'" type="button" class="btn rounded-3 pt-4 pb-4 ps-5 pe-5 text-light"><h1>5</h1>
-                </button>
+              <div class="col text-center textGreen h3 mt-3">
+                <p>oder</p>
               </div>
             </div>
-            <div class="row mt-3">
-              <div class="col-2 me-2"></div>
-              <input [(ngModel)]="seats" [ngModelOptions]="{standalone: true}" disabled type="number" class="rounded-5 p-2 col-9">
+
+            <button (click)="changeSeatCount(1)" [ngClass]="seats === 1 ? 'selectedButton' : 'deselectedButton'"
+                    type="button" class="btn rounded-3 text-light w-100">
+              <h2>Nur Cargo</h2>
+            </button>
+            <div class="row mt-5">
+              <div class="col text-start">
+                <h2 class="textGreen">Preisvorschlag:</h2>
+              </div>
             </div>
-            <div class="col-12 mt-5 align-bottom d-flex justify-content-around align-items-center" *ngIf="enableDeletion">
-              <button type="button" class="btn customButton deleteButton text-light" (click)="deleteCar(editingCar)">
-                <i>
-                  <fa-icon [icon]="faDeleteLeft"></fa-icon>
-                </i>
-                <span class="ms-3">Auto Löschen</span>
-              </button>
+            <div class="hstack justify-content-center">
+              <input [(ngModel)]="offeredPrice" #requestedPriceInput="ngModel" type="number"
+                     name="requestedPriceInput"
+                     class="rounded-5 p-2 w-100" placeholder="Andere Anzahl"
+                     (input)="changeOfferedPrice(requestedPriceInput.value)">
+            </div>
+            <div class="col-12 mt-3">
+              <div class="btn-group d-flex" role="group">
+                <input type="radio" class="btn-check" name="musicOrTalk" id="totalPrice" autocomplete="off"
+                       (click)="changePriceType(1)">
+                <label class="btn customButton flex-fill checkboxBorder" for="totalPrice"
+                       [ngClass]="offeredPriceType === 1 ? 'selectedButton' : 'deselectedButton'">Gesamt</label>
+
+                <input type="radio" class="btn-check" name="musicOrTalk" id="perPersonPrice" autocomplete="off"
+                       (click)="changePriceType(2)">
+                <label class="btn customButton flex-fill checkboxBorder" for="perPersonPrice"
+                       [ngClass]="offeredPriceType === 2 ? 'selectedButton' : 'deselectedButton'">Pro Person</label>
+
+                <input type="radio" class="btn-check" name="musicOrTalk" id="perWeightPrice" autocomplete="off"
+                       (click)="changePriceType(3)">
+                <label class="btn customButton flex-fill checkboxBorder" for="perWeightPrice"
+                       [ngClass]="offeredPriceType === 3 ? 'selectedButton' : 'deselectedButton'">Pro KG</label>
+              </div>
             </div>
           </div>
 
           <div class="col-4">
-            <h1 class="textGreen col-5">Infos:</h1>
+            <h2 class="textGreen col-5 mb-3">Infos:</h2>
 
-            <div class="col-12" *ngIf="editingCar == 0">
-              <input [(ngModel)]="model" [ngModelOptions]="{standalone: true}" name="modelInput" required type="text" class="rounded-5 p-2 col-12" placeholder="Modell" id="carModel">
+            <div class="col-12" *ngIf="editingOffer == 0">
+              <input [(ngModel)]="name" [ngModelOptions]="{standalone: true}" name="nameInput" required type="text"
+                     class="form-control rounded-5 p-2 col-12" placeholder="Name des Trips" id="nameInput">
             </div>
-            <div class="col-12" *ngIf="editingCar != 0">
-              <span class="carInfo">{{ model }}</span>
+            <div class="row mt-3">
+              <div class="col-5">
+                <div class="dropdown w-100">
+                  <a class="btn customButton dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                     aria-expanded="false">
+                    Auto wählen
+                  </a>
+
+                  <ul class="dropdown-menu">
+                    <li><a class="dropdown-item">Mercedes CL500</a></li>
+                    <li><a class="dropdown-item">Porsche 911</a></li>
+                    <li><a class="dropdown-item">Lamborghini Countach</a></li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="col-7 text-end">
+                <button (click)="openCarDialog()" type="button"
+                        class="btn rounded-3 text-light customButton">
+                  Auto anpassen
+                </button>
+              </div>
             </div>
-            <div class="col-12 mt-5">
-              <p>Bild des Autos</p>
+            <div class="row mt-3">
+              <div class="col-5">
+                <div class="dropdown w-100">
+                  <a class="btn customButton dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                     aria-expanded="false">
+                    Anhänger wählen
+                  </a>
+
+                  <ul class="dropdown-menu">
+                    <li><a class="dropdown-item">Kramer KL 200</a></li>
+                    <li><a class="dropdown-item">Anhänger 1</a></li>
+                    <li><a class="dropdown-item">Anhänger 2</a></li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="col-7 text-end">
+                <button (click)="openTrailerDialog()" type="button"
+                        class="btn rounded-3 text-light customButton">
+                  Anhänger anpassen
+                </button>
+              </div>
             </div>
-            <div class="col-12">
-              <button type="button" class="btn customButton text-light rounded-4" (click)="enableImageUpload()">Hochladen</button>
-              <input (change)="onFileChange($event)" *ngIf="uploadCarImgState" type="file" required name="carImgInput">
+
+
+            <div class="col-12 mt-3">
+              <p>Mitfahrer darf folgende Eigenschaften haben:</p>
+              <div class="hstack justify-content-between">
+                <div class="col-5 checkboxBorder rounded-pill p-3">
+                  <div class="form-check">
+                    <label class="form-check-label" for="checkSmoker">
+                      Raucher <br>
+                      ‎
+                    </label>
+                    <input class="form-check-input" type="checkbox" value="" id="checkSmoker">
+                  </div>
+                </div>
+                <div class="col-5 checkboxBorder rounded-pill p-3">
+                  <div class="form-check">
+                    <label class="form-check-label" for="checkPets">
+                      Haustier- <br>
+                      besitzer*in <br>
+                    </label>
+                    <input class="form-check-input" type="checkbox" value="" id="checkPets">
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <p class="mt-3">Auf der Fahrt:</p>
+            <div class="col-12 mt-3">
+              <div class="btn-group d-flex" role="group">
+                <input type="radio" class="btn-check" name="musicOrTalk" id="onlyMusic" autocomplete="off"
+                       (click)="changeTalkMode(1)">
+                <label class="btn customButton flex-fill checkboxBorder" for="onlyMusic"
+                       [ngClass]="talkMode === 1 ? 'selectedButton' : 'deselectedButton'">Nur Musik</label>
+
+                <input type="radio" class="btn-check" name="musicOrTalk" id="onlyTalk" autocomplete="off"
+                       (click)="changeTalkMode(2)">
+                <label class="btn customButton flex-fill checkboxBorder" for="onlyTalk"
+                       [ngClass]="talkMode === 2 ? 'selectedButton' : 'deselectedButton'">Nur Reden</label>
+
+                <input type="radio" class="btn-check" name="musicOrTalk" id="byRequest" autocomplete="off"
+                       (click)="changeTalkMode(3)">
+                <label class="btn customButton flex-fill checkboxBorder" for="byRequest"
+                       [ngClass]="talkMode === 3 ? 'selectedButton' : 'deselectedButton'">Nach Wunsch</label>
+              </div>
             </div>
           </div>
 
-          <div class="col-4" *ngIf="editingCar == 0">
-            <h1 class="textGreen col-5">Maße:</h1>
+          <div class="col-3" *ngIf="editingOffer == 0">
+            <h2 class="textGreen col-12 mb-3">Zeit & Ort</h2>
             <div class="col-12">
-              <input [(ngModel)]="weight" [ngModelOptions]="{standalone: true}" name="weightInput" required type="number" class="rounded-5 p-2 col-12" placeholder="Gewicht in KG" id="carWeight">
+              <input [(ngModel)]="date" [ngModelOptions]="{standalone: true}" name="dateInput" required
+                     class="form-control rounded-5 p-2 col-12" placeholder="Datum der Fahrt" id="dateInput"
+                     placeholder="Datum der Fahrt" ngbDatepicker #d="ngbDatepicker" type="text">
             </div>
-            <div class="col-12 mt-5">
-              <input [(ngModel)]="length" [ngModelOptions]="{standalone: true}" name="lengthInput" required type="number" class="rounded-5 p-2 col-12" placeholder="Länge in M" id="carLength">
+            <div class="col-12 mt-2">
+              <input [(ngModel)]="time" [ngModelOptions]="{standalone: true}" name="timeInput" required
+                     type="text" class="rounded-5 p-2 col-12" placeholder="Uhrzeit" id="timeInput">
             </div>
-            <div class="col-12 mt-5">
-              <input [(ngModel)]="width" [ngModelOptions]="{standalone: true}" name="widthInput" required type="number" class="rounded-5 p-2 col-12" placeholder="Breite in M" id="carWidth">
-            </div>
-            <div class="col-12 mt-5">
-              <input [(ngModel)]="height" [ngModelOptions]="{standalone: true}" name="heightInput" required type="number" class="rounded-5 p-2 col-12" placeholder="Höhe in M" id="carHeight">
-            </div>
-            <div class="col-12 mt-5 form-check text-start flex-row justify-content-start align-items-center">
-              <input [(ngModel)]="hasTv" [ngModelOptions]="{standalone: true}" name="hasTvCheckbox" type="checkbox" class="form-check-input me-3" id="flexCheckDefault" style="width: 2rem; height: 2rem">
-              <label for="flexCheckDefault" class="form-check-label mt-2">Hat einen Fernseher</label>
-            </div>
-            <div class="col-12 mt-5 form-check text-start flex-row justify-content-start align-items-center">
-              <input [(ngModel)]="hasAc" [ngModelOptions]="{standalone: true}" name="hasAcCheckbox" type="checkbox" class="form-check-input me-3" id="flexCheckedDefault" style="width: 2rem; height: 2rem">
-              <label for="flexCheckedDefault" class="form-check-label mt-2">Hat eine Klimaanlage</label>
-            </div>
-          </div>
 
-          <div class="col-4" *ngIf="editingCar != 0">
-            <h1 class="textGreen col-5">Maße:</h1>
+            <h2 class="textGreen col-12 mt-5">Startpunkt</h2>
             <div class="col-12">
-              <span class="carInfo">{{ weight }}KG Maximal-Gewicht</span>
+              <input [(ngModel)]="startLand" [ngModelOptions]="{standalone: true}" name="startLandInput" required
+                     type="text" class="rounded-5 p-2 col-12" placeholder="Land" id="startLandInput">
             </div>
-            <div class="col-12 mt-5">
-              <span class="carInfo">{{ length }}Meter lang</span>
+            <div class="hstack justify-content-between">
+              <div class="col-4 mt-2">
+                <input [(ngModel)]="startPLZ" [ngModelOptions]="{standalone: true}" name="startPLZInput" required
+                       type="text" class="rounded-5 p-2 col-12" placeholder="PLZ" id="startPLZInput">
+              </div>
+              <div class="col-7 mt-2">
+                <input [(ngModel)]="startPlace" [ngModelOptions]="{standalone: true}" name="startPlaceInput" required
+                       type="text" class="rounded-5 p-2 col-12" placeholder="Ort" id="startPlaceInput">
+              </div>
             </div>
-            <div class="col-12 mt-5">
-              <span class="carInfo">{{ width }}Meter breit</span>
+
+            <div class="hstack mt-5">
+              <h2 class="textGreen col-12">Zwischenstopp</h2>
+              <a (click)="openStopDialog()" class="non-pointable fa-stack fa-2x me-5 mt-2">
+                <fa-icon [icon]="faCircle"
+                         class="fa-stack-2x text-center white-fade fa-2xs pe-1 pt-3 add-fix"></fa-icon>
+                <fa-icon [icon]="faCirclePlus" class="fa-stack-1x btn-blue pointable add-fix"></fa-icon>
+              </a>
             </div>
-            <div class="col-12 mt-5">
-              <span class="carInfo">{{ height }}Meter hoch</span>
+
+            <div class="mt-2">
+              <div class="hstack justify-content-between">
+                <h3 class="textGreen">1. Stopp</h3>
+                <div class="hstack mb-2 text-end">
+                  <div class="text-end">
+                    <button (click)="openStopDialog()" type="button" class="btn btn-primary editButton text-end me-1"
+                            id="editButton">
+                      <i>
+                        <fa-icon [icon]="faPenToSquare"></fa-icon>
+                      </i>
+                    </button>
+                  </div>
+                  <div class="text-end">
+                    <button type="button" class="btn btn-danger deleteButton text-end" id="deleteButton">
+                      <i>
+                        <fa-icon [icon]="faX"></fa-icon>
+                      </i>
+                    </button>
+                  </div>
+                </div>
+
+              </div>
+              <div class="card mb-3">
+                <div class="card-body">
+                  <p class="card-text">
+                    {{ stopLand }}  <br>
+                    {{ stopPLZ }} {{ stopPlace }}
+                  </p>
+                </div>
+              </div>
             </div>
-            <div class="col-12 mt-5 form-check text-start flex-row justify-content-start align-items-center">
-              <span class="carInfo">{{ hasTv? "Hat einen Fernseher" : "Hat keinen Fernseher" }}</span>
+
+            <h2 class="textGreen col-12 mt-5">Zielort</h2>
+            <div class="col-12">
+              <input [(ngModel)]="endLand" [ngModelOptions]="{standalone: true}" name="endLandInput" required
+                     type="text" class="rounded-5 p-2 col-12" placeholder="Land" id="endLandInput">
             </div>
-            <div class="col-12 mt-5 form-check text-start flex-row justify-content-start align-items-center">
-              <span class="carInfo">{{ hasAc? "Hat eine Klimaanlage" : "Hat keine Klimaanlage" }}</span>
+            <div class="hstack justify-content-between">
+              <div class="col-4 mt-2">
+                <input [(ngModel)]="endPLZ" [ngModelOptions]="{standalone: true}" name="endPLZInput" required
+                       type="text" class="rounded-5 p-2 col-12" placeholder="PLZ" id="endPLZInput">
+              </div>
+              <div class="col-7 mt-2">
+                <input [(ngModel)]="endPlace" [ngModelOptions]="{standalone: true}" name="endPlaceInput" required
+                       type="text" class="rounded-5 p-2 col-12" placeholder="Ort" id="endPlaceInput">
+              </div>
             </div>
           </div>
         </div>
@@ -146,15 +263,11 @@
           </div>
         </div>
       </div>
-      <div class="col-12 align-bottom d-flex justify-content-around align-items-center" *ngIf="editingCar == 0">
-        <button type="submit" class="btn customButton exitButton text-light">
-          <i>
-            <fa-icon [icon]="faSave"></fa-icon>
-          </i>
-          <span class="ms-3">Speichern</span>
+      <div class="col-12 align-bottom d-flex justify-content-around align-items-center" *ngIf="editingOffer == 0">
+        <button (click)="openCarDialog()" type="submit" class="btn customButton exitButton text-light">
+          <span class="ms-3">Weiter <fa-icon [icon]="faArrowRight" class="ms-2"></fa-icon></span>
         </button>
       </div>
     </div>
   </form>
 </div>
--->
