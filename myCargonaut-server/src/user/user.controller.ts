@@ -3,14 +3,14 @@ import {
   Body,
   Controller,
   Get,
-  Logger,
+  Logger, Param,
   Post,
-  Put,
+  Put, Res,
   Session,
   UploadedFile,
   UseGuards,
-  UseInterceptors,
-} from '@nestjs/common';
+  UseInterceptors
+} from "@nestjs/common";
 import {
   ApiBearerAuth,
   ApiConsumes,
@@ -20,7 +20,7 @@ import {
 import { UserService } from './user.service';
 import { CreateUserDTO } from './DTO/CreateUserDTO';
 import { OkDTO } from '../serverDTO/OkDTO';
-import { extname } from 'path';
+import { extname, join } from "path";
 import { diskStorage } from 'multer';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { EditPasswordDTO } from './DTO/EditPasswordDTO';
@@ -32,7 +32,8 @@ import * as validator from 'validator';
 import * as bcrypt from 'bcryptjs';
 import { GetOwnUserDTO } from './DTO/GetOwnUserDTO';
 import { UserDB } from '../database/UserDB';
-import { EditUserProfileDTO } from './DTO/EditUserProfileDTO';
+import { GetOtherUserDTO } from './DTO/GetOtherUserDTO';
+import { Response } from "express";
 
 @ApiTags('user')
 @Controller('user')
@@ -269,7 +270,7 @@ export class UserController {
     type: OkDTO,
     description: 'updates a specifics user details',
   })
-  @Put()
+  @Put('/profile')
   @ApiBearerAuth()
   @UseGuards(IsLoggedInGuard)
   async updateUser(
@@ -299,6 +300,10 @@ export class UserController {
       );
       user.lastName = body.lastName;
     }
+    if (body.languages !== '' || body.languages !== undefined) {
+      user.languages = body.languages;
+    }
+    if (body.isSmoker) user.isSmoker = body.isSmoker;
     if (body.profileText) user.profileText = body.profileText;
     try {
       await this.userService.updateUser(user);
@@ -308,38 +313,19 @@ export class UserController {
     }
   }
 
-  @ApiResponse({
-    type: OkDTO,
-    description: 'updates a specifics user with their profile details',
-  })
-  @Put('/profile')
-  @ApiBearerAuth()
-  @UseGuards(IsLoggedInGuard)
-  async updateUserProfile(
-    @Session() session: SessionData,
-    @Body() body: EditUserProfileDTO,
-  ): Promise<OkDTO> {
-    const id: number = session.currentUser;
-    const user: UserDB = await this.userService.getUserById(id);
-    console.log('der Nutzer: ' + user, ' Der body: ', body);
-    if (body.email.trim() !== '' || body.email !== undefined) {
-      user.email = body.email;
-    }
-    if (body.languages !== '' || body.languages !== undefined) {
-      user.languages = body.languages;
-    }
-    if (body.phoneNumber.trim() !== '' || body.phoneNumber !== undefined) {
-      user.phoneNumber = body.phoneNumber;
-    }
-    if (body.profileText.trim() !== '' || body.profileText !== undefined) {
-      user.profileText = body.profileText;
-    }
-    user.isSmoker = body.isSmoker;
+  @ApiResponse({ description: 'Fetches the image of a vehicle' })
+  @Get('image/:image')
+  async getImage(@Param('image') image: string, @Res() res: Response) {
     try {
-      await this.userService.updateUser(user);
-      return new OkDTO(true, 'User was updated');
+      const imgPath: string = join(
+        process.cwd(),
+        'uploads',
+        'profilePictures',
+        image,
+      );
+      res.sendFile(imgPath);
     } catch (err) {
-      throw err;
+      throw new BadRequestException(err);
     }
   }
 

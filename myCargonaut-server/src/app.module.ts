@@ -21,54 +21,71 @@ import { OfferTripDB } from './database/OfferTripDB';
 import { RequestTripDB } from './database/RequestTripDB';
 import { DriveService } from './drive/drive.service';
 import { DriveController } from './drive/drive.controller';
+import { TripService } from './trip/trip.service';
+import { TripController } from './trip/trip.controller';
+import { LocationService } from './location/location.service';
+import { UtilsService } from './utils/utils.service';
+import { ReviewService } from './review/review.service';
+import { ReviewController } from './review/review.controller';
 
 @Module({
-    imports: [
-        TypeOrmModule.forRoot({
-            type: 'sqlite',
-            database: './db.sqlite',
-            entities: [
-                UserDB,
-                DriveDB,
-                CarDB,
-                LocationDB,
-                ReviewDB,
-                TrailerDB,
-                TripDB,
-                VehicleDB,
-                MessageDB,
-                RequestDB,
-                CargoDB,
-                OfferDB,
-                OfferTripDB,
-                RequestTripDB,
-            ],
-            synchronize: true,
-        }),
-        TypeOrmModule.forFeature([
-            UserDB,
-            DriveDB,
-            CarDB,
-            LocationDB,
-            ReviewDB,
-            TrailerDB,
-            TripDB,
-            VehicleDB,
-            MessageDB,
-            RequestDB,
-            CargoDB,
-            OfferDB,
-            OfferTripDB,
-            RequestTripDB,
-        ]),
-    ],
-    controllers: [
-        AppController,
-        UserController,
-        SessionController,
-        VehicleController,
-        DriveController,
-    ],
-    providers: [AppService, UserService, VehicleService, DriveService],
+  imports: [
+    TypeOrmModule.forRoot({
+      type: 'sqlite',
+      database: './db.sqlite',
+      entities: [
+        UserDB,
+        DriveDB,
+        CarDB,
+        LocationDB,
+        ReviewDB,
+        TrailerDB,
+        TripDB,
+        VehicleDB,
+        MessageDB,
+        RequestDB,
+        CargoDB,
+        OfferDB,
+        OfferTripDB,
+        RequestTripDB,
+      ],
+      synchronize: true,
+    }),
+    TypeOrmModule.forFeature([
+      UserDB,
+      DriveDB,
+      CarDB,
+      LocationDB,
+      ReviewDB,
+      TrailerDB,
+      TripDB,
+      VehicleDB,
+      MessageDB,
+      RequestDB,
+      CargoDB,
+      OfferDB,
+      OfferTripDB,
+      RequestTripDB,
+    ]),
+  ],
+  controllers: [
+    AppController,
+    UserController,
+    SessionController,
+    VehicleController,
+    DriveController,
+    TripController,
+    ReviewController,
+  ],
+  providers: [
+    AppService,
+    UserService,
+    VehicleService,
+    DriveService,
+    TripService,
+    LocationService,
+    UtilsService,
+    ReviewService,
+  ],
 })
 export class AppModule {}

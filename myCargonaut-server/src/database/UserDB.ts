@@ -50,7 +50,7 @@ export class UserDB {
     trips: Promise<TripDB[]>;
 
     @OneToMany(() => DriveDB, (drive) => drive.user)
-    drives: Promise<DriveDB[]>;
+    drives: DriveDB[];
 
     @OneToMany(() => ReviewDB, (review) => review.writer)
     writtenReviews: Promise<ReviewDB[]>;
