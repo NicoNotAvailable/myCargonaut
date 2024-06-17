@@ -192,6 +192,55 @@ export class DriveService {
     }
     return requests;
   }
+  async updateOffer(
+    offerId: number,
+    userId: number,
+    updateData: CreateOfferDTO,
+  ): Promise<OfferDB> {
+    const offer = await this.offerRepository.findOne({
+      where: { id: offerId },
+      relations: ['user'],
+    });
+    if (!offer) {
+      throw new NotFoundException('Offer not found');
+    }
+    if (offer.user.id !== userId) {
+      throw new UnauthorizedException('You are not the owner of this offer');
+    }
+
+    Object.assign(offer, updateData);
+
+    try {
+      return await this.offerRepository.save(offer);
+    } catch (error) {
+      throw new Error('An error occurred while updating the offer');
+    }
+  }
+
+  async updateRequest(
+    requestId: number,
+    userId: number,
+    updateData: CreateRequestDTO,
+  ): Promise<RequestDB> {
+    const request = await this.requestRepository.findOne({
+      where: { id: requestId },
+      relations: ['user'],
+    });
+    if (!request) {
+      throw new NotFoundException('Request not found');
+    }
+    if (request.user.id !== userId) {
+      throw new UnauthorizedException('You are not the owner of this request');
+    }
+
+    Object.assign(request, updateData);
+
+    try {
+      return await this.requestRepository.save(request);
+    } catch (error) {
+      throw new Error('An error occurred while updating the request');
+    }
+  }
   async deleteDrive(driveId: number, userId: number) {
     const drive = await this.driveRepository.findOne({
       where: { id: driveId },

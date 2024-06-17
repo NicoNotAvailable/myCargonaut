@@ -1,6 +1,11 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DriveDB, OfferDB, RequestDB } from '../database/DriveDB';
+import { OfferDB, RequestDB } from '../database/DriveDB';
 import { Repository } from 'typeorm';
 import { CargoDB } from '../database/CargoDB';
 import { TripDB } from '../database/TripDB';
@@ -16,7 +21,7 @@ import { LocationDB } from '../database/LocationDB';
 @Injectable()
 export class TripService {
   constructor(
-    @InjectRepository(DriveDB)
+    @InjectRepository(TripDB)
     private tripRepository: Repository<TripDB>,
     @InjectRepository(OfferTripDB)
     private offerTripRepository: Repository<OfferTripDB>,
@@ -152,5 +157,69 @@ export class TripService {
       throw new NotFoundException('Request Trip not found');
     }
     return requestTrip;
+  }
+
+  async acceptTrip(tripId: number, userId: number): Promise<void> {
+    const trip = await this.tripRepository.findOne({
+      where: { id: tripId },
+    });
+    if (trip instanceof OfferTripDB) {
+      await this.acceptOfferTrip(tripId, userId);
+    }
+    if (trip instanceof RequestTripDB) {
+      await this.acceptRequestTrip(tripId, userId);
+    }
+  }
+  async acceptOfferTrip(tripId: number, userId: number): Promise<void> {
+    const trip = await this.offerTripRepository.findOne({
+      where: { id: tripId },
+      relations: ['drive', 'drive.user'],
+    });
+    if (!trip) {
+      throw new NotFoundException('Trip not found');
+    }
+    if (trip.drive.user.id !== userId) {
+      throw new UnauthorizedException('You are not the creator of this drive');
+    }
+    trip.isAccepted = true;
+    await this.tripRepository.save(trip);
+    const otherTrips = await this.offerTripRepository.find({
+      where: { drive: trip.drive, isAccepted: false },
+    });
+    await this.tripRepository.remove(otherTrips);
+  }
+  async acceptRequestTrip(tripId: number, userId: number): Promise<void> {
+    const trip = await this.requestTripRepository.findOne({
+      where: { id: tripId },
+      relations: ['drive', 'drive.user'],
+    });
+    if (!trip) {
+      throw new NotFoundException('Trip not found');
+    }
+    if (trip.drive.user.id !== userId) {
+      throw new UnauthorizedException('You are not the creator of this drive');
+    }
+    trip.isAccepted = true;
+    await this.tripRepository.save(trip);
+    const otherTrips = await this.requestTripRepository.find({
+      where: { drive: trip.drive, isAccepted: false },
+    });
+    await this.tripRepository.remove(otherTrips);
+  }
+  async deleteTrip(tripId: number, userId: number) {
+    const trip = await this.tripRepository.findOne({
+      where: { id: tripId },
+      relations: ['requesting'],
+    });
+    if (!trip) {
+      throw new NotFoundException('Trip not found');
+    }
+    if (trip.requesting.id !== userId) {
+      throw new UnauthorizedException('Trip is not yours!');
+    }
+    if (trip.isAccepted) {
+      throw new BadRequestException('Your trip already has been accepted');
+    }
+    await this.tripRepository.remove(trip);
   }
 }

@@ -8,6 +8,7 @@ import {
   Param,
   ParseIntPipe,
   Post,
+  Put,
   Session,
   UseGuards,
 } from '@nestjs/common';
@@ -293,6 +294,75 @@ export class DriveController {
     } catch (err) {
       throw new BadRequestException('An error occurred: ' + err.message);
     }
+  }
+  @ApiResponse({
+    type: OkDTO,
+    description: 'update an offer',
+  })
+  @ApiBearerAuth()
+  @UseGuards(IsLoggedInGuard)
+  @ApiParam({
+    name: 'id',
+    type: 'number',
+    description: 'ID of the offer to be updated',
+  })
+  @Put('offer/:id')
+  async updateOffer(
+    @Param('id') offerId: number,
+    @Body() body: CreateOfferDTO,
+    @Session() session: SessionData,
+  ): Promise<OkDTO> {
+    const userId = session.currentUser;
+    const car = await this.vehicleService.getCarById(body.carID);
+    if (!car) {
+      throw new BadRequestException('Car was not found');
+    }
+    const trailer = body.trailerID
+      ? await this.vehicleService.getTrailerById(body.trailerID)
+      : null;
+    if (body.trailerID && !trailer) {
+      throw new BadRequestException('Trailer was not found');
+    }
+    this.validateOfferInput(body);
+    try {
+      await this.driveService.updateOffer(offerId, userId, body);
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw new NotFoundException(error.message);
+      }
+      throw error;
+    }
+    return new OkDTO(true, 'offer was updated');
+  }
+
+  @ApiResponse({
+    type: OkDTO,
+    description: 'updates a request',
+  })
+  @ApiBearerAuth()
+  @UseGuards(IsLoggedInGuard)
+  @ApiParam({
+    name: 'id',
+    type: 'number',
+    description: 'ID of the request to be updated',
+  })
+  @Put('request/:id')
+  async updateRequest(
+    @Param('id') requestId: number,
+    @Session() session: SessionData,
+    @Body() body: CreateRequestDTO,
+  ): Promise<OkDTO> {
+    const userId = session.currentUser;
+    this.validateRequestInput(body);
+    try {
+      await this.driveService.updateRequest(requestId, userId, body);
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw new NotFoundException(error.message);
+      }
+      throw error;
+    }
+    return new OkDTO(true, 'request was updated');
   }
 
   @ApiResponse({

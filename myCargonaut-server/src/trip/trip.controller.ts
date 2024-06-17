@@ -2,10 +2,13 @@ import {
   BadRequestException,
   Body,
   Controller,
+  Delete,
   Get,
+  NotFoundException,
   Param,
   ParseIntPipe,
   Post,
+  Put,
   Session,
   UseGuards,
 } from '@nestjs/common';
@@ -13,7 +16,7 @@ import { DriveService } from '../drive/drive.service';
 import { UserService } from '../user/user.service';
 import { VehicleService } from '../vehicle/vehicle.service';
 import { TripService } from './trip.service';
-import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { OkDTO } from '../serverDTO/OkDTO';
 import { IsLoggedInGuard } from '../session/is-logged-in.guard';
 import { SessionData } from 'express-session';
@@ -232,5 +235,56 @@ export class TripController {
     } catch (err) {
       throw new BadRequestException('An error occurred: ' + err.message);
     }
+  }
+  @ApiResponse({
+    type: OkDTO,
+    description: 'accepts a trip',
+  })
+  @ApiBearerAuth()
+  @UseGuards(IsLoggedInGuard)
+  @Put('accept/:id')
+  async acceptTrip(
+    @Session() session: SessionData,
+    @Param('id', ParseIntPipe) tripId: number,
+  ): Promise<OkDTO> {
+    const userId = session.currentUser;
+    try {
+      await this.tripService.acceptTrip(tripId, userId);
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw new NotFoundException(error.message);
+      }
+      if (error instanceof BadRequestException) {
+        throw new BadRequestException(error.message);
+      }
+      throw error;
+    }
+    return new OkDTO(true, 'trip was accepted');
+  }
+  @ApiResponse({
+    type: OkDTO,
+    description: 'removes a trip from the database',
+  })
+  @ApiParam({
+    name: 'id',
+    type: 'number',
+    description: 'ID of the trip to be deleted',
+  })
+  @Delete(':id')
+  @ApiBearerAuth()
+  @UseGuards(IsLoggedInGuard)
+  async deleteTrip(
+    @Param('id', ParseIntPipe) id: number,
+    @Session() session: SessionData,
+  ): Promise<OkDTO> {
+    try {
+      await this.tripService.deleteTrip(id, session.currentUser);
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw new NotFoundException(error.message);
+      }
+      throw error;
+    }
+    return new OkDTO(true, 'trip was deleted');
   }
 }
