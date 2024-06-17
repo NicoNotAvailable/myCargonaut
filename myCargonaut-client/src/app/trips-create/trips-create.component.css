@@ -3,7 +3,6 @@
   color: white;
   border-radius: 15px;
   border-color: #005B52 ;
-
 }
 .greenButton:hover {
   box-shadow: 0 0 20px #005B52;
@@ -20,6 +19,9 @@
 
 .greenText {
   color: #005B52;
+}
+.whiteText {
+  color: white;
 }
 
 .blueText {

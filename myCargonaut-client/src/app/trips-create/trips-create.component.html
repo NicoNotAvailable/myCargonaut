@@ -38,59 +38,99 @@
       </div>
 
     </div>
-    <div class="col-12 col-lg-8">
-      <div class="container greenBackground p-3">
-        <div class="row mt-3">
-          <div class="col-12 col-lg-6">
-            <select class="form-select inputField" aria-label="Default select example">
-              <option selected>Dein Startpunkte</option>
-              <option value="1">One</option>
-              <option value="2">Two</option>
-              <option value="3">Three</option>
-            </select>
-          </div>
-          <div class="col-12 col-lg-6 mt-3 mt-lg-0">
-            <select class="form-select inputField" aria-label="Default select example">
-              <option selected>Dein Ziel</option>
-              <option value="1">One</option>
-              <option value="2">Two</option>
-              <option value="3">Three</option>
-            </select>
-          </div>
-        </div>
-        <div class="row mt-3">
-          <div class="col-12 col-lg-6 ">
-            <select class="form-select inputField" aria-label="Default select example">
-              <option selected>Anzahl Personen</option>
-              <option value="1">1</option>
-              <option value="2">2</option>
-              <option value="3">3</option>
-              <option value="4">4</option>
-              <option value="5">5</option>
-              <option value="6">6</option>
-            </select>
-          </div>
-          <div class="col-12 col-lg-6 mt-3 mt-lg-0">
-            <button type="button" class="btn btn-primary blueButton">Cargo hinzufügen</button>
-
-          </div>
-
+    @if (this.offerBool) {
+      <div class="col-12 col-lg-8">
+        <div class="container greenBackground p-3">
           <div class="row mt-3">
-            <div class="col-6 col-lg-3">
-              <span>Gesamtpreis</span>
+            <div class="col-12 col-lg-6">
+              <select class="form-select inputField" aria-label="Default select example">
+                <option selected>Dein Startpunkte</option>
+                <option value="1">One</option>
+                <option value="2">Two</option>
+                <option value="3">Three</option>
+              </select>
             </div>
-            <div class="col-6 col-lg-3 text-end">
-              <span>35€</span>
+            <div class="col-12 col-lg-6 mt-3 mt-lg-0">
+              <select class="form-select inputField" aria-label="Default select example">
+                <option selected>Dein Ziel</option>
+                <option value="1">One</option>
+                <option value="2">Two</option>
+                <option value="3">Three</option>
+              </select>
             </div>
           </div>
-        </div>
-        <div class="row mt-3 horizontal-center">
-          <div class="col-6 col-lg-2 horizontal-center">
-            <button type="button" class="btn btn-primary blueButton transform">Abschicken</button>
+          <div class="row mt-3">
+            <div class="col-12 col-lg-6 ">
+              <select class="form-select inputField" aria-label="Default select example">
+                <option selected>Anzahl Personen</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+              </select>
+            </div>
+            <div class="col-12 col-lg-6 mt-3 mt-lg-0">
+              <button type="button" class="btn btn-primary blueButton">Cargo hinzufügen</button>
+
+            </div>
+
+            <div class="row mt-3 whiteText">
+              <div class="col-6 col-lg-3">
+                <span>Gesamtpreis</span>
+              </div>
+              <div class="col-6 col-lg-3 text-end">
+                <span>35€</span>
+              </div>
+            </div>
+          </div>
+          <div class="row mt-3 horizontal-center">
+            <div class="col-6 col-lg-2 horizontal-center">
+              <button type="button" class="btn btn-primary blueButton transform">Abschicken</button>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    } @else if (requestBool) {
+      <div class="col-12 col-lg-8">
+        <div class="container greenBackground p-3">
+          <div class="row mt-3">
+            <div class="col-12 col-lg-6">
+              <select class="form-select inputField" aria-label="Default select example">
+                <option selected>Dein Auto</option>
+                <option value="1">One</option>
+                <option value="2">Two</option>
+                <option value="3">Three</option>
+              </select>
+            </div>
+            <div class="col-12 col-lg-6 mt-3 mt-lg-0">
+              <select class="form-select inputField" aria-label="Default select example">
+                <option selected>Dein Trailer</option>
+                <option value="1">One</option>
+                <option value="2">Two</option>
+                <option value="3">Three</option>
+              </select>
+            </div>
+          </div>
+            <div class="row mt-3 whiteText">
+              <div class="col-6 col-lg-3">
+                <span>Gesamtpreis</span>
+              </div>
+              <div class="col-6 col-lg-3 text-end">
+                <span>35€</span>
+              </div>
+          </div>
+          <div class="row mt-3 horizontal-center">
+            <div class="col-6 col-lg-2 horizontal-center">
+              <button type="button" class="btn btn-primary blueButton transform">Abschicken</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    }
+
     <div class="col-12 col-lg-2">
       <div class="row">
         <img src="../../assets/Cybertruck-fremont-cropped.jpg" class="img-fluid roundedABit backgroundGreen profileCircle" alt="">
