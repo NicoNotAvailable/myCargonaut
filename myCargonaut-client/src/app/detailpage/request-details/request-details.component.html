@@ -1,1 +1,100 @@
-<p>request-details works!</p>
+<div class="container mb-5">
+  <div class="row d-flex justify-content-center">
+    <div class="col-lg-6 col-md-4 col-sm-2">
+      <h1>
+        {{ title }}
+      </h1>
+    </div>
+  </div>
+  <div class="row d-flex justify-content-center">
+    <div class="col-lg-3 col-md-2 col-sm-1">
+      <h3>Datum: {{ date | date }}</h3>
+    </div>
+  </div>
+  <div class="row justify-content-center d-flex justify-content-between align-items-center">
+    <div class="col-lg-3 col-md-2 col-sm-1 d-flex justify-content-start align-items-center">
+      <div class="col-6">
+        <img priority [ngSrc]="window.location.protocol + '//' + window.location.host.replace('4200', '8000') + '/user/image/'+ userPfp" width="40" height="25" class="card-img-top img-fluid userImage profileCircle my-4" alt="">
+      </div>
+      <div class="col-3 ms-3">
+        <div>{{userFirstname}}</div>
+        <div>{{userFirstname}}</div>
+        <div>Bewertung</div>
+      </div>
+    </div>
+    <div class="col-lg-3 col-md-2 col-sm-1 locations stops">
+      <div>von {{getStop(0).city == undefined? "" : getStop(0).city}}</div>
+      <div>Land <span class="highlight">{{getStop(0).country}}</span></div>
+    </div>
+    <div class="col-lg-3 col-md-2 col-sm-1 locations stops">
+      <div>nach {{getStop(100).city}}</div>
+      <div>Land <span class="highlight">{{getStop(100).country}}</span></div>
+    </div>
+    <div class="col-lg-3 col-md-2 col-sm-1 stops">
+      <div>Preisvorschlag</div>
+      <div class="highlight">{{price}}€</div>
+    </div>
+    <div class="col-lg-3 col-md-2 col-sm-1">
+
+    </div>
+  </div>
+
+  <div class="carInfoArea">
+    <div class="row">
+      <div class="col-3">
+        <span>Sitzplätze</span>
+      </div>
+      <div class="col-3">
+        <span><strong>{{seats}}</strong></span>
+      </div>
+    </div>
+    <div class="row d-flex justify-content-between">
+      <div class="col-4">
+        <span><strong>{{userSmoker? "Raucher" : "Nicht-Raucher"}}</strong></span>
+      </div>
+      <div class="col-4">
+        <span><strong>{{withAnimal? "Mit Tieren" : "Ohne Tiere"}}</strong></span>
+      </div>
+      <div class="col-4">
+        <span><strong>{{tripInfo}}</strong></span>
+      </div>
+    </div>
+    <div class="row mt-5">
+      <div class="col-12">
+        <span class="highlight">{{cargos.length >= 1 ? "Cargo:" : "Kein Cargo"}}</span>
+      </div>
+      <div class="cargoDesc mt-1" *ngFor="let cargo of cargos; let i = index">
+        <div class="row">
+          <div class="col-12">
+            <span class="highlight">{{cargo.description}}</span>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-6 d-flex justify-content-between">
+            <div>Länge: </div>
+            <div><strong>{{cargo.length}}cm</strong></div>
+          </div>
+          <div class="col-6 d-flex justify-content-between">
+            <div>Gewicht: </div>
+            <div><strong>{{cargo.weight}}KG</strong></div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-6 d-flex justify-content-between">
+            <div>Breite: </div>
+            <div><strong>{{cargo.width}}cm</strong></div>
+          </div>
+          <div class="col-6 d-flex justify-content-between">
+            <div>Höhe: </div>
+            <div><strong>{{cargo.height}}cm</strong></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row mb-5 buttonArea">
+    <div class="col-12 d-flex justify-content-center">
+      <button type="button" class="btn customButton sendRequest" (click)="startRequest()">Jetzt Anfrage Schicken!</button>
+    </div>
+  </div>
+</div>

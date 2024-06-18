@@ -63,7 +63,8 @@ export class SearchCardComponent {
     const url: string = this.router.url;
     if (url.includes('searchOffer')){
       this.href = "/detail/offer/";
-    } else if (url.includes('searchRequest')){
+    }
+    if (url.includes('searchRequest')){
       this.href = "/detail/request/";
     }
   }

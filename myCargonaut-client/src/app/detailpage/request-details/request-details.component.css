@@ -1,0 +1,72 @@
+.profileCircle {
+  border-radius: 50%;
+  box-shadow: 0 10px 0 #005B52;
+}
+
+h1 {
+  color: #005B52;
+}
+
+h2 {
+  color: #1a9cc5;
+  font-weight: bold;
+}
+
+h3 {
+  font-weight: bold;
+}
+
+.carImage {
+  border-radius: 1rem;
+  box-shadow: 0 10px 0 #005B52;
+  transition: all 0.4s ease;
+}
+
+.carImage:hover {
+  box-shadow: 0 10px 20px #005B52;
+}
+
+.carInfoArea {
+  background-color: #fff;
+  font-size: 1.25rem;
+  border-radius: 20px;
+  transition: all 0.4s ease;
+  padding: 3rem;
+  margin: 4rem 14rem;
+}
+
+.carInfoArea:hover {
+  box-shadow: 0px 0px 20px #005B52;
+}
+
+.stops{
+  font-weight: bold;
+}
+strong{
+  color: #005B52;
+}
+
+.sendRequest{
+  background-color: #1a9cc5;
+  transition: all 0.4s ease;
+}
+.sendRequest:hover, .sendRequest:active {
+  box-shadow: 0 0 20px #1a9cc5;
+}
+.buttonArea{
+  margin-top: -5rem;
+}
+.highlight{
+  color: #1a9cc5;
+  font-weight: bold;
+  font-size: 1.4rem;
+}
+
+.cargoDesc{
+  border-radius: 1rem;
+  padding: 1rem;
+  transition: all 0.4s ease;
+}
+.cargoDesc:hover{
+  box-shadow: 0 0 20px #005B52;
+}
