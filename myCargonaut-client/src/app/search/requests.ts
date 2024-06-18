@@ -4,6 +4,7 @@ export class request {
   name: string;
   user: { id: number, profilePic: string, firstName: string, lastName: string };
   price: number;
+  priceType: number;
   seats: number;
   info: number;
   smokingAllowed: boolean;
@@ -28,6 +29,7 @@ export class request {
     name: string,
     user: { id: number, profilePic: string, firstName: string, lastName: string },
     price: number,
+    priceType:number,
     seats: number,
     info: number,
     smokingAllowed: boolean,
@@ -51,6 +53,7 @@ export class request {
     this.name = name;
     this.user = user;
     this.price = price;
+    this.priceType = priceType;
     this.seats = seats;
     this.info = info;
     this.smokingAllowed = smokingAllowed;

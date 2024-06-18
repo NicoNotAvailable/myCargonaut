@@ -6,6 +6,7 @@ export class offer {
   name: string;
   date: string;
   price: number;
+  priceType: number;
   seats: number;
   animalsAllowed: boolean;
   smokingAllowed: boolean;
@@ -29,6 +30,7 @@ export class offer {
     name: string,
     date: string,
     price: number,
+    priceType: number,
     seats: number,
     animalsAllowed: boolean,
     smokingAllowed: boolean,
@@ -51,6 +53,7 @@ export class offer {
     this.name = name;
     this.date = date;
     this.price = price;
+    this.priceType = priceType;
     this.seats = seats;
     this.animalsAllowed = animalsAllowed;
     this.smokingAllowed = smokingAllowed;

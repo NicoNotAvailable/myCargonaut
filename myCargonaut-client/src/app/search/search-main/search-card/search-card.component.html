@@ -50,7 +50,11 @@
                         </div>
                         <div class="col-6 col-lg-3">
                           <div class="horizontal-right">
-                            <h5 class="blueText">{{ element.price }}€</h5>
+                            <h5 class="blueText">{{ element.price }}€
+                              @if (element.priceType == 1){}
+                              @else if (element.priceType == 2){p. Person}
+                              @else if (element.priceType == 3){p. Kilo}
+                            </h5>
                           </div>
                         </div>
                       </div>
@@ -174,7 +178,11 @@
                         </div>
                         <div class="col-6 col-lg-3">
                           <div class="horizontal-right">
-                            <h5 class="blueText">{{ element.price }}€</h5>
+                            <h5 class="blueText">{{ element.price }}€
+                              @if (element.priceType == 1){}
+                              @else if (element.priceType == 2){p. Person}
+                              @else if (element.priceType == 3){p. Kilo}
+                            </h5>
                           </div>
                         </div>
                       </div>
