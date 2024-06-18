@@ -48,7 +48,9 @@ export class ReviewService {
             } else if (drive.status !== StatusEnum.finished) {
                 throw new BadRequestException('ride is not finished yet!');
             }
-            otherPerson = drive.user.id === user.id ? trip.requesting : drive.user;
+            otherPerson =
+                drive.user.id === user.id ? trip.requesting : drive.user;
+            await this.checkExistingReview(user, trip, drive);
         } else if (trip instanceof RequestTripDB) {
             const drive = await this.driveRepository.findOne({
                 where: { id: trip.drive.id },
@@ -64,7 +66,9 @@ export class ReviewService {
             } else if (drive.status !== StatusEnum.finished) {
                 throw new BadRequestException('ride is not finished yet!');
             }
-            otherPerson = drive.user.id === user.id ? trip.requesting : drive.user;
+            otherPerson =
+                drive.user.id === user.id ? trip.requesting : drive.user;
+            await this.checkExistingReview(user, trip, drive);
         } else {
             throw new Error('Invalid trip type');
         }
@@ -76,6 +80,23 @@ export class ReviewService {
             return await this.reviewRepository.save(newReview);
         } catch (error) {
             throw new Error('An error occurred while saving the review');
+        }
+    }
+    private async checkExistingReview(
+        user: UserDB,
+        trip: TripDB,
+        drive: DriveDB,
+    ): Promise<void> {
+        const existingReview = await this.reviewRepository.findOne({
+            where: { writer: user, trip: trip },
+            relations: ['writer'],
+        });
+        if (existingReview.writer.id == user.id) {
+            throw new Error('User has already written a review for this trip');
+        }
+        if (existingReview) {
+            drive.status = StatusEnum.reviewed;
+            await this.driveRepository.save(drive);
         }
     }
 }
