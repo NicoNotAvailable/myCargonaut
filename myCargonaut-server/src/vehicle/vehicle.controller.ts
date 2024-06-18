@@ -46,6 +46,7 @@ export class VehicleController {
     private readonly userService: UserService,
     private readonly utilsService: UtilsService,
   ) {}
+
   private readonly logger = new Logger(VehicleController.name);
 
   @ApiResponse({
@@ -194,6 +195,47 @@ export class VehicleController {
     try {
       await this.vehicleService.createTrailer(owner, body);
       return new OkDTO(true, 'Trailer was created');
+    } catch (err) {
+      throw new Error('An error occurred');
+    }
+  }
+
+  @Put('/updateTrailer/:id')
+  @ApiBearerAuth()
+  @UseGuards(IsLoggedInGuard)
+  async updateTrailer(
+    @Body() body: CreateTrailerDTO,
+    @Param('id', ParseIntPipe) id: number,
+  ) {
+    const trailer = await this.vehicleService.getTrailerById(id);
+
+    if (!body.name || body.name.trim().length === 0) {
+      throw new BadRequestException('Trailer Name muss ausgefüllt sein');
+    }
+    if (body.name.trim().length > 20) {
+      throw new BadRequestException('Trailer Name ist zu lang');
+    }
+    if (!body.weight || body.weight <= 0) {
+      throw new BadRequestException('Trailer weight must be a positive number');
+    }
+    if (!body.length || body.length <= 0 || body.length > 100) {
+      throw new BadRequestException(
+        'Trailer muss länger als 0m und kürzer als 100m sein',
+      );
+    }
+    if (!body.height || body.height <= 0 || body.height > 100) {
+      throw new BadRequestException(
+        'Trailer muss höher als 0m und kleiner als 100m sein',
+      );
+    }
+    if (!body.width || body.width <= 0 || body.width > 100) {
+      throw new BadRequestException(
+        'Trailer muss breiter als 0m und dünner als 100m sein',
+      );
+    }
+    try {
+      await this.vehicleService.updateTrailer(trailer);
+      return new OkDTO(true, 'Trailer was updated');
     } catch (err) {
       throw new Error('An error occurred');
     }

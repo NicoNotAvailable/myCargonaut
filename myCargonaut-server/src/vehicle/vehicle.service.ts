@@ -108,6 +108,10 @@ export class VehicleService {
     return this.carRepository.save(carData);
   }
 
+  async updateTrailer(trailerData: TrailerDB): Promise<TrailerDB> {
+    return this.trailerRepository.save(trailerData);
+  }
+
   async deleteVehicle(vehicleId: number, userId: number) {
     const vehicle = await this.vehicleRepository.findOne({
       where: { id: vehicleId },
