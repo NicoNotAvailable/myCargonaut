@@ -12,6 +12,7 @@ import {MeineGesucheComponent} from "./meineAnfragenGesuche/meine-gesuche/meine-
 import {RequestAufAnfrageOSucheComponent} from "./meineAnfragenGesuche/request-auf-anfrage-osuche/request-auf-anfrage-osuche.component";
 
 import {TripsCreateComponent} from "./trips-create/trips-create.component";
+import { DetailpageComponent } from "./detailpage/detailpage.component";
 
 export const routes: Routes = [
 
@@ -28,6 +29,9 @@ export const routes: Routes = [
 
   {path: 'request/:id', component: RequestAufAnfrageOSucheComponent},
   {path: 'offer/:id', component: RequestAufAnfrageOSucheComponent},
+
+  {path: 'detail/request/:id', component: DetailpageComponent},
+  {path: 'detail/offer/:id', component: DetailpageComponent},
 
   {path: 'trips/create', component: TripsCreateComponent},
 ];

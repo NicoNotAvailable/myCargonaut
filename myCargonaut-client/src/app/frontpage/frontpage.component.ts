@@ -66,6 +66,10 @@ export class FrontpageComponent {
       );
   }
 
+  sendToRegister(): void {
+    window.location.href = "/register";
+  }
+
   protected readonly offer = offer;
   protected readonly window = window;
 }

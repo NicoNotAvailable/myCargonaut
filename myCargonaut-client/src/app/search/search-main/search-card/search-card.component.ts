@@ -1,11 +1,11 @@
-import {Component, Input} from '@angular/core';
-import {NavigationEnd, Router} from "@angular/router";
-import {filter} from "rxjs/operators";
+import { Component, Input } from "@angular/core";
+import { NavigationEnd, Router } from "@angular/router";
+import { filter } from "rxjs/operators";
 
-import {offer} from "../../offers"
-import {request} from "../../requests"
+import { offer } from "../../offers";
+import { request } from "../../requests";
 
-import {DateFormatPipe} from "../../date-format.pipe";
+import { DateFormatPipe } from "../../date-format.pipe";
 import { NgForOf, NgIf, NgOptimizedImage } from "@angular/common";
 
 
@@ -46,12 +46,26 @@ export class SearchCardComponent {
 
   ngOnInit(): void {
     this.updateCurrentRoute();
+    this.setHref();
 
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd)
     ).subscribe(() => {
       this.updateCurrentRoute();
     });
+  }
+
+  sendToDetail(id: any): void {
+    window.location.href = this.href + id.toString();
+  }
+
+  private setHref(): void {
+    const url: string = this.router.url;
+    if (url.includes('searchOffer')){
+      this.href = "/detail/offer/";
+    } else if (url.includes('searchRequest')){
+      this.href = "/detail/request/";
+    }
   }
 
   private updateCurrentRoute(): void {
@@ -68,16 +82,12 @@ export class SearchCardComponent {
     } else if (this.currentRoute === "myOffer") {
       this.buttonText = "Anfragen ansehen";
       this.plaetze = "verfügbare Plätze";
-      this.href = "offer";
 
     }else if (this.currentRoute === "myRequest") {
       this.buttonText = "Anfragen ansehen";
       this.plaetze = "benötigte Plätze";
-      this.href = "request";
 
     }
-
-
   }
 
   protected readonly window = window;

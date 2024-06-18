@@ -1,0 +1,80 @@
+<div class="container mb-5">
+  <div class="row d-flex justify-content-center">
+    <div class="col-lg-6 col-md-4 col-sm-2">
+      <h1>
+        {{ title }}
+      </h1>
+    </div>
+  </div>
+  <div class="row d-flex justify-content-center">
+    <div class="col-lg-3 col-md-2 col-sm-1">
+      <h3>Datum: {{ date | date }}</h3>
+    </div>
+    <div class="col-lg-3 col-md-2 col-sm-1">
+      <h2>{{ price }}€ {{priceType}}</h2>
+    </div>
+  </div>
+  <div class="row justify-content-center d-flex justify-content-between align-items-center stops">
+    <div class="col-lg-3 col-md-2 col-sm-1 d-flex justify-content-start align-items-center">
+      <div class="col-6">
+        <img priority [ngSrc]="window.location.protocol + '//' + window.location.host.replace('4200', '8000') + '/user/image/'+ userPfp" width="40" height="25" class="card-img-top img-fluid userImage profileCircle my-4" alt="">
+      </div>
+      <div class="col-3 ms-3">
+        <div>{{userFirstname}}</div>
+        <div>{{userFirstname}}</div>
+        <div>Bewertung</div>
+      </div>
+    </div>
+    <div class="col-lg-2 col-md-2 col-sm-1 locations">
+      <div>von {{getStop(0).city == undefined? "" : getStop(0).city}}</div>
+      <div>Land {{getStop(0).country}}</div>
+    </div>
+    <div class="col-lg-2 col-md-2 col-sm-1 locations">
+      <div>nach {{getStop(100).city}}</div>
+      <div>Land {{getStop(100).country}}</div>
+    </div>
+    <div class="col-lg-2 col-md-2 col-sm-1 locations">
+      <div>
+        Zwischenstopp:
+        <div *ngFor="let location of midLocations; let i = index">
+          {{location.city}}
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-3 col-md-2 col-sm-1">
+      <img [ngSrc]="window.location.protocol + '//' + window.location.host.replace('4200', '8000') + '/vehicle/image/'+ carPicture" width="70" height="55" class="card-img-top img-fluid carImage mb-4" alt="">
+    </div>
+  </div>
+
+  <div class="row carInfoArea">
+    <div class="col-6 justify-content-start align-items-center">
+      <div class="d-flex justify-content-between">Modell: <strong>{{carModel}}</strong></div>
+      <div class="d-flex justify-content-between">Maximales Gewicht: <strong>{{maxWeight}}KG</strong></div>
+      <div class="d-flex justify-content-between">Maximale Maße: <strong>{{maxLength}}m / {{maxWidth}}m / {{maxHeight}}m</strong></div>
+      <div class="d-flex justify-content-between">Verfügbare Sitzplätze: <strong>{{seats}}</strong></div>
+      <div class="d-flex justify-content-end"><strong>{{carAC? "hat eine Klimaanlage" : "hat keine Klimaanlage"}}</strong></div>
+      <div class="d-flex justify-content-end"><strong>{{carTV? "hat einen Fernseher" : "hat keinen Fernseher"}}</strong></div>
+      <div class="d-flex justify-content-end"><strong>{{userSmoker? "Fahrer Raucht" : "Fahrer ist Nicht-Raucher"}}</strong></div>
+      <div class="d-flex justify-content-end"><strong>{{smokinAllowance? "Rauchen ist erlaubt" : "Rauchen ist nicht erlaubt"}}</strong></div>
+      <div class="d-flex justify-content-end"><strong>{{animalsAllowed? "Tiere sind erlaubt" : "Tiere sind nicht erlaubt"}}</strong></div>
+      <div class="d-flex justify-content-end"><strong>{{tripInfo}}</strong></div>
+    </div>
+    <div class="col-6 justify-content-start align-items-center">
+      <div class="d-flex justify-content-start"><strong>{{trailerId == null? "Ohne Anhänger" : "Anhänger: "}}</strong></div>
+      <div class="d-flex justify-content-start"><strong>{{maxWeightTrailer == null? "" : maxWeightTrailer + "KG"}}</strong></div>
+      <div class="d-flex justify-content-start">
+        <strong>
+          {{maxLengthTrailer == null? "" : maxLengthTrailer + "KG"}}
+          {{maxWidthTrailer == null? "" : maxWidthTrailer + "KG"}}
+          {{maxHeightTrailer == null? "" : maxHeightTrailer + "KG"}}
+        </strong>
+      </div>
+      <div></div>
+    </div>
+  </div>
+  <div class="row mb-5 buttonArea">
+    <div class="col-12 d-flex justify-content-center">
+      <button type="button" class="btn customButton sendRequest" (click)="startRequest()">Jetzt Anfrage Schicken!</button>
+    </div>
+  </div>
+</div>

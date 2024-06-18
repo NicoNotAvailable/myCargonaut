@@ -1,0 +1,11 @@
+<div class="container d-flex justify-content-start">
+  <div class="row mt-5">
+    <div class="col-12">
+      <button type="button" class="btn  customButton" (click)="sendToOverview()">Alle Angebote</button>
+    </div>
+  </div>
+</div>
+<app-offer-details [offer]="offerID" *ngIf="isOffer"></app-offer-details>
+<app-request-details [request]="requestID" *ngIf="isRequest"></app-request-details>
+<app-aktuelle-fahrten></app-aktuelle-fahrten>
+
