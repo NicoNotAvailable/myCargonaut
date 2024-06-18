@@ -5,6 +5,8 @@ import {MatDialogActions, MatDialogContent, MatDialogTitle} from "@angular/mater
 import {NgIf} from "@angular/common";
 import {ActivatedRoute} from "@angular/router";
 import {SessionService} from "../../services/session.service";
+import { faSave, faStar } from '@fortawesome/free-solid-svg-icons';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 
 @Component({
   selector: 'app-summary',
@@ -15,7 +17,8 @@ import {SessionService} from "../../services/session.service";
     MatDialogActions,
     MatDialogContent,
     MatDialogTitle,
-    NgIf
+    NgIf,
+    FaIconComponent,
   ],
   templateUrl: './summary.component.html',
   styleUrl: './summary.component.css'
@@ -52,4 +55,7 @@ export class SummaryComponent {
   saveOffer(form: NgForm) {
 
   }
+
+  protected readonly faSave = faSave;
+  protected readonly faStar = faStar;
 }

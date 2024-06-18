@@ -8,8 +8,10 @@
   color: #005B52;
 }
 
-html{
+html, body {
   background-color: ghostwhite !important;
+  height: 100%;
+  margin: 0;
   font-family: Roboto, sans-serif;
 }
 
@@ -75,10 +77,6 @@ html{
   text-decoration: underline;
   color: #ffffff;
 }
-
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
-
 
 .editButton, .deleteButton{
   position: relative;
