@@ -22,37 +22,8 @@ import { GetMessageDTO } from './DTO/GetMessageDTO';
 export class ChatController {
   constructor(
     private readonly chatService: ChatService,
-    private readonly chatGateway: SocketGateway,
+    private readonly socketGateway: SocketGateway,
   ) {}
-
-  @Post('join')
-  @ApiOperation({ summary: 'Join a chat room' })
-  @ApiResponse({
-    type: OkDTO,
-    description: 'Joined the chat room successfully.',
-  })
-  async joinRoom(
-    @Body('userId', ParseIntPipe) userId: number,
-    @Body('targetUserId', ParseIntPipe) targetUserId: number,
-  ): Promise<OkDTO> {
-    const roomName = this.chatGateway.getRoomName(userId, targetUserId);
-    const socket =
-      this.chatGateway.server.sockets.sockets.get('user_${userId}');
-
-    if (!socket) {
-      throw new NotFoundException('Socket not found for the user.');
-    }
-
-    try {
-      socket.join(roomName);
-      this.chatGateway.server
-        .to(roomName)
-        .emit('message', 'User ${userId} joined room ${roomName}');
-      return new OkDTO(true, 'User joined room');
-    } catch (err) {
-      throw new Error(err);
-    }
-  }
 
   @Post('message')
   @ApiOperation({ summary: 'Send a message to a chat room and database' })
@@ -74,10 +45,10 @@ export class ChatController {
     dto.targetUserId = body.targetUserId;
     dto.tripId = body.tripId;
     dto.message = body.message;
-    const roomName = this.chatGateway.getRoomName(userId, body.targetUserId);
+    const roomName = this.socketGateway.getRoomName(userId, body.targetUserId);
     try {
       await this.chatService.createMessage(userId, body.tripId, body.message);
-      this.chatGateway.server.to(roomName).emit('message', body.message);
+      this.socketGateway.server.to(roomName).emit('message', body.message);
       return dto;
     } catch (err) {
       throw new Error(err);

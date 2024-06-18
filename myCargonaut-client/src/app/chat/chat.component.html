@@ -21,13 +21,13 @@
           {{ message }}
         </p>
       </div>
-      <input type="text" #messageInput placeholder="Type a message" />
+      <input type="text" #messageInput placeholder="Type a message" (keyup.enter)="sendMessage(messageInput.value); messageInput.value=''" />
       <button (click)="sendMessage(messageInput.value); messageInput.value=''">
-        Send
+        Senden
       </button>
     </div>
     <div *ngIf="!room">
-      <p>Select a chat to start messaging.</p>
+      <p>Wähle einen Chat aus, um zu schreiben!</p>
     </div>
   </div>
 </div>

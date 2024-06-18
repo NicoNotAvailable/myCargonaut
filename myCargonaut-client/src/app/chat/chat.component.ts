@@ -3,6 +3,7 @@ import { SocketService } from '../services/socket.service';
 import { SessionService } from "../services/session.service";
 import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
+import { ActivatedRoute } from "@angular/router";
 
 @Component({
   selector: 'app-chat',
@@ -21,6 +22,7 @@ export class ChatComponent implements OnInit {
 
   private sessionService: SessionService = inject(SessionService);
   private socketService: SocketService = inject(SocketService);
+  private route: ActivatedRoute = inject(ActivatedRoute);
 
   constructor() {
   }
@@ -32,7 +34,29 @@ export class ChatComponent implements OnInit {
       if (!this.isLoggedIn) {
         window.location.href = "/";
       }
+
+      this.route.queryParams.subscribe(params => {
+        this.targetUserId = +params['targetUserId'];
+        if (this.targetUserId) {
+          this.initiateChat(this.targetUserId);
+        }
+      });
+
+      this.loadExistingChats();
     });
+
+    this.socketService.onMessage().subscribe(({ room, message }) => {
+      if (!this.messages[room]) {
+        this.messages[room] = [];
+      }
+      this.messages[room].push(message);
+    });
+  }
+
+  ngAfterViewInit(): void {
+    if (this.messageInput) {
+      this.messageInput.nativeElement.focus();
+    }
   }
 
   initiateChat(targetUserId: number): void {
