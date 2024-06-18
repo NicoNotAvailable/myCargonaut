@@ -1,6 +1,8 @@
 export enum StatusEnum {
     created,
+    accepted,
+    paid,
     active,
     finished,
-    cancelled,
+    reviewed
 }
