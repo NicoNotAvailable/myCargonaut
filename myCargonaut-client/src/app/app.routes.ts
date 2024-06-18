@@ -12,6 +12,9 @@ import {MeineGesucheComponent} from "./meineAnfragenGesuche/meine-gesuche/meine-
 import {RequestAufAnfrageOSucheComponent} from "./meineAnfragenGesuche/request-auf-anfrage-osuche/request-auf-anfrage-osuche.component";
 
 import {TripsCreateComponent} from "./trips-create/trips-create.component";
+import {
+  MeineLetztenFahrtenComponent
+} from './meineAnfragenGesuche/meine-letzten-fahrten/meine-letzten-fahrten.component';
 
 export const routes: Routes = [
 
@@ -30,4 +33,5 @@ export const routes: Routes = [
   {path: 'offer/:id', component: RequestAufAnfrageOSucheComponent},
 
   {path: 'trips/create', component: TripsCreateComponent},
+  {path: 'myLastRides', component: MeineLetztenFahrtenComponent}
 ];
