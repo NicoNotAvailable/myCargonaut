@@ -32,6 +32,7 @@ export class ReviewService {
         } else {
             throw new Error('Invalid owner type');
         }
+        let otherPerson: UserDB | undefined;
         if (trip instanceof OfferTripDB) {
             const drive = await this.driveRepository.findOne({
                 where: { id: trip.drive.id },
@@ -47,6 +48,7 @@ export class ReviewService {
             } else if (drive.status !== StatusEnum.finished) {
                 throw new BadRequestException('ride is not finished yet!');
             }
+            otherPerson = drive.user.id === user.id ? trip.requesting : drive.user;
         } else if (trip instanceof RequestTripDB) {
             const drive = await this.driveRepository.findOne({
                 where: { id: trip.drive.id },
@@ -62,12 +64,14 @@ export class ReviewService {
             } else if (drive.status !== StatusEnum.finished) {
                 throw new BadRequestException('ride is not finished yet!');
             }
+            otherPerson = drive.user.id === user.id ? trip.requesting : drive.user;
         } else {
             throw new Error('Invalid trip type');
         }
         newReview.rating = body.rating;
         newReview.text = body.text;
         newReview.trip = trip;
+        newReview.about = otherPerson;
         try {
             return await this.reviewRepository.save(newReview);
         } catch (error) {
