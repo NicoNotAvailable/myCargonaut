@@ -2,38 +2,109 @@
   <form #form="ngForm" (ngSubmit)="saveOffer(form)">
     <div class="row">
       <div class="p-5" id="summaryArea" *ngIf="templateToLoad === 'summaryOffer' && isLoggedIn">
-        <h1 class="textGreen text-center">Zusammenfassung</h1>
-        <div class="row mt-4 justify-content-between">
-          <div class="col-4">
+        <h1 class="textGreen text-center mt-4">Zusammenfassung</h1>
+        <div class="row mt-5 justify-content-between">
+          <div class="col-3">
             <img class="w-100 rounded-3 custom-card" src="../../../assets/Cybertruck-fremont-cropped.jpg">
           </div>
-          <div class="col-7">
-            <div class="row">
-              <div class="col-auto">
-                <h4>Entspannte Fahrt in meinem Tesla</h4>
+          <div class="col-9">
+            <div class="row justify-content-between">
+              <div class="col-7">
+                <h4 class="text-end">Entspannte Fahrt in meinem Tesla</h4>
                 <div class="hstack justify-content-end text-end">
                   <p>Elon Musk</p>
 
                 </div>
               </div>
               <div class="col-4">
-                <h3>1000€</h3>
+                <h4>1000€</h4>
                 <p class="">pro Person</p>
               </div>
             </div>
-            <hr>
+            <div class="row justify-content-center mt-4">
+              <hr class="blueLine col-8">
+            </div>
           </div>
         </div>
-        <div class="row">
-          <div class="col-4"></div>
-          <div class="col-4"></div>
-        </div>
-        <div class="row">
-          <div class="col-4"></div>
-          <div class="col-4"></div>
-        </div>
+        <div class="row mt-4">
+          <div class="col-4">
+            <h5 class="mt-3">Fahrzeuginformationen</h5>
+            <div class="row">
+              <div class="col-6">
+                <p>verfügbare Plätze:</p>
+              </div>
+              <div class="col-6">
+                <p class="fw-bold">AnzPlatz</p>
+              </div>
+            </div>
 
+            <div>
+              <p>maximale Maße: <br>
+              Länge: <span class="fw-bold">4,0m</span> /
+              Breite: <span class="fw-bold">3,5m</span> /
+              Höhe: <span class="fw-bold">2,5m</span>
+              </p>
+            </div>
+            <h5 class="mt-4">Anhängerinformationen</h5>
+            <div class="row">
+              <div class="col-6">
+                <p>maximales Gewicht:</p>
+              </div>
+              <div class="col-6">
+                <p class="fw-bold">MaxGew</p>
+              </div>
+            </div>
 
+            <div>
+              <p>maximale Maße: <br>
+                Länge: <span class="fw-bold">4,0m</span> /
+                Breite: <span class="fw-bold">3,5m</span> /
+                Höhe: <span class="fw-bold">2,5m</span>
+              </p>
+            </div>
+            <div class="row">
+              <div class="col-6">
+                <p>maximales Gewicht:</p>
+              </div>
+              <div class="col-6">
+                <p class="fw-bold">MaxGew</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-4">
+            <h5 class="mt-3">Allgemeine Informationen</h5>
+            <div class="row">
+              <div class="col-6">
+                <p>Start des Trips:</p>
+                <p>Startpunkt:</p>
+                <p>Zielort:</p>
+              </div>
+              <div class="col-6">
+                <p class="fw-bold">23:59 am 14.02.2024</p>
+                <p class="fw-bold">30324 LA</p>
+                <p class="fw-bold">35390 Gießen</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-4">
+            <h5 class="mt-3">Zusatzinformationen</h5>
+            <div class="row">
+              <div class="col-6">
+                <p>Raucher:</p>
+                <p>Tiere:</p>
+                <p>Kommunikationswunsch:</p>
+              </div>
+              <div class="col-6">
+                <p class="fw-bold">ja</p>
+                <p class="fw-bold">ja</p>
+                <p class="fw-bold">nur Musik</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="text-center mt-5">
+          <button class="btn customButton px-5">Fahrt erstellen</button>
+        </div>
       </div>
     </div>
   </form>
