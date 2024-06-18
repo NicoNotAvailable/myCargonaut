@@ -1,5 +1,5 @@
 import {Component, inject} from '@angular/core';
-import {FormsModule} from "@angular/forms";
+import { FormsModule, NgForm } from '@angular/forms';
 import {MatButton} from "@angular/material/button";
 import {MatDialogActions, MatDialogContent, MatDialogTitle} from "@angular/material/dialog";
 import {NgIf} from "@angular/common";
@@ -47,5 +47,9 @@ export class SummaryComponent {
         this.templateToLoad = 'summaryOffer';
       }
     });
+  }
+
+  saveOffer(form: NgForm) {
+
   }
 }

@@ -4,6 +4,10 @@
   color: ghostwhite;
 }
 
+.textGreen {
+  color: #005B52;
+}
+
 html{
   background-color: ghostwhite !important;
   font-family: Roboto, sans-serif;

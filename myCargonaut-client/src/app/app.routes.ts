@@ -17,4 +17,6 @@ export const routes: Routes = [
   { path: 'summary', component: SummaryComponent },
   { path: 'createregister', component: RegisterComponent },
   { path: '', component: FrontpageComponent },
+
+
 ];

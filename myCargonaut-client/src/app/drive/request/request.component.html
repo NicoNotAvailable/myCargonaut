@@ -36,7 +36,7 @@
       </button>
     </div>
   </ng-template>
-  <form #form="ngForm" (ngSubmit)="saveRequest(form)">
+  <form #form="ngForm" (ngSubmit)="createSummaryRequest(form)">
     <div class="row">
       <div class="p-5" id="addOfferArea">
         <div class="row mb-5 justify-content-between">
@@ -227,11 +227,8 @@
         </div>
       </div>
       <div class="col-12 align-bottom d-flex justify-content-around align-items-center" *ngIf="editingRequest == 0">
-        <button type="submit" class="btn customButton exitButton text-light">
-          <i>
-            <fa-icon [icon]="faSave"></fa-icon>
-          </i>
-          <span class="ms-3">Speichern</span>
+        <button (click)="createSummaryRequest(form)" type="submit" class="btn customButton exitButton text-light">
+          <span class="ms-3">Weiter <fa-icon [icon]="faArrowRight" class="ms-2"></fa-icon></span>
         </button>
       </div>
     </div>

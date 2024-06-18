@@ -6,12 +6,12 @@ import { RequestDB } from './DriveDB';
 
 @Entity()
 export class RequestTripDB extends TripDB {
-    @ManyToOne(() => RequestDB)
-    drive: RequestDB;
+  @ManyToOne(() => RequestDB)
+  drive: RequestDB;
 
-    @ManyToOne(() => CarDB)
-    car: CarDB;
+  @ManyToOne(() => CarDB)
+  car: CarDB;
 
-    @ManyToOne(() => TrailerDB)
-    trailer: TrailerDB;
+  @ManyToOne(() => TrailerDB)
+  trailer: TrailerDB;
 }

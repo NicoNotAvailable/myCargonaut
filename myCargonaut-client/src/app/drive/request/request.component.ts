@@ -1,7 +1,7 @@
 import {Component, EventEmitter, inject, Input, Output, TemplateRef, ViewEncapsulation} from "@angular/core";
 import {SessionService} from "../../services/session.service";
 import {NgClass, NgIf, NgOptimizedImage} from "@angular/common";
-import {faCirclePlus, faDeleteLeft, faPlus, faSave} from "@fortawesome/free-solid-svg-icons";
+import { faArrowRight, faCirclePlus, faDeleteLeft, faPlus, faSave } from '@fortawesome/free-solid-svg-icons';
 import {FormsModule, NgForm} from "@angular/forms";
 import {FaIconComponent} from "@fortawesome/angular-fontawesome";
 import {NgbInputDatepicker} from "@ng-bootstrap/ng-bootstrap";
@@ -112,7 +112,7 @@ export class RequestComponent {
     this.talkMode = Number(num);
   }
 
-  saveRequest(form: any): void {
+  createSummaryRequest(form: any): void {
     this.router.navigate(['/summary'], {queryParams: {origin: 'request'}})
   }
 
@@ -155,4 +155,5 @@ export class RequestComponent {
   protected readonly faCirclePlus = faCirclePlus;
   protected readonly faPlus = faPlus;
   protected readonly window = window;
+  protected readonly faArrowRight = faArrowRight;
 }

@@ -93,17 +93,6 @@ export class OfferComponent {
     this.talkMode = 3;
   }
 
-  openCarDialog() {
-    const dialogRef = this.dialog.open(DriveModalComponent, {
-      width: '400px',
-      data: { template: 'tripCar' }
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The weight dialog was closed. Result:', result);
-    });
-  }
-
   changeTalkMode(num: any) {
     if (num < 1) {
       this.errorMessage = "Unzulässiger Kommunikationswunsch";
@@ -126,7 +115,7 @@ export class OfferComponent {
     this.seats = Number(num);
   }
 
-  saveOffer(form: NgForm) {
+  createSummaryOffer(form: NgForm) {
     this.router.navigate(['/summary'], { queryParams: { origin: 'offer' } })
   }
 
@@ -141,6 +130,28 @@ export class OfferComponent {
   protected readonly faSave = faSave;
   protected readonly faCircle = faCircle;
   protected readonly faCirclePlus = faCirclePlus;
+
+  openCarDialog() {
+    const dialogRef = this.dialog.open(DriveModalComponent, {
+      width: '400px',
+      data: { template: 'tripCar' }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The weight dialog was closed. Result:', result);
+    });
+  }
+
+  openTrailerDialog() {
+    const dialogRef = this.dialog.open(DriveModalComponent, {
+      width: '400px',
+      data: { template: 'tripTrailer' }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The weight dialog was closed. Result:', result);
+    });
+  }
 
   openStopDialog(): void {
     const dialogRef = this.dialog.open(DriveModalComponent, {
@@ -164,15 +175,4 @@ export class OfferComponent {
 
   protected readonly faPenToSquare = faPenToSquare;
   protected readonly faX = faX;
-
-  openTrailerDialog() {
-    const dialogRef = this.dialog.open(DriveModalComponent, {
-      width: '400px',
-      data: { template: 'tripTrailer' }
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The weight dialog was closed. Result:', result);
-    });
-  }
 }

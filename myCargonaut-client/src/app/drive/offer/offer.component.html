@@ -1,5 +1,5 @@
 <div *ngIf="isLoggedIn" class="container mt-3 mb-3 text-start">
-  <form #form="ngForm" (ngSubmit)="saveOffer(form)">
+  <form #form="ngForm" (ngSubmit)="createSummaryOffer(form)">
     <div class="row">
       <div class="p-5" id="addOfferArea">
         <div class="row mb-5 justify-content-between">
@@ -264,7 +264,7 @@
         </div>
       </div>
       <div class="col-12 align-bottom d-flex justify-content-around align-items-center" *ngIf="editingOffer == 0">
-        <button (click)="openCarDialog()" type="submit" class="btn customButton exitButton text-light">
+        <button (click)="createSummaryOffer(form)" type="submit" class="btn customButton exitButton text-light">
           <span class="ms-3">Weiter <fa-icon [icon]="faArrowRight" class="ms-2"></fa-icon></span>
         </button>
       </div>

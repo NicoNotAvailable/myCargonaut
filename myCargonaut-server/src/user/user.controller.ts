@@ -38,6 +38,7 @@ import { EditUserProfileDTO } from './DTO/EditUserProfileDTO';
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
+
   private readonly logger = new Logger(UserController.name);
 
   private validateNonEmptyString(value: string, errorMessage: string): void {
