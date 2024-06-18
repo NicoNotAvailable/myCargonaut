@@ -19,6 +19,7 @@ import { CreateLocationDTO } from '../location/DTO/CreateLocationDTO';
 import { StatusEnum } from '../database/enums/StatusEnum';
 import { OfferTripDB } from '../database/OfferTripDB';
 import { RequestTripDB } from '../database/RequestTripDB';
+import { ChangeStatusDTO } from './DTO/ChangeStatusDTO';
 
 @Injectable()
 export class DriveService {
@@ -239,6 +240,30 @@ export class DriveService {
       return await this.requestRepository.save(request);
     } catch (error) {
       throw new Error('An error occurred while updating the request');
+    }
+  }
+  async updateStatus(
+    offerId: number,
+    userId: number,
+    updateData: ChangeStatusDTO,
+  ): Promise<DriveDB> {
+    const drive = await this.driveRepository.findOne({
+      where: { id: offerId },
+      relations: ['user'],
+    });
+    if (!drive) {
+      throw new NotFoundException('Offer not found');
+    }
+    if (drive.user.id !== userId) {
+      throw new UnauthorizedException('You are not the owner of this offer');
+    }
+
+    drive.status = updateData.newStatus;
+
+    try {
+      return await this.driveRepository.save(drive);
+    } catch (error) {
+      throw new Error('An error occurred while updating the offer');
     }
   }
   async deleteDrive(driveId: number, userId: number) {
