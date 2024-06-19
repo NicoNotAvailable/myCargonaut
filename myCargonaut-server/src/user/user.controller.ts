@@ -3,14 +3,17 @@ import {
   Body,
   Controller,
   Get,
-  Logger, Param,
+  Logger,
+  Param,
+  ParseIntPipe,
   Post,
-  Put, Res,
+  Put,
+  Res,
   Session,
   UploadedFile,
   UseGuards,
-  UseInterceptors
-} from "@nestjs/common";
+  UseInterceptors,
+} from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiConsumes,
@@ -20,7 +23,7 @@ import {
 import { UserService } from './user.service';
 import { CreateUserDTO } from './DTO/CreateUserDTO';
 import { OkDTO } from '../serverDTO/OkDTO';
-import { extname, join } from "path";
+import { extname, join } from 'path';
 import { diskStorage } from 'multer';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { EditPasswordDTO } from './DTO/EditPasswordDTO';
@@ -33,12 +36,17 @@ import * as bcrypt from 'bcryptjs';
 import { GetOwnUserDTO } from './DTO/GetOwnUserDTO';
 import { UserDB } from '../database/UserDB';
 import { GetOtherUserDTO } from './DTO/GetOtherUserDTO';
-import { Response } from "express";
+import { Response } from 'express';
+import { UtilsService } from '../utils/utils.service';
 
 @ApiTags('user')
 @Controller('user')
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private readonly userService: UserService,
+    private readonly utilsService: UtilsService,
+  ) {}
+
   private readonly logger = new Logger(UserController.name);
 
   private validateNonEmptyString(value: string, errorMessage: string): void {
@@ -70,6 +78,18 @@ export class UserController {
     }
 
     return age >= 18;
+  }
+
+  @ApiResponse({ type: GetOtherUserDTO, description: 'gets other user' })
+  @Get('/:id')
+  async getOtherUser(@Param('id', ParseIntPipe) id: number) {
+    let user: UserDB;
+    try {
+      user = await this.userService.getUserById(id);
+    } catch (err) {
+      console.log(err);
+    }
+    return this.utilsService.transformUserToGetOtherUserDTO(user);
   }
 
   @ApiResponse({ type: GetOwnUserDTO, description: 'gets the own user' })

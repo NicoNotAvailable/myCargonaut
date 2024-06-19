@@ -112,8 +112,8 @@ export class UtilsService {
     const dto = new GetOtherUserDTO();
     dto.id = user.id;
     dto.profilePic = user.profilePic;
-    dto.firstName = user.firstName;
-    dto.lastName = user.lastName;
+    dto.firstName = user.firstName.charAt(0).toUpperCase() + '.';
+    dto.lastName = user.lastName.charAt(0).toUpperCase() + '.';
     dto.languages = user.languages;
     dto.profileText = user.profileText;
     dto.isSmoker = user.isSmoker;
