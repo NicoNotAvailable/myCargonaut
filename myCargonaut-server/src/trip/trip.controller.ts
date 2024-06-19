@@ -237,7 +237,9 @@ export class TripController {
     }
   }
 
-  @ApiOperation({ summary: 'Get user trips (offer and request trips)' })
+  @ApiOperation({
+    summary: 'Get user trips (offer/request trips, offer/request drive trips)',
+  })
   @ApiResponse({
     status: 200,
     description: 'User trips retrieved successfully.',
@@ -247,7 +249,12 @@ export class TripController {
   @UseGuards(IsLoggedInGuard)
   @Get('user-trips/:userId')
   async getUserTrips(@Param('userId', ParseIntPipe) userId: number
-  ): Promise<{ offerTrips: any[]; requestTrips: any[], drives: any[] }> {
+  ): Promise<{
+    offerTrips: any[];
+    requestTrips: any[];
+    offerDriveTrips: any[];
+    requestDriveTrips: any[];
+  }> {
     try {
       return await this.tripService.getUserTrips(userId);
     } catch (err) {

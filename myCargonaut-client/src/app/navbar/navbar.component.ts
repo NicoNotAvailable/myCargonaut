@@ -30,7 +30,7 @@ import { offerTrips } from "../meineAnfragenGesuche/offerTrips";
 })
 export class NavbarComponent {
 
-  public sessionService: SessionService = inject(SessionService);
+  private sessionService: SessionService = inject(SessionService);
   private socketService: SocketService = inject(SocketService);
 
   protected readonly faCar = faCar;
@@ -78,17 +78,38 @@ export class NavbarComponent {
   }
 
   private joinChatRooms(userId: number): void {
-    this.http.get('http://localhost:8000/trips/user-trips${userId}', {withCredentials: true}).subscribe(
-      response => {
-        if(response.offerTrips) {
-          for e of offerTrips {
-            this.http.get('http://localhost:8000/chat/messages', {withCredentials: true}).subscribe()
-          }
+    this.http.get(`http://localhost:8000/trip/user-trips/${userId}`, { withCredentials: true }).subscribe(
+      (response: any) => {
+        if (response) {
+          response.offerTrips.forEach((trip: any) => {
+            this.joinRoom(userId, trip.id);
+          });
+
+          // Joining request trips rooms
+          response.requestTrips.forEach((trip: any) => {
+            this.joinRoom(userId, trip.id);
+          });
+
+          // Joining offer drive trips rooms
+          response.offerDriveTrips.forEach((trip: any) => {
+            this.joinRoom(userId, trip.id);
+          });
+
+          // Joining request drive trips rooms
+          response.requestDriveTrips.forEach((trip: any) => {
+            this.joinRoom(userId, trip.id);
+          });
         }
       },
       error => {
-        console.log(error);
+        console.error('Error fetching user trips:', error);
       }
-    )
+    );
+  }
+
+  private joinRoom(userId: number, tripId: number): void {
+    const payload = { userId, tripId };
+    this.socketService.emit('createOrJoinRoom', payload);
+    console.log(`Requested to join room: trip_${tripId}`);
   }
 }
