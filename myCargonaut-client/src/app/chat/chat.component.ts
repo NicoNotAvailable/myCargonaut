@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from "@angular/core";
+import { Component, OnInit, inject, ViewChild, ElementRef } from "@angular/core";
 import { SocketService } from '../services/socket.service';
 import { SessionService } from "../services/session.service";
 import { CommonModule } from "@angular/common";
@@ -24,7 +24,10 @@ export class ChatComponent implements OnInit {
   private socketService: SocketService = inject(SocketService);
   private route: ActivatedRoute = inject(ActivatedRoute);
 
-  constructor() {
+  @ViewChild('messageInput') messageInput: ElementRef | undefined;
+
+  constructor(
+  ) {
   }
 
   ngOnInit(): void {
@@ -57,6 +60,13 @@ export class ChatComponent implements OnInit {
     if (this.messageInput) {
       this.messageInput.nativeElement.focus();
     }
+  }
+
+  loadExistingChats(): void {
+    this.rooms = ['room1', 'room2', 'room3'];
+    this.rooms.forEach(room => {
+      this.messages[room] = [`Welcome to ${room}!`];
+    });
   }
 
   initiateChat(targetUserId: number): void {

@@ -236,6 +236,7 @@ export class TripController {
       throw new BadRequestException('An error occurred: ' + err.message);
     }
   }
+
   @ApiResponse({
     type: OkDTO,
     description: 'accepts a trip',
