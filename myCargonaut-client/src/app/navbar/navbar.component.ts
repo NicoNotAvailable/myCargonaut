@@ -14,6 +14,8 @@ import {
 import { SessionService } from "../services/session.service";
 import { HttpClient, HttpClientModule } from "@angular/common/http";
 import { SocketService } from '../services/socket.service';
+import { error } from "@angular/compiler-cli/src/transformers/util";
+import { offerTrips } from "../meineAnfragenGesuche/offerTrips";
 
 @Component({
   selector: 'app-navbar',
@@ -56,6 +58,7 @@ export class NavbarComponent {
         this.isLoggedIn = true;
         console.log(currentUser + ' heyyyyyyyyyyyyyyyyyyyyyyy');
         this.socketService.emit('register', currentUser);
+        this.joinChatRooms(currentUser);
       } else {
         this.isLoggedIn = false;
       }
@@ -67,6 +70,21 @@ export class NavbarComponent {
       response => {
         this.isLoggedIn = false;
         window.location.href = "/";
+      },
+      error => {
+        console.log(error);
+      }
+    )
+  }
+
+  private joinChatRooms(userId: number): void {
+    this.http.get('http://localhost:8000/trips/user-trips${userId}', {withCredentials: true}).subscribe(
+      response => {
+        if(response.offerTrips) {
+          for e of offerTrips {
+            this.http.get('http://localhost:8000/chat/messages', {withCredentials: true}).subscribe()
+          }
+        }
       },
       error => {
         console.log(error);

@@ -10,22 +10,22 @@ import {
   Post,
   Put,
   Session,
-  UseGuards,
-} from '@nestjs/common';
-import { DriveService } from '../drive/drive.service';
-import { UserService } from '../user/user.service';
-import { VehicleService } from '../vehicle/vehicle.service';
-import { TripService } from './trip.service';
-import { ApiBearerAuth, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { OkDTO } from '../serverDTO/OkDTO';
-import { IsLoggedInGuard } from '../session/is-logged-in.guard';
-import { SessionData } from 'express-session';
-import { CreateOfferTripDTO } from './DTO/CreateOfferTripDTO';
-import { LocationService } from '../location/location.service';
-import { CreateRequestTripDTO } from './DTO/CreateRequestTripDTO';
-import { UtilsService } from '../utils/utils.service';
-import { GetRequestTripDTO } from './DTO/GetRequestTripDTO';
-import { GetOfferTripDTO } from './DTO/GetOfferTripDTO';
+  UseGuards
+} from "@nestjs/common";
+import { DriveService } from "../drive/drive.service";
+import { UserService } from "../user/user.service";
+import { VehicleService } from "../vehicle/vehicle.service";
+import { TripService } from "./trip.service";
+import { ApiBearerAuth, ApiOperation, ApiParam, ApiResponse, ApiTags } from "@nestjs/swagger";
+import { OkDTO } from "../serverDTO/OkDTO";
+import { IsLoggedInGuard } from "../session/is-logged-in.guard";
+import { SessionData } from "express-session";
+import { CreateOfferTripDTO } from "./DTO/CreateOfferTripDTO";
+import { LocationService } from "../location/location.service";
+import { CreateRequestTripDTO } from "./DTO/CreateRequestTripDTO";
+import { UtilsService } from "../utils/utils.service";
+import { GetRequestTripDTO } from "./DTO/GetRequestTripDTO";
+import { GetOfferTripDTO } from "./DTO/GetOfferTripDTO";
 
 @ApiTags('trip')
 @Controller('trip')
@@ -232,6 +232,24 @@ export class TripController {
       return this.utilsService.transformRequestTripDBToGetRequestTripDTO(
         requestTrip,
       );
+    } catch (err) {
+      throw new BadRequestException('An error occurred: ' + err.message);
+    }
+  }
+
+  @ApiOperation({ summary: 'Get user trips (offer and request trips)' })
+  @ApiResponse({
+    status: 200,
+    description: 'User trips retrieved successfully.',
+    type: 'object',
+  })
+  @ApiBearerAuth()
+  @UseGuards(IsLoggedInGuard)
+  @Get('user-trips/:userId')
+  async getUserTrips(@Param('userId', ParseIntPipe) userId: number
+  ): Promise<{ offerTrips: any[]; requestTrips: any[], drives: any[] }> {
+    try {
+      return await this.tripService.getUserTrips(userId);
     } catch (err) {
       throw new BadRequestException('An error occurred: ' + err.message);
     }

@@ -223,7 +223,21 @@ export class TripService {
     await this.tripRepository.remove(trip);
   }
 
-  public async getUserTrips(userId: number) {
+  public async getUserTripsDrives(userId: number) {
+    const offerDriveTrips = await this.offerTripRepository.find({
+      where: { drive: { user: { id: userId } } },
+      relations: ['drive', 'drive.user'],
+    });
+
+    const requestDriveTrips = await this.requestTripRepository.find({
+      where: { drive: { user: { id: userId } } },
+      relations: ['drive', 'drive.user'],
+    });
+
+    return { offerDriveTrips, requestDriveTrips };
+  }
+
+  async getUserTrips(userId: number) {
     const offerTrips = await this.getOwnOfferTrips(userId);
     const requestTrips = await this.getOwnRequestTrips(userId);
     return { offerTrips, requestTrips };
