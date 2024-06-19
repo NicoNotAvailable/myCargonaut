@@ -99,4 +99,50 @@ export class ReviewService {
             await this.driveRepository.save(drive);
         }
     }
+    private async getFilteredReviews(userId: number): Promise<ReviewDB[]> {
+        const reviewsAboutUser = await this.reviewRepository.find({
+            where: { about: { id: userId } },
+            relations: ['writer', 'trip'],
+        });
+
+        const relevantReviews = await Promise.all(
+            reviewsAboutUser.map(async (reviewAboutUser) => {
+                const otherReview = await this.reviewRepository.findOne({
+                    where: {
+                        writer: { id: userId },
+                        trip: reviewAboutUser.trip,
+                    },
+                    relations: ['writer', 'trip'],
+                });
+                return otherReview ? reviewAboutUser : null;
+            }),
+        );
+
+        return relevantReviews.filter((review) => review !== null);
+    }
+
+    async getRating(userId: number): Promise<number> {
+        const filteredReviews = await this.getFilteredReviews(userId);
+
+        if (filteredReviews.length === 0) {
+            return 0;
+        }
+
+        const totalRating = filteredReviews.reduce(
+            (sum, review) => sum + review.rating,
+            0,
+        );
+
+        return totalRating / filteredReviews.length;
+    }
+
+    async getReviews(userId: number): Promise<ReviewDB[]> {
+        const filteredReviews = await this.getFilteredReviews(userId);
+
+        if (filteredReviews.length === 0) {
+            throw new Error('There are no reviews');
+        }
+
+        return filteredReviews;
+    }
 }
