@@ -39,6 +39,7 @@ export class ChatService {
     return this.messageRepository.save(newMessage);
   }
 
+  /**
   async getMessages(
     userId: number,
     targetUserId: number,
@@ -58,6 +59,7 @@ export class ChatService {
     }
     return messages;
   }
+  */
 
   async markMessageAsRead(
     messageId: number,

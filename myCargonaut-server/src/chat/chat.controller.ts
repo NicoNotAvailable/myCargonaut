@@ -49,7 +49,7 @@ export class ChatController {
       throw new Error(err);
     }
   }
-
+  /**
   @Get('messages')
   @ApiOperation({ summary: 'Get all messages between users for a trip' })
   @ApiResponse({
@@ -92,6 +92,7 @@ export class ChatController {
       throw new Error(err);
     }
   }
+   */
 
   @Put('message/:id')
   @ApiOperation({ summary: 'Mark a message as read' })
