@@ -22,6 +22,8 @@ import { TrailerDB } from '../database/TrailerDB';
 import { GetTrailerDTO } from '../vehicle/DTO/GetTrailerDTO';
 import { OfferTripDB } from '../database/OfferTripDB';
 import { GetOfferTripDTO } from '../trip/DTO/GetOfferTripDTO';
+import { GetReviewDTO } from '../review/DTO/GetReviewDTO';
+import { ReviewDB } from '../database/ReviewDB';
 
 @ApiTags('trip')
 @Controller('trip')
@@ -166,6 +168,15 @@ export class UtilsService {
     dto.locations = locations.map(this.transformLocationDBToCreateLocationDTO);
     const cargo = await request.cargo;
     dto.cargo = cargo.map(this.transformCargoDBToCreateCargoDTO);
+    return dto;
+  }
+  async transformReviewDBToGetReviewDTO(
+    review: ReviewDB,
+  ): Promise<GetReviewDTO> {
+    const dto = new GetReviewDTO();
+    dto.writer = this.transformUserToGetOtherUserDTO(review.writer);
+    dto.rating = review.rating;
+    dto.text = review.text;
     return dto;
   }
 }
