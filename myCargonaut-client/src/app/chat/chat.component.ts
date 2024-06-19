@@ -48,7 +48,7 @@ export class ChatComponent implements OnInit {
       this.loadExistingChats();
     });
 
-    this.socketService.onMessage().subscribe(({ room, message }) => {
+    this.socketService.on('message').subscribe(({ room, message }) => {
       if (!this.messages[room]) {
         this.messages[room] = [];
       }
