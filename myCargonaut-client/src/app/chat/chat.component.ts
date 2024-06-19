@@ -4,6 +4,8 @@ import { SessionService } from "../services/session.service";
 import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
+import { HttpClient } from "@angular/common/http";
+import { Message } from './message.interface';
 
 @Component({
   selector: 'app-chat',
@@ -25,9 +27,10 @@ export class ChatComponent implements OnInit {
   private route: ActivatedRoute = inject(ActivatedRoute);
 
   @ViewChild('messageInput') messageInput: ElementRef | undefined;
+  private writer: number = -1;
+  private message: string = '';
 
-  constructor(
-  ) {
+  constructor(private http: HttpClient) {
   }
 
   ngOnInit(): void {
@@ -45,7 +48,7 @@ export class ChatComponent implements OnInit {
         }
       });
 
-      this.loadExistingChats();
+      this.loadChatsWithMessages();
     });
 
     this.socketService.on('message').subscribe(({ room, message }) => {
@@ -62,11 +65,31 @@ export class ChatComponent implements OnInit {
     }
   }
 
-  loadExistingChats(): void {
-    this.rooms = ['room1', 'room2', 'room3'];
-    this.rooms.forEach(room => {
-      this.messages[room] = [`Welcome to ${room}!`];
-    });
+  loadChatsWithMessages(): void {
+    if (!this.userId) return;
+    this.http
+      .get<any>('http://localhost:8000/trips/getUserTrips/${this.userId}', { withCredentials: true })
+      .subscribe(
+        (data) => {
+          const { offerTrips, requestTrips, offerDriveTrips, requestDriveTrips } = data;
+
+          const trips = [...offerTrips, ...requestTrips, ...offerDriveTrips, ...requestDriveTrips];
+
+          trips.forEach(trip => {
+            if (trip.messages && trip.messages.length > 0) {
+              const roomName = `trip_${trip.id}`;
+              if (!this.rooms.includes(roomName)) {
+                this.rooms.push(roomName);
+                this.messages[roomName] = trip.messages.map((msg: Message) => msg.message);
+              }
+            }
+          });
+
+        },
+        (error) => {
+          console.error(error);
+        }
+      );
   }
 
   initiateChat(targetUserId: number): void {
@@ -80,11 +103,30 @@ export class ChatComponent implements OnInit {
     this.socketService.emit('createOrJoinRoom', { userId: this.userId, targetUserId: this.targetUserId });
   }
 
-  sendMessage(message: string): void {
-    if (this.room) {
-      this.socketService.emit('message', { room: this.room, message });
-      this.messages[this.room].push(`Me: ${message}`);
+  sendMessage(messageText: string): void {
+    if (!this.room || !this.userId) {
+      console.error('Room or userId not defined');
+      return;
     }
+
+    const messageData = {
+      tripId: parseInt(this.room.split('_')[1]), // Extract tripId from room name
+      writer: this.userId,
+      message: messageText,
+    };
+
+    this.socketService.emit('message', { room: this.room, message: messageText });
+    this.messages[this.room].push(`Me: ${messageText}`);
+
+    this.http.post("http://localhost:8000/chats/message", messageData, { withCredentials: true })
+      .subscribe(
+        response => {
+          console.log('Message sent successfully');
+        },
+        error => {
+          console.error('There was an error sending the message:', error);
+        }
+      );
   }
 
   private getRoomName(userId1: number, userId2: number): string {
@@ -93,5 +135,13 @@ export class ChatComponent implements OnInit {
 
   selectRoom(room: string): void {
     this.room = room;
+  }
+
+  getMessageClasses(message: any): string {
+    if (message.writer.id !== this.userId) {
+      return 'message-left';
+    } else {
+      return 'message-right';
+    }
   }
 }

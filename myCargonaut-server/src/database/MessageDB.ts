@@ -10,13 +10,13 @@ export class MessageDB {
   @ManyToOne(() => UserDB)
   writer: UserDB;
 
-    @ManyToOne(() => TripDB, { onDelete: 'CASCADE' })
-    trip: TripDB;
+  @ManyToOne(() => TripDB, { onDelete: 'CASCADE' })
+  trip: TripDB;
 
   @Column()
   message: string;
 
-  @Column()
+  @Column({ default: false })
   read: boolean;
 
   @Column({ default: new Date().toISOString() })

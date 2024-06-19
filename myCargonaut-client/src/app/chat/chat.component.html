@@ -1,4 +1,4 @@
-<div class="chat-container">
+<div class="chat-container text-center">
   <div class="chat-list">
     <h3>Chats</h3>
     <div *ngIf="rooms.length === 0; else chatList">
@@ -17,7 +17,7 @@
     <div *ngIf="room">
       <h4>Room: {{ room }}</h4>
       <div class="messages">
-        <p *ngFor="let message of messages[room]">
+        <p *ngFor="let message of messages[room]" [ngClass]="getMessageClasses(message)">
           {{ message }}
         </p>
       </div>

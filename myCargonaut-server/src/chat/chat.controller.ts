@@ -3,7 +3,6 @@ import {
   Post,
   Body,
   ParseIntPipe,
-  NotFoundException,
   Session,
   BadRequestException,
   Get,
@@ -14,12 +13,12 @@ import { SocketGateway } from '../socket.gateway';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { CreateMessageDTO } from './DTO/CreateMessageDTO';
 import { SessionData } from 'express-session';
-import { OkDTO } from '../serverDTO/OkDTO';
 import { GetMessageDTO } from './DTO/GetMessageDTO';
 
 @ApiTags('chat')
 @Controller('chat')
 export class ChatController {
+
   constructor(
     private readonly chatService: ChatService,
     private readonly socketGateway: SocketGateway,
@@ -42,13 +41,10 @@ export class ChatController {
       throw new BadRequestException('User not logged in.');
     }
 
-    dto.targetUserId = body.targetUserId;
     dto.tripId = body.tripId;
     dto.message = body.message;
-    const roomName = this.socketGateway.getRoomName(userId, body.targetUserId);
     try {
       await this.chatService.createMessage(userId, body.tripId, body.message);
-      this.socketGateway.server.to(roomName).emit('message', body.message);
       return dto;
     } catch (err) {
       throw new Error(err);
