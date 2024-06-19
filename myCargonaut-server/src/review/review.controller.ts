@@ -110,4 +110,25 @@ export class ReviewController {
             throw new BadRequestException('An error occurred: ' + err.message);
         }
     }
+  @ApiResponse({
+    type: [GetReviewDTO],
+    description: 'gets the reviews for the own user',
+  })
+  @Get()
+  async getOwnReviews(
+    @Session() session: SessionData
+  ): Promise<GetReviewDTO[]> {
+    try {
+      const reviews = await this.reviewService.getReviews(session.currentUser);
+      return await Promise.all(
+        reviews.map(async (review) => {
+          return this.utilsService.transformReviewDBToGetReviewDTO(
+            review,
+          );
+        }),
+      );
+    } catch (err) {
+      throw new BadRequestException('An error occurred: ' + err.message);
+    }
+  }
 }
