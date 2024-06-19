@@ -16,6 +16,7 @@ import { HttpClient, HttpClientModule } from "@angular/common/http";
 import { SocketService } from '../services/socket.service';
 import { error } from "@angular/compiler-cli/src/transformers/util";
 import { offerTrips } from "../meineAnfragenGesuche/offerTrips";
+import { NotificationService } from "../services/notification.service";
 
 @Component({
   selector: 'app-navbar',
@@ -32,6 +33,7 @@ export class NavbarComponent {
 
   private sessionService: SessionService = inject(SessionService);
   private socketService: SocketService = inject(SocketService);
+  private notificationService: NotificationService = inject(NotificationService);
 
   protected readonly faCar = faCar;
   protected readonly faHouse = faHouse;
@@ -108,8 +110,16 @@ export class NavbarComponent {
   }
 
   private joinRoom(userId: number, tripId: number): void {
+    const room = `trip_${tripId}`;
     const payload = { userId, tripId };
+
     this.socketService.emit('createOrJoinRoom', payload);
-    console.log(`Requested to join room: trip_${tripId}`);
+    console.log(`Requested to join room: ${room}`);
+
+    this.socketService.on('message').subscribe(({ message }) => {
+      if (!window.location.href.includes('/chats')) {
+        this.notificationService.showNotification(`New message in ${room}: ${message}`);
+      }
+    });
   }
 }
