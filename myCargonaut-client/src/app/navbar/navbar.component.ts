@@ -27,7 +27,7 @@ import { NotificationService } from "../services/notification.service";
     NgIf
   ],
   templateUrl: './navbar.component.html',
-  styleUrl: './navbar.component.css'
+  styleUrl: './navbar.component.css',
 })
 export class NavbarComponent {
 
