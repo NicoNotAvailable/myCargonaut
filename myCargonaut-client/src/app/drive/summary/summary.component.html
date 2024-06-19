@@ -1,4 +1,9 @@
 <div class="rounded-3 container mt-3 mb-3 text-start" *ngIf="isLoggedIn">
+  <a href="/createoffer">
+    <button type="click" class="btn customButton exitButton text-light">
+      <span class="px-3"><fa-icon [icon]="faArrowLeft"></fa-icon> Zurück</span>
+    </button>
+  </a>
   <form #form="ngForm" (ngSubmit)="saveOffer(form)">
     <div class="row">
       <div class="p-5 mb-4" id="summaryArea">

@@ -1,10 +1,12 @@
 <div *ngIf="isLoggedIn" class="container mt-3 mb-3 text-start">
+
+
   <form #form="ngForm" (ngSubmit)="createSummaryOffer(form)">
     <div class="row">
       <div class="p-5" id="addOfferArea">
         <div class="row mb-5 justify-content-between">
-          <div class="col-3" *ngIf="editingOffer == 0">
-            <h2 class="textGreen col-7">Sitze:</h2>
+          <div class="col-xl-3 col-12" *ngIf="editingOffer == 0">
+            <h2 class="textGreen col-7 mt-5">Sitze:</h2>
             <div class="row mt-4">
               <div class="hstack justify-content-between">
                 <button (click)="changeSeatCount(2)" [ngClass]="seats === 2 ? 'selectedButton' : 'deselectedButton'"
@@ -71,10 +73,12 @@
             </div>
           </div>
 
-          <div class="col-4">
-            <h2 class="textGreen col-5 mb-3">Infos:</h2>
+          <hr class="blueLine d-xl-none mt-5">
 
-            <div class="col-12" *ngIf="editingOffer == 0">
+          <div class="col-xl-4 col-12" *ngIf="editingOffer == 0">
+            <h2 class="textGreen col-5 mb-3 mt-5">Infos:</h2>
+
+            <div class="col-12">
               <input [(ngModel)]="name" [ngModelOptions]="{standalone: true}" name="nameInput" required type="text"
                      class="form-control rounded-5 p-2 col-12" placeholder="Name des Trips" id="nameInput">
             </div>
@@ -171,8 +175,10 @@
             </div>
           </div>
 
-          <div class="col-3" *ngIf="editingOffer == 0">
-            <h2 class="textGreen col-12 mb-3">Zeit & Ort</h2>
+          <hr class="blueLine d-xl-none mt-5">
+
+          <div class="col-xl-3 col-12" *ngIf="editingOffer == 0">
+            <h2 class="textGreen col-12 mb-3 mt-5">Zeit & Ort</h2>
             <div class="col-12">
               <input [(ngModel)]="date" [ngModelOptions]="{standalone: true}" name="dateInput" required
                      class="form-control rounded-5 p-2 col-12" placeholder="Datum der Fahrt" id="dateInput"
@@ -199,13 +205,13 @@
               </div>
             </div>
 
-            <div class="hstack mt-5">
-              <h2 class="textGreen col-12">Zwischenstopp</h2>
-              <a (click)="openStopDialog()" class="non-pointable fa-stack fa-2x me-5 mt-2">
-                <fa-icon [icon]="faCircle"
-                         class="fa-stack-2x text-center white-fade fa-2xs pe-1 pt-3 add-fix"></fa-icon>
-                <fa-icon [icon]="faCirclePlus" class="fa-stack-1x btn-blue pointable add-fix"></fa-icon>
-              </a>
+            <div class="hstack mt-5 col-12">
+                <h2 class="textGreen">Zwischenstopp</h2>
+                <a (click)="openStopDialog()" class="non-pointable fa-stack fa-2x mt-2 text.">
+                  <fa-icon [icon]="faCircle"
+                           class="fa-stack-2x text-center white-fade fa-2xs pe-1 pt-3 ms-3 add-fix"></fa-icon>
+                  <fa-icon [icon]="faCirclePlus" class="fa-stack-1x btn-blue ms-3 pointable add-fix"></fa-icon>
+                </a>
             </div>
 
             <div class="mt-2">
@@ -228,7 +234,6 @@
                     </button>
                   </div>
                 </div>
-
               </div>
               <div class="card mb-3">
                 <div class="card-body">
@@ -264,9 +269,9 @@
         </div>
       </div>
       <div class="col-12 align-bottom d-flex justify-content-around align-items-center" *ngIf="editingOffer == 0">
-        <button (click)="createSummaryOffer(form)" type="submit" class="btn customButton exitButton text-light">
-          <span class="ms-3">Weiter <fa-icon [icon]="faArrowRight" class="ms-2"></fa-icon></span>
-        </button>
+        <a href="/summary"  class="btn customButton exitButton text-light">
+            <span class="px-3">Weiter <fa-icon [icon]="faArrowRight"></fa-icon></span>
+        </a>
       </div>
     </div>
   </form>

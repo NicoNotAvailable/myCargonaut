@@ -8,14 +8,15 @@ import {MatFormField} from "@angular/material/form-field";
 import {MatInput} from "@angular/material/input";
 import {NgbInputDatepicker, NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {
+  faArrowLeft,
   faArrowRight,
   faCircle,
   faCirclePlus,
   faPenToSquare,
   faPlus,
   faSave,
-  faX
-} from "@fortawesome/free-solid-svg-icons";
+  faX,
+} from '@fortawesome/free-solid-svg-icons';
 import {SessionService} from "../../services/session.service";
 import {DriveModalComponent} from "../drive-modal/drive-modal.component";
 
@@ -116,7 +117,7 @@ export class OfferComponent {
   }
 
   createSummaryOffer(form: NgForm) {
-    this.router.navigate(['/summary'], { queryParams: { origin: 'offer' } })
+    //this.router.navigate(['/summary'], { queryParams: { origin: 'offer' } })
   }
 
   removeErrorMessage(): void {
@@ -175,4 +176,5 @@ export class OfferComponent {
 
   protected readonly faPenToSquare = faPenToSquare;
   protected readonly faX = faX;
+  protected readonly faArrowLeft = faArrowLeft;
 }

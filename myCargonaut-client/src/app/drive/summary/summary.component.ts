@@ -5,7 +5,7 @@ import {MatDialogActions, MatDialogContent, MatDialogTitle} from "@angular/mater
 import {NgIf} from "@angular/common";
 import {ActivatedRoute} from "@angular/router";
 import {SessionService} from "../../services/session.service";
-import { faSave, faStar } from '@fortawesome/free-solid-svg-icons';
+import { faArrowLeft, faSave, faStar } from '@fortawesome/free-solid-svg-icons';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { faStar as faStarRegular } from '@fortawesome/free-regular-svg-icons';
 
@@ -66,4 +66,5 @@ export class SummaryComponent {
   protected readonly faStar = faStar;
 
   protected readonly faStarRegular = faStarRegular;
+  protected readonly faArrowLeft = faArrowLeft;
 }

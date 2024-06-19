@@ -89,3 +89,7 @@ input{
 .checkboxBorder{
   border: 1px solid #005B52 !important;
 }
+
+.deleteButton {
+  background-color: #dc3545;
+}

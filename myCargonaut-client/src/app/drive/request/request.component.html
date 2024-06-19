@@ -40,8 +40,8 @@
     <div class="row">
       <div class="p-5" id="addOfferArea">
         <div class="row mb-5 justify-content-between">
-          <div class="col-3" *ngIf="editingRequest == 0">
-            <h2 class="textGreen col-7">Sitze:</h2>
+          <div class="col-xl-3 col-12" *ngIf="editingRequest == 0">
+            <h2 class="textGreen col-7 mt-5">Sitze:</h2>
             <div class="row mt-4">
               <div class="hstack justify-content-between">
                 <button (click)="changeSeatCount(2)" [ngClass]="seats === 2 ? 'selectedButton' : 'deselectedButton'"
@@ -90,10 +90,12 @@
             </div>
           </div>
 
-          <div class="col-4">
+          <hr class="blueLine d-xl-none mt-5">
+
+          <div class="col-xl-4 col-12" *ngIf="editingRequest == 0">
             <h2 class="textGreen col-5 mb-3">Infos:</h2>
 
-            <div class="col-12" *ngIf="editingRequest == 0">
+            <div class="col-12">
               <input [(ngModel)]="name" [ngModelOptions]="{standalone: true}" name="nameInput" required type="text"
                      class="form-control rounded-5 p-2 col-12" placeholder="Name des Trips" id="nameInput">
             </div>
@@ -143,39 +145,62 @@
             </div>
 
             <div class="col-12 mt-5">
-              <h2 class="textGreen">Fracht:</h2>
-              <div class="card border border-0">
-                <div class="card-body">
-                  <div class="backgroundGreen">
-                    <div class="text-light mx-3 pt-2">
-                      <h4 class="card-title ms-1 text-center"><!--{{ cargo.name }}-->Omas Klavier</h4>
-                      <p class="ms-2"><!--{{ car.weight }}-->100 kg</p>
-                      <div class="row">
-                        <div class="col">
-                          <p class="ms-2"><!--{{ car.length }}-->3,35m Lang</p></div>
-                        <div class="col">
-                          <p class="mx-1"><!--{{ car.width }}-->2,20m Breit</p>
-                        </div>
-                        <div class="col">
-                          <p class="me-2"><!--{{ car.height }}-->1,50m Hoch</p>
+              <div class="hstack mt-5 col-12">
+                <div class="row justify-content-between">
+                  <div class="col-auto">
+                    <h2 class="textGreen mt-1">Cargo hinzufügen</h2>
+                  </div>
+                  <div class="col-auto">
+                    <a (click)="openCargoDialog()" class="non-pointable fa-stack fa-2x add-fix">
+                      <fa-icon [icon]="faCircle"
+                               class="fa-stack-2x text-center white-fade fa-2xs pe-1 pt-3 add-fix"></fa-icon>
+                      <fa-icon [icon]="faCirclePlus" class="fa-stack-1x btn-blue pointable add-fix"></fa-icon>
+                    </a>
+                  </div>
+                </div>
+
+              </div>
+              <div class="position-relative mb-3">
+                <div class="position-absolute top-0 end-0 me-3">
+                  <button (click)="openCargoDialog()" type="button" class="btn btn-primary editButton text-end me-1" id="editButton">
+                    <i><fa-icon [icon]="faPenToSquare"></fa-icon></i>
+                  </button>
+                  <button type="button" class="btn btn-danger deleteButton text-end" id="deleteButton">
+                    <i>
+                      <fa-icon [icon]="faX"></fa-icon>
+                    </i>
+                  </button>
+                </div>
+                <div class="card border-0">
+                  <div class="card-body">
+                    <div class="backgroundGreen">
+                      <div class="text-light mx-3 pt-2">
+                        <h4 class="card-title ms-1 mt-3 text-center">Omas Klavier</h4>
+                        <p class="ms-2">100 kg</p>
+                        <div class="row">
+                          <div class="col">
+                            <p class="ms-2">3,35m Lang</p>
+                          </div>
+                          <div class="col">
+                            <p class="mx-1">2,20m Breit</p>
+                          </div>
+                          <div class="col">
+                            <p class="me-2">1,50m Hoch</p>
+                          </div>
                         </div>
                       </div>
+                      <button type="button" class="btn bg-transparent text-light editButton ms-2"><h5>Bearbeiten</h5></button>
                     </div>
-                    <button type="button" class="btn bg-transparent text-light editButton ms-2"><h5>Bearbeiten</h5>
-                    </button>
                   </div>
                 </div>
               </div>
             </div>
-
-            <button class="btn btn-primary" (click)="openCargoDialog()">
-              <fa-icon [icon]="faPlus"></fa-icon>
-              Cargo hinzufügen
-            </button>
           </div>
 
-          <div class="col-3" *ngIf="editingRequest == 0">
-            <h2 class="textGreen col-12 mb-3">Zeit & Ort</h2>
+          <hr class="blueLine d-xl-none mt-5">
+
+          <div class="col-xl-3 col-12" *ngIf="editingRequest == 0">
+            <h2 class="textGreen col-12 mb-3 mt-5">Zeit & Ort</h2>
             <div class="col-12">
               <input [(ngModel)]="date" [ngModelOptions]="{standalone: true}" name="dateInput" required
                      class="form-control rounded-5 p-2 col-12" placeholder="Datum der Fahrt" id="dateInput"
@@ -227,9 +252,9 @@
         </div>
       </div>
       <div class="col-12 align-bottom d-flex justify-content-around align-items-center" *ngIf="editingRequest == 0">
-        <button (click)="createSummaryRequest(form)" type="submit" class="btn customButton exitButton text-light">
-          <span class="ms-3">Weiter <fa-icon [icon]="faArrowRight" class="ms-2"></fa-icon></span>
-        </button>
+        <a href="/summary"  class="btn customButton exitButton text-light">
+          <span class="px-3">Weiter <fa-icon [icon]="faArrowRight"></fa-icon></span>
+        </a>
       </div>
     </div>
   </form>

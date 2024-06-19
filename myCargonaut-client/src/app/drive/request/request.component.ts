@@ -1,7 +1,15 @@
 import {Component, EventEmitter, inject, Input, Output, TemplateRef, ViewEncapsulation} from "@angular/core";
 import {SessionService} from "../../services/session.service";
 import {NgClass, NgIf, NgOptimizedImage} from "@angular/common";
-import { faArrowRight, faCirclePlus, faDeleteLeft, faPlus, faSave } from '@fortawesome/free-solid-svg-icons';
+import {
+  faArrowRight,
+  faCircle,
+  faCirclePlus,
+  faDeleteLeft, faPenToSquare,
+  faPlus,
+  faSave,
+  faX,
+} from '@fortawesome/free-solid-svg-icons';
 import {FormsModule, NgForm} from "@angular/forms";
 import {FaIconComponent} from "@fortawesome/angular-fontawesome";
 import {NgbInputDatepicker} from "@ng-bootstrap/ng-bootstrap";
@@ -87,13 +95,12 @@ export class RequestComponent {
     });
   }
 
-  /*open(content: TemplateRef<any>) {
+  openCargoModal(content: TemplateRef<any>) {
     this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
-      this.closeResult = `Closed with: ${result}`;
     }, (reason) => {
-      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+
     });
-  }*/
+  }
 
   private getDismissReason(reason: any): string {
     if (reason === 'Cross click') {
@@ -156,4 +163,7 @@ export class RequestComponent {
   protected readonly faPlus = faPlus;
   protected readonly window = window;
   protected readonly faArrowRight = faArrowRight;
+  protected readonly faCircle = faCircle;
+  protected readonly faX = faX;
+  protected readonly faPenToSquare = faPenToSquare;
 }

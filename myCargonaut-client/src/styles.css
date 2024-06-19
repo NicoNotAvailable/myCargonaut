@@ -49,7 +49,7 @@ html, body {
 }
 
 .add-fix {
-  width: 32px;
+  width: 32px !important;
 }
 
 .non-pointable {
@@ -104,6 +104,7 @@ html, body {
 .deleteButton{
   background-color: #dc3545;
 }
+
 
 .blueLine {
   border: 2px solid #1a9cc5;
