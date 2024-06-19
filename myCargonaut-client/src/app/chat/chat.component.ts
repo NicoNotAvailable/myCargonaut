@@ -16,7 +16,7 @@ import { Message } from './message.interface';
 })
 export class ChatComponent implements OnInit {
   isLoggedIn: boolean = false;
-  messages: { [key: string]: string[] } = {};
+  messages: { [key: string]: Message[] } = {};
   userId: number | undefined;
   targetUserId: number | undefined;
   room: string | undefined;
@@ -108,20 +108,27 @@ export class ChatComponent implements OnInit {
       console.error('Room or userId not defined');
       return;
     }
-
+    const trip: number = parseInt(this.room.split('_')[1]);
     const messageData = {
-      tripId: parseInt(this.room.split('_')[1]), // Extract tripId from room name
+      tripId: trip,
       writer: this.userId,
       message: messageText,
     };
 
     this.socketService.emit('message', { room: this.room, message: messageText });
-    this.messages[this.room].push(`Me: ${messageText}`);
+    this.messages[this.room].push({ id: 0, writer: { id: this.userId }, trip: trip, message: messageText, read: true, timestamp: '' }); // Temporary push until response
 
-    this.http.post("http://localhost:8000/chats/message", messageData, { withCredentials: true })
+
+    this.http.post<Message>("http://localhost:8000/chats/message", messageData, { withCredentials: true })
       .subscribe(
-        response => {
+        (response: Message) => {
           console.log('Message sent successfully');
+          const newMessage = response as Message;
+          const roomMessages = this.messages[this.room!];
+          const index = roomMessages.findIndex(msg => msg.id === 0);
+          if (index !== -1) {
+            roomMessages[index] = newMessage;
+          }
         },
         error => {
           console.error('There was an error sending the message:', error);
@@ -135,6 +142,27 @@ export class ChatComponent implements OnInit {
 
   selectRoom(room: string): void {
     this.room = room;
+    this.markMessagesAsRead(room);
+  }
+
+  markMessagesAsRead(room: string): void {
+    if (!this.messages[room]) return;
+
+    this.messages[room].forEach((message: Message) => {
+      if (message.writer.id !== this.userId && !message.read) {
+        message.read = true;
+
+        this.http.put<Message>(`http://localhost:8000/chats/message/${message.id}`, { read: true }, { withCredentials: true })
+          .subscribe(
+            response => {
+              console.log('Message read status updated successfully');
+            },
+            error => {
+              console.error('There was an error updating message read status:', error);
+            }
+          );
+      }
+    });
   }
 
   getMessageClasses(message: any): string {

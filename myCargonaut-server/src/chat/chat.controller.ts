@@ -6,11 +6,11 @@ import {
   Session,
   BadRequestException,
   Get,
-  Query,
-} from '@nestjs/common';
+  Query, Put, Param, NotFoundException
+} from "@nestjs/common";
 import { ChatService } from './chat.service';
 import { SocketGateway } from '../socket.gateway';
-import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiResponse, ApiBody, ApiParam } from "@nestjs/swagger";
 import { CreateMessageDTO } from './DTO/CreateMessageDTO';
 import { SessionData } from 'express-session';
 import { GetMessageDTO } from './DTO/GetMessageDTO';
@@ -18,7 +18,6 @@ import { GetMessageDTO } from './DTO/GetMessageDTO';
 @ApiTags('chat')
 @Controller('chat')
 export class ChatController {
-
   constructor(
     private readonly chatService: ChatService,
     private readonly socketGateway: SocketGateway,
@@ -91,6 +90,23 @@ export class ChatController {
       });
     } catch (err) {
       throw new Error(err);
+    }
+  }
+
+  @Put('message/:id')
+  @ApiOperation({ summary: 'Mark a message as read' })
+  @ApiParam({ name: 'id', description: 'Message ID' })
+  @ApiBody({ description: 'Set read status', type: Boolean })
+  async markMessageAsRead(
+    @Param('id') messageId: number,
+    @Body() updateMessageDto: { read: boolean },
+  ): Promise<void> {
+    const message = await this.chatService.markMessageAsRead(
+      messageId,
+      updateMessageDto.read,
+    );
+    if (!message) {
+      throw new NotFoundException(`Message with ID ${messageId} not found`);
     }
   }
 }

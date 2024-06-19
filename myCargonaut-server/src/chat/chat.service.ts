@@ -58,4 +58,19 @@ export class ChatService {
     }
     return messages;
   }
+
+  async markMessageAsRead(
+    messageId: number,
+    read: boolean,
+  ): Promise<MessageDB | undefined> {
+    const message = await this.messageRepository.findOne({
+      where: { id: messageId },
+    });
+    if (!message) {
+      throw new NotFoundException(`Message with ID ${messageId} not found`);
+    }
+    message.read = read;
+    await this.messageRepository.save(message);
+    return message;
+  }
 }

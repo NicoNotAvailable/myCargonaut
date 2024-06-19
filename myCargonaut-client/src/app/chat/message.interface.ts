@@ -1,6 +1,9 @@
+
 export interface Message {
   id: number;
-  writer: number;
+  writer: {
+    id: number;
+  };
   trip: number;
   message: string;
   read: boolean;
