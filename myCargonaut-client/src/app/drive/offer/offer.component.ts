@@ -1,11 +1,7 @@
-import {Component, EventEmitter, inject, Input, Output} from '@angular/core';
+import { Component, EventEmitter, inject, Input, Output, TemplateRef } from '@angular/core';
 import { FaIconComponent } from "@fortawesome/angular-fontawesome";
 import {FormsModule, NgForm, ReactiveFormsModule} from "@angular/forms";
 import {NgClass, NgIf} from "@angular/common";
-import {MatButton} from "@angular/material/button";
-import {MatDialog, MatDialogActions, MatDialogContent, MatDialogTitle} from "@angular/material/dialog";
-import {MatFormField} from "@angular/material/form-field";
-import {MatInput} from "@angular/material/input";
 import {NgbInputDatepicker, NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {
   faArrowLeft,
@@ -18,7 +14,6 @@ import {
   faX,
 } from '@fortawesome/free-solid-svg-icons';
 import {SessionService} from "../../services/session.service";
-import {DriveModalComponent} from "../drive-modal/drive-modal.component";
 
 @Component({
   selector: 'app-offer',
@@ -28,12 +23,6 @@ import {DriveModalComponent} from "../drive-modal/drive-modal.component";
     FormsModule,
     NgIf,
     ReactiveFormsModule,
-    MatButton,
-    MatDialogActions,
-    MatDialogContent,
-    MatDialogTitle,
-    MatFormField,
-    MatInput,
     NgbInputDatepicker,
     NgClass
   ],
@@ -52,19 +41,24 @@ export class OfferComponent {
   talkMode: number | null = null;
   seats: number | null = null;
 
-  //Cargo
-  description: string | null = null;
-  length: number | null = null;
-  width: number | null = null;
-  height: number | null = null;
-  weight: number | null = null;
+  carWeight:  number | null = null;
+  carLength:  number | null = null;
+  carWidth:  number | null = null;
+  carHeight:  number | null = null;
+
+  trailerWeight:  number | null = null;
+  trailerLength:  number | null = null;
+  trailerWidth:  number | null = null;
+  trailerHeight:  number | null = null;
 
   name: string = "";
   date: string = "";
   time: string = "";
+
   startLand: string = "";
   startPLZ: string = "";
   startPlace: string = "";
+
   endLand: string = "";
   endPLZ: string = "";
   endPlace: string = "";
@@ -79,7 +73,7 @@ export class OfferComponent {
   private http: any;
   private router: any;
 
-  constructor(private modalService: NgbModal, public dialog: MatDialog) {}
+  constructor(private modalService: NgbModal) {}
 
   ngOnInit(): void {
     //console.log(this.sessionService.checkLogin());
@@ -132,36 +126,21 @@ export class OfferComponent {
   protected readonly faCircle = faCircle;
   protected readonly faCirclePlus = faCirclePlus;
 
-  openCarDialog() {
-    const dialogRef = this.dialog.open(DriveModalComponent, {
-      width: '400px',
-      data: { template: 'tripCar' }
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The weight dialog was closed. Result:', result);
+  openCarModal(content: TemplateRef<any>) {
+    this.modalService.open(content, { ariaLabelledBy: 'modal-car-title' }).result.then((result) => {
+    }, (reason) => {
     });
   }
 
-  openTrailerDialog() {
-    const dialogRef = this.dialog.open(DriveModalComponent, {
-      width: '400px',
-      data: { template: 'tripTrailer' }
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The weight dialog was closed. Result:', result);
+  openTrailerModal(content: TemplateRef<any>) {
+    this.modalService.open(content, { ariaLabelledBy: 'modal-trailer-title' }).result.then((result) => {
+    }, (reason) => {
     });
   }
 
-  openStopDialog(): void {
-    const dialogRef = this.dialog.open(DriveModalComponent, {
-      width: '400px',
-      data: { template: 'tripStop' }
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The weight dialog was closed. Result:', result);
+  openStopModal(content: TemplateRef<any>) {
+    this.modalService.open(content, { ariaLabelledBy: 'modal-stop-title' }).result.then((result) => {
+    }, (reason) => {
     });
   }
 

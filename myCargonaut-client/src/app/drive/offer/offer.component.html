@@ -1,6 +1,96 @@
 <div *ngIf="isLoggedIn" class="container mt-3 mb-3 text-start">
-
-
+  <ng-template #carModal let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-car-title">Auto anpassen</h4>
+      <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+    </div>
+    <div class="modal-body">
+      <form>
+        <div class="mb-3">
+          <div class="input-group">
+            <input [(ngModel)]="carWeight" [ngModelOptions]="{standalone: true}" name="carWeight" required
+                   type="text" class="rounded-5 p-2 mb-2 col-12" placeholder="Gewicht in kg (2,50)" id="carWeight">
+            <input [(ngModel)]="carLength" [ngModelOptions]="{standalone: true}" name="carLength" required
+                   type="text" class="rounded-5 p-2 mb-2 col-12" placeholder="Länge in m (3,20)" id="carLength">
+            <input [(ngModel)]="carWidth" [ngModelOptions]="{standalone: true}" name="carWidth" required
+                   type="text" class="rounded-5 p-2 mb-2 col-12" placeholder="Breite in m (3,55)" id="carWidth">
+            <input [(ngModel)]="carHeight" [ngModelOptions]="{standalone: true}" name="carHeight" required
+                   type="text" class="rounded-5 p-2 mb-2 col-12" placeholder="Höhe in m (2,55)" id="carHeight">
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer justify-content-center">
+      <button type="button" class="btn customButton exitButton text-light mt-2">
+        <i>
+          <fa-icon [icon]="faSave"></fa-icon>
+        </i>
+        <span class="ms-3">Speichern</span>
+      </button>
+    </div>
+  </ng-template>
+  <ng-template #trailerModal let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-trailer-title">Anhänger anpassen</h4>
+      <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+    </div>
+    <div class="modal-body">
+      <form>
+        <div class="mb-3">
+          <div class="input-group">
+            <input [(ngModel)]="trailerWeight" [ngModelOptions]="{standalone: true}" name="trailerWeight" required
+                   type="text" class="rounded-5 p-2 mb-2 col-12" placeholder="Gewicht in kg (2,50)" id="trailerWeight">
+            <input [(ngModel)]="trailerLength" [ngModelOptions]="{standalone: true}" name="trailerLength" required
+                   type="text" class="rounded-5 p-2 mb-2 col-12" placeholder="Länge in m (3,20)" id="trailerLength">
+            <input [(ngModel)]="trailerWidth" [ngModelOptions]="{standalone: true}" name="trailerWidth" required
+                   type="text" class="rounded-5 p-2 mb-2 col-12" placeholder="Breite in m (3,55)" id="trailerWidth">
+            <input [(ngModel)]="trailerHeight" [ngModelOptions]="{standalone: true}" name="trailerHeight" required
+                   type="text" class="rounded-5 p-2 mb-2 col-12" placeholder="Höhe in m (2,55)" id="trailerHeight">
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer justify-content-center">
+      <button type="button" class="btn customButton exitButton text-light mt-2">
+        <i>
+          <fa-icon [icon]="faSave"></fa-icon>
+        </i>
+        <span class="ms-3">Speichern</span>
+      </button>
+    </div>
+  </ng-template>
+  <ng-template #stopModal let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-stop-title">Zwischenstopp hinzufügen</h4>
+      <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+    </div>
+    <div class="modal-body">
+      <form>
+        <div class="mb-3">
+            <input [(ngModel)]="stopLand" [ngModelOptions]="{standalone: true}" name="stopLandInput" required
+                   type="text" class="rounded-5 p-2 w-100" placeholder="Land" id="stopLandInput">
+            <div class="row mt-2 justify-content-between">
+              <div class="col-4">
+                <input [(ngModel)]="stopPLZ" [ngModelOptions]="{standalone: true}" name="stopPLZInput" required
+                       type="text" class="rounded-5 p-2 w-100" placeholder="PLZ" id="stopPLZInput">
+              </div>
+              <div class="col-8">
+                <input [(ngModel)]="stopPlace" [ngModelOptions]="{standalone: true}" name="stopPlaceInput" required
+                       type="text" class="rounded-5 p-2 w-100" placeholder="Ort" id="stopPlaceInput">
+              </div>
+            </div>
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer justify-content-center">
+      <button type="button" class="btn customButton exitButton text-light mt-2">
+        <i>
+          <fa-icon [icon]="faSave"></fa-icon>
+        </i>
+        <span class="ms-3">Speichern</span>
+      </button>
+    </div>
+  </ng-template>
   <form #form="ngForm" (ngSubmit)="createSummaryOffer(form)">
     <div class="row">
       <div class="p-5" id="addOfferArea">
@@ -99,7 +189,7 @@
               </div>
 
               <div class="col-7 text-end">
-                <button (click)="openCarDialog()" type="button"
+                <button (click)="openCarModal(carModal)" type="button"
                         class="btn rounded-3 text-light customButton">
                   Auto anpassen
                 </button>
@@ -122,7 +212,7 @@
               </div>
 
               <div class="col-7 text-end">
-                <button (click)="openTrailerDialog()" type="button"
+                  <button (click)="openTrailerModal(trailerModal)" type="button"
                         class="btn rounded-3 text-light customButton">
                   Anhänger anpassen
                 </button>
@@ -182,7 +272,7 @@
             <div class="col-12">
               <input [(ngModel)]="date" [ngModelOptions]="{standalone: true}" name="dateInput" required
                      class="form-control rounded-5 p-2 col-12" placeholder="Datum der Fahrt" id="dateInput"
-                     placeholder="Datum der Fahrt" ngbDatepicker #d="ngbDatepicker" type="text">
+                     ngbDatepicker #d="ngbDatepicker" type="text">
             </div>
             <div class="col-12 mt-2">
               <input [(ngModel)]="time" [ngModelOptions]="{standalone: true}" name="timeInput" required
@@ -207,7 +297,7 @@
 
             <div class="hstack mt-5 col-12">
                 <h2 class="textGreen">Zwischenstopp</h2>
-                <a (click)="openStopDialog()" class="non-pointable fa-stack fa-2x mt-2 text.">
+                <a (click)="openStopModal(stopModal)" class="non-pointable fa-stack fa-2x mt-2 text.">
                   <fa-icon [icon]="faCircle"
                            class="fa-stack-2x text-center white-fade fa-2xs pe-1 pt-3 ms-3 add-fix"></fa-icon>
                   <fa-icon [icon]="faCirclePlus" class="fa-stack-1x btn-blue ms-3 pointable add-fix"></fa-icon>
@@ -219,7 +309,7 @@
                 <h3 class="textGreen">1. Stopp</h3>
                 <div class="hstack mb-2 text-end">
                   <div class="text-end">
-                    <button (click)="openStopDialog()" type="button" class="btn btn-primary editButton text-end me-1"
+                    <button (click)="openStopModal(stopModal)" type="button" class="btn btn-primary editButton text-end me-1"
                             id="editButton">
                       <i>
                         <fa-icon [icon]="faPenToSquare"></fa-icon>

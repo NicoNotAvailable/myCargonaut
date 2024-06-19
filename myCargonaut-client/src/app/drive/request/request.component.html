@@ -1,5 +1,5 @@
 <div *ngIf="isLoggedIn" class="container mt-3 mb-3 text-start">
-  <ng-template #content let-modal>
+  <ng-template #cargoModal let-modal>
     <div class="modal-header">
       <h4 class="modal-title" id="modal-basic-title">Cargo Hinzufügen</h4>
       <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
@@ -8,27 +8,27 @@
       <form>
         <div class="mb-3">
           <div class="input-group">
-            <input [(ngModel)]="description" #descriptionInput="ngModel" type="text" name="descriptionInput"
+            <input [(ngModel)]="cargoDescription" #descriptionInput="ngModel" type="text" name="descriptionInput"
                    class="rounded-5 p-2 w-100 mb-3" placeholder="Name des Cargos"
-                   (input)="this.description">
-            <input [(ngModel)]="weight" #weightInput="ngModel" type="text" name="weightInput"
+                   (input)="this.cargoDescription">
+            <input [(ngModel)]="cargoWeight" #weightInput="ngModel" type="text" name="weightInput"
                    class="rounded-5 p-2 w-100 mb-3" placeholder="Gewicht in kg (Bsp. 5,50)"
-                   (input)="this.weight">
-            <input [(ngModel)]="length" #lengthInput="ngModel" type="text" name="lengthInput"
+                   (input)="this.cargoWeight">
+            <input [(ngModel)]="cargoLength" #lengthInput="ngModel" type="text" name="lengthInput"
                    class="rounded-5 p-2 w-100 mb-3" placeholder="Länge in m (Bsp. 2,30)"
-                   (input)="this.length">
-            <input [(ngModel)]="width" #widthInput="ngModel" type="text" name="widthInput"
+                   (input)="this.cargoLength">
+            <input [(ngModel)]="cargoWidth" #widthInput="ngModel" type="text" name="widthInput"
                    class="rounded-5 p-2 w-100 mb-3" placeholder="Breite in m (Bsp. 1,30)"
-                   (input)="this.width">
-            <input [(ngModel)]="height" #heightInput="ngModel" type="text" name="heightInput"
+                   (input)="this.cargoWidth">
+            <input [(ngModel)]="cargoHeight" #heightInput="ngModel" type="text" name="heightInput"
                    class="rounded-5 p-2 w-100 mb-3" placeholder="Höhe in m (Bsp. 0,80)"
-                   (input)="this.height">
+                   (input)="this.cargoHeight">
           </div>
         </div>
       </form>
     </div>
     <div class="modal-footer justify-content-center">
-      <button type="submit" class="btn customButton exitButton text-light mt-2">
+      <button type="button" class="btn customButton exitButton text-light mt-2">
         <i>
           <fa-icon [icon]="faSave"></fa-icon>
         </i>
@@ -151,7 +151,7 @@
                     <h2 class="textGreen mt-1">Cargo hinzufügen</h2>
                   </div>
                   <div class="col-auto">
-                    <a (click)="openCargoDialog()" class="non-pointable fa-stack fa-2x add-fix">
+                    <a (click)="openCargoModal(cargoModal)" class="non-pointable fa-stack fa-2x add-fix">
                       <fa-icon [icon]="faCircle"
                                class="fa-stack-2x text-center white-fade fa-2xs pe-1 pt-3 add-fix"></fa-icon>
                       <fa-icon [icon]="faCirclePlus" class="fa-stack-1x btn-blue pointable add-fix"></fa-icon>
@@ -160,10 +160,13 @@
                 </div>
 
               </div>
-              <div class="position-relative mb-3">
-                <div class="position-absolute top-0 end-0 me-3">
-                  <button (click)="openCargoDialog()" type="button" class="btn btn-primary editButton text-end me-1" id="editButton">
-                    <i><fa-icon [icon]="faPenToSquare"></fa-icon></i>
+              <div class="card border-0 position-relative mt-3">
+                <div class="button-container position-absolute end-0 mt-1 me-3">
+                  <button (click)="openCargoModal(cargoModal)" type="button"
+                          class="btn btn-primary editButton text-end me-1" id="editButton">
+                    <i>
+                      <fa-icon [icon]="faPenToSquare"></fa-icon>
+                    </i>
                   </button>
                   <button type="button" class="btn btn-danger deleteButton text-end" id="deleteButton">
                     <i>
@@ -171,29 +174,31 @@
                     </i>
                   </button>
                 </div>
-                <div class="card border-0">
-                  <div class="card-body">
-                    <div class="backgroundGreen">
-                      <div class="text-light mx-3 pt-2">
-                        <h4 class="card-title ms-1 mt-3 text-center">Omas Klavier</h4>
-                        <p class="ms-2">100 kg</p>
-                        <div class="row">
-                          <div class="col">
-                            <p class="ms-2">3,35m Lang</p>
-                          </div>
-                          <div class="col">
-                            <p class="mx-1">2,20m Breit</p>
-                          </div>
-                          <div class="col">
-                            <p class="me-2">1,50m Hoch</p>
-                          </div>
-                        </div>
+                <div class="card-body backgroundGreen">
+                  <div class="text-light mx-3 pt-2">
+                    <h4 class="card-title ms-1 mt-1 text-center">Omas Klavier</h4>
+                    <p class="ms-2">100 kg</p>
+                    <div class="row">
+                      <div class="col">
+                        <p class="ms-2">3,35m <br>
+                          Lang</p>
                       </div>
-                      <button type="button" class="btn bg-transparent text-light editButton ms-2"><h5>Bearbeiten</h5></button>
+                      <div class="col">
+                        <p class="mx-1">2,20m <br>
+                          Breit </p>
+                      </div>
+                      <div class="col">
+                        <p class="me-2">1,50m <br>
+                          Hoch</p>
+                      </div>
                     </div>
                   </div>
+                  <button type="button" class="btn bg-transparent text-light editButton ms-2">
+                    <h5>Bearbeiten</h5>
+                  </button>
                 </div>
               </div>
+
             </div>
           </div>
 
@@ -252,7 +257,7 @@
         </div>
       </div>
       <div class="col-12 align-bottom d-flex justify-content-around align-items-center" *ngIf="editingRequest == 0">
-        <a href="/summary"  class="btn customButton exitButton text-light">
+        <a href="/summary" class="btn customButton exitButton text-light">
           <span class="px-3">Weiter <fa-icon [icon]="faArrowRight"></fa-icon></span>
         </a>
       </div>

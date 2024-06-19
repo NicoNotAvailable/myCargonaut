@@ -1,7 +1,5 @@
 import {Component, inject} from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
-import {MatButton} from "@angular/material/button";
-import {MatDialogActions, MatDialogContent, MatDialogTitle} from "@angular/material/dialog";
 import {NgIf} from "@angular/common";
 import {ActivatedRoute} from "@angular/router";
 import {SessionService} from "../../services/session.service";
@@ -15,10 +13,6 @@ import { faStar as faStarRegular } from '@fortawesome/free-regular-svg-icons';
   standalone: true,
   imports: [
     FormsModule,
-    MatButton,
-    MatDialogActions,
-    MatDialogContent,
-    MatDialogTitle,
     NgIf,
     FaIconComponent,
   ],

@@ -14,8 +14,6 @@ import {FormsModule, NgForm} from "@angular/forms";
 import {FaIconComponent} from "@fortawesome/angular-fontawesome";
 import {NgbInputDatepicker} from "@ng-bootstrap/ng-bootstrap";
 import {NgbActiveModal, NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
-import {MatDialog, MatDialogRef} from '@angular/material/dialog';
-import {DriveModalComponent} from '../drive-modal/drive-modal.component';
 
 @Component({
   selector: 'app-request',
@@ -30,8 +28,7 @@ import {DriveModalComponent} from '../drive-modal/drive-modal.component';
   ],
   templateUrl: './request.component.html',
   styleUrls: [
-    './request.component.css',
-    '../../../../node_modules/@angular/material/prebuilt-themes/indigo-pink.css'
+    './request.component.css'
   ]
 })
 export class RequestComponent {
@@ -46,18 +43,20 @@ export class RequestComponent {
   seats: number | null = null;
 
   //Cargo
-  description: string | null = null;
-  length: number | null = null;
-  width: number | null = null;
-  height: number | null = null;
-  weight: number | null = null;
+  cargoDescription: string | null = null;
+  cargoLength: number | null = null;
+  cargoWidth: number | null = null;
+  cargoHeight: number | null = null;
+  cargoWeight: number | null = null;
 
   name: string = "";
   date: string = "";
   time: string = "";
+
   startLand: string = "";
   startPLZ: string = "";
   startPlace: string = "";
+
   endLand: string = "";
   endPLZ: string = "";
   endPlace: string = "";
@@ -68,7 +67,7 @@ export class RequestComponent {
   private http: any;
   private router: any;
 
-  constructor(private modalService: NgbModal, public dialog: MatDialog) {
+  constructor(private modalService: NgbModal) {
   }
 
   ngOnInit(): void {
@@ -84,30 +83,10 @@ export class RequestComponent {
     this.talkMode = 3;
   }
 
-  openCargoDialog(): void {
-    const dialogRef = this.dialog.open(DriveModalComponent, {
-      width: '400px',
-      data: {template: 'tripCargo'}
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The weight dialog was closed. Result:', result);
-    });
-  }
-
   openCargoModal(content: TemplateRef<any>) {
     this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
     }, (reason) => {
-
     });
-  }
-
-  private getDismissReason(reason: any): string {
-    if (reason === 'Cross click') {
-      return 'by clicking on a cross';
-    } else {
-      return `with: ${reason}`;
-    }
   }
 
   changeTalkMode(num: any) {
