@@ -21,3 +21,18 @@
   background-color: #005B52;
   color: white;
 }
+
+.image-cropper {
+  height: 200px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
+}
+
+.image-cropper img {
+  height: 100%;
+  object-fit: cover;
+}

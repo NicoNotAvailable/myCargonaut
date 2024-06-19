@@ -7,6 +7,8 @@ import {ActivatedRoute} from "@angular/router";
 import {SessionService} from "../../services/session.service";
 import { faSave, faStar } from '@fortawesome/free-solid-svg-icons';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { faStar as faStarRegular } from '@fortawesome/free-regular-svg-icons';
+
 
 @Component({
   selector: 'app-summary',
@@ -24,7 +26,7 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
   styleUrl: './summary.component.css'
 })
 export class SummaryComponent {
-  templateToLoad: string = "summaryOffer";
+  templateToLoad: string = "summaryRequest";
 
   public sessionService: SessionService = inject(SessionService);
 
@@ -56,6 +58,12 @@ export class SummaryComponent {
 
   }
 
+  saveRequest(form: NgForm) {
+
+  }
+
   protected readonly faSave = faSave;
   protected readonly faStar = faStar;
+
+  protected readonly faStarRegular = faStarRegular;
 }
