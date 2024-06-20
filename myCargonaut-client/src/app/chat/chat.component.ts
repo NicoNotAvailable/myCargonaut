@@ -28,7 +28,7 @@ export class ChatComponent implements OnInit {
 
   @ViewChild('messageInput') messageInput: ElementRef | undefined;
   private writer: number = -1;
-  private message: string = '';
+  protected message: string = '';
 
   constructor(private http: HttpClient) {
   }
@@ -40,6 +40,7 @@ export class ChatComponent implements OnInit {
       if (!this.isLoggedIn) {
         window.location.href = "/";
       }
+      this.userId = await this.sessionService.checkLoginNum();
 
       this.route.queryParams.subscribe(params => {
         this.targetUserId = +params['targetUserId'];
@@ -48,7 +49,9 @@ export class ChatComponent implements OnInit {
         }
       });
 
-      this.loadChatsWithMessages();
+      setTimeout(() => {
+        this.loadChatsWithMessages();
+      }, 200);
     });
 
     this.socketService.on('message').subscribe(({ room, message }) => {
@@ -66,25 +69,40 @@ export class ChatComponent implements OnInit {
   }
 
   loadChatsWithMessages(): void {
+    console.log('hiiiiiiiiii')
     if (!this.userId) return;
+    console.log('hooooo')
     this.http
-      .get<any>('http://localhost:8000/trips/getUserTrips/${this.userId}', { withCredentials: true })
+      .get<any>(`http://localhost:8000/trip/user-trips/${this.userId}`, { withCredentials: true })
       .subscribe(
         (data) => {
+          console.log('eyo ' + data);
           const { offerTrips, requestTrips, offerDriveTrips, requestDriveTrips } = data;
 
           const trips = [...offerTrips, ...requestTrips, ...offerDriveTrips, ...requestDriveTrips];
+          console.log('trips ' + trips);
 
           trips.forEach(trip => {
-            if (trip.messages && trip.messages.length > 0) {
-              const roomName = `trip_${trip.id}`;
-              if (!this.rooms.includes(roomName)) {
-                this.rooms.push(roomName);
-                this.messages[roomName] = trip.messages.map((msg: Message) => msg.message);
-              }
+            console.log('ohoh' + trip);
+            console.log(JSON.stringify(trip, null, 2));
+            if (trip.__messages__ && trip.__messages__.length > 0) {
+              console.log('hi');
+              this.http.get<Message[]>(`http://localhost:8000/chat/messages/${trip.id}`, { withCredentials: true })
+                .subscribe(
+                  (data) => {
+                    console.log(JSON.stringify(data, null, 2));
+                    const roomName = `trip_${trip.id}`;
+                    if (!this.rooms.includes(roomName)) {
+                      this.rooms.push(roomName);
+                      this.messages[roomName] = data;
+                    }
+                  },
+                  (error) => {
+                    console.log(error);
+                  }
+                );
             }
           });
-
         },
         (error) => {
           console.error(error);
@@ -108,20 +126,21 @@ export class ChatComponent implements OnInit {
       console.error('Room or userId not defined');
       return;
     }
-    const trip: number = parseInt(this.room.split('_')[1]);
+    const tripId: number = parseInt(this.room.split('_')[1]);
     const messageData = {
-      tripId: trip,
+      tripId: tripId,
       writer: this.userId,
       message: messageText,
     };
 
     this.socketService.emit('message', { room: this.room, message: messageText });
-    this.messages[this.room].push({ id: 0, writer: { id: this.userId }, trip: trip, message: messageText, read: true, timestamp: '' }); // Temporary push until response
+    this.messages[this.room].push({ id: 0, writer: { id: this.userId }, trip: { id: tripId }, message: messageText, read: true, timestamp: '' }); // Temporary push until response
 
 
-    this.http.post<Message>("http://localhost:8000/chats/message", messageData, { withCredentials: true })
+    this.http.post<Message>("http://localhost:8000/chat/message", messageData, { withCredentials: true })
       .subscribe(
         (response: Message) => {
+          console.log(response);
           console.log('Message sent successfully');
           const newMessage = response as Message;
           const roomMessages = this.messages[this.room!];
@@ -149,10 +168,11 @@ export class ChatComponent implements OnInit {
     if (!this.messages[room]) return;
 
     this.messages[room].forEach((message: Message) => {
+      console.log(message.writer.id);
       if (message.writer.id !== this.userId && !message.read) {
         message.read = true;
 
-        this.http.put<Message>(`http://localhost:8000/chats/message/${message.id}`, { read: true }, { withCredentials: true })
+        this.http.put<Message>(`http://localhost:8000/chat/message/${message.id}`, { read: true }, { withCredentials: true })
           .subscribe(
             response => {
               console.log('Message read status updated successfully');
@@ -165,8 +185,9 @@ export class ChatComponent implements OnInit {
     });
   }
 
-  getMessageClasses(message: any): string {
-    if (message.writer.id !== this.userId) {
+  getMessageClasses(message: Message): string {
+    console.log(JSON.stringify(message, null, 2));
+    if (message.writer?.id !== this.userId) {
       return 'message-left';
     } else {
       return 'message-right';

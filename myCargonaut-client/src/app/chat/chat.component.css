@@ -1,0 +1,60 @@
+/*BEISPIEL*/
+
+/* Container for chat messages */
+.chat-container {
+  display: flex;
+  flex-direction: column;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* Style for individual messages */
+.message {
+  margin: 5px 0;
+  padding: 10px;
+  border-radius: 10px;
+  max-width: 70%;
+  word-wrap: break-word;
+}
+
+/* Align messages sent by the user to the right */
+.message-right {
+  align-self: flex-end;
+  background-color: #daf8cb; /* Light green */
+  color: #000;
+}
+
+/* Align messages received from others to the left */
+.message-left {
+  align-self: flex-start;
+  background-color: #f1f0f0; /* Light grey */
+  color: #000;
+}
+
+/* Input box for sending messages */
+.chat-input-container {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.chat-input {
+  flex-grow: 1;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+.chat-send-button {
+  padding: 10px;
+  border-radius: 5px;
+  background-color: #007bff; /* Blue */
+  color: white;
+  border: none;
+  margin-left: 10px;
+  cursor: pointer;
+}
+
+.chat-send-button:hover {
+  background-color: #0056b3; /* Darker blue */
+}

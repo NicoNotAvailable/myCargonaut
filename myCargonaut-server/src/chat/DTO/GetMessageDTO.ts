@@ -1,14 +1,16 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { UserDB } from '../../database/UserDB';
+import { TripDB } from '../../database/TripDB';
 
 export class GetMessageDTO {
   @ApiProperty()
   id: number;
 
   @ApiProperty()
-  writerId: number;
+  writer: UserDB;
 
   @ApiProperty()
-  tripId: number;
+  trip: TripDB;
 
   @ApiProperty()
   message: string;

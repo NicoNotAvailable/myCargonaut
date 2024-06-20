@@ -39,27 +39,18 @@ export class ChatService {
     return this.messageRepository.save(newMessage);
   }
 
-  /**
-  async getMessages(
-    userId: number,
-    targetUserId: number,
-    tripId: number,
-  ): Promise<MessageDB[]> {
+  async getMessages(tripId: number): Promise<MessageDB[]> {
     const messages = await this.messageRepository.find({
-      where: [
-        { writer: { id: userId }, trip: { id: tripId } },
-        { writer: { id: targetUserId }, trip: { id: tripId } },
-      ],
-      order: { timestamp: 'ASC' },
-      relations: ['writer', 'trip'],
+      where: { trip: { id: tripId } },
+      relations: ['trip', 'writer'],
     });
-
+    console.log('tschauuuuuu');
     if (!messages) {
       throw new NotFoundException('Messages not found');
     }
+    console.log(JSON.stringify(messages, null, 2));
     return messages;
   }
-  */
 
   async markMessageAsRead(
     messageId: number,
@@ -67,6 +58,7 @@ export class ChatService {
   ): Promise<MessageDB | undefined> {
     const message = await this.messageRepository.findOne({
       where: { id: messageId },
+      relations: ['writer'],
     });
     if (!message) {
       throw new NotFoundException(`Message with ID ${messageId} not found`);

@@ -6,11 +6,20 @@ import {
   Session,
   BadRequestException,
   Get,
-  Query, Put, Param, NotFoundException
-} from "@nestjs/common";
+  Query,
+  Put,
+  Param,
+  NotFoundException,
+} from '@nestjs/common';
 import { ChatService } from './chat.service';
 import { SocketGateway } from '../socket.gateway';
-import { ApiTags, ApiOperation, ApiResponse, ApiBody, ApiParam } from "@nestjs/swagger";
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiBody,
+  ApiParam,
+} from '@nestjs/swagger';
 import { CreateMessageDTO } from './DTO/CreateMessageDTO';
 import { SessionData } from 'express-session';
 import { GetMessageDTO } from './DTO/GetMessageDTO';
@@ -49,18 +58,17 @@ export class ChatController {
       throw new Error(err);
     }
   }
-  /**
-  @Get('messages')
+
+  @Get('messages/:tripId')
   @ApiOperation({ summary: 'Get all messages between users for a trip' })
   @ApiResponse({
-    type: [GetMessageDTO],
+    status: 200,
     description: 'Messages retrieved successfully.',
+    type: 'object',
   })
   async getMessages(
-    @Query('userId', ParseIntPipe) userId: number,
-    @Query('targetUserId', ParseIntPipe) targetUserId: number,
-    @Query('tripId', ParseIntPipe) tripId: number,
     @Session() session: SessionData,
+    @Param('tripId', ParseIntPipe) tripId: number,
   ): Promise<GetMessageDTO[]> {
     const sessionUserId = session.currentUser;
 
@@ -68,21 +76,15 @@ export class ChatController {
       throw new BadRequestException('User not logged in.');
     }
 
-    if (sessionUserId !== userId) {
-      throw new BadRequestException('Invalid user ID.');
-    }
+    console.log('HALLOOOOOOOOOOOOOOOO');
 
     try {
-      const messages = await this.chatService.getMessages(
-        userId,
-        targetUserId,
-        tripId,
-      );
+      const messages = await this.chatService.getMessages(tripId);
       return messages.map((msg) => {
         const dto = new GetMessageDTO();
         dto.id = msg.id;
-        dto.writerId = msg.writer.id;
-        dto.tripId = msg.trip.id;
+        dto.writer = msg.writer;
+        dto.trip = msg.trip;
         dto.message = msg.message;
         dto.read = msg.read;
         dto.timestamp = msg.timestamp;
@@ -92,7 +94,6 @@ export class ChatController {
       throw new Error(err);
     }
   }
-   */
 
   @Put('message/:id')
   @ApiOperation({ summary: 'Mark a message as read' })

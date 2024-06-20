@@ -4,7 +4,9 @@ export interface Message {
   writer: {
     id: number;
   };
-  trip: number;
+  trip: {
+    id: number;
+  };
   message: string;
   read: boolean;
   timestamp: string;

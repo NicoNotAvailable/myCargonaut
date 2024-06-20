@@ -1,5 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsArray, IsNotEmpty, IsNumber, IsOptional, ValidateNested } from 'class-validator';
+import {
+  IsArray,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  ValidateNested,
+} from 'class-validator';
 import { GetOtherUserDTO } from '../../user/DTO/GetOtherUserDTO';
 import { CreateCargoDTO } from '../../cargo/DTO/CreateCargoDTO';
 import { Type } from 'class-transformer';

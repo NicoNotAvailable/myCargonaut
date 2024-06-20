@@ -1,4 +1,4 @@
-<div class="chat-container text-center">
+<div class="chat-container">
   <div class="chat-list">
     <h3>Chats</h3>
     <div *ngIf="rooms.length === 0; else chatList">
@@ -16,15 +16,15 @@
     <h3>Chat Window</h3>
     <div *ngIf="room">
       <h4>Room: {{ room }}</h4>
-      <div class="messages">
-        <p *ngFor="let message of messages[room]" [ngClass]="getMessageClasses(message)">
-          {{ message }}
-        </p>
+      <div class="chat-container" *ngIf="room">
+        <div *ngFor="let message of messages[room]" [ngClass]="['message', getMessageClasses(message)]">
+          {{ message.message }}
+        </div>
+        <div class="chat-input-container">
+          <input class="chat-input" #messageInput type="text" [(ngModel)]="message" (keyup.enter)="sendMessage(message)" />
+          <button class="chat-send-button" (click)="sendMessage(message)">Send</button>
+        </div>
       </div>
-      <input type="text" #messageInput placeholder="Type a message" (keyup.enter)="sendMessage(messageInput.value); messageInput.value=''" />
-      <button (click)="sendMessage(messageInput.value); messageInput.value=''">
-        Senden
-      </button>
     </div>
     <div *ngIf="!room">
       <p>Wähle einen Chat aus, um zu schreiben!</p>

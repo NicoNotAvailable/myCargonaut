@@ -25,13 +25,13 @@ import {
 } from '@nestjs/swagger';
 import { OkDTO } from '../serverDTO/OkDTO';
 import { IsLoggedInGuard } from '../session/is-logged-in.guard';
-import { SessionData } from "express-session";
-import { CreateOfferTripDTO } from "./DTO/CreateOfferTripDTO";
-import { LocationService } from "../location/location.service";
-import { CreateRequestTripDTO } from "./DTO/CreateRequestTripDTO";
-import { UtilsService } from "../utils/utils.service";
-import { GetRequestTripDTO } from "./DTO/GetRequestTripDTO";
-import { GetOfferTripDTO } from "./DTO/GetOfferTripDTO";
+import { SessionData } from 'express-session';
+import { CreateOfferTripDTO } from './DTO/CreateOfferTripDTO';
+import { LocationService } from '../location/location.service';
+import { CreateRequestTripDTO } from './DTO/CreateRequestTripDTO';
+import { UtilsService } from '../utils/utils.service';
+import { GetRequestTripDTO } from './DTO/GetRequestTripDTO';
+import { GetOfferTripDTO } from './DTO/GetOfferTripDTO';
 
 @ApiTags('trip')
 @Controller('trip')

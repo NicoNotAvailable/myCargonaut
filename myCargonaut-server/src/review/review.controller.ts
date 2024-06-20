@@ -1,4 +1,12 @@
-import { BadRequestException, Body, Controller, NotFoundException, Post, Session, UseGuards } from '@nestjs/common';
+import {
+  BadRequestException,
+  Body,
+  Controller,
+  NotFoundException,
+  Post,
+  Session,
+  UseGuards,
+} from '@nestjs/common';
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { OkDTO } from '../serverDTO/OkDTO';
 import { IsLoggedInGuard } from '../session/is-logged-in.guard';
@@ -20,8 +28,7 @@ export class ReviewController {
     private readonly utilsService: UtilsService,
     private readonly tripService: TripService,
     private readonly driveService: DriveService,
-  ) {
-  }
+  ) {}
 
   @ApiResponse({
     type: OkDTO,
