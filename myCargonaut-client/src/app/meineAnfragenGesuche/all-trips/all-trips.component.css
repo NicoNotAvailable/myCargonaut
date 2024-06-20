@@ -1,3 +1,28 @@
+.roadmap {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.dot {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: #ccc;
+  display: inline-block;
+}
+
+.line {
+  width: 50px;
+  height: 2px;
+  background-color: #ccc;
+  flex-grow: 1;
+}
+
+.highlight {
+  background-color: #005B52; /* Highlight color for active status */
+}
 .greenText {
   color: #005B52;
 }
@@ -106,3 +131,22 @@
   transform: translate(-50%, -50%);
   object-fit: cover; /* Beschneidet das Bild, um die gewünschte Höhe beizubehalten */
 }
+
+.accordion{
+  border-style: none;
+  border-width: 0;
+}
+.accordion-button{
+  background-color: transparent;
+  border-width: 0;
+
+}
+
+.accordion-item{
+  border: none;
+}
+
+.accordion-button:focus {
+  box-shadow: 2px 2px 2px 2px #005B52 ;
+}
+
