@@ -229,26 +229,33 @@ export class TripService {
         }
         await this.tripRepository.remove(trip);
     }
-  async getUserTrips(userId: number) {
+  async getUserTrips(user: number) {
+    console.log('userId ' + user);
     const offerTrips = await this.offerTripRepository.find({
-      where: { requesting: { id: userId } },
+      where: { requesting: { id: user } },
       relations: ['requesting', 'drive', 'messages'],
     });
+    console.log('offer Trips ' + JSON.stringify(offerTrips, null, 2));
 
     const requestTrips = await this.requestTripRepository.find({
-      where: { requesting: { id: userId } },
-      relations: ['requesting', 'drive', 'messages'],
+      where: { requesting: { id: user } },
+      relations: ['requesting', 'car', 'trailer', 'drive'],
     });
+    console.log('request Trips ' + JSON.stringify(requestTrips, null, 2));
 
     const offerDriveTrips = await this.offerTripRepository.find({
-      where: { drive: { user: { id: userId } } },
+      where: { drive: { user: { id: user } } },
       relations: ['drive', 'drive.user', 'messages'],
     });
+    console.log(
+      'offer Drive Trips ' + JSON.stringify(offerDriveTrips, null, 2),
+    );
 
     const requestDriveTrips = await this.requestTripRepository.find({
-      where: { drive: { user: { id: userId } } },
+      where: { drive: { user: { id: user } } },
       relations: ['drive', 'drive.user', 'messages'],
     });
+    console.log('offer Request Trips ' + JSON.stringify(requestDriveTrips, null, 2));
 
     return { offerTrips, requestTrips, offerDriveTrips, requestDriveTrips };
   }
