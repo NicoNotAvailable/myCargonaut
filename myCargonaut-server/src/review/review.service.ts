@@ -91,6 +91,9 @@ export class ReviewService {
             where: { writer: user, trip: trip },
             relations: ['writer'],
         });
+        if (!existingReview) {
+            return;
+        }
         if (existingReview.writer.id == user.id) {
             throw new Error('User has already written a review for this trip');
         }
