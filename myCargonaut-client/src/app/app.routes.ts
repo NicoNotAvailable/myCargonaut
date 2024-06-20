@@ -10,6 +10,7 @@ import {MeineAnfragenComponent} from "./meineAnfragenGesuche/meine-anfragen/mein
 import {MeineGesucheComponent} from "./meineAnfragenGesuche/meine-gesuche/meine-gesuche.component";
 
 import {RequestAufAnfrageOSucheComponent} from "./meineAnfragenGesuche/request-auf-anfrage-osuche/request-auf-anfrage-osuche.component";
+import { ReviewComponent } from './review/review.component';
 
 import {TripsCreateComponent} from "./trips-create/trips-create.component";
 import {
@@ -22,6 +23,7 @@ export const routes: Routes = [
   {path: '', component: FrontpageComponent},
   { path: 'register', component: RegisterComponent },
   { path: 'login', component: LoginComponent },
+  {path: 'review', component: ReviewComponent},
 
   {path: 'profile', component: ProfileComponent},
   {path: 'searchOffer', component: SearchMainComponent},

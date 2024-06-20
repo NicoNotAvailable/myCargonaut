@@ -1,0 +1,99 @@
+<div class="container">
+  <div class="row">
+    <div class="col-lg-12 col-12">
+      <div class="card m-4">
+        <div class="row no-gutters flex-column flex-lg-row card-horizontal">
+          <div class="col-lg-12">
+            <div class="card-body">
+              <div class="headline">
+                <h5 class="card-title greenText">Entspannte Fahrt in meinem Tesla BEWERTUNG</h5>
+              </div>
+              <div class="col-4 margin-vertical ">
+                <div class="stars" matTooltip="Durchschnitt der Bewertung"
+                     matTooltipPosition="before"
+                     aria-label="Button that displays a tooltip when focused or hovered over">
+                  <button
+                    class="star-button"
+                    *ngFor="let filled of averageStarsFilled">
+                    <fa-icon [icon]="filled ? faStar : faStarRegular" class="star-icon"></fa-icon>
+                  </button>
+                </div>
+              </div>
+              <div class="margin-vertical">
+
+                <div class="row ">
+                  <div class="col-4">
+                    <p>War der Fahrer Pünktlich ?</p>
+                  </div>
+                  <div class="col-4 ">
+                    <div class="stars">
+                      <button class="star-button" *ngFor="let filled of starsFilledOne; let i = index"
+                              (click)="handleStarClickQOne(i)">
+                        <fa-icon [icon]="filled ? faStar : faStarRegular" class="star-icon"></fa-icon>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <div class="row ">
+                  <div class="col-4">
+                    <p>Wurden sich an alle Abmachungen gehalten?</p>
+                  </div>
+                  <div class="col-4 ">
+                    <div class="stars">
+                      <button class="star-button" *ngFor="let filled of starsFilledTwo; let i = index"
+                              (click)="handleStarClickQTwo(i)">
+                        <fa-icon [icon]="filled ? faStar : faStarRegular" class="star-icon"></fa-icon>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <div class="row ">
+                  <div class="col-4">
+                    <p>Haben Sie sich bei der Fahrt wohl gefühlt?</p>
+                  </div>
+                  <div class="col-4">
+                    <div class="stars">
+                      <button class="star-button" *ngFor="let filled of starsFilledThree; let i = index"
+                              (click)="handleStarClickQThree(i)">
+                        <fa-icon [icon]="filled ? faStar : faStarRegular" class="star-icon"></fa-icon>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <div class="row ">
+                  <div class="col-4">
+                    <p>Ist die Fracht unbeschadet angekommen?</p>
+                  </div>
+                  <div class="col-4 ">
+                    <div class="stars">
+                      <button class="star-button" *ngFor="let filled of starsFilledFour; let i = index"
+                              (click)="handleStarClickQFour(i)">
+                        <fa-icon [icon]="filled ? faStar : faStarRegular" class="star-icon"></fa-icon>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <textarea placeholder="Beschreibung" type="text"
+                          class="border border-2 rounded-3 col-12 mb-3"
+                          id="selfNoteDisabled" [(ngModel)]='text'></textarea>
+              </div>
+
+
+            </div>
+            <div class="col-12 align-bottom d-flex justify-content-around align-items-center">
+              <button type="submit" class="btn customButton exitButton text-light margin-vertical">
+                <i>
+                  <fa-icon [icon]="faSave"></fa-icon>
+                </i>
+                <span class="ms-3" (click)="createReview()">Speichern</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
