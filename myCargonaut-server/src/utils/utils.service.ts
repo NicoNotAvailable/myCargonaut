@@ -131,6 +131,7 @@ export class UtilsService {
     dto.seats = offer.seats;
     dto.animalsAllowed = offer.animalsAllowed;
     dto.smokingAllowed = offer.smokingAllowed;
+    dto.status = offer.status;
     dto.info = offer.info;
     dto.maxCWeight = offer.maxCWeight;
     dto.maxCLength = offer.maxCLength;
@@ -161,6 +162,7 @@ export class UtilsService {
     dto.seats = request.seats;
     dto.animalsAllowed = request.animalsAllowed;
     dto.smokingAllowed = request.smokingAllowed;
+    dto.status = request.status;
     dto.info = request.info;
     const locations = await request.location;
     dto.locations = locations.map(this.transformLocationDBToCreateLocationDTO);
