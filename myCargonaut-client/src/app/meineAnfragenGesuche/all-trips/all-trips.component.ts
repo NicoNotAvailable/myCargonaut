@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, EventEmitter, inject, Output } from '@angular/core';
 import { TopAuswahlComponent } from '../top-auswahl/top-auswahl.component';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
@@ -27,6 +27,9 @@ import { MatTooltip } from '@angular/material/tooltip';
   styleUrls: ['./all-trips.component.css']
 })
 export class AllTripsComponent {
+
+  @Output() tripIdSend = new EventEmitter<any>();
+
 
   isLoggedIn: boolean = false;
   public sessionService: SessionService = inject(SessionService);
@@ -125,8 +128,15 @@ export class AllTripsComponent {
 
   handleButtonClick(number: number) {
     console.log(number);
+    this.sendTripId(number)
   }
 
+
+  sendTripId(number: number) {
+    this.tripIdSend.emit(number);
+    this.router.navigate(['/review'])
+
+  }
   handleButtonClick2(number: number) {
     console.log(number);
   }

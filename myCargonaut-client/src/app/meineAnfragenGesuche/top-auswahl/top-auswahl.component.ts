@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import {NgClass} from "@angular/common";
@@ -14,6 +14,8 @@ import {NgClass} from "@angular/common";
 })
 export class TopAuswahlComponent implements OnInit {
   currentRoute: string = '';
+  @Input() allOffers!: any;
+  @Input() allRequests!: any;
   constructor(private router: Router) {}
 
   ngOnInit(): void {

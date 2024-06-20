@@ -6,6 +6,7 @@ import { NgForOf, NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import {MatTooltipModule} from "@angular/material/tooltip";
 import { HttpClient } from '@angular/common/http';
+import { TripService } from '../../services/trip-service.service';
 
 
 
@@ -26,10 +27,16 @@ import { HttpClient } from '@angular/common/http';
 
 export class ReviewCreateComponent {
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private tripService: TripService) {
 
   }
 
+  ngOnInit(): void {
+    this.tripService.currentTripId.subscribe(id => {
+      this.tripId = id;
+      console.log(this.tripId);
+    });
+  }
 
 
   protected readonly faSave = faSave;
@@ -39,7 +46,7 @@ export class ReviewCreateComponent {
 
 
   message: string = ""
-  tripId: number | undefined
+  tripId: number | null = null;
   text: string | undefined
   averageFilledStars: number | undefined
 
@@ -57,9 +64,11 @@ export class ReviewCreateComponent {
    */
   createReview(){
     console.log("createReview");
+    console.log(this.tripId);
+
 
     const reviewData = {
-      tripId: 1,
+      tripId: this.tripId,
       rating: this.averageFilledStars,
       text: this.text,
     };

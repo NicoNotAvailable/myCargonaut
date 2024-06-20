@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, EventEmitter, inject, Output } from '@angular/core';
 import { TopAuswahlComponent } from '../top-auswahl/top-auswahl.component';
 import { SearchCardComponent } from '../../search/search-main/search-card/search-card.component';
 import { offer } from '../../search/offers';
@@ -9,6 +9,7 @@ import { UserService } from '../../services/user.service';
 import { request } from '../../search/requests';
 import { NgForOf, NgIf, NgOptimizedImage } from '@angular/common';
 import { DateFormatPipe } from '../../search/date-format.pipe';
+import { TripService } from '../../services/trip-service.service';
 
 @Component({
   selector: 'app-meine-letzten-fahrten',
@@ -39,7 +40,9 @@ export class MeineLetztenFahrtenComponent {
   TripsOffersAll: any = [];
   TripsRequestAll: any = [];
 
-  constructor(private http: HttpClient, private router: Router) {}
+
+
+  constructor(private http: HttpClient, private router: Router, private tripService: TripService) {}
 
   ngOnInit(): void {
     this.getAllRequests();
@@ -122,10 +125,14 @@ export class MeineLetztenFahrtenComponent {
 
   handleButtonClick(number: number) {
     console.log(number);
-  }
+    this.tripService.changeTripId(number);
+    this.router.navigate(['/review']);  }
 
   handleButtonClick2(number: number) {
     console.log(number);
+    this.tripService.changeTripId(number);
+    this.router.navigate(['/review']);
+
   }
 
   protected readonly window = window;
