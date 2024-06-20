@@ -1,5 +1,5 @@
 import { Component, Inject, inject, PLATFORM_ID } from "@angular/core";
-import { isPlatformBrowser, NgIf, NgOptimizedImage } from "@angular/common";
+import { isPlatformBrowser, NgIf, NgOptimizedImage, CommonModule } from "@angular/common";
 import {FaIconComponent} from "@fortawesome/angular-fontawesome";
 import {
   faCar,
@@ -24,7 +24,8 @@ import { NotificationService } from "../services/notification.service";
   imports: [
     NgOptimizedImage,
     FaIconComponent,
-    NgIf
+    NgIf,
+    CommonModule,
   ],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.css',
@@ -33,7 +34,7 @@ export class NavbarComponent {
 
   private sessionService: SessionService = inject(SessionService);
   private socketService: SocketService = inject(SocketService);
-  private notificationService: NotificationService = inject(NotificationService);
+  protected notificationService: NotificationService = inject(NotificationService);
 
   protected readonly faCar = faCar;
   protected readonly faHouse = faHouse;
@@ -83,6 +84,8 @@ export class NavbarComponent {
     this.http.get(`http://localhost:8000/trip/user-trips/${userId}`, { withCredentials: true }).subscribe(
       (response: any) => {
         if (response) {
+          console.log('joinChatRooms FUNC');
+          console.log(response);
           response.offerTrips.forEach((trip: any) => {
             this.joinRoom(userId, trip.id);
           });
@@ -110,6 +113,7 @@ export class NavbarComponent {
   }
 
   private joinRoom(userId: number, tripId: number): void {
+    console.log('50000000000000000');
     const room = `trip_${tripId}`;
     const payload = { userId, tripId };
 

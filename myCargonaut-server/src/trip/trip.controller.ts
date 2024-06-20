@@ -10,15 +10,21 @@ import {
   Post,
   Put,
   Session,
-  UseGuards
-} from "@nestjs/common";
-import { DriveService } from "../drive/drive.service";
-import { UserService } from "../user/user.service";
-import { VehicleService } from "../vehicle/vehicle.service";
-import { TripService } from "./trip.service";
-import { ApiBearerAuth, ApiOperation, ApiParam, ApiResponse, ApiTags } from "@nestjs/swagger";
-import { OkDTO } from "../serverDTO/OkDTO";
-import { IsLoggedInGuard } from "../session/is-logged-in.guard";
+  UseGuards,
+} from '@nestjs/common';
+import { DriveService } from '../drive/drive.service';
+import { UserService } from '../user/user.service';
+import { VehicleService } from '../vehicle/vehicle.service';
+import { TripService } from './trip.service';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiParam,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
+import { OkDTO } from '../serverDTO/OkDTO';
+import { IsLoggedInGuard } from '../session/is-logged-in.guard';
 import { SessionData } from "express-session";
 import { CreateOfferTripDTO } from "./DTO/CreateOfferTripDTO";
 import { LocationService } from "../location/location.service";
@@ -248,8 +254,7 @@ export class TripController {
   @ApiBearerAuth()
   @UseGuards(IsLoggedInGuard)
   @Get('user-trips/:userId')
-  async getUserTrips(@Param('userId', ParseIntPipe) userId: number
-  ): Promise<{
+  async getUserTrips(@Param('userId', ParseIntPipe) userId: number): Promise<{
     offerTrips: any[];
     requestTrips: any[];
     offerDriveTrips: any[];
