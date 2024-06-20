@@ -75,109 +75,106 @@ export class UtilsService {
         return dto;
     }
 
-    transformTrailerDBtoGetTrailerDTO(trailer: TrailerDB): GetTrailerDTO {
-        const dto = new GetTrailerDTO();
-        dto.id = trailer.id;
-        dto.name = trailer.name;
-        dto.weight = trailer.weight;
-        dto.length = trailer.length;
-        dto.height = trailer.height;
-        dto.width = trailer.width;
-        dto.isCooled = trailer.isCooled;
-        dto.isEnclosed = trailer.isEnclosed;
-        return dto;
+  transformTrailerDBtoGetTrailerDTO(trailer: TrailerDB): GetTrailerDTO {
+    const dto = new GetTrailerDTO();
+    dto.id = trailer.id;
+    dto.name = trailer.name;
+    dto.weight = trailer.weight;
+    dto.length = trailer.length;
+    dto.height = trailer.height;
+    dto.width = trailer.width;
+    dto.isCooled = trailer.isCooled;
+    dto.isEnclosed = trailer.isEnclosed;
+    return dto;
+  }
+  transformLocationDBToCreateLocationDTO(
+    location: LocationDB,
+  ): CreateLocationDTO {
+    const dto = new CreateLocationDTO();
+    dto.stopNr = location.stopNr;
+    dto.country = location.country;
+    dto.zipCode = location.zipCode;
+    dto.city = location.city;
+    return dto;
+  }
+  transformCargoDBToCreateCargoDTO(cargo: CargoDB): CreateCargoDTO {
+    const dto = new CreateCargoDTO();
+    dto.weight = cargo.weight;
+    dto.length = cargo.length;
+    dto.height = cargo.height;
+    dto.width = cargo.width;
+    dto.description = cargo.description;
+    return dto;
+  }
+  transformUserToGetOtherUserDTO(user: UserDB): GetOtherUserDTO {
+    const dto = new GetOtherUserDTO();
+    dto.id = user.id;
+    dto.profilePic = user.profilePic;
+    dto.firstName = user.firstName;
+    dto.lastName = user.lastName;
+    dto.languages = user.languages;
+    dto.profileText = user.profileText;
+    dto.isSmoker = user.isSmoker;
+    return dto;
+  }
+  async transformOfferDBtoGetOfferDTO(offer: OfferDB): Promise<GetOfferDTO> {
+    const dto = new GetOfferDTO();
+    dto.id = offer.id;
+    dto.user = this.transformUserToGetOtherUserDTO(offer.user);
+    dto.carID = offer.car.id;
+    dto.carPicture = offer.car.carPicture;
+    dto.name = offer.name;
+    dto.date = offer.date;
+    dto.price = offer.price;
+    dto.seats = offer.seats;
+    dto.animalsAllowed = offer.animalsAllowed;
+    dto.smokingAllowed = offer.smokingAllowed;
+    dto.status = offer.status;
+    dto.info = offer.info;
+    dto.maxCWeight = offer.maxCWeight;
+    dto.maxCLength = offer.maxCLength;
+    dto.maxCHeight = offer.maxCHeight;
+    dto.maxCWidth = offer.maxCWidth;
+    if (offer.trailer) {
+      dto.trailerID = offer.trailer.id;
+      dto.maxTLength = offer.maxTLength;
+      dto.maxTWeight = offer.maxTWeight;
+      dto.maxTHeight = offer.maxTHeight;
+      dto.maxTWidth = offer.maxTWidth;
     }
-    transformLocationDBToCreateLocationDTO(
-        location: LocationDB,
-    ): CreateLocationDTO {
-        const dto = new CreateLocationDTO();
-        dto.stopNr = location.stopNr;
-        dto.country = location.country;
-        dto.zipCode = location.zipCode;
-        dto.city = location.city;
-        return dto;
-    }
-    transformCargoDBToCreateCargoDTO(cargo: CargoDB): CreateCargoDTO {
-        const dto = new CreateCargoDTO();
-        dto.weight = cargo.weight;
-        dto.length = cargo.length;
-        dto.height = cargo.height;
-        dto.width = cargo.width;
-        dto.description = cargo.description;
-        return dto;
-    }
-    async transformUserToGetOtherUserDTO(user: UserDB): Promise<GetOtherUserDTO> {
-      const dto = new GetOtherUserDTO();
-      dto.id = user.id;
-      dto.profilePic = user.profilePic;
-      dto.firstName = user.firstName;
-      dto.lastName = user.lastName;
-      dto.languages = user.languages;
-      dto.profileText = user.profileText;
-      dto.isSmoker = user.isSmoker;
-      dto.rating = await this.reviewService.getRating(user.id);
-      return dto;
-    }
-    async transformOfferDBtoGetOfferDTO(offer: OfferDB): Promise<GetOfferDTO> {
-        const dto = new GetOfferDTO();
-        dto.id = offer.id;
-        dto.user = await this.transformUserToGetOtherUserDTO(offer.user);
-        dto.carID = offer.car.id;
-        dto.carPicture = offer.car.carPicture;
-        dto.name = offer.name;
-        dto.date = offer.date;
-        dto.price = offer.price;
-        dto.seats = offer.seats;
-        dto.animalsAllowed = offer.animalsAllowed;
-        dto.smokingAllowed = offer.smokingAllowed;
-        dto.info = offer.info;
-        dto.maxCWeight = offer.maxCWeight;
-        dto.maxCLength = offer.maxCLength;
-        dto.maxCHeight = offer.maxCHeight;
-        dto.maxCWidth = offer.maxCWidth;
-        if (offer.trailer) {
-            dto.trailerID = offer.trailer.id;
-            dto.maxTLength = offer.maxTLength;
-            dto.maxTWeight = offer.maxTWeight;
-            dto.maxTHeight = offer.maxTHeight;
-            dto.maxTWidth = offer.maxTWidth;
-        }
-        dto.priceType = offer.priceType;
-        const locations = await offer.location;
-        dto.locations = locations.map(
-            this.transformLocationDBToCreateLocationDTO,
-        );
-        return dto;
-    }
+    dto.priceType = offer.priceType;
+    const locations = await offer.location;
+    dto.locations = locations.map(this.transformLocationDBToCreateLocationDTO);
+    return dto;
+  }
 
-    async transformRequestDBtoGetRequestDTO(
-        request: RequestDB,
-    ): Promise<GetRequestDTO> {
-        const dto = new GetRequestDTO();
-        dto.id = request.id;
-        dto.user = await this.transformUserToGetOtherUserDTO(request.user);
-        dto.name = request.name;
-        dto.date = request.date;
-        dto.price = request.price;
-        dto.seats = request.seats;
-        dto.animalsAllowed = request.animalsAllowed;
-        dto.smokingAllowed = request.smokingAllowed;
-        dto.info = request.info;
-        const locations = await request.location;
-        dto.locations = locations.map(
-            this.transformLocationDBToCreateLocationDTO,
-        );
-        const cargo = await request.cargo;
-        dto.cargo = cargo.map(this.transformCargoDBToCreateCargoDTO);
-        return dto;
-    }
-    async transformReviewDBToGetReviewDTO(
-        review: ReviewDB,
-    ): Promise<GetReviewDTO> {
-        const dto = new GetReviewDTO();
-        dto.writer = await this.transformUserToGetOtherUserDTO(review.writer);
-        dto.rating = review.rating;
-        dto.text = review.text;
-        return dto;
-    }
+  async transformRequestDBtoGetRequestDTO(
+    request: RequestDB,
+  ): Promise<GetRequestDTO> {
+    const dto = new GetRequestDTO();
+    dto.id = request.id;
+    dto.user = this.transformUserToGetOtherUserDTO(request.user);
+    dto.name = request.name;
+    dto.date = request.date;
+    dto.price = request.price;
+    dto.seats = request.seats;
+    dto.animalsAllowed = request.animalsAllowed;
+    dto.smokingAllowed = request.smokingAllowed;
+    dto.status = request.status;
+    dto.info = request.info;
+    const locations = await request.location;
+    dto.locations = locations.map(this.transformLocationDBToCreateLocationDTO);
+    const cargo = await request.cargo;
+    dto.cargo = cargo.map(this.transformCargoDBToCreateCargoDTO);
+    return dto;
+  }
+  async transformReviewDBToGetReviewDTO(
+    review: ReviewDB,
+  ): Promise<GetReviewDTO> {
+    const dto = new GetReviewDTO();
+    dto.writer = await this.transformUserToGetOtherUserDTO(review.writer);
+    dto.rating = review.rating;
+    dto.text = review.text;
+    return dto;
+  }
 }
