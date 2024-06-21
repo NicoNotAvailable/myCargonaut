@@ -11,7 +11,7 @@ import { DateFormatPipe } from '../date-format.pipe';
   imports: [
     SearchInputComponent,
     SearchCardComponent,
-    DateFormatPipe // Hier die Pipe importieren
+    DateFormatPipe
   ],
   templateUrl: './search-main.component.html',
   styleUrls: ['./search-main.component.css']
