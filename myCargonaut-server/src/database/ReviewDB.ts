@@ -10,7 +10,6 @@ import { UserDB } from './UserDB';
 
 @Entity()
 @Check(`"rating" BETWEEN 1 AND 5`)
-
 export class ReviewDB {
   @PrimaryGeneratedColumn()
   id: number;
@@ -21,25 +20,12 @@ export class ReviewDB {
   @ManyToOne(() => UserDB)
   writer: UserDB;
 
+  @ManyToOne(() => UserDB)
+  about: UserDB;
 
   @Column()
-  punctuality: number;
+  rating: number;
 
   @Column()
-  reliability: number;
-
-  @Column()
-  comfort: number;
-
-  @Column()
-  damage: number;
-  
-    @ManyToOne(() => UserDB)
-    about: UserDB;
-
-    @Column()
-    rating: number;
-
-    @Column()
-    text: string;
+  text: string;
 }

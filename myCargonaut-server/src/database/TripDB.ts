@@ -19,10 +19,6 @@ export class TripDB {
   @ManyToOne(() => UserDB)
   requesting: UserDB;
 
-
-  @Column({ default: false })
-  isAccepted: boolean;
-
   @OneToMany(() => ReviewDB, (review) => review.trip, { onDelete: 'CASCADE' })
   reviews: Promise<ReviewDB[]>;
 
