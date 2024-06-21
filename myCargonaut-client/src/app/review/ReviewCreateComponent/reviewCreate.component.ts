@@ -1,10 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { faSave, faStar, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { faStar as faStarRegular } from '@fortawesome/free-regular-svg-icons';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { NgForOf, NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import {MatTooltipModule} from "@angular/material/tooltip";
 import { HttpClient } from '@angular/common/http';
 import { TripService } from '../../services/trip-service.service';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
@@ -19,7 +18,7 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
     NgForOf,
     FormsModule,
     NgIf,
-    MatTooltipModule,
+
     RouterLink,
   ],
   templateUrl: './reviewCreate.component.html',
@@ -29,16 +28,18 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
 export class ReviewCreateComponent {
 
-  constructor(private http: HttpClient, private tripService: TripService, private router: Router) {}
-
+  constructor(private http: HttpClient,    private tripService: TripService,
+             private router: Router) {}
 
 
   ngOnInit(): void {
+    // Subscribe to the trip ID from the service
     this.tripService.currentTripId.subscribe(id => {
       this.tripId = id;
-      console.log(this.tripId);
+      console.log(this.tripId);  // Will log the trip ID whenever it changes
     });
   }
+
 
 
   protected readonly faSave = faSave;

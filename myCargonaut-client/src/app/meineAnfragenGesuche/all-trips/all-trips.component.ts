@@ -6,9 +6,9 @@ import { SessionService } from '../../services/session.service';
 import { UserService } from '../../services/user.service';
 import { DateFormatPipe } from '../../search/date-format.pipe';
 import { offer } from '../../search/offers';
-import { NgClass, NgForOf, NgIf, NgOptimizedImage } from '@angular/common';
+import { DatePipe, NgClass, NgForOf, NgIf, NgOptimizedImage } from '@angular/common';
 import { SearchCardComponent } from '../../search/search-main/search-card/search-card.component';
-import { MatTooltip } from '@angular/material/tooltip';
+import { TripService } from '../../services/trip-service.service';
 
 @Component({
   selector: 'app-all-trips',
@@ -21,7 +21,7 @@ import { MatTooltip } from '@angular/material/tooltip';
     NgForOf,
     NgIf,
     NgClass,
-    MatTooltip,
+    DatePipe,
   ],
   templateUrl: './all-trips.component.html',
   styleUrls: ['./all-trips.component.css']
@@ -30,10 +30,10 @@ export class AllTripsComponent {
 
   @Output() tripIdSend = new EventEmitter<any>();
 
-
   isLoggedIn: boolean = false;
   public sessionService: SessionService = inject(SessionService);
   public userService: UserService = inject(UserService);
+  public tripService: TripService = inject(TripService);
 
   allRequests: any = [];
   pathToImage: string = 'empty.png';
@@ -42,14 +42,24 @@ export class AllTripsComponent {
   activeTrips: any = [];
   TripsOffersAll: any = [];
   TripsRequestAll: any = [];
+  userID: number | undefined
 
-  constructor(private http: HttpClient, private router: Router) {
-  }
+  constructor(private http: HttpClient, private router: Router) {}
 
   ngOnInit(): void {
-  this.loadTripsData()
+    this.sessionService.checkLoginNum().then(currentUser => {
+      if (currentUser != -1) {
+        this.isLoggedIn = true;
+        this.userID = currentUser;
+        console.log(currentUser + ' this is the user ID');
+        console.log(this.userID + ' this is the user ID');
+        this.getAllTrips(); // Move getAllTrips() here
+        this.loadTripsData();
+      } else {
+        this.isLoggedIn = false;
+      }
+    });
   }
-
 
   loadTripsData() {
     this.sessionService.checkLoginNum().then(isLoggedIn => {
@@ -68,7 +78,6 @@ export class AllTripsComponent {
     this.http.get('http://localhost:8000/drive/user/requests', { withCredentials: true }).subscribe(
       (response: any) => {
         this.allRequests = response;
-        this.activeTrips = this.activeTrips.concat(response.filter((request: { status: number; }) => request.status === 3 || request.status === 4 || request.status === 5));
         this.getAllTripRequest();
 
         response.forEach((element: { user: { profilePic: string; }; }) => {
@@ -87,7 +96,6 @@ export class AllTripsComponent {
     this.http.get('http://localhost:8000/drive/user/offers', { withCredentials: true }).subscribe(
       (response: any) => {
         this.allOffers = response;
-        this.activeTrips = this.activeTrips.concat(response.filter((offer: { status: number; }) => offer.status === 3 || offer.status === 4 || offer.status === 5));
         this.getAllTripOffers();
 
         response.forEach((element: { carPicture: string; }) => {
@@ -100,7 +108,6 @@ export class AllTripsComponent {
       }
     );
   }
-
 
   getAllTripOffers() {
     this.http.get('http://localhost:8000/trip/offer/user', { withCredentials: true })
@@ -131,18 +138,93 @@ export class AllTripsComponent {
     this.sendTripId(number)
   }
 
-
   sendTripId(number: number) {
-    this.tripIdSend.emit(number);
-    this.router.navigate(['/review'])
-
+    this.tripService.changeTripId(number);  // Update the trip ID in the service
+    this.router.navigate(['/review']);      // Navigate to the review route
   }
   handleButtonClick2(number: number) {
     console.log(number);
   }
 
+  getAllTrips() {
+    console.log("getAllTrips");
+    this.http.get('http://localhost:8000/trip/user-trips/' + this.userID, { withCredentials: true }).subscribe(
+      (response: any) => {
+        // Log the response to understand its structure
+        console.log('Response:', response);
+
+        const offerTrips = response.offerTrips
+          .filter((offerTrip: any) => offerTrip.drive && (offerTrip.drive.status === 3 || offerTrip.drive.status === 4 || offerTrip.drive.status === 5))
+          .map((offerTrip: any) => ({
+            id: offerTrip.id,
+            name: offerTrip.drive.name,
+            user: offerTrip.requesting || offerTrip.drive.user,
+            date: offerTrip.drive.date,
+            price: offerTrip.drive.price,
+            priceType: offerTrip.drive.priceType,
+            maxCWeight: offerTrip.drive.maxCWeight,
+            maxCVolumen: (offerTrip.drive.maxCLength * offerTrip.drive.maxCWidth * offerTrip.drive.maxCHeight) / 1000000,
+            status: offerTrip.drive.status,
+            locations: offerTrip.locations || []
+          }));
+
+        const requestTrips = response.requestTrips
+          .filter((requestTrips: any) => requestTrips.drive && (requestTrips.drive.status === 3 || requestTrips.drive.status === 4 || requestTrips.drive.status === 5))
+          .map((requestTrips: any) => ({
+            id: requestTrips.id,
+            name: requestTrips.drive.name,
+            user: requestTrips.requesting,
+            date: requestTrips.drive.date,
+            price: requestTrips.drive.price,
+            priceType: requestTrips.drive.priceType,
+            maxCWeight: requestTrips.drive.maxCWeight,
+            maxCVolumen: (requestTrips.drive.maxCLength * requestTrips.drive.maxCWidth * requestTrips.drive.maxCHeight) / 1000000,
+            status: requestTrips.drive.status,
+            locations: requestTrips.locations || []
+          }));
+
+        const offerDriveTrips = response.offerDriveTrips
+          .filter((offerDriveTrips: any) => offerDriveTrips.drive && (offerDriveTrips.drive.status === 3 || offerDriveTrips.drive.status === 4 || offerDriveTrips.drive.status === 5))
+          .map((offerDriveTrips: any) => ({
+            id: offerDriveTrips.id,
+            name: offerDriveTrips.drive.name,
+            user: offerDriveTrips.drive.user,
+            date: offerDriveTrips.drive.date,
+            price: offerDriveTrips.drive.price,
+            priceType: offerDriveTrips.drive.priceType,
+            maxCWeight: offerDriveTrips.drive.maxCWeight,
+            maxCVolumen: (offerDriveTrips.drive.maxCLength * offerDriveTrips.drive.maxCWidth * offerDriveTrips.drive.maxCHeight) / 1000000,
+            status: offerDriveTrips.drive.status,
+            locations: offerDriveTrips.locations || []
+          }));
+
+        const requestDriveTrips = response.requestDriveTrips
+          .filter((requestDriveTrips: any) => requestDriveTrips.drive && (requestDriveTrips.drive.status === 3 || requestDriveTrips.drive.status === 4 || requestDriveTrips.drive.status === 5))
+          .map((requestDriveTrips: any) => ({
+            id: requestDriveTrips.id,
+            name: requestDriveTrips.drive.name,
+            user: requestDriveTrips.drive.user,
+            date: requestDriveTrips.drive.date,
+            price: requestDriveTrips.drive.price,
+            priceType: requestDriveTrips.drive.priceType,
+            maxCWeight: requestDriveTrips.drive.maxCWeight,
+            maxCVolumen: (requestDriveTrips.drive.maxCLength * requestDriveTrips.drive.maxCWidth * requestDriveTrips.drive.maxCHeight) / 1000000,
+            status: requestDriveTrips.drive.status,
+            locations: requestDriveTrips.locations || []
+          }));
+
+        // Combine all trips into activeTrips
+        this.activeTrips = [].concat(offerTrips, requestTrips, offerDriveTrips, requestDriveTrips);
+        console.log('Active Trips:', this.activeTrips);
+      },
+      error => {
+        console.error('Error fetching requests:', error);
+      }
+    );
+  }
+
+
   protected readonly window = window;
   protected readonly PageTransitionEvent = PageTransitionEvent;
   protected readonly location = location;
 }
-
