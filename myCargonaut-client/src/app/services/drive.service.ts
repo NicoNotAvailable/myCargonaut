@@ -10,11 +10,11 @@ export class DriveService {
   constructor(private http: HttpClient) { }
 
   readOffer(id: number): Observable<any> {
-    return this.http.get<any>("http://localhost:8000/drive/offer" + id, {withCredentials: true});
+    return this.http.get<any>("http://localhost:8000/drive/offer/" + id, {withCredentials: true});
   }
 
   readRequest(id: number): Observable<any> {
-    return this.http.get<any>("http://localhost:8000/drive/request" + id, {withCredentials: true});
+    return this.http.get<any>("http://localhost:8000/drive/request/" + id, {withCredentials: true});
   }
 
 }

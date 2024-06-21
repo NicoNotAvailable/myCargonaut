@@ -29,5 +29,5 @@ export const routes: Routes = [
   {path: 'request/:id', component: RequestAufAnfrageOSucheComponent},
   {path: 'offer/:id', component: RequestAufAnfrageOSucheComponent},
 
-  {path: 'trips/:id', component: TripsComponent},
+  {path: 'trips/:type/:id', component: TripsComponent},
 ];
