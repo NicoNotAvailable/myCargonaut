@@ -1,0 +1,9 @@
+.circle {
+  border-radius: 50%;
+}
+
+.priceText {
+  color: #1A9CC5;
+  font-size: 30px;
+  font-weight: bold;
+}
