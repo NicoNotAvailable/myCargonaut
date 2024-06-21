@@ -19,7 +19,6 @@ export const routes: Routes = [
   { path: 'createrequest', component: RequestComponent },
   { path: 'createoffer', component: OfferComponent },
   { path: 'summary', component: SummaryComponent },
-  { path: 'createregister', component: RegisterComponent },
   { path: '', component: FrontpageComponent },
 
 

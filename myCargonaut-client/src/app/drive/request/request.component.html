@@ -1,5 +1,5 @@
 <div *ngIf="isLoggedIn" class="container mt-3 mb-3 text-start">
-  <ng-template #cargoModal let-modal>
+  <ng-template #cargoModal let-modal="modal">
     <div class="modal-header">
       <h4 class="modal-title" id="modal-basic-title">Cargo Hinzufügen</h4>
       <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
@@ -9,30 +9,25 @@
         <div class="mb-3">
           <div class="input-group">
             <input [(ngModel)]="cargoDescription" #descriptionInput="ngModel" type="text" name="descriptionInput"
-                   class="rounded-5 p-2 w-100 mb-3" placeholder="Name des Cargos"
-                   (input)="this.cargoDescription">
+                   class="rounded-5 p-2 w-100 mb-3" placeholder="Name des Cargos">
             <input [(ngModel)]="cargoWeight" #weightInput="ngModel" type="text" name="weightInput"
-                   class="rounded-5 p-2 w-100 mb-3" placeholder="Gewicht in kg (Bsp. 5,50)"
-                   (input)="this.cargoWeight">
+                   class="rounded-5 p-2 w-100 mb-3" placeholder="Gewicht in kg (Bsp. 5,50)">
             <input [(ngModel)]="cargoLength" #lengthInput="ngModel" type="text" name="lengthInput"
-                   class="rounded-5 p-2 w-100 mb-3" placeholder="Länge in m (Bsp. 2,30)"
-                   (input)="this.cargoLength">
+                   class="rounded-5 p-2 w-100 mb-3" placeholder="Länge in m (Bsp. 2,30)">
             <input [(ngModel)]="cargoWidth" #widthInput="ngModel" type="text" name="widthInput"
-                   class="rounded-5 p-2 w-100 mb-3" placeholder="Breite in m (Bsp. 1,30)"
-                   (input)="this.cargoWidth">
+                   class="rounded-5 p-2 w-100 mb-3" placeholder="Breite in m (Bsp. 1,30)">
             <input [(ngModel)]="cargoHeight" #heightInput="ngModel" type="text" name="heightInput"
-                   class="rounded-5 p-2 w-100 mb-3" placeholder="Höhe in m (Bsp. 0,80)"
-                   (input)="this.cargoHeight">
+                   class="rounded-5 p-2 w-100 mb-3" placeholder="Höhe in m (Bsp. 0,80)">
           </div>
         </div>
       </form>
     </div>
     <div class="modal-footer justify-content-center">
-      <button type="button" class="btn customButton exitButton text-light mt-2">
-        <i>
-          <fa-icon [icon]="faSave"></fa-icon>
-        </i>
-        <span class="ms-3">Speichern</span>
+      <button type="button" (click)="addCargoToArray(modal)" class="btn customButton exitButton text-light mt-2">
+          <i>
+            <fa-icon [icon]="faSave"></fa-icon>
+          </i>
+          <span class="ms-3">Speichern</span>
       </button>
     </div>
   </ng-template>
@@ -160,7 +155,7 @@
                 </div>
 
               </div>
-              <div class="card border-0 position-relative mt-3">
+              <div *ngFor="let cargo of cargoDataArray" class="card border-0 position-relative mt-3">
                 <div class="button-container position-absolute end-0 mt-1 me-3">
                   <button (click)="openCargoModal(cargoModal)" type="button"
                           class="btn btn-primary editButton text-end me-1" id="editButton">
@@ -176,19 +171,19 @@
                 </div>
                 <div class="card-body backgroundGreen">
                   <div class="text-light mx-3 pt-2">
-                    <h4 class="card-title ms-1 mt-1 text-center">Omas Klavier</h4>
-                    <p class="ms-2">100 kg</p>
+                    <h4 class="card-title ms-1 mt-1 text-center">{{ cargo.description }}</h4>
+                    <p class="ms-2">{{ cargo.weight }} kg</p>
                     <div class="row">
                       <div class="col">
-                        <p class="ms-2">3,35m <br>
+                        <p class="ms-2">{{ cargo.length }}m <br>
                           Lang</p>
                       </div>
                       <div class="col">
-                        <p class="mx-1">2,20m <br>
+                        <p class="mx-1">{{ cargo.width }}m <br>
                           Breit </p>
                       </div>
                       <div class="col">
-                        <p class="me-2">1,50m <br>
+                        <p class="me-2">{{ cargo.height }}m <br>
                           Hoch</p>
                       </div>
                     </div>
@@ -198,7 +193,6 @@
                   </button>
                 </div>
               </div>
-
             </div>
           </div>
 
