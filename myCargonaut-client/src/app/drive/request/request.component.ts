@@ -14,8 +14,9 @@ import {FormsModule, NgForm} from "@angular/forms";
 import {FaIconComponent} from "@fortawesome/angular-fontawesome";
 import {NgbInputDatepicker} from "@ng-bootstrap/ng-bootstrap";
 import {NgbActiveModal, NgbModal, NgbModalRef, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
-import { RequestService } from '../../services/drive/request.service';
+import { RequestService } from '../../../../request.service';
 import { Cargo } from '../Cargo';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-request',
@@ -37,9 +38,14 @@ import { Cargo } from '../Cargo';
 export class RequestComponent {
   public sessionService: SessionService = inject(SessionService);
   public requestService: RequestService = inject(RequestService);
+  private router: Router = inject(Router);
+
 
   @Input() editingRequest!: number;
   @Output() changeAddCar = new EventEmitter<void>();
+
+  message: string = "";
+  textColor: string = "errorText";
 
   requestedPrice: number | null = null;
   talkMode: number | null = null;
@@ -69,7 +75,6 @@ export class RequestComponent {
 
   isLoggedIn: boolean = false;
   private http: any;
-  private router: any;
   private cargoModalRef: NgbModalRef | undefined;
 
 
@@ -103,7 +108,7 @@ export class RequestComponent {
   }
 
   createSummaryRequest(form: any): void {
-    this.router.navigate(['/summary'], {queryParams: {origin: 'request'}})
+    this.router.navigate(['/summary'], { queryParams: { origin: 'request' } });
   }
 
   changeAddCarState(): void {
@@ -141,18 +146,17 @@ export class RequestComponent {
   }
 
   addCargoToArray(modal: any) {
-    if(this.cargoDescription != null && this.cargoWeight != null &&
+    if (this.cargoDescription != null && this.cargoWeight != null &&
       this.cargoLength != null && this.cargoWidth != null &&
       this.cargoHeight != null) {
       const newCargo = new Cargo(this.cargoDescription, this.cargoWeight, this.cargoLength, this.cargoWidth, this.cargoHeight);
       this.requestService.addCargo(newCargo);
+      console.log('Cargo added:', newCargo);
     }
     // Close the modal
     if (this.cargoModalRef) {
       this.cargoModalRef.close();
     }
-    console.log("Klappt");
-    console.log(this.cargoDataArray);
   }
 
   get cargoDataArray() {

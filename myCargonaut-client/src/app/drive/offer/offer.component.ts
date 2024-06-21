@@ -111,7 +111,7 @@ export class OfferComponent {
   }
 
   createSummaryOffer(form: NgForm) {
-    //this.router.navigate(['/summary'], { queryParams: { origin: 'offer' } })
+    this.router.navigate(['/summary'], { queryParams: { origin: 'offer' } })
   }
 
   removeErrorMessage(): void {

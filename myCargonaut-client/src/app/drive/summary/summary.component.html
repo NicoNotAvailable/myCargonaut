@@ -1,5 +1,10 @@
 <div class="rounded-3 container mt-3 mb-3 text-start" *ngIf="isLoggedIn">
-  <a href="/createoffer">
+  <a *ngIf="templateToLoad === 'summaryOffer'" href="/createoffer">
+    <button type="button" class="btn customButton exitButton text-light">
+      <span class="px-3"><fa-icon [icon]="faArrowLeft"></fa-icon> Zurück</span>
+    </button>
+  </a>
+  <a *ngIf="templateToLoad === 'summaryRequest'" href="/createrequest">
     <button type="button" class="btn customButton exitButton text-light">
       <span class="px-3"><fa-icon [icon]="faArrowLeft"></fa-icon> Zurück</span>
     </button>
@@ -116,7 +121,7 @@
             </div>
           </div>
           <div class="text-center mt-5">
-            <button class="btn customButton px-5">Fahrt erstellen</button>
+            <button class="btn customButton px-5" (click)="createOffer()">Fahrt erstellen</button>
           </div>
         </div>
         <div *ngIf="templateToLoad === 'summaryRequest'">
@@ -152,14 +157,14 @@
             </div>
           </div>
           <div class="row mt-4">
-            <div class="col-12 col-lg-4">
-              <h5 class="textGreen mt-5">1. Cargo</h5>
+            <div *ngFor="let cargo of cargoDataArray" class="col-12 col-lg-4">
+              <h5 class="textGreen mt-5">{{ cargo.listId + 1 }}. Cargo</h5>
               <div class="row">
                 <div class="col-6">
                   <p>Name des Cargos:</p>
                 </div>
                 <div class="col-6">
-                  <p class="fw-bold">Omas Antikes Klavier</p>
+                  <p class="fw-bold">{{ cargo.description }}</p>
                 </div>
               </div>
               <div class="row">
@@ -167,14 +172,14 @@
                   <p>maximales Gewicht:</p>
                 </div>
                 <div class="col-6">
-                  <p class="fw-bold">MaxGew</p>
+                  <p class="fw-bold">{{ cargo.weight }}kg</p>
                 </div>
               </div>
               <div>
                 <p>Maße des Cargo: <br>
-                  Länge: <span class="fw-bold">4,0m</span> /
-                  Breite: <span class="fw-bold">3,5m</span> /
-                  Höhe: <span class="fw-bold">2,5m</span>
+                  Länge: <span class="fw-bold">{{ cargo.length }}m</span> /
+                  Breite: <span class="fw-bold">{{ cargo.width }}m</span> /
+                  Höhe: <span class="fw-bold">{{ cargo.height }}m</span>
                 </p>
               </div>
             </div>
@@ -210,7 +215,7 @@
             </div>
           </div>
           <div class="text-center mt-5">
-            <button class="btn customButton px-5">Fahrt erstellen</button>
+            <button class="btn customButton px-5" (click)="createRequest()">Fahrt erstellen</button>
           </div>
         </div>
       </div>

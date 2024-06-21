@@ -1,11 +1,12 @@
 import {Component, inject} from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
-import {NgIf} from "@angular/common";
+import { NgForOf, NgIf } from '@angular/common';
 import {ActivatedRoute} from "@angular/router";
 import {SessionService} from "../../services/session.service";
 import { faArrowLeft, faSave, faStar } from '@fortawesome/free-solid-svg-icons';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { faStar as faStarRegular } from '@fortawesome/free-regular-svg-icons';
+import { RequestService } from '../../../../request.service';
 
 
 @Component({
@@ -15,6 +16,7 @@ import { faStar as faStarRegular } from '@fortawesome/free-regular-svg-icons';
     FormsModule,
     NgIf,
     FaIconComponent,
+    NgForOf,
   ],
   templateUrl: './summary.component.html',
   styleUrl: './summary.component.css'
@@ -23,6 +25,8 @@ export class SummaryComponent {
   templateToLoad: string = "summaryRequest";
 
   public sessionService: SessionService = inject(SessionService);
+  public requestService: RequestService = inject(RequestService);
+
 
   isLoggedIn: boolean = false;
 
@@ -40,12 +44,16 @@ export class SummaryComponent {
 
     this.route.queryParams.subscribe(params => {
       const origin = params['origin'];
-      if (origin === 'request') {
+      if (origin === 'createrequest') {
         this.templateToLoad = 'summaryRequest';
-      } else if (origin === 'offer') {
+      } else if (origin === 'createoffer') {
         this.templateToLoad = 'summaryOffer';
       }
     });
+  }
+
+  get cargoDataArray() {
+    return this.requestService.getCargos();
   }
 
   saveOffer(form: NgForm) {
@@ -61,4 +69,12 @@ export class SummaryComponent {
 
   protected readonly faStarRegular = faStarRegular;
   protected readonly faArrowLeft = faArrowLeft;
+
+  createOffer() {
+
+  }
+
+  createRequest() {
+
+  }
 }

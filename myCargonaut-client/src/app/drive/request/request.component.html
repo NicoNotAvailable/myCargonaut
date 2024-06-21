@@ -9,15 +9,15 @@
         <div class="mb-3">
           <div class="input-group">
             <input [(ngModel)]="cargoDescription" #descriptionInput="ngModel" type="text" name="descriptionInput"
-                   class="rounded-5 p-2 w-100 mb-3" placeholder="Name des Cargos">
+                   class="rounded-5 p-2 w-100 mb-3" placeholder="Name des Cargos" required>
             <input [(ngModel)]="cargoWeight" #weightInput="ngModel" type="text" name="weightInput"
-                   class="rounded-5 p-2 w-100 mb-3" placeholder="Gewicht in kg (Bsp. 5,50)">
+                   class="rounded-5 p-2 w-100 mb-3" placeholder="Gewicht in kg (Bsp. 5,50)" required>
             <input [(ngModel)]="cargoLength" #lengthInput="ngModel" type="text" name="lengthInput"
-                   class="rounded-5 p-2 w-100 mb-3" placeholder="Länge in m (Bsp. 2,30)">
+                   class="rounded-5 p-2 w-100 mb-3" placeholder="Länge in m (Bsp. 2,30)" required>
             <input [(ngModel)]="cargoWidth" #widthInput="ngModel" type="text" name="widthInput"
-                   class="rounded-5 p-2 w-100 mb-3" placeholder="Breite in m (Bsp. 1,30)">
+                   class="rounded-5 p-2 w-100 mb-3" placeholder="Breite in m (Bsp. 1,30)" required>
             <input [(ngModel)]="cargoHeight" #heightInput="ngModel" type="text" name="heightInput"
-                   class="rounded-5 p-2 w-100 mb-3" placeholder="Höhe in m (Bsp. 0,80)">
+                   class="rounded-5 p-2 w-100 mb-3" placeholder="Höhe in m (Bsp. 0,80)" required>
           </div>
         </div>
       </form>
@@ -60,7 +60,7 @@
             <div class="mt-3 justify-content-center">
               <input [(ngModel)]="seats" #seatsInput="ngModel" type="number" name="seatsInput"
                      class="rounded-5 p-2 w-100" placeholder="Andere Anzahl"
-                     (input)="changeSeatCount(seatsInput.value)">
+                     (input)="changeSeatCount(seatsInput.value)" required>
             </div>
             <div class="row">
               <div class="col text-center textGreen h3 mt-3">
@@ -81,14 +81,14 @@
               <input [(ngModel)]="requestedPrice" #requestedPriceInput="ngModel" type="number"
                      name="requestedPriceInput"
                      class="rounded-5 p-2 w-100" placeholder="Andere Anzahl"
-                     (input)="changeRequestedPrice(requestedPriceInput.value)">
+                     (input)="changeRequestedPrice(requestedPriceInput.value)" required>
             </div>
           </div>
 
           <hr class="blueLine d-xl-none mt-5">
 
           <div class="col-xl-4 col-12" *ngIf="editingRequest == 0">
-            <h2 class="textGreen col-5 mb-3">Infos:</h2>
+            <h2 class="textGreen col-5 mt-5 mb-3">Infos:</h2>
 
             <div class="col-12">
               <input [(ngModel)]="name" [ngModelOptions]="{standalone: true}" name="nameInput" required type="text"
@@ -251,9 +251,11 @@
         </div>
       </div>
       <div class="col-12 align-bottom d-flex justify-content-around align-items-center" *ngIf="editingRequest == 0">
-        <a href="/summary" class="btn customButton exitButton text-light">
+        <span [ngClass]="textColor"> {{ message }}</span>
+        <button type="submit" class="btn customButton exitButton text-light">
           <span class="px-3">Weiter <fa-icon [icon]="faArrowRight"></fa-icon></span>
-        </a>
+
+        </button>
       </div>
     </div>
   </form>
