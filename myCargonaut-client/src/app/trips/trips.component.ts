@@ -76,12 +76,17 @@ export class TripsComponent implements OnInit {
         this.request = data;
         this.rating = this.request.user.rating;
         console.log('Offer Details:', this.request);
-      },
+        },
       error: (error) => {
         console.error('Error fetching offer details:', error);
       },
     });
   }
+  handleCreateTripRequest(): void {
+    this.showTripsRead = false;
+    this.showTripsCreate = true;
+  }
+
   starFillSrc: string = './assets/star-fill.svg';
   starEmptySrc: string = './assets/star.svg';
   stars: number[] = [1, 2, 3, 4, 5];
