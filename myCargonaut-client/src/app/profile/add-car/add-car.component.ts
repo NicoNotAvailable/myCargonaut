@@ -6,6 +6,7 @@ import { HttpClient } from "@angular/common/http";
 import { FormsModule } from "@angular/forms";
 import { NgClass, NgIf } from "@angular/common";
 import { response } from "express";
+import { Car } from "../Car";
 
 @Component({
   selector: "app-add-car",
@@ -62,7 +63,10 @@ export class AddCarComponent {
   }
 
   saveCar(form: any): void {
-    if (this.editingCar != 0) return;
+    if (this.editingCar != 0) {
+      this.changeAddCarState();
+      return;
+    }
     const carData = {
       name: this.model,
       weight: this.weight == null? 0 : this.weight,
@@ -73,17 +77,29 @@ export class AddCarComponent {
       hasAC: this.hasAc,
       hasTelevision: this.hasTv
     };
-    console.log(carData);
 
     this.http.post("http://localhost:8000/vehicle/car", carData, { withCredentials: true }).subscribe(
       response => {
         form.resetForm();
-        this.changeAddCarState();
+        this.fetchCreatedCar();
+        this.enableImageUpload();
       },
       error => {
         console.error(error);
         this.errorMessage = error.error.message || "Bitte überprüfen Sie die eingabe";
         this.removeErrorMessage();
+      }
+    );
+  }
+
+  fetchCreatedCar(): void {
+    this.vehicleService.readCars().subscribe(
+      response => {
+        this.editingCar = response[response.length - 1].id;
+        console.log(this.editingCar);
+      },
+      error => {
+        console.error(error);
       }
     );
   }
@@ -122,9 +138,9 @@ export class AddCarComponent {
       const formData: FormData = new FormData();
       formData.append("file", file);
 
-      this.http.post("http://localhost:8000/vehicle/carPicture", formData, { withCredentials: true }).subscribe(
+      this.http.post("http://localhost:8000/vehicle/carPicture/"+this.editingCar, formData, { withCredentials: true }).subscribe(
         response => {
-          this.uploadCarImgState = false;
+          this.enableImageUpload();
           this.changeAddCarState();
         },
         error => {

@@ -57,6 +57,7 @@ export class ProfileComponent {
   fullName = computed(() => `${this.firstName()} ${this.lastName()}`);
   birthday: string = "";
   pathToImage: string = "empty.png";
+  profilePic: string = "";
 
   constructor(private http: HttpClient) {
   }
@@ -92,6 +93,7 @@ export class ProfileComponent {
         this.lastName.set(response.lastName);
         this.birthday = DateUtils.parseDate(response.birthday);
         const imagePath: string = response.profilePic;
+        this.profilePic = response.profilePic;
         this.pathToImage = imagePath === "empty.png" ? "assets/empty.png" : prePath.concat(imagePath);
         this.smoker = this.formatSmokeBool(response.isSmoker);
       },
@@ -130,4 +132,6 @@ export class ProfileComponent {
     this.addTrailers = !this.addTrailers;
     this.viewTrailers = !this.viewTrailers;
   }
+
+  protected readonly window = window;
 }
