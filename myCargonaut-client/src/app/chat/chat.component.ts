@@ -22,12 +22,14 @@ export class ChatComponent implements OnInit {
   targetUserId: number | undefined;
   room: string | undefined;
   rooms: string[] = [];
+  trips: { [key: string]: any } = {};
 
   private sessionService: SessionService = inject(SessionService);
   private socketService: SocketService = inject(SocketService);
   private route: ActivatedRoute = inject(ActivatedRoute);
 
   @ViewChild('messageInput') messageInput: ElementRef | undefined;
+  @ViewChild('messagesContainer') messagesContainer: ElementRef | undefined;
   private writer: number = -1;
   protected message: string = '';
 
@@ -69,6 +71,7 @@ export class ChatComponent implements OnInit {
 
       console.log('Received message:', message, 'for room:', roomName);
       this.messages[roomName].push(message);
+      setTimeout(() => this.scrollToBottom(), 0);
     });
   }
 
@@ -76,27 +79,30 @@ export class ChatComponent implements OnInit {
     if (this.messageInput) {
       this.messageInput.nativeElement.focus();
     }
+    setTimeout(() => this.scrollToBottom(), 0);
   }
 
   loadChatsWithMessages(): void {
-    console.log('hiiiiiiiiii')
     if (!this.userId) return;
-    console.log('hooooo')
-    this.http
-      .get<any>(`http://localhost:8000/trip/user-trips/${this.userId}`, { withCredentials: true })
+
+    this.http.get<any>(`http://localhost:8000/trip/user-trips/${this.userId}`, { withCredentials: true })
       .subscribe(
         (data) => {
           const { offerTrips, requestTrips, offerDriveTrips, requestDriveTrips } = data;
-
           const trips = [...offerTrips, ...requestTrips, ...offerDriveTrips, ...requestDriveTrips];
 
           trips.forEach(trip => {
             if (trip.__messages__ && trip.__messages__.length > 0) {
-              console.log('hi');
+              const roomName = `trip_${trip.id}`;
+              this.trips[roomName] = trip;  // Store trip details
+
+              this.fetchOtherUser(trip).then(user => {
+                this.trips[roomName].user = user;  // Store user details
+              });
+
               this.http.get<Message[]>(`http://localhost:8000/chat/messages/${trip.id}`, { withCredentials: true })
                 .subscribe(
                   (data) => {
-                    const roomName = `trip_${trip.id}`;
                     if (!this.rooms.includes(roomName)) {
                       this.rooms.push(roomName);
                       this.messages[roomName] = data;
@@ -114,6 +120,7 @@ export class ChatComponent implements OnInit {
         }
       );
   }
+
 
   initiateChat(tripId: number): void {
     if (this.userId) {
@@ -158,6 +165,8 @@ export class ChatComponent implements OnInit {
           console.error('There was an error sending the message:', error);
         }
       );
+    this.message = '';
+    setTimeout(() => this.scrollToBottom(), 0);
   }
 
   private getRoomName(tripId: number): string {
@@ -168,6 +177,11 @@ export class ChatComponent implements OnInit {
     this.room = room;
     console.log('Selected room:', room);
     this.markMessagesAsRead(room);
+    this.selectRoom(room);
+    if (this.messageInput) {
+      this.messageInput.nativeElement.focus();
+    }
+    setTimeout(() => this.scrollToBottom(), 0);
   }
 
   markMessagesAsRead(room: string): void {
@@ -195,6 +209,32 @@ export class ChatComponent implements OnInit {
       return 'message-left';
     } else {
       return 'message-right';
+    }
+  }
+
+  fetchOtherUser(trip: any): Promise<any> {
+    const userId = trip.drive ? trip.drive.userId : trip.requesting.userId;
+    return this.http.get<any>(`http://localhost:8000/user/${userId}`, { withCredentials: true }).toPromise();
+  }
+
+  getInitials(user: any): string {
+    if (!user) return '';
+    const firstNameInitial = user.firstName.charAt(0).toUpperCase();
+    const lastNameInitial = user.lastName.charAt(0).toUpperCase();
+    return `${firstNameInitial}\n${lastNameInitial}`;
+  }
+
+  formatDate(dateString: string): string {
+    const date = new Date(dateString);
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-indexed
+    const year = date.getFullYear();
+    return `${day}.${month}.${year}`;
+  }
+
+  scrollToBottom(): void {
+    if (this.messagesContainer) {
+      this.messagesContainer.nativeElement.scrollTop = this.messagesContainer.nativeElement.scrollHeight;
     }
   }
 }

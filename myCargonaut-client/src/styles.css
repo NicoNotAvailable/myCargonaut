@@ -27,6 +27,10 @@ html{
   background-color: #005B52;
 }
 
+.textGreen {
+  color: #005B52;
+}
+
 .btn-blue {
   color: #1a9cc5;
 }
@@ -74,6 +78,7 @@ html{
   font-weight: bold;
   border-radius: 15px;
   transition: all 0.5s ease;
+  padding: 5px 1px;
 }
 
 .notification:hover {
