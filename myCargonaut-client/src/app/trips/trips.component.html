@@ -1,0 +1,50 @@
+<div class="container">
+  <div class="row mt-5 mb-3">
+    <div class="col-12 col-lg-2">
+      <a href="">
+        <button type="button" class="btn btn-primary greenButton"><- Alle Angebote</button>
+      </a>
+    </div>
+    <div class="col-12 col-lg-8 ">
+      <div class="row text-center">
+        <h2 class="greenText">Entspannte Fahrt mit meinem Tesla</h2>
+      </div>
+      <div class="row">
+        <div class="col-6 text-start">
+          <span>Datum: 06.09.4020</span>
+        </div>
+        <div class="col-6 text-end">
+          <span class="blueText">69€ pro Person</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12 col-lg-2">
+      <div class="row">
+        <img src="../../../assets/Cybertruck-fremont-cropped.jpg" class="img-fluid rounded-img " alt="">
+      </div>
+      <div class="row">
+        <span>firstname lastname</span>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <ng-container *ngFor="let star of stars; let i = index">
+            <img [src]="i < bewertungsDummy ? starFillSrc : starEmptySrc" alt="star{{i + 1}}"
+                 class="blueText">
+          </ng-container>
+        </div>
+      </div>
+    </div>
+
+    <app-trips-read *ngIf="showTripsRead" class="col-8"></app-trips-read>
+    <app-trips-create *ngIf="showTripsCreate" class="col-8"></app-trips-create>
+
+    <div class="col-12 col-lg-2 justify-content-center">
+      <div class="row">
+        <img src="../../../assets/Cybertruck-fremont-cropped.jpg" class="img-fluid roundedABit backgroundGreen profileCircle" alt="">
+      </div>
+    </div>
+  </div>
+</div>
+
