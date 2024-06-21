@@ -16,8 +16,8 @@ import { TripsReadComponent } from './trips-read/trips-read.component';
   styleUrl: './trips.component.css'
 })
 export class TripsComponent {
-  showTripsRead: boolean = true;
-  showTripsCreate: boolean = false;
+  showTripsRead: boolean = false;
+  showTripsCreate: boolean = true;
 
   starFillSrc: string = './assets/star-fill.svg';
   starEmptySrc: string = './assets/star.svg';
