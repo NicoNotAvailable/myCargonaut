@@ -6,7 +6,7 @@ import {SessionService} from "../../services/session.service";
 import { faArrowLeft, faSave, faStar } from '@fortawesome/free-solid-svg-icons';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { faStar as faStarRegular } from '@fortawesome/free-regular-svg-icons';
-import { RequestService } from '../../../../request.service';
+import { RequestService } from '../../../drive/request.service';
 
 
 @Component({
@@ -29,6 +29,8 @@ export class SummaryComponent {
 
 
   isLoggedIn: boolean = false;
+
+  private http: any;
 
   constructor(private route: ActivatedRoute) {
   }
@@ -76,5 +78,30 @@ export class SummaryComponent {
 
   createRequest() {
 
+    //const requestData = {
+    //  email: this.email,
+    //  password: this.password,
+    //};
+
+    /*this.http.post("http://localhost:8000/drive/request", userData, { withCredentials: true }).subscribe(
+      response =>{
+        form.resetForm();
+        console.log(response);
+        this.textColor = "successText"
+        this.message = "Anmeldung lief swaggy";
+        window.location.href = "/profile";
+        setTimeout(() => {
+          this.message = "";
+          this.textColor = "errorText"
+        }, 5000);
+      },
+      error => {
+        console.error(error);
+        this.message = error.error.message || "Passwort oder Email stimmt nicht überein";
+        setTimeout(()=> {
+          this.message = "";
+        }, 5000);
+      }
+    );*/
   }
 }

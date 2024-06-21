@@ -157,30 +157,32 @@
             </div>
           </div>
           <div class="row mt-4">
-            <div *ngFor="let cargo of cargoDataArray" class="col-12 col-lg-4">
-              <h5 class="textGreen mt-5">{{ cargo.listId + 1 }}. Cargo</h5>
-              <div class="row">
-                <div class="col-6">
-                  <p>Name des Cargos:</p>
+            <div class="col-12 col-lg-4">
+              <div *ngFor="let cargo of cargoDataArray">
+                <h5 class="textGreen mt-5">{{ cargo.listId + 1 }}. Cargo</h5>
+                <div class="row">
+                  <div class="col-6">
+                    <p>Name des Cargos:</p>
+                  </div>
+                  <div class="col-6">
+                    <p class="fw-bold">{{ cargo.description }}</p>
+                  </div>
                 </div>
-                <div class="col-6">
-                  <p class="fw-bold">{{ cargo.description }}</p>
+                <div class="row">
+                  <div class="col-6">
+                    <p>maximales Gewicht:</p>
+                  </div>
+                  <div class="col-6">
+                    <p class="fw-bold">{{ cargo.weight }}kg</p>
+                  </div>
                 </div>
-              </div>
-              <div class="row">
-                <div class="col-6">
-                  <p>maximales Gewicht:</p>
+                <div>
+                  <p>Maße des Cargo: <br>
+                    Länge: <span class="fw-bold">{{ cargo.length }}m</span> /
+                    Breite: <span class="fw-bold">{{ cargo.width }}m</span> /
+                    Höhe: <span class="fw-bold">{{ cargo.height }}m</span>
+                  </p>
                 </div>
-                <div class="col-6">
-                  <p class="fw-bold">{{ cargo.weight }}kg</p>
-                </div>
-              </div>
-              <div>
-                <p>Maße des Cargo: <br>
-                  Länge: <span class="fw-bold">{{ cargo.length }}m</span> /
-                  Breite: <span class="fw-bold">{{ cargo.width }}m</span> /
-                  Höhe: <span class="fw-bold">{{ cargo.height }}m</span>
-                </p>
               </div>
             </div>
             <div class="col-12 col-lg-4">

@@ -250,11 +250,14 @@
           </div>
         </div>
       </div>
+      <div class="row">
+        <div class="col-12 text-center">
+          <span> {{ message }}1232112</span>
+        </div>
+      </div>
       <div class="col-12 align-bottom d-flex justify-content-around align-items-center" *ngIf="editingRequest == 0">
-        <span [ngClass]="textColor"> {{ message }}</span>
         <button type="submit" class="btn customButton exitButton text-light">
           <span class="px-3">Weiter <fa-icon [icon]="faArrowRight"></fa-icon></span>
-
         </button>
       </div>
     </div>

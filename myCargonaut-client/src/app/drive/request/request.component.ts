@@ -14,7 +14,7 @@ import {FormsModule, NgForm} from "@angular/forms";
 import {FaIconComponent} from "@fortawesome/angular-fontawesome";
 import {NgbInputDatepicker} from "@ng-bootstrap/ng-bootstrap";
 import {NgbActiveModal, NgbModal, NgbModalRef, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
-import { RequestService } from '../../../../request.service';
+import { RequestService } from '../../../drive/request.service';
 import { Cargo } from '../Cargo';
 import { Router } from '@angular/router';
 
@@ -152,6 +152,14 @@ export class RequestComponent {
       const newCargo = new Cargo(this.cargoDescription, this.cargoWeight, this.cargoLength, this.cargoWidth, this.cargoHeight);
       this.requestService.addCargo(newCargo);
       console.log('Cargo added:', newCargo);
+
+      this.cargoDescription = null;
+      this.cargoWeight = null;
+      this.cargoLength = null;
+      this.cargoWidth = null;
+      this.cargoHeight = null;
+    } else {
+
     }
     // Close the modal
     if (this.cargoModalRef) {
