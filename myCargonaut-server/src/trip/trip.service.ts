@@ -1,12 +1,11 @@
 import {
-  BadRequestException,
   Injectable,
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { OfferDB, RequestDB } from '../database/DriveDB';
-import { Repository } from 'typeorm';
+import { DriveDB, OfferDB, RequestDB } from '../database/DriveDB';
+import { Not, Repository } from 'typeorm';
 import { CargoDB } from '../database/CargoDB';
 import { TripDB } from '../database/TripDB';
 import { OfferTripDB } from '../database/OfferTripDB';
@@ -17,6 +16,7 @@ import { CarDB } from '../database/CarDB';
 import { TrailerDB } from '../database/TrailerDB';
 import { CreateCargoDTO } from '../cargo/DTO/CreateCargoDTO';
 import { LocationDB } from '../database/LocationDB';
+import { StatusEnum } from '../database/enums/StatusEnum';
 
 @Injectable()
 export class TripService {
@@ -29,6 +29,8 @@ export class TripService {
     private requestTripRepository: Repository<RequestTripDB>,
     @InjectRepository(CargoDB)
     private cargoRepository: Repository<CargoDB>,
+    @InjectRepository(DriveDB)
+    private driveRepository: Repository<DriveDB>,
   ) {}
 
   async createOfferTrip(
@@ -181,10 +183,10 @@ export class TripService {
     if (trip.drive.user.id !== userId) {
       throw new UnauthorizedException('You are not the creator of this drive');
     }
-    trip.isAccepted = true;
-    await this.tripRepository.save(trip);
+    trip.drive.status = StatusEnum.accepted;
+    await this.driveRepository.save(trip.drive);
     const otherTrips = await this.offerTripRepository.find({
-      where: { drive: trip.drive, isAccepted: false },
+      where: { drive: trip.drive, id: Not(trip.id) },
     });
     await this.tripRepository.remove(otherTrips);
   }
@@ -199,10 +201,10 @@ export class TripService {
     if (trip.drive.user.id !== userId) {
       throw new UnauthorizedException('You are not the creator of this drive');
     }
-    trip.isAccepted = true;
-    await this.tripRepository.save(trip);
+    trip.drive.status = StatusEnum.accepted;
+    await this.driveRepository.save(trip.drive);
     const otherTrips = await this.requestTripRepository.find({
-      where: { drive: trip.drive, isAccepted: false },
+      where: { drive: trip.drive, id: Not(trip.id) },
     });
     await this.tripRepository.remove(otherTrips);
   }
@@ -217,9 +219,38 @@ export class TripService {
     if (trip.requesting.id !== userId) {
       throw new UnauthorizedException('Trip is not yours!');
     }
-    if (trip.isAccepted) {
-      throw new BadRequestException('Your trip already has been accepted');
-    }
     await this.tripRepository.remove(trip);
+  }
+  async getUserTrips(user: number) {
+    console.log('userId ' + user);
+    const offerTrips = await this.offerTripRepository.find({
+      where: { requesting: { id: user } },
+      relations: ['requesting', 'drive', 'messages'],
+    });
+    console.log('offer Trips ' + JSON.stringify(offerTrips, null, 2));
+
+    const requestTrips = await this.requestTripRepository.find({
+      where: { requesting: { id: user } },
+      relations: ['requesting', 'car', 'trailer', 'drive'],
+    });
+    console.log('request Trips ' + JSON.stringify(requestTrips, null, 2));
+
+    const offerDriveTrips = await this.offerTripRepository.find({
+      where: { drive: { user: { id: user } } },
+      relations: ['drive', 'drive.user', 'messages'],
+    });
+    console.log(
+      'offer Drive Trips ' + JSON.stringify(offerDriveTrips, null, 2),
+    );
+
+    const requestDriveTrips = await this.requestTripRepository.find({
+      where: { drive: { user: { id: user } } },
+      relations: ['drive', 'drive.user', 'messages'],
+    });
+    console.log(
+      'offer Request Trips ' + JSON.stringify(requestDriveTrips, null, 2),
+    );
+
+    return { offerTrips, requestTrips, offerDriveTrips, requestDriveTrips };
   }
 }

@@ -1,37 +1,31 @@
 import {
-    Entity,
-    Column,
-    PrimaryGeneratedColumn,
-    ManyToOne,
-    Check,
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  ManyToOne,
+  Check,
 } from 'typeorm';
 import { TripDB } from './TripDB';
 import { UserDB } from './UserDB';
 
 @Entity()
-@Check(`"punctuality" BETWEEN 1 AND 5`)
-@Check(`"reliability" BETWEEN 1 AND 5`)
-@Check(`"comfort" BETWEEN 1 AND 5`)
-@Check(`"damage" BETWEEN 1 AND 5`)
+@Check(`"rating" BETWEEN 1 AND 5`)
 export class ReviewDB {
-    @PrimaryGeneratedColumn()
-    id: number;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @ManyToOne(() => TripDB, { onDelete: 'CASCADE' })
-    trip: TripDB;
+  @ManyToOne(() => TripDB, { onDelete: 'CASCADE' })
+  trip: TripDB;
 
-    @ManyToOne(() => UserDB)
-    writer: UserDB;
+  @ManyToOne(() => UserDB)
+  writer: UserDB;
 
-    @Column()
-    punctuality: number;
+  @ManyToOne(() => UserDB)
+  about: UserDB;
 
-    @Column()
-    reliability: number;
+  @Column()
+  rating: number;
 
-    @Column()
-    comfort: number;
-
-    @Column()
-    damage: number;
+  @Column()
+  text: string;
 }

@@ -17,8 +17,7 @@ import { CreateRequestDTO } from './DTO/CreateRequestDTO';
 import { LocationDB } from '../database/LocationDB';
 import { CreateLocationDTO } from '../location/DTO/CreateLocationDTO';
 import { StatusEnum } from '../database/enums/StatusEnum';
-import { OfferTripDB } from '../database/OfferTripDB';
-import { RequestTripDB } from '../database/RequestTripDB';
+import { ChangeStatusDTO } from './DTO/ChangeStatusDTO';
 
 @Injectable()
 export class DriveService {
@@ -33,10 +32,6 @@ export class DriveService {
     private cargoRepository: Repository<CargoDB>,
     @InjectRepository(LocationDB)
     private locationRepository: Repository<LocationDB>,
-    @InjectRepository(OfferTripDB)
-    private offerTripRepository: Repository<OfferTripDB>,
-    @InjectRepository(RequestTripDB)
-    private requestTripRepository: Repository<RequestTripDB>,
   ) {}
 
   async createOffer(
@@ -154,13 +149,17 @@ export class DriveService {
     }
     return drive;
   }
-  async getAllOffers(): Promise<OfferDB[]> {
+  async getAllOffers(user?: UserDB): Promise<OfferDB[]> {
     const offers = await this.offerRepository.find({
       relations: ['user', 'car', 'trailer', 'location'],
     });
     if (!offers) {
       throw new NotFoundException('Offers not found');
     }
+    if (user) {
+      return offers.filter((offer) => offer.user.id !== user.id);
+    }
+
     return offers;
   }
   async getOwnOffers(user: number): Promise<OfferDB[]> {
@@ -173,12 +172,15 @@ export class DriveService {
     }
     return offers;
   }
-  async getAllRequests(): Promise<RequestDB[]> {
+  async getAllRequests(user?: UserDB): Promise<RequestDB[]> {
     const requests = await this.requestRepository.find({
       relations: ['user', 'cargo', 'location'],
     });
     if (!requests) {
       throw new NotFoundException('Requests not found');
+    }
+    if (user) {
+      return requests.filter((request) => request.user.id !== user.id);
     }
     return requests;
   }
@@ -241,6 +243,30 @@ export class DriveService {
       throw new Error('An error occurred while updating the request');
     }
   }
+  async updateStatus(
+    offerId: number,
+    userId: number,
+    updateData: ChangeStatusDTO,
+  ): Promise<DriveDB> {
+    const drive = await this.driveRepository.findOne({
+      where: { id: offerId },
+      relations: ['user'],
+    });
+    if (!drive) {
+      throw new NotFoundException('Offer not found');
+    }
+    if (drive.user.id !== userId) {
+      throw new UnauthorizedException('You are not the owner of this offer');
+    }
+
+    drive.status = updateData.newStatus;
+
+    try {
+      return await this.driveRepository.save(drive);
+    } catch (error) {
+      throw new Error('An error occurred while updating the offer');
+    }
+  }
   async deleteDrive(driveId: number, userId: number) {
     const drive = await this.driveRepository.findOne({
       where: { id: driveId },
@@ -255,28 +281,6 @@ export class DriveService {
     if (drive.status !== StatusEnum.created) {
       throw new BadRequestException(
         'Drive cannot be deleted because it is not in the created status',
-      );
-    }
-    const acceptedOfferTrip = await this.offerTripRepository.findOne({
-      where: {
-        drive: { id: driveId },
-        isAccepted: true,
-      },
-    });
-    if (acceptedOfferTrip) {
-      throw new BadRequestException(
-        'Drive cannot be deleted because there are accepted offer trips associated with it',
-      );
-    }
-    const acceptedRequestTrip = await this.requestTripRepository.findOne({
-      where: {
-        drive: { id: driveId },
-        isAccepted: true,
-      },
-    });
-    if (acceptedRequestTrip) {
-      throw new BadRequestException(
-        'Drive cannot be deleted because there are accepted request trips associated with it',
       );
     }
     await this.driveRepository.remove(drive);
