@@ -213,6 +213,10 @@ export class RequestAufAnfrageOSucheComponent  implements OnInit {
 
   }
 
+  navigateToChat(targetUserId: number): void {
+    this.router.navigate(['/chats'], { queryParams: { targetUserId } });
+  }
+
 
   protected readonly window = window;
 }

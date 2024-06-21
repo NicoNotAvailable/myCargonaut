@@ -21,6 +21,9 @@ import { OfferTripDB } from './database/OfferTripDB';
 import { RequestTripDB } from './database/RequestTripDB';
 import { DriveService } from './drive/drive.service';
 import { DriveController } from './drive/drive.controller';
+import { SocketGateway } from './socket.gateway';
+import { ChatController } from './chat/chat.controller';
+import { ChatService } from './chat/chat.service';
 import { TripService } from './trip/trip.service';
 import { TripController } from './trip/trip.controller';
 import { LocationService } from './location/location.service';
@@ -74,6 +77,7 @@ import { ReviewController } from './review/review.controller';
     SessionController,
     VehicleController,
     DriveController,
+    ChatController,
     TripController,
     ReviewController,
   ],
@@ -82,9 +86,11 @@ import { ReviewController } from './review/review.controller';
     UserService,
     VehicleService,
     DriveService,
-    TripService,
+    ChatService,
+    SocketGateway,
     LocationService,
     UtilsService,
+    TripService,
     ReviewService,
   ],
 })

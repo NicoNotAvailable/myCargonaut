@@ -1,8 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import {
-  IsNotEmpty,
-  IsNumber,
-} from 'class-validator';
+import { IsNotEmpty, IsNumber } from 'class-validator';
 
 export class CreateReviewDTO {
   @ApiProperty({ description: 'the id of the trip', example: 1 })
@@ -15,7 +12,10 @@ export class CreateReviewDTO {
   @IsNotEmpty()
   rating: number;
 
-  @ApiProperty({ description: 'optional description', example: "der Fahrer hat komische Musik gehört :/" })
+  @ApiProperty({
+    description: 'optional description',
+    example: 'der Fahrer hat komische Musik gehört :/',
+  })
   @IsNumber()
   text: string;
 }

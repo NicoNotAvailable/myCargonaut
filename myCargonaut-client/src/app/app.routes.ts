@@ -4,6 +4,7 @@ import {LoginComponent} from "./login/login.component";
 import { ProfileComponent } from "./profile/profile.component";
 import {FrontpageComponent} from "./frontpage/frontpage.component";
 import {SearchMainComponent} from "./search/search-main/search-main.component";
+import { ChatComponent } from "./chat/chat.component";
 import {SearchMainGesuchtComponent} from "./search/search-suchen/search-main-gesucht/search-main-gesucht.component";
 
 import {MeineAnfragenComponent} from "./meineAnfragenGesuche/meine-anfragen/meine-anfragen.component";
@@ -25,6 +26,8 @@ export const routes: Routes = [
   { path: 'login', component: LoginComponent },
 
   {path: 'profile', component: ProfileComponent},
+  {path: 'search', component: SearchMainComponent},
+  {path: 'chats', component: ChatComponent},
   {path: 'searchOffer', component: SearchMainComponent},
   {path: 'searchRequest', component: SearchMainGesuchtComponent},
 

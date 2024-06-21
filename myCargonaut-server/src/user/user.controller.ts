@@ -36,6 +36,7 @@ import { GetOwnUserDTO } from './DTO/GetOwnUserDTO';
 import { UserDB } from '../database/UserDB';
 import { Response } from 'express';
 import { ReviewService } from '../review/review.service';
+import { GetOtherUserDTO } from './DTO/GetOtherUserDTO';
 
 @ApiTags('user')
 @Controller('user')
