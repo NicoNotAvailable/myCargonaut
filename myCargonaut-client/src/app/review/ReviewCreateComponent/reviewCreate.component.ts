@@ -7,6 +7,7 @@ import { FormsModule } from '@angular/forms';
 import {MatTooltipModule} from "@angular/material/tooltip";
 import { HttpClient } from '@angular/common/http';
 import { TripService } from '../../services/trip-service.service';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
 
 
@@ -19,6 +20,7 @@ import { TripService } from '../../services/trip-service.service';
     FormsModule,
     NgIf,
     MatTooltipModule,
+    RouterLink,
   ],
   templateUrl: './reviewCreate.component.html',
   styleUrl: './reviewCreate.component.css'
@@ -27,9 +29,9 @@ import { TripService } from '../../services/trip-service.service';
 
 export class ReviewCreateComponent {
 
-  constructor(private http: HttpClient, private tripService: TripService) {
+  constructor(private http: HttpClient, private tripService: TripService, private router: Router) {}
 
-  }
+
 
   ngOnInit(): void {
     this.tripService.currentTripId.subscribe(id => {
@@ -77,9 +79,7 @@ export class ReviewCreateComponent {
       .subscribe(
         response => {
           console.log('Review added successfully', response);
-          setTimeout(() => {
-            window.location.reload();
-          }, 2000);
+          this.router.navigate(['/myOffer']);
 
         },
         error => {
