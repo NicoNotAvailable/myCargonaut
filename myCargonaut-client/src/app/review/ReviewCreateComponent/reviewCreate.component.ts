@@ -4,7 +4,6 @@ import { faStar as faStarRegular } from '@fortawesome/free-regular-svg-icons';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { NgForOf, NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import {MatTooltipModule} from "@angular/material/tooltip";
 import { HttpClient } from '@angular/common/http';
 
 
@@ -17,7 +16,6 @@ import { HttpClient } from '@angular/common/http';
     NgForOf,
     FormsModule,
     NgIf,
-    MatTooltipModule,
   ],
   templateUrl: './reviewCreate.component.html',
   styleUrl: './reviewCreate.component.css'
