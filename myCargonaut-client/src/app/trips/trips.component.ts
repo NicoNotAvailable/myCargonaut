@@ -76,7 +76,6 @@ export class TripsComponent implements OnInit {
         this.request = data;
         this.rating = this.request.user.rating;
         console.log('Offer Details:', this.request);
-        console.log( this.request.user.rating + "hurensohn")
       },
       error: (error) => {
         console.error('Error fetching offer details:', error);
