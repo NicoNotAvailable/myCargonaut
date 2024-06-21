@@ -1,3 +1,4 @@
+@if (this.offerBool) {
 <div class="container m-lg-5">
   <div class="row justify-content-center">
     <div class="col-10 col-md-8 col-lg-6 my-5 p-4 field">
@@ -79,7 +80,7 @@
     </div>
   </div>
 </div>
-
+} @else if (requestBool) {
 <div class="container m-lg-5">
   <div class="row justify-content-center">
     <div class="col-10 col-md-8 col-lg-6 my-5 p-4 field">
@@ -148,4 +149,5 @@
     </div>
   </div>
 </div>
+}
 

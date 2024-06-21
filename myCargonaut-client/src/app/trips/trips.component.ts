@@ -6,6 +6,7 @@ import { TripsReadComponent } from './trips-read/trips-read.component';
 import { TripsCreateComponent } from './trips-create/trips-create.component';
 import { GetOffer } from './GetOffer';
 import { GetRequest } from './GetRequest';
+import {NgFor, NgIf} from "@angular/common";
 
 @Component({
   selector: 'app-trips',
@@ -14,6 +15,8 @@ import { GetRequest } from './GetRequest';
   imports: [
     TripsReadComponent,
     TripsCreateComponent,
+    NgIf,
+    NgFor,
   ],
   styleUrls: ['./trips.component.css'],
 })
