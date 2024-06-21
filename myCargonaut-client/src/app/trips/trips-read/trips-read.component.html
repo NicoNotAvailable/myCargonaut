@@ -4,16 +4,16 @@
     <div class="col-10 col-md-8 col-lg-10 my-5 p-4 field">
       <div class="row ms-3 me-3 mb-4">
         <div class="col-12 col-md-8 col-lg-2 text-start">
-          <span>Model:</span>
+          <span>Auto:</span>
         </div>
         <div class="col-12 col-md-8 col-lg-4 text-end fw-bold">
-          <span>Tesla Model Y</span>
+          <span>{{ (offer?.carID  || "loading")  }}</span>
         </div>
         <div class="col-3 text-start ">
           <span>Anhänger:</span>
         </div>
         <div class="col-3 text-end fw-bold">
-          <span>Hier Anhänger</span>
+          <span>{{ (offer?.trailerID  || "")  }}</span>
         </div>
       </div>
       <div class="row ms-3 me-3 mb-4">
@@ -21,12 +21,12 @@
           <span>Maximales Gewicht:</span>
         </div>
         <div class="col-12 col-md-8 col-lg-4 text-end fw-bold">
-          <span>100kg</span>
+          <span>{{ (offer?.maxCWeight  || "")  }} kg</span>
         </div>
         <div class="col-3">
         </div>
         <div class="col-3 text-end fw-bold">
-          <span>100kg</span>
+          <span>{{ (offer?.maxTWeight  || "")  }} kg</span>
         </div>
       </div>
       <div class="row ms-3 me-3 mb-4">
@@ -34,12 +34,12 @@
           <span>Maximale Maße:</span>
         </div>
         <div class="col-12 col-md-8 col-lg-4 text-end fw-bold">
-          <span>5m / 3m / 2m</span>
+          <span>{{ (offer?.maxCHeight  || "")  }}cm / {{ (offer?.maxCLength  || "")  }}cm / {{ (offer?.maxCWidth  || "")  }}cm</span>
         </div>
         <div class="col-3">
         </div>
         <div class="col-3 text-end fw-bold">
-          <span>5m / 3m / 2m</span>
+          <span>{{ (offer?.maxTHeight  || "")  }}cm / {{ (offer?.maxTLength  || "")  }}cm / {{ (offer?.maxTWidth  || "")  }}cm</span>
         </div>
       </div>
       <div class="row ms-3 me-3 mb-4">
@@ -47,7 +47,7 @@
           <span>Verfügbare Sitzplätze:</span>
         </div>
         <div class="col-12 col-md-8 col-lg-4 text-end fw-bold">
-          <span>3</span>
+          <span>{{ (offer?.seats  || "")  }}</span>
         </div>
       </div>
       <div class="row ms-3 me-3 mb-4">
@@ -56,7 +56,7 @@
         </div>
         <div class="col-4"></div>
         <div class="col-12 col-md-8 col-lg-2 text-start">
-          <span>Klimaanlage, Enclosed</span>
+          <span>gekühlt, mit Abdeckung</span>
         </div>
       </div>
       <div class="row ms-3 me-3 mb-4">

@@ -1,7 +1,9 @@
-import {Component, OnInit} from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import {FormsModule} from "@angular/forms";
 import {NgIf} from "@angular/common";
 import {ActivatedRoute} from "@angular/router";
+import { GetOffer } from '../GetOffer';
+import { GetRequest } from '../GetRequest';
 
 @Component({
   selector: 'app-trips-read',
@@ -16,6 +18,9 @@ import {ActivatedRoute} from "@angular/router";
 export class TripsReadComponent implements OnInit {
   offerBool: boolean = true;
   requestBool: boolean = false;
+
+  @Input() offer: GetOffer | undefined;
+  @Input() request: GetRequest | undefined;
 
   constructor(
     private route: ActivatedRoute,
