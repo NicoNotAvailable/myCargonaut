@@ -60,10 +60,12 @@ export class SearchCardComponent {
     if (this.currentRoute === "searchRequest") {
       this.buttonText = "Suche ansehen";
       this.plaetze = "benötigte Plätze";
+      this.href = "/"
 
     } else if (this.currentRoute === "searchOffer") {
       this.buttonText = "Fahrt ansehen";
       this.plaetze = "verfügbare Plätze";
+      this.href = "/"
 
     } else if (this.currentRoute === "myOffer") {
       this.buttonText = "Anfragen ansehen";
