@@ -44,11 +44,9 @@ export class ChatService {
       where: { trip: { id: tripId } },
       relations: ['trip', 'writer'],
     });
-    console.log('tschauuuuuu');
     if (!messages) {
       throw new NotFoundException('Messages not found');
     }
-    console.log(JSON.stringify(messages, null, 2));
     return messages;
   }
 

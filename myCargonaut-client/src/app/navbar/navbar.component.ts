@@ -113,16 +113,15 @@ export class NavbarComponent {
   }
 
   private joinRoom(userId: number, tripId: number): void {
-    console.log('50000000000000000');
     const room = `trip_${tripId}`;
     const payload = { userId, tripId };
 
     this.socketService.emit('createOrJoinRoom', payload);
     console.log(`Requested to join room: ${room}`);
 
-    this.socketService.on('message').subscribe(({ message }) => {
+    this.socketService.on('message').subscribe((message: any) => {
       if (!window.location.href.includes('/chats')) {
-        this.notificationService.showNotification(`New message in ${room}: ${message}`);
+        this.notificationService.showNotification(`New message in ${room}: ${message.message}`);
       }
     });
   }

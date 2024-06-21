@@ -10,6 +10,7 @@ import {
 import { Server, Socket } from 'socket.io';
 import { ChatService } from './chat/chat.service';
 import { TripService } from './trip/trip.service';
+import { MessageDB } from "./database/MessageDB";
 
 interface ActiveRoom {
   tripId: number;
@@ -50,37 +51,44 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
     @MessageBody() userId: number,
   ): Promise<void> {
     this.users.set(userId, client.id);
-    console.log('1111111111111111' + userId);
-    client.join('user_${payload.userId}');
-    console.log('User ' + userId + ' registered with socket ID ' + client.id);
+    client.join(`user_${userId}`);
+    console.log(`User ${userId} registered with socket ID ${client.id}`);
 
     const tripsObject = await this.tripService.getUserTrips(userId);
 
-    tripsObject.offerTrips.forEach((trip) => {
-      const roomName = `trip_${trip.id}`;
-      client.join(roomName);
-      this.addUserToRoom(userId, trip.id);
-      this.server
-        .to(roomName)
-        .emit('message', `User ${userId} joined room ${roomName}`);
-      console.log('joined room  ' + roomName);
-    });
+    const joinRooms = (trips) => {
+      trips.forEach((trip) => {
+        const roomName = `trip_${trip.id}`;
+        client.join(roomName);
+        this.addUserToRoom(userId, trip.id);
+        console.log(`Joined room ${roomName}`);
+      });
+    };
 
-    tripsObject.requestTrips.forEach((trip) => {
-      const roomName = `trip_${trip.id}`;
-      client.join(roomName);
-      this.addUserToRoom(userId, trip.id);
-      this.server
-        .to(roomName)
-        .emit('message', `User ${userId} joined room ${roomName}`);
-      console.log('joined room  ' + roomName);
-    });
+    joinRooms(tripsObject.offerTrips);
+    joinRooms(tripsObject.requestTrips);
+    joinRooms(tripsObject.offerDriveTrips);
+    joinRooms(tripsObject.requestDriveTrips);
 
     const tripIds = [
       ...tripsObject.offerTrips.map((trip) => trip.id),
       ...tripsObject.requestTrips.map((trip) => trip.id),
+      ...tripsObject.offerDriveTrips.map((trip) => trip.id),
+      ...tripsObject.requestDriveTrips.map((trip) => trip.id),
     ];
     client.emit('joinRooms', tripIds);
+  }
+
+  @SubscribeMessage('message')
+  handleMessage(
+    @ConnectedSocket() client: Socket,
+    @MessageBody() payload: { room: string; message: MessageDB },
+  ): void {
+    const { room, message } = payload;
+    console.log('rooooooooooooooooooooom ' + room);
+    console.log(this.activeRooms);
+    this.server.to(room).emit('message', message);
+    console.log(`Message sent to room ${room}: ${JSON.stringify(message)}`);
   }
 
   @SubscribeMessage('createOrJoinRoom')
@@ -95,23 +103,6 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
     client.data.userId = userId;
 
     this.addUserToRoom(userId, tripId);
-
-    this.server
-      .to(roomName)
-      .emit('message', `User ${userId} joined room ${roomName}`);
-  }
-
-  @SubscribeMessage('message')
-  handleMessage(
-    @ConnectedSocket() client: Socket,
-    @MessageBody() payload: { room: string; message: string },
-  ): void {
-    const { room, message } = payload;
-    this.server.to(room).emit('message', message);
-  }
-
-  getRoomName(userId1: number, userId2: number): string {
-    return [userId1, userId2].sort((a, b) => a - b).join('-');
   }
 
   addUserToRoom(userId: number, tripId: number): void {

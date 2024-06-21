@@ -76,8 +76,6 @@ export class ChatController {
       throw new BadRequestException('User not logged in.');
     }
 
-    console.log('HALLOOOOOOOOOOOOOOOO');
-
     try {
       const messages = await this.chatService.getMessages(tripId);
       return messages.map((msg) => {
