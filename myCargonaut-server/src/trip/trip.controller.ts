@@ -68,6 +68,9 @@ export class TripController {
       throw new BadRequestException('You need a phone number');
     }
     const offer = await this.driveService.getOfferById(body.driveID);
+    if (offer.user.id == user.id) {
+      throw new BadRequestException('You cant request your own offer!');
+    }
     const startLocation = await this.locationService.getLocationById(
       body.startLocationID,
     );
@@ -172,6 +175,9 @@ export class TripController {
       throw new BadRequestException('You need a phone number');
     }
     const request = await this.driveService.getRequestById(body.driveID);
+    if (request.user.id == user.id) {
+      throw new BadRequestException('You cant request your own offer!');
+    }
     const car = await this.vehicleService.getCarById(body.carID);
     const trailer = await this.vehicleService.getTrailerById(body.trailerID);
     try {

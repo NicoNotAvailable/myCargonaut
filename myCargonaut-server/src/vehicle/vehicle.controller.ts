@@ -14,6 +14,7 @@ import {
   UseGuards,
   Res,
   UseInterceptors,
+  Put,
 } from '@nestjs/common';
 import { VehicleService } from './vehicle.service';
 import { UserService } from '../user/user.service';
@@ -45,6 +46,7 @@ export class VehicleController {
     private readonly userService: UserService,
     private readonly utilsService: UtilsService,
   ) {}
+
   private readonly logger = new Logger(VehicleController.name);
 
   @ApiResponse({
@@ -89,17 +91,64 @@ export class VehicleController {
     if (body.seats <= 0 || body.seats > 20) {
       throw new BadRequestException('Sitzplätze nur zwischen 1 und 20');
     }
-    console.log('owner');
-    console.log(owner);
-    console.log('body');
-    console.log(body);
-    this.logger.log('through the ifs');
-    this.logger.log(owner);
-    this.logger.log(body);
 
     try {
       await this.vehicleService.createCar(owner, body);
       return new OkDTO(true, 'Car was created');
+    } catch (err) {
+      throw new Error('An error occurred' + err);
+    }
+  }
+
+  @ApiResponse({
+    type: OkDTO,
+    description: 'updates a car',
+  })
+  @Put('/updateCar/:id')
+  @ApiBearerAuth()
+  @UseGuards(IsLoggedInGuard)
+  async updateCar(
+    @Body() body: CreateCarDTO,
+    @Param('id', ParseIntPipe) id: number,
+  ) {
+    const car = await this.vehicleService.getCarById(id);
+
+    if (!car) {
+      throw new BadRequestException('User was not found');
+    }
+    if (!body.name || body.name.trim().length === 0) {
+      throw new BadRequestException('Auto Name muss ausgefüllt sein');
+    }
+    if (body.name.trim().length > 20) {
+      throw new BadRequestException('Auto Name ist zu lang');
+    }
+    if (!body.weight || body.weight <= 0) {
+      throw new BadRequestException(
+        'Maximal Gewicht muss eine positive Zahl sein',
+      );
+    }
+    if (!body.length || body.length <= 0 || body.length > 100) {
+      throw new BadRequestException(
+        'Auto muss länger al 0m und kürzer als 100m sein',
+      );
+    }
+    if (!body.height || body.height <= 0 || body.height > 100) {
+      throw new BadRequestException(
+        'Auto muss höher als 0m und kleiner als 100m sein',
+      );
+    }
+    if (!body.width || body.width <= 0 || body.width > 100) {
+      throw new BadRequestException(
+        'Auto muss breiter als 0m und schmaler als 100m sein',
+      );
+    }
+    if (body.seats <= 0 || body.seats > 20) {
+      throw new BadRequestException('Sitzplätze nur zwischen 1 und 20');
+    }
+
+    try {
+      await this.vehicleService.updateCar(car);
+      return new OkDTO(true, 'Car was updated');
     } catch (err) {
       throw new Error('An error occurred' + err);
     }
@@ -146,6 +195,47 @@ export class VehicleController {
     try {
       await this.vehicleService.createTrailer(owner, body);
       return new OkDTO(true, 'Trailer was created');
+    } catch (err) {
+      throw new Error('An error occurred');
+    }
+  }
+
+  @Put('/updateTrailer/:id')
+  @ApiBearerAuth()
+  @UseGuards(IsLoggedInGuard)
+  async updateTrailer(
+    @Body() body: CreateTrailerDTO,
+    @Param('id', ParseIntPipe) id: number,
+  ) {
+    const trailer = await this.vehicleService.getTrailerById(id);
+
+    if (!body.name || body.name.trim().length === 0) {
+      throw new BadRequestException('Trailer Name muss ausgefüllt sein');
+    }
+    if (body.name.trim().length > 20) {
+      throw new BadRequestException('Trailer Name ist zu lang');
+    }
+    if (!body.weight || body.weight <= 0) {
+      throw new BadRequestException('Trailer weight must be a positive number');
+    }
+    if (!body.length || body.length <= 0 || body.length > 100) {
+      throw new BadRequestException(
+        'Trailer muss länger als 0m und kürzer als 100m sein',
+      );
+    }
+    if (!body.height || body.height <= 0 || body.height > 100) {
+      throw new BadRequestException(
+        'Trailer muss höher als 0m und kleiner als 100m sein',
+      );
+    }
+    if (!body.width || body.width <= 0 || body.width > 100) {
+      throw new BadRequestException(
+        'Trailer muss breiter als 0m und dünner als 100m sein',
+      );
+    }
+    try {
+      await this.vehicleService.updateTrailer(trailer);
+      return new OkDTO(true, 'Trailer was updated');
     } catch (err) {
       throw new Error('An error occurred');
     }
@@ -305,6 +395,6 @@ export class VehicleController {
       }
       throw error;
     }
-    return new OkDTO(true, 'Vehicle was deleted');
+    return new OkDTO(true, 'Trailer was created');
   }
 }
