@@ -19,6 +19,7 @@ export class TripDB {
   @ManyToOne(() => UserDB)
   requesting: UserDB;
 
+
   @Column({ default: false })
   isAccepted: boolean;
 
