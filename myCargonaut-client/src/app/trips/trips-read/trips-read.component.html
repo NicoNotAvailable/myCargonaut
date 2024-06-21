@@ -1,1 +1,153 @@
-<p>trips-read works!</p>
+@if (this.offerBool) {
+<div class="container m-lg-5">
+  <div class="row justify-content-center">
+    <div class="col-10 col-md-8 col-lg-6 my-5 p-4 field">
+      <div class="row ms-3 me-3 mb-4">
+        <div class="col-12 col-md-8 col-lg-2 text-start">
+          <span>Model:</span>
+        </div>
+        <div class="col-12 col-md-8 col-lg-4 text-end fw-bold">
+          <span>Tesla Model Y</span>
+        </div>
+        <div class="col-3 text-start ">
+          <span>Anhänger:</span>
+        </div>
+        <div class="col-3 text-end fw-bold">
+          <span>Hier Anhänger</span>
+        </div>
+      </div>
+      <div class="row ms-3 me-3 mb-4">
+        <div class="col-12 col-md-8 col-lg-2 text-start">
+          <span>Maximales Gewicht:</span>
+        </div>
+        <div class="col-12 col-md-8 col-lg-4 text-end fw-bold">
+          <span>100kg</span>
+        </div>
+        <div class="col-3">
+        </div>
+        <div class="col-3 text-end fw-bold">
+          <span>100kg</span>
+        </div>
+      </div>
+      <div class="row ms-3 me-3 mb-4">
+        <div class="col-12 col-md-8 col-lg-2 text-start font-weight-bold">
+          <span>Maximale Maße:</span>
+        </div>
+        <div class="col-12 col-md-8 col-lg-4 text-end fw-bold">
+          <span>5m / 3m / 2m</span>
+        </div>
+        <div class="col-3">
+        </div>
+        <div class="col-3 text-end fw-bold">
+          <span>5m / 3m / 2m</span>
+        </div>
+      </div>
+      <div class="row ms-3 me-3 mb-4">
+        <div class="col-12 col-md-8 col-lg-2 text-start">
+          <span>Verfügbare Sitzplätze:</span>
+        </div>
+        <div class="col-12 col-md-8 col-lg-4 text-end fw-bold">
+          <span>3</span>
+        </div>
+      </div>
+      <div class="row ms-3 me-3 mb-4">
+        <div class="col-12 col-md-8 col-lg-2 text-start">
+          <span>Fernseher, Klimaanlage</span>
+        </div>
+        <div class="col-4"></div>
+        <div class="col-12 col-md-8 col-lg-2 text-start">
+          <span>Klimaanlage, Enclosed</span>
+        </div>
+      </div>
+      <div class="row ms-3 me-3 mb-4">
+        <div class="col-12 col-md-8 col-lg-2 text-start fw-bold">
+          <span>Raucher, Tiere</span>
+        </div>
+        <div class="col-12 col-md-8 col-lg-4">
+        </div>
+        <div class="col-3 text-start fw-bold">
+          <span>nur Musik hören</span>
+        </div>
+        <div class="col-3">
+        </div>
+      </div>
+
+      <div class="row justify-content-center">
+        <div class="col-12 col-md-8 col-lg-10 mt-5 mb-3 text-center">
+          <button type="submit" class="btn blueButton ps-5 pe-5">Jetzt Anfrage schicken!</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+} @else if (requestBool) {
+<div class="container m-lg-5">
+  <div class="row justify-content-center">
+    <div class="col-10 col-md-8 col-lg-6 my-5 p-4 field">
+      <div class="row ms-3 me-3 mb-4">
+        <div class="col-12 col-md-8 col-lg-4 text-start">
+          <span>Sitzplätze:</span>
+        </div>
+        <div class="col-12 col-md-8 col-lg-4 text-start fw-bold">
+          <span>3</span>
+        </div>
+      </div>
+      <div class="row ms-3 me-3 mb-4">
+        <div class="col-12 col-md-8 col-lg-4 text-start fw-bold">
+          <span>Nicht Raucher</span>
+        </div>
+        <div class="col-12 col-md-8 col-lg-3 text-start fw-bold">
+          <span>Keine Tiere</span>
+        </div>
+        <div class="col-4 text-end fw-bold">
+          <span>Nur Musik hören</span>
+        </div>
+      </div>
+      <div class="row ms-3 me-3 mb-2 blueHeader fw-bold">
+        <span>Cargo</span>
+      </div>
+      <div class="col-10 col-md-8 col-lg-12 p-2 field">
+        <div class="row ms-1 me-3 blueHeader fw-bold">
+          <span>Antikes Römisches Klavier</span>
+        </div>
+        <div class="row ms-1 me-3 mb-4">
+          <div class="col-3">
+            <span>Länge:</span>
+          </div>
+          <div class="col-3 fw-bold">
+            <span>100cm</span>
+          </div>
+          <div class="col-3">
+            <span>Gewicht:</span>
+          </div>
+          <div class="col-3 fw-bold">
+            <span>100kg</span>
+          </div>
+        </div>
+        <div class="row ms-1 me-3 mb-4">
+          <div class="col-3">
+            <span>Breite</span>
+          </div>
+          <div class="col-3 fw-bold">
+            <span>140cm</span>
+          </div>
+        </div>
+        <div class="row ms-1 me-3 mb-4">
+          <div class="col-3">
+            <span>Höhe:</span>
+          </div>
+          <div class="col-3 fw-bold">
+            <span>42cm</span>
+          </div>
+        </div>
+      </div>
+      <div class="row justify-content-center">
+        <div class="col-12 col-md-8 col-lg-10 mt-5 mb-3 text-center">
+          <button type="submit" class="btn blueButton ps-5 pe-5">Jetzt Anfrage schicken!</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+}
+

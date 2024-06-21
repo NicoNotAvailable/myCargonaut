@@ -1,0 +1,23 @@
+.field {
+  background-color: #fff;
+  margin-bottom: 10px;
+  border-radius: 20px;
+  padding: 5% 0 3% 0;
+  transition: all 0.4s ease;
+}
+.field:hover{
+  box-shadow: 0px 0px 20px #005B52;
+}
+
+.blueButton {
+  background-color: #1A9CC5;
+  color: white;
+  border-radius: 15px;
+  border-color: #1A9CC5 ;
+}
+
+.blueHeader {
+  color: #1A9CC5;
+  font-size: 30px;
+}
+
