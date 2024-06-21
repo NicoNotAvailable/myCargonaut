@@ -31,8 +31,8 @@ export class TripsComponent implements OnInit {
   request: GetRequest | undefined = undefined;
   rating: number = 0;
 
-  showTripsRead: boolean = false;
-  showTripsCreate: boolean = true;
+  showTripsRead: boolean = true;
+  showTripsCreate: boolean = false;
 
   birthday: string = '';
   pathToImage: string = 'empty.png';

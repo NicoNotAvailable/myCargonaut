@@ -17,8 +17,8 @@ export interface GetOffer {
   maxCWeight: number;
   maxCWidth: number;
   maxTHeight: number | null;
-  maxTLength: number;
-  maxTWeight: number;
-  maxTWidth: number;
-  trailerID: number;
+  maxTLength: number | null;
+  maxTWeight: number | null;
+  maxTWidth: number | null;
+  trailerID: number | null;
 }

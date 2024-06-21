@@ -29,6 +29,7 @@ export class TripsCreateComponent implements OnInit {
         this.requestBool = true
         this.offerBool = false;
       }
+
     });
   }
 }
