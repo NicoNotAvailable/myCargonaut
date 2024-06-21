@@ -1,27 +1,27 @@
 import { ApiProperty } from '@nestjs/swagger';
 
 export class GetTrailerDTO {
-    @ApiProperty()
-    id: number;
+  @ApiProperty()
+  id: number;
 
-    @ApiProperty()
-    name: string;
+  @ApiProperty()
+  name: string;
 
-    @ApiProperty()
-    weight: number;
+  @ApiProperty()
+  weight: number;
 
-    @ApiProperty()
-    length: number;
+  @ApiProperty()
+  length: number;
 
-    @ApiProperty()
-    height: number;
+  @ApiProperty()
+  height: number;
 
-    @ApiProperty()
-    width: number;
+  @ApiProperty()
+  width: number;
 
-    @ApiProperty()
-    isCooled: boolean;
+  @ApiProperty()
+  isCooled: boolean;
 
-    @ApiProperty()
-    isEnclosed: boolean;
+  @ApiProperty()
+  isEnclosed: boolean;
 }
