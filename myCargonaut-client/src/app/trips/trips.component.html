@@ -36,9 +36,8 @@
         </div>
       </div>
     </div>
-
-    <app-trips-read *ngIf="showTripsRead" class="col-8"></app-trips-read>
-    <app-trips-create *ngIf="showTripsCreate" class="col-8"></app-trips-create>
+@if(showTripsRead) { <app-trips-read class="col-8"></app-trips-read>}
+    @else if(showTripsCreate){<app-trips-create class="col-8"></app-trips-create>}
 
     <div class="col-12 col-lg-2 justify-content-center">
       <div class="row">
