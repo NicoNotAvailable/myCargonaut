@@ -3,14 +3,16 @@ import {
   Body,
   Controller,
   Get,
-  Logger, Param,
+  Logger,
+  Param,
   Post,
-  Put, Res,
+  Put,
+  Res,
   Session,
   UploadedFile,
   UseGuards,
-  UseInterceptors
-} from "@nestjs/common";
+  UseInterceptors,
+} from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiConsumes,
@@ -20,7 +22,7 @@ import {
 import { UserService } from './user.service';
 import { CreateUserDTO } from './DTO/CreateUserDTO';
 import { OkDTO } from '../serverDTO/OkDTO';
-import { extname, join } from "path";
+import { extname, join } from 'path';
 import { diskStorage } from 'multer';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { EditPasswordDTO } from './DTO/EditPasswordDTO';
@@ -33,7 +35,7 @@ import * as bcrypt from 'bcryptjs';
 import { GetOwnUserDTO } from './DTO/GetOwnUserDTO';
 import { UserDB } from '../database/UserDB';
 import { GetOtherUserDTO } from './DTO/GetOtherUserDTO';
-import { Response } from "express";
+import { Response } from 'express';
 
 @ApiTags('user')
 @Controller('user')
