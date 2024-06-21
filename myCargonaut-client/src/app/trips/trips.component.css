@@ -35,15 +35,6 @@
   border-radius: 10%;
 }
 
-
-.rounded-img {
-  border-radius: 50%;
-  overflow: hidden;
-  width: 130px;
-  height: 100px;
-  object-fit: cover; /* Wichtig: Beschnitten, um das Seitenverhältnis zu erhalten */
-  object-position: center center; /* Optional: Zentriert das Bild im Container */
-}
 .greenBackground{
   background-color: #005B52;
   border-radius: 15px;
@@ -62,8 +53,7 @@
 }
 
 .profileCircle {
-  border-radius: 10%;
-  box-shadow: 5px 5px 5px #005B52;
+  border-radius: 50%;
 }
 
 
