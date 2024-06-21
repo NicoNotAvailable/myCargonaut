@@ -2,7 +2,7 @@ export interface GetRequest {
   id: number;
   date: string;
   name: string;
-  user: { id: number, profilePic: string, firstName: string, lastName: string };
+  user: { id: number, profilePic: string, firstName: string, lastName: string , rating: number};
   price: number;
   priceType: number;
   seats: number;

@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {NgForOf, NgOptimizedImage} from "@angular/common";
 import { ActivatedRoute } from '@angular/router';
-import { DriveService } from '../../services/drive.service';
-import { SessionService } from '../../services/session.service';
 
 @Component({
   selector: 'app-trips-create',

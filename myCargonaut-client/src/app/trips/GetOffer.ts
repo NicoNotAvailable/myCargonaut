@@ -1,6 +1,6 @@
 export interface GetOffer {
   id: number;
-  user: { id: number, profilePic: string, firstName: string, lastName: string };
+  user: { id: number, profilePic: string, firstName: string, lastName: string, rating: number };
   carID: number;
   carPicture: string;
   name: string;
