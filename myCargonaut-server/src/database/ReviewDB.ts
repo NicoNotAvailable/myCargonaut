@@ -21,6 +21,9 @@ export class ReviewDB {
     @ManyToOne(() => UserDB)
     writer: UserDB;
 
+    @ManyToOne(() => UserDB)
+    about: UserDB;
+
     @Column()
     rating: number;
 

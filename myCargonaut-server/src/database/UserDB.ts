@@ -55,6 +55,9 @@ export class UserDB {
     @OneToMany(() => ReviewDB, (review) => review.writer)
     writtenReviews: Promise<ReviewDB[]>;
 
+    @OneToMany(() => ReviewDB, (review) => review.about)
+    reviewsWrittenAbout: Promise<ReviewDB[]>;
+
     @OneToMany(() => MessageDB, (message) => message.writer)
     writtenMessages: Promise<MessageDB[]>;
 }
