@@ -92,7 +92,13 @@
           <div class="col-12 col-md-8 col-lg-4">
           </div>
           <div class="col-3 text-start fw-bold">
-            <span>nur Musik hören</span>
+            <span>
+              @if (offer?.info == 1) { gerne quatschen!
+            } @else if (offer?.info == 2) {
+              lieber nur Musik hören
+            } @else if (offer?.info == 3) {
+              ich passe mich gerne an!}
+            </span>
           </div>
           <div class="col-3">
           </div>
@@ -128,7 +134,11 @@
             <div class="d-flex justify-content-end"><strong>{{request?.animalsAllowed? "Ich habe Tier(e) dabei" : "Ich habe keine Tiere dabei"}}</strong></div>
           </div>
           <div class="col-4 text-end fw-bold">
-            <span>Nur Musik hören</span>
+            <span> @if (request?.info == 1) { gerne quatschen!
+            } @else if (request?.info == 2) {
+              lieber nur Musik hören
+            } @else if (request?.info == 3) {
+              ich passe mich gerne an!}</span>
           </div>
         </div>
         @if (request?.cargo != undefined) {
