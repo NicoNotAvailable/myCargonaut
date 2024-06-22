@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { DriveService } from '../services/drive.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { SessionService } from '../services/session.service';
 import { TripsReadComponent } from './trips-read/trips-read.component';
 import { TripsCreateComponent } from './trips-create/trips-create.component';
@@ -19,6 +19,7 @@ import { NgIf, NgOptimizedImage } from '@angular/common';
     DateFormatPipe,
     NgOptimizedImage,
     NgIf,
+    RouterLink,
   ],
   styleUrls: ['./trips.component.css'],
 })
