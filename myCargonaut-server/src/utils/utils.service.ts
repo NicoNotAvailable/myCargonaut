@@ -11,46 +11,44 @@ import { GetOfferDTO } from '../drive/DTO/GetOfferDTO';
 import { GetRequestDTO } from '../drive/DTO/GetRequestDTO';
 import { ApiTags } from '@nestjs/swagger';
 import { Controller } from '@nestjs/common';
-import { DriveService } from '../drive/drive.service';
-import { UserService } from '../user/user.service';
-import { VehicleService } from '../vehicle/vehicle.service';
-import { TripService } from '../trip/trip.service';
-import { LocationService } from '../location/location.service';
 import { CarDB } from '../database/CarDB';
 import { GetCarDTO } from '../vehicle/DTO/GetCarDTO';
 import { TrailerDB } from '../database/TrailerDB';
 import { GetTrailerDTO } from '../vehicle/DTO/GetTrailerDTO';
 import { OfferTripDB } from '../database/OfferTripDB';
 import { GetOfferTripDTO } from '../trip/DTO/GetOfferTripDTO';
+import { GetReviewDTO } from '../review/DTO/GetReviewDTO';
+import { ReviewDB } from '../database/ReviewDB';
+import { ReviewService } from '../review/review.service';
 
 @ApiTags('trip')
 @Controller('trip')
 export class UtilsService {
-  constructor(
-    private readonly driveService: DriveService,
-    private readonly userService: UserService,
-    private readonly vehicleService: VehicleService,
-    private readonly tripService: TripService,
-    private readonly locationService: LocationService,
-  ) {}
-  transformRequestTripDBToGetRequestTripDTO(
+  constructor(private readonly reviewService: ReviewService) {}
+
+  async transformRequestTripDBToGetRequestTripDTO(
     request: RequestTripDB,
-  ): GetRequestTripDTO {
+  ): Promise<GetRequestTripDTO> {
     const dto = new GetRequestTripDTO();
     dto.id = request.id;
-    dto.requesting = this.transformUserToGetOtherUserDTO(request.requesting);
+    dto.requesting = await this.transformUserToGetOtherUserDTO(
+      request.requesting,
+    );
     dto.car = this.transformCarDBtoGetCarDTO(request.car);
     if (request.trailer) {
       dto.trailer = this.transformTrailerDBtoGetTrailerDTO(request.trailer);
     }
     return dto;
   }
+
   async transformOfferTripDBToGetOfferTripDTO(
     offer: OfferTripDB,
   ): Promise<GetOfferTripDTO> {
     const dto = new GetOfferTripDTO();
     dto.id = offer.id;
-    dto.requesting = this.transformUserToGetOtherUserDTO(offer.requesting);
+    dto.requesting = await this.transformUserToGetOtherUserDTO(
+      offer.requesting,
+    );
     dto.usedSeats = offer.usedSeats;
     dto.startLocation = this.transformLocationDBToCreateLocationDTO(
       offer.startLocation,
@@ -62,6 +60,7 @@ export class UtilsService {
     dto.cargo = cargo.map(this.transformCargoDBToCreateCargoDTO);
     return dto;
   }
+
   transformCarDBtoGetCarDTO(car: CarDB): GetCarDTO {
     const dto = new GetCarDTO();
     dto.id = car.id;
@@ -89,6 +88,7 @@ export class UtilsService {
     dto.isEnclosed = trailer.isEnclosed;
     return dto;
   }
+
   transformLocationDBToCreateLocationDTO(
     location: LocationDB,
   ): CreateLocationDTO {
@@ -99,6 +99,7 @@ export class UtilsService {
     dto.city = location.city;
     return dto;
   }
+
   transformCargoDBToCreateCargoDTO(cargo: CargoDB): CreateCargoDTO {
     const dto = new CreateCargoDTO();
     dto.weight = cargo.weight;
@@ -108,6 +109,7 @@ export class UtilsService {
     dto.description = cargo.description;
     return dto;
   }
+
   transformUserToGetOtherUserDTO(user: UserDB): GetOtherUserDTO {
     const dto = new GetOtherUserDTO();
     dto.id = user.id;
@@ -119,6 +121,7 @@ export class UtilsService {
     dto.isSmoker = user.isSmoker;
     return dto;
   }
+
   async transformOfferDBtoGetOfferDTO(offer: OfferDB): Promise<GetOfferDTO> {
     const dto = new GetOfferDTO();
     dto.id = offer.id;
@@ -155,7 +158,7 @@ export class UtilsService {
   ): Promise<GetRequestDTO> {
     const dto = new GetRequestDTO();
     dto.id = request.id;
-    dto.user = this.transformUserToGetOtherUserDTO(request.user);
+    dto.user = await this.transformUserToGetOtherUserDTO(request.user);
     dto.name = request.name;
     dto.date = request.date;
     dto.price = request.price;
@@ -168,6 +171,16 @@ export class UtilsService {
     dto.locations = locations.map(this.transformLocationDBToCreateLocationDTO);
     const cargo = await request.cargo;
     dto.cargo = cargo.map(this.transformCargoDBToCreateCargoDTO);
+    return dto;
+  }
+
+  async transformReviewDBToGetReviewDTO(
+    review: ReviewDB,
+  ): Promise<GetReviewDTO> {
+    const dto = new GetReviewDTO();
+    dto.writer = await this.transformUserToGetOtherUserDTO(review.writer);
+    dto.rating = review.rating;
+    dto.text = review.text;
     return dto;
   }
 }

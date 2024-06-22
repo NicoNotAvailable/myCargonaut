@@ -35,4 +35,8 @@ export class GetOtherUserDTO {
   @IsBoolean()
   @IsNotEmpty()
   isSmoker: boolean;
+
+  @ApiProperty()
+  @IsNumber()
+  rating: number;
 }

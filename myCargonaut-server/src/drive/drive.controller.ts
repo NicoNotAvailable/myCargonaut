@@ -24,6 +24,8 @@ import { CreateRequestDTO } from './DTO/CreateRequestDTO';
 import { GetOfferDTO } from './DTO/GetOfferDTO';
 import { GetRequestDTO } from './DTO/GetRequestDTO';
 import { UtilsService } from '../utils/utils.service';
+import { ChangeStatusDTO } from './DTO/ChangeStatusDTO';
+import { UserDB } from '../database/UserDB';
 
 @ApiTags('drive')
 @Controller('drive')
@@ -186,9 +188,13 @@ export class DriveController {
     description: 'gets all offers',
   })
   @Get('/all/offers')
-  async getAllOffers() {
+  async getAllOffers(@Session() session: SessionData) {
+    let user: UserDB;
+    if (session.currentUser) {
+      user = await this.userService.getUserById(session.currentUser);
+    }
     try {
-      const offers = await this.driveService.getAllOffers();
+      const offers = await this.driveService.getAllOffers(user);
       return await Promise.all(
         offers.map(async (offer) => {
           return this.utilsService.transformOfferDBtoGetOfferDTO(offer);
@@ -243,9 +249,13 @@ export class DriveController {
     description: 'gets all requests',
   })
   @Get('/all/requests')
-  async getAllRequests() {
+  async getAllRequests(@Session() session: SessionData) {
+    let user: UserDB;
+    if (session.currentUser) {
+      user = await this.userService.getUserById(session.currentUser);
+    }
     try {
-      const requests = await this.driveService.getAllRequests();
+      const requests = await this.driveService.getAllRequests(user);
       return await Promise.all(
         requests.map(async (request) => {
           return this.utilsService.transformRequestDBtoGetRequestDTO(request);
@@ -356,6 +366,34 @@ export class DriveController {
     this.validateRequestInput(body);
     try {
       await this.driveService.updateRequest(requestId, userId, body);
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw new NotFoundException(error.message);
+      }
+      throw error;
+    }
+    return new OkDTO(true, 'request was updated');
+  }
+  @ApiResponse({
+    type: OkDTO,
+    description: 'updates the status of a drive',
+  })
+  @ApiBearerAuth()
+  @UseGuards(IsLoggedInGuard)
+  @ApiParam({
+    name: 'id',
+    type: 'number',
+    description: 'ID of the drive to be updated',
+  })
+  @Put('status/:id')
+  async updateStatus(
+    @Param('id') driveId: number,
+    @Session() session: SessionData,
+    @Body() body: ChangeStatusDTO,
+  ): Promise<OkDTO> {
+    const userId = session.currentUser;
+    try {
+      await this.driveService.updateStatus(driveId, userId, body);
     } catch (error) {
       if (error instanceof NotFoundException) {
         throw new NotFoundException(error.message);

@@ -5,8 +5,8 @@ import {
   Get,
   Logger,
   Param,
-  ParseIntPipe,
   Post,
+  ParseIntPipe,
   Put,
   Res,
   Session,
@@ -35,8 +35,9 @@ import * as validator from 'validator';
 import * as bcrypt from 'bcryptjs';
 import { GetOwnUserDTO } from './DTO/GetOwnUserDTO';
 import { UserDB } from '../database/UserDB';
-import { GetOtherUserDTO } from './DTO/GetOtherUserDTO';
 import { Response } from 'express';
+import { ReviewService } from '../review/review.service';
+import { GetOtherUserDTO } from './DTO/GetOtherUserDTO'
 import { UtilsService } from '../utils/utils.service';
 
 @ApiTags('user')
@@ -45,6 +46,7 @@ export class UserController {
   constructor(
     private readonly userService: UserService,
     private readonly utilsService: UtilsService,
+    private readonly reviewService: ReviewService,
   ) {}
 
   private readonly logger = new Logger(UserController.name);
@@ -96,8 +98,10 @@ export class UserController {
   @Get()
   async getUser(@Session() session: SessionData): Promise<GetOwnUserDTO> {
     let user: UserDB;
+    let rating: number;
     try {
       user = await this.userService.getUserById(session.currentUser);
+      rating = await this.reviewService.getRating(session.currentUser);
     } catch (err) {
       console.log(err);
     }
@@ -111,6 +115,7 @@ export class UserController {
     dto.isSmoker = user.isSmoker;
     dto.profileText = user.profileText;
     dto.languages = user.languages;
+    dto.rating = rating;
     return dto;
   }
 
