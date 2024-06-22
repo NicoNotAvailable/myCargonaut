@@ -1,19 +1,12 @@
 <div class="rounded-3 container mt-3 mb-3 text-start" *ngIf="isLoggedIn">
-  <a *ngIf="templateToLoad === 'summaryOffer'" href="/createoffer">
-    <button type="button" class="btn customButton exitButton text-light">
-      <span class="px-3"><fa-icon [icon]="faArrowLeft"></fa-icon> Zurück</span>
-    </button>
-  </a>
-  <a *ngIf="templateToLoad === 'summaryRequest'" href="/createrequest">
-    <button type="button" class="btn customButton exitButton text-light">
-      <span class="px-3"><fa-icon [icon]="faArrowLeft"></fa-icon> Zurück</span>
-    </button>
-  </a>
+  <button type="button" class="btn customButton exitButton text-light" (click)="navigateBack()">
+    <span class="px-3"><fa-icon [icon]="faArrowLeft"></fa-icon> Zurück</span>
+  </button>
   <form #form="ngForm" class="mt-3">
     <div class="row">
       <div class="p-5 mb-4" id="summaryArea">
         <div *ngIf="templateToLoad === 'summaryOffer'">
-          <h1 class="textGreen text-center mt-4">Zusammenfassung</h1>
+          <h1 class="textGreen text-center mt-4">Zusammenfassung ihres Angebots</h1>
           <div class="row justify-content-center">
             <div class="col-lg-3 col-8 mt-5">
               <div class="image-cropper">
@@ -23,9 +16,9 @@
             <div class="col-lg-9 col-12 mt-5">
               <div class="row justify-content-between">
                 <div class="col-7">
-                  <h4 class="text-end">Entspannte Fahrt in meinem Tesla</h4>
+                  <h4 class="text-end">{{ requestService.name }}</h4>
                   <div class="hstack justify-content-end text-end">
-                    <p>Elon Musk
+                    <p>
                       <fa-icon [icon]="faStar"></fa-icon>
                       <fa-icon [icon]="faStar"></fa-icon>
                       <fa-icon [icon]="faStar"></fa-icon>
@@ -35,7 +28,7 @@
                   </div>
                 </div>
                 <div class="col-4">
-                  <h4>1000€</h4>
+                  <h4>{{ requestService.price }}€</h4>
                   <p class="">Gesamt</p>
                 </div>
               </div>
@@ -98,7 +91,7 @@
                   <p>Zielort:</p>
                 </div>
                 <div class="col-6">
-                  <p class="fw-bold">23:59 am 14.02.2024</p>
+                  <p class="fw-bold">Um {{ this.requestService.time }} am {{ this.requestService.date }}</p>
                   <p class="fw-bold">30324 LA</p>
                   <p class="fw-bold">35390 Gießen</p>
                 </div>
@@ -125,17 +118,18 @@
           </div>
         </div>
         <div *ngIf="templateToLoad === 'summaryRequest'">
-          <h1 class="textGreen text-center">Zusammenfassung</h1>
+          <h1 class="textGreen text-center">Zusammenfassung ihres Gesuchs</h1>
           <div class="row justify-content-center">
             <div class="col-lg-3 col-8 mt-5">
               <div class="image-cropper">
-                <img class="w-100 rounded-3 custom-card" src="../../../assets/empty.png" alt="Bild des Nutzers">
+                <img *ngIf="this.requestService.profilePic === 'empty.png' " class="profileCircle" [ngSrc]="this.requestService.pathToImage" alt="profile" width="150" height="150">
+                <img *ngIf="this.requestService.profilePic !== 'empty.png' " [ngSrc]="window.location.protocol + '//' + window.location.host.replace('4200', '8000') + '/user/image/'+ this.requestService.profilePic" width="70" height="55" class="card-img-top img-fluid backgroundGreen profileCircle my-4" alt="">
               </div>
             </div>
             <div class="col-lg-8 col-12 mt-5">
               <div class="row justify-content-between">
                 <div class="col-7">
-                  <h4 class="text-end">Entspannte Fahrt in meinem Tesla</h4>
+                  <h4 class="text-end">{{ requestService.name }}</h4>
                   <div class="hstack justify-content-end text-end">
                     <p>Elon Musk
                       <fa-icon [icon]="faStar"></fa-icon>
@@ -147,7 +141,7 @@
                   </div>
                 </div>
                 <div class="col-4">
-                  <h4>1000€</h4>
+                  <h4>{{ requestService.price }} €</h4>
                   <p>Gesamt</p>
                 </div>
               </div>
@@ -158,8 +152,8 @@
           </div>
           <div class="row mt-4">
             <div class="col-12 col-lg-4">
-              <div *ngFor="let cargo of cargoDataArray">
-                <h5 class="textGreen mt-5">{{ cargo.listId + 1 }}. Cargo</h5>
+              <div *ngFor="let cargo of cargoDataArray; let i = index">
+                <h5 class="textGreen mt-5">{{ i + 1 }}. Cargo</h5>
                 <div class="row">
                   <div class="col-6">
                     <p>Name des Cargos:</p>
@@ -194,9 +188,13 @@
                   <p>Zielort:</p>
                 </div>
                 <div class="col-6">
-                  <p class="fw-bold">23:59 am 14.02.2024</p>
-                  <p class="fw-bold">30324 LA</p>
-                  <p class="fw-bold">35390 Gießen</p>
+                  <p class="fw-bold">Um {{ this.requestService.time }} am {{ this.requestService.date?.day }}.{{ this.requestService.date?.month }}.{{ this.requestService.date?.year }}</p>
+                  <p class="fw-bold">{{ requestService.locations[0].zipCode }} {{ requestService.locations[0].city }} <br>
+                    {{ requestService.locations[0].country }}
+                  </p>
+                  <p class="fw-bold">{{ requestService.locations[1].zipCode }} {{ requestService.locations[1].city }} <br>
+                    {{ requestService.locations[1].country }}
+                  </p>
                 </div>
               </div>
             </div>
@@ -209,15 +207,17 @@
                   <p>Atmosphäre:</p>
                 </div>
                 <div class="col-6">
-                  <p class="fw-bold">ja</p>
-                  <p class="fw-bold">ja</p>
-                  <p class="fw-bold">nur Musik</p>
+                  <p class="fw-bold">{{ requestService.smokingAllowed ? 'ja' : 'nein' }}</p>
+                  <p class="fw-bold">{{ requestService.animalsAllowed ? 'ja' : 'nein' }}</p>
+                  <p class="fw-bold">
+                    {{ requestService.info === 1 ? 'Nur Musik' : requestService.info === 2 ? 'Nur Reden' : 'Nach Wunsch' }}
+                  </p>
                 </div>
               </div>
             </div>
           </div>
           <div class="text-center mt-5">
-            <button class="btn customButton px-5" (click)="createRequest()">Fahrt erstellen</button>
+            <button class="btn customButton px-5" (click)="requestService.createRequest()">Anfrage erstellen</button>
           </div>
         </div>
       </div>

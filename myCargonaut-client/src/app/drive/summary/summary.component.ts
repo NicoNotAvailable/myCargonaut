@@ -1,7 +1,7 @@
 import {Component, inject} from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
-import { NgForOf, NgIf } from '@angular/common';
-import {ActivatedRoute} from "@angular/router";
+import { NgForOf, NgIf, NgOptimizedImage } from '@angular/common';
+import {ActivatedRoute, Router} from "@angular/router";
 import {SessionService} from "../../services/session.service";
 import { faArrowLeft, faSave, faStar } from '@fortawesome/free-solid-svg-icons';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
@@ -17,12 +17,13 @@ import { RequestService } from '../../../drive/request.service';
     NgIf,
     FaIconComponent,
     NgForOf,
+    NgOptimizedImage,
   ],
   templateUrl: './summary.component.html',
   styleUrl: './summary.component.css'
 })
 export class SummaryComponent {
-  templateToLoad: string = "summaryRequest";
+  templateToLoad: string = "";
 
   public sessionService: SessionService = inject(SessionService);
   public requestService: RequestService = inject(RequestService);
@@ -32,10 +33,10 @@ export class SummaryComponent {
 
   private http: any;
 
-  constructor(private route: ActivatedRoute) {
+  constructor(private route: ActivatedRoute, private router: Router) {
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.sessionService.checkLoginNum().then(isLoggedIn => {
       console.log('Login status:', isLoggedIn);
       isLoggedIn == -1 ? this.isLoggedIn = false : this.isLoggedIn = true;
@@ -44,14 +45,28 @@ export class SummaryComponent {
       }
     });
 
+    console.log(this.requestService.date);
+
     this.route.queryParams.subscribe(params => {
       const origin = params['origin'];
+      console.log('Origin:', origin); // Überprüfen, ob origin richtig gesetzt ist
       if (origin === 'createrequest') {
         this.templateToLoad = 'summaryRequest';
       } else if (origin === 'createoffer') {
         this.templateToLoad = 'summaryOffer';
+      } else {
+        this.templateToLoad = 'summaryRequest';
       }
+      console.log('Template to load:', this.templateToLoad); // Überprüfen, welches Template geladen wird
     });
+  }
+
+  navigateBack(): void {
+    if (this.templateToLoad === 'summaryOffer') {
+      this.router.navigate(['/createoffer']);
+    } else if (this.templateToLoad === 'summaryRequest') {
+      this.router.navigate(['/createrequest']);
+    }
   }
 
   get cargoDataArray() {
@@ -78,30 +93,7 @@ export class SummaryComponent {
 
   createRequest() {
 
-    //const requestData = {
-    //  email: this.email,
-    //  password: this.password,
-    //};
-
-    /*this.http.post("http://localhost:8000/drive/request", userData, { withCredentials: true }).subscribe(
-      response =>{
-        form.resetForm();
-        console.log(response);
-        this.textColor = "successText"
-        this.message = "Anmeldung lief swaggy";
-        window.location.href = "/profile";
-        setTimeout(() => {
-          this.message = "";
-          this.textColor = "errorText"
-        }, 5000);
-      },
-      error => {
-        console.error(error);
-        this.message = error.error.message || "Passwort oder Email stimmt nicht überein";
-        setTimeout(()=> {
-          this.message = "";
-        }, 5000);
-      }
-    );*/
   }
+
+  protected readonly window = window;
 }

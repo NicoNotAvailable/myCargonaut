@@ -14,6 +14,7 @@ import {
   faX,
 } from '@fortawesome/free-solid-svg-icons';
 import {SessionService} from "../../services/session.service";
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-offer',
@@ -71,9 +72,8 @@ export class OfferComponent {
 
   isLoggedIn: boolean = false;
   private http: any;
-  private router: any;
 
-  constructor(private modalService: NgbModal) {}
+  constructor(private modalService: NgbModal, private router: Router) {}
 
   ngOnInit(): void {
     //console.log(this.sessionService.checkLogin());
@@ -90,7 +90,6 @@ export class OfferComponent {
 
   changeTalkMode(num: any) {
     if (num < 1) {
-      this.errorMessage = "Unzulässiger Kommunikationswunsch";
       this.removeErrorMessage();
       return;
     }
@@ -111,7 +110,7 @@ export class OfferComponent {
   }
 
   createSummaryOffer(form: NgForm) {
-    this.router.navigate(['/summary'], { queryParams: { origin: 'offer' } })
+    this.router.navigate(['/summary'], { queryParams: { origin: 'createoffer' } })
   }
 
   removeErrorMessage(): void {

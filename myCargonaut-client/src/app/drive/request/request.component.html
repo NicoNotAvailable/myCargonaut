@@ -1,22 +1,22 @@
 <div *ngIf="isLoggedIn" class="container mt-3 mb-3 text-start">
   <ng-template #cargoModal let-modal="modal">
     <div class="modal-header">
-      <h4 class="modal-title" id="modal-basic-title">Cargo Hinzufügen</h4>
+      <h4 class="modal-title" id="modal-basic-title">Cargo {{ editModeText }}</h4>
       <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
     </div>
     <div class="modal-body">
       <form>
         <div class="mb-3">
           <div class="input-group">
-            <input [(ngModel)]="cargoDescription" #descriptionInput="ngModel" type="text" name="descriptionInput"
+            <input [(ngModel)]="cargoDescription" #cargoDescriptionInput="ngModel" type="text" name="descriptionInput"
                    class="rounded-5 p-2 w-100 mb-3" placeholder="Name des Cargos" required>
-            <input [(ngModel)]="cargoWeight" #weightInput="ngModel" type="text" name="weightInput"
+            <input [(ngModel)]="cargoWeight" #cargoWeightInput="ngModel" type="text" name="weightInput"
                    class="rounded-5 p-2 w-100 mb-3" placeholder="Gewicht in kg (Bsp. 5,50)" required>
-            <input [(ngModel)]="cargoLength" #lengthInput="ngModel" type="text" name="lengthInput"
+            <input [(ngModel)]="cargoLength" #cargoLengthInput="ngModel" type="text" name="lengthInput"
                    class="rounded-5 p-2 w-100 mb-3" placeholder="Länge in m (Bsp. 2,30)" required>
-            <input [(ngModel)]="cargoWidth" #widthInput="ngModel" type="text" name="widthInput"
+            <input [(ngModel)]="cargoWidth" #cargoWidthInput="ngModel" type="text" name="widthInput"
                    class="rounded-5 p-2 w-100 mb-3" placeholder="Breite in m (Bsp. 1,30)" required>
-            <input [(ngModel)]="cargoHeight" #heightInput="ngModel" type="text" name="heightInput"
+            <input [(ngModel)]="cargoHeight" #cargoHeightInput="ngModel" type="text" name="heightInput"
                    class="rounded-5 p-2 w-100 mb-3" placeholder="Höhe in m (Bsp. 0,80)" required>
           </div>
         </div>
@@ -31,34 +31,34 @@
       </button>
     </div>
   </ng-template>
-  <form #form="ngForm" (ngSubmit)="createSummaryRequest(form)">
+  <form #form="ngForm" (ngSubmit)="validInputs() && createSummaryRequest(form)">
     <div class="row">
       <div class="p-5" id="addOfferArea">
         <div class="row mb-5 justify-content-between">
-          <div class="col-xl-3 col-12" *ngIf="editingRequest == 0">
+          <div class="col-xl-3 col-12">
             <h2 class="textGreen col-7 mt-5">Sitze:</h2>
             <div class="row mt-4">
               <div class="hstack justify-content-between">
-                <button (click)="changeSeatCount(2)" [ngClass]="seats === 2 ? 'selectedButton' : 'deselectedButton'"
+                <button (click)="changeSeatCount(2)" [ngClass]="requestService.seats === 2 ? 'selectedButton' : 'deselectedButton'"
                         type="button" class="btn rounded-3 py-1 px-3 text-light">
                   <h2>2</h2>
                 </button>
-                <button (click)="changeSeatCount(3)" [ngClass]="seats === 3 ? 'selectedButton' : 'deselectedButton'"
+                <button (click)="changeSeatCount(3)" [ngClass]="requestService.seats === 3 ? 'selectedButton' : 'deselectedButton'"
                         type="button" class="btn rounded-3 py-1 px-3 text-light">
                   <h2>3</h2>
                 </button>
-                <button (click)="changeSeatCount(4)" [ngClass]="seats === 4 ? 'selectedButton' : 'deselectedButton'"
+                <button (click)="changeSeatCount(4)" [ngClass]="requestService.seats === 4 ? 'selectedButton' : 'deselectedButton'"
                         type="button" class="btn rounded-3 py-1 px-3 text-light">
                   <h2>4</h2>
                 </button>
-                <button (click)="changeSeatCount(5)" [ngClass]="seats === 5 ? 'selectedButton' : 'deselectedButton'"
+                <button (click)="changeSeatCount(5)" [ngClass]="requestService.seats === 5 ? 'selectedButton' : 'deselectedButton'"
                         type="button" class="btn rounded-3 py-1 px-3 text-light">
                   <h2>5</h2>
                 </button>
               </div>
             </div>
             <div class="mt-3 justify-content-center">
-              <input [(ngModel)]="seats" #seatsInput="ngModel" type="number" name="seatsInput"
+              <input [(ngModel)]="requestService.seats" #seatsInput="ngModel" type="number" name="seatsInput"
                      class="rounded-5 p-2 w-100" placeholder="Andere Anzahl"
                      (input)="changeSeatCount(seatsInput.value)" required>
             </div>
@@ -68,7 +68,7 @@
               </div>
             </div>
 
-            <button (click)="changeSeatCount(1)" [ngClass]="seats === 1 ? 'selectedButton' : 'deselectedButton'"
+            <button (click)="changeSeatCount(1)" [ngClass]="requestService.seats === 1 ? 'selectedButton' : 'deselectedButton'"
                     type="button" class="btn rounded-3 text-light w-100">
               <h2>Nur Cargo</h2>
             </button>
@@ -78,7 +78,7 @@
               </div>
             </div>
             <div class="hstack justify-content-center">
-              <input [(ngModel)]="requestedPrice" #requestedPriceInput="ngModel" type="number"
+              <input [(ngModel)]="requestService.price" #requestedPriceInput="ngModel" type="number"
                      name="requestedPriceInput"
                      class="rounded-5 p-2 w-100" placeholder="Andere Anzahl"
                      (input)="changeRequestedPrice(requestedPriceInput.value)" required>
@@ -87,11 +87,12 @@
 
           <hr class="blueLine d-xl-none mt-5">
 
-          <div class="col-xl-4 col-12" *ngIf="editingRequest == 0">
+          <div class="col-xl-4 col-12">
             <h2 class="textGreen col-5 mt-5 mb-3">Infos:</h2>
 
             <div class="col-12">
-              <input [(ngModel)]="name" [ngModelOptions]="{standalone: true}" name="nameInput" required type="text"
+              <input [(ngModel)]="requestService.name" [ngModelOptions]="{standalone: true}" #nameInput="ngModel"
+                     name="nameInput" required type="text"
                      class="form-control rounded-5 p-2 col-12" placeholder="Name des Trips" id="nameInput">
             </div>
 
@@ -104,7 +105,8 @@
                       Raucher <br>
                       ‎
                     </label>
-                    <input class="form-check-input" type="checkbox" value="" id="checkSmoker">
+                    <input [(ngModel)]="requestService.smokingAllowed"
+                           class="form-check-input" type="checkbox" id="checkSmoker" name="checkSmoker">
                   </div>
                 </div>
                 <div class="col-5 checkboxBorder rounded-pill p-3">
@@ -113,29 +115,30 @@
                       Haustier- <br>
                       besitzer*in <br>
                     </label>
-                    <input class="form-check-input" type="checkbox" value="" id="checkPets">
+                    <input [(ngModel)]="requestService.animalsAllowed"
+                           class="form-check-input" type="checkbox" id="checkPets" name="checkPets">
                   </div>
                 </div>
               </div>
             </div>
 
-            <p class="mt-3">Auf der Fahrt:</p>
+            <p class="mt-3">Kommunikationswunsch:</p>
             <div class="col-12 mt-3">
               <div class="btn-group d-flex" role="group">
                 <input type="radio" class="btn-check" name="musicOrTalk" id="onlyMusic" autocomplete="off"
                        (click)="changeTalkMode(1)">
                 <label class="btn customButton flex-fill checkboxBorder" for="onlyMusic"
-                       [ngClass]="talkMode === 1 ? 'selectedButton' : 'deselectedButton'">Nur Musik</label>
+                       [ngClass]="requestService.info === 1 ? 'selectedButton' : 'deselectedButton'">Nur Musik</label>
 
                 <input type="radio" class="btn-check" name="musicOrTalk" id="onlyTalk" autocomplete="off"
                        (click)="changeTalkMode(2)">
                 <label class="btn customButton flex-fill checkboxBorder" for="onlyTalk"
-                       [ngClass]="talkMode === 2 ? 'selectedButton' : 'deselectedButton'">Nur Reden</label>
+                       [ngClass]="requestService.info === 2 ? 'selectedButton' : 'deselectedButton'">Nur Reden</label>
 
                 <input type="radio" class="btn-check" name="musicOrTalk" id="byRequest" autocomplete="off"
                        (click)="changeTalkMode(3)">
                 <label class="btn customButton flex-fill checkboxBorder" for="byRequest"
-                       [ngClass]="talkMode === 3 ? 'selectedButton' : 'deselectedButton'">Nach Wunsch</label>
+                       [ngClass]="requestService.info === 3 ? 'selectedButton' : 'deselectedButton'">Nach Wunsch</label>
               </div>
             </div>
 
@@ -146,7 +149,7 @@
                     <h2 class="textGreen mt-1">Cargo hinzufügen</h2>
                   </div>
                   <div class="col-auto">
-                    <a (click)="openCargoModal(cargoModal)" class="non-pointable fa-stack fa-2x add-fix">
+                    <a (click)="addCargoClicked(cargoModal)" class="non-pointable fa-stack fa-2x add-fix">
                       <fa-icon [icon]="faCircle"
                                class="fa-stack-2x text-center white-fade fa-2xs pe-1 pt-3 add-fix"></fa-icon>
                       <fa-icon [icon]="faCirclePlus" class="fa-stack-1x btn-blue pointable add-fix"></fa-icon>
@@ -155,21 +158,21 @@
                 </div>
 
               </div>
-              <div *ngFor="let cargo of cargoDataArray" class="card border-0 position-relative mt-3">
+              <div *ngFor="let cargo of cargoDataArray; let i = index" class="card border-0 position-relative mt-3">
                 <div class="button-container position-absolute end-0 mt-1 me-3">
-                  <button (click)="openCargoModal(cargoModal)" type="button"
+                  <button (click)="editCargoClicked(cargoModal, i)" type="button"
                           class="btn btn-primary editButton text-end me-1" id="editButton">
                     <i>
                       <fa-icon [icon]="faPenToSquare"></fa-icon>
                     </i>
                   </button>
-                  <button type="button" class="btn btn-danger deleteButton text-end" id="deleteButton">
+                  <button (click)="deleteCargo(i)" type="button" class="btn btn-danger deleteButton text-end" id="deleteButton">
                     <i>
                       <fa-icon [icon]="faX"></fa-icon>
                     </i>
                   </button>
                 </div>
-                <div class="card-body backgroundGreen">
+                <div class="card-body backgroundGreen my-2">
                   <div class="text-light mx-3 pt-2">
                     <h4 class="card-title ms-1 mt-1 text-center">{{ cargo.description }}</h4>
                     <p class="ms-2">{{ cargo.weight }} kg</p>
@@ -188,9 +191,6 @@
                       </div>
                     </div>
                   </div>
-                  <button type="button" class="btn bg-transparent text-light editButton ms-2">
-                    <h5>Bearbeiten</h5>
-                  </button>
                 </div>
               </div>
             </div>
@@ -198,48 +198,49 @@
 
           <hr class="blueLine d-xl-none mt-5">
 
-          <div class="col-xl-3 col-12" *ngIf="editingRequest == 0">
+          <div class="col-xl-3 col-12">
             <h2 class="textGreen col-12 mb-3 mt-5">Zeit & Ort</h2>
             <div class="col-12">
-              <input [(ngModel)]="date" [ngModelOptions]="{standalone: true}" name="dateInput" required
+              <input [(ngModel)]="this.requestService.date" [ngModelOptions]="{standalone: true}" name="dateInput" required
                      class="form-control rounded-5 p-2 col-12" placeholder="Datum der Fahrt" id="dateInput"
-                     placeholder="Datum der Fahrt" ngbDatepicker #d="ngbDatepicker" type="text">
+                     placeholder="Datum der Fahrt" ngbDatepicker #d="ngbDatepicker" type="date">
             </div>
             <div class="col-12 mt-2">
-              <input [(ngModel)]="time" [ngModelOptions]="{standalone: true}" name="timeInput" required
+              <input [(ngModel)]="this.requestService.time" [ngModelOptions]="{standalone: true}" name="timeInput" required
+                     pattern="^(2[0-3]|[01]?[0-9]):([0-5]?[0-9])$"
                      type="text" class="rounded-5 p-2 col-12" placeholder="Uhrzeit" id="timeInput">
             </div>
 
             <h2 class="textGreen col-12 mt-5">Startpunkt</h2>
             <div class="col-12">
-              <input [(ngModel)]="startLand" [ngModelOptions]="{standalone: true}" name="startLandInput" required
-                     type="text" class="rounded-5 p-2 col-12" placeholder="Land" id="startLandInput">
+              <input [(ngModel)]="this.requestService.locations[0].country" [ngModelOptions]="{standalone: true}" #startLandInput="ngModel"
+                     name="startLandInput" required  type="text" class="rounded-5 p-2 col-12" placeholder="Land" id="startLandInput">
             </div>
             <div class="hstack justify-content-between">
               <div class="col-4 mt-2">
-                <input [(ngModel)]="startPLZ" [ngModelOptions]="{standalone: true}" name="startPLZInput" required
-                       type="text" class="rounded-5 p-2 col-12" placeholder="PLZ" id="startPLZInput">
+                <input [(ngModel)]="this.requestService.locations[0].zipCode" [ngModelOptions]="{standalone: true}" #startPLZInput="ngModel"
+                       name="startPLZInput" required  type="text" class="rounded-5 p-2 col-12" placeholder="PLZ" id="startPLZInput">
               </div>
               <div class="col-7 mt-2">
-                <input [(ngModel)]="startPlace" [ngModelOptions]="{standalone: true}" name="startPlaceInput" required
-                       type="text" class="rounded-5 p-2 col-12" placeholder="Ort" id="startPlaceInput">
+                <input [(ngModel)]="this.requestService.locations[0].city" [ngModelOptions]="{standalone: true}" #startPlaceInput="ngModel"
+                       name="startPlaceInput" required type="text" class="rounded-5 p-2 col-12" placeholder="Ort" id="startPlaceInput">
               </div>
             </div>
 
 
             <h2 class="textGreen col-12 mt-5">Zielort</h2>
             <div class="col-12">
-              <input [(ngModel)]="endLand" [ngModelOptions]="{standalone: true}" name="endLandInput" required
-                     type="text" class="rounded-5 p-2 col-12" placeholder="Land" id="endLandInput">
+              <input [(ngModel)]="this.requestService.locations[1].country" [ngModelOptions]="{standalone: true}" #endLandInput="ngModel"
+                     name="endLandInput" required  type="text" class="rounded-5 p-2 col-12" placeholder="Land" id="endLandInput">
             </div>
             <div class="hstack justify-content-between">
               <div class="col-4 mt-2">
-                <input [(ngModel)]="endPLZ" [ngModelOptions]="{standalone: true}" name="endPLZInput" required
-                       type="text" class="rounded-5 p-2 col-12" placeholder="PLZ" id="endPLZInput">
+                <input [(ngModel)]="this.requestService.locations[1].zipCode" [ngModelOptions]="{standalone: true}" #endPLZInput="ngModel"
+                       name="endPLZInput" required type="text" class="rounded-5 p-2 col-12" placeholder="PLZ" id="endPLZInput">
               </div>
               <div class="col-7 mt-2">
-                <input [(ngModel)]="endPlace" [ngModelOptions]="{standalone: true}" name="endPlaceInput" required
-                       type="text" class="rounded-5 p-2 col-12" placeholder="Ort" id="endPlaceInput">
+                <input [(ngModel)]="this.requestService.locations[1].city" [ngModelOptions]="{standalone: true}" #endPlaceInput="ngModel"
+                       name="endPlaceInput" required type="text" class="rounded-5 p-2 col-12" placeholder="Ort" id="endPlaceInput">
               </div>
             </div>
           </div>
@@ -250,12 +251,8 @@
           </div>
         </div>
       </div>
-      <div class="row">
-        <div class="col-12 text-center">
-          <span> {{ message }}1232112</span>
-        </div>
-      </div>
-      <div class="col-12 align-bottom d-flex justify-content-around align-items-center" *ngIf="editingRequest == 0">
+
+      <div class="col-12 align-bottom d-flex justify-content-around align-items-center">
         <button type="submit" class="btn customButton exitButton text-light">
           <span class="px-3">Weiter <fa-icon [icon]="faArrowRight"></fa-icon></span>
         </button>
