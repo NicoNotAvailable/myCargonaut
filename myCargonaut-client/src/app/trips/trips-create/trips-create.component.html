@@ -113,25 +113,25 @@
         <div class="container greenBackground p-3">
           <div class="row mt-3">
             <div class="col-12 col-lg-6">
-              <select class="form-select inputField" aria-label="Default select example">
-                <option selected>Dein Auto</option>
-                @for (car of cars ; track $index) {
-                  <option value=$index>{{ car.name }}</option>
+              <p class="text-light me-2">Dein Auto:<br>
+                <select class="form-select inputField" [(ngModel)]="selectedCar" aria-label="Default select example">
+                @for (car of cars ; track car.id) {
+                  <option [value]="car.id">{{ car.name }}</option>
                 }
               </select>
             </div>
             <div class="col-12 col-lg-6 mt-3 mt-lg-0">
-              <select class="form-select inputField" aria-label="Default select example">
-                <option selected>Dein Trailer</option>
-                @for (trailer of trailers ; track $index) {
-                  <option value=$index>{{ trailer.name }}</option>
+              <p class="text-light me-2">Dein Trailer:<br>
+              <select class="form-select inputField" [(ngModel)]="selectedTrailer" aria-label="Default select example">
+                @for (trailer of trailers ; track trailer.id) {
+                  <option [value]="trailer.id">{{ trailer.name }}</option>
                 }
               </select>
             </div>
           </div>
           <div class="row mt-3 horizontal-center">
             <div class="col-6 col-lg-2 horizontal-center">
-              <button type="button" class="btn btn-primary blueButton transform">Abschicken</button>
+              <button type="button" class="btn btn-primary blueButton transform" (click)="createRequestTrip()">Abschicken</button>
             </div>
           </div>
         </div>

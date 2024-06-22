@@ -1,7 +1,6 @@
 import { Component, inject, Input, OnInit, TemplateRef } from '@angular/core';
 import {NgForOf, NgOptimizedImage} from "@angular/common";
 import { ActivatedRoute } from '@angular/router';
-import { offer } from '../../search/offers';
 import { GetOffer } from '../GetOffer';
 import { GetRequest } from '../GetRequest';
 import { faCircle, faCirclePlus, faPenToSquare, faSave, faX } from '@fortawesome/free-solid-svg-icons';
@@ -15,7 +14,6 @@ import { VehicleService } from '../../services/vehicle.service';
 import { Car } from "../../profile/Car";
 import { Trailer } from "../../profile/Trailer";
 import { TripsService } from '../../services/trips.service';
-import { error } from '@angular/compiler-cli/src/transformers/util';
 
 @Component({
   selector: 'app-trips-create',
@@ -123,18 +121,19 @@ export class TripsCreateComponent implements OnInit {
     });
   }
 
-  createRequestTrip(form: any): void {
+  createRequestTrip(): void {
     const tripData = {
       driveID: this.request?.id,
       carID: this.selectedCar,
       trailerID: this.selectedTrailer,
     };
     if (tripData.carID === 0 || tripData.carID === null) {
-      console.error('Car was not found', error);
+      console.error('Car was not found');
     }
     this.tripsService.createRequestTrip(tripData).subscribe(
       response => {
         setTimeout(() => {
+          //TODO: navigate to chat
           window.location.reload();
         }, 200);
       }, error => {
