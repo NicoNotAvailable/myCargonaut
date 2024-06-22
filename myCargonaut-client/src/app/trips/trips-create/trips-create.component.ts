@@ -14,6 +14,8 @@ import { SessionService } from '../../services/session.service';
 import { VehicleService } from '../../services/vehicle.service';
 import { Car } from "../../profile/Car";
 import { Trailer } from "../../profile/Trailer";
+import { TripsService } from '../../services/trips.service';
+import { error } from '@angular/compiler-cli/src/transformers/util';
 
 @Component({
   selector: 'app-trips-create',
@@ -31,6 +33,7 @@ import { Trailer } from "../../profile/Trailer";
 export class TripsCreateComponent implements OnInit {
   public sessionService: SessionService = inject(SessionService);
   public requestService: RequestService = inject(RequestService);
+  public tripsService: TripsService = inject(TripsService);
 
   offerBool: boolean = true;
   requestBool: boolean = false;
@@ -44,6 +47,9 @@ export class TripsCreateComponent implements OnInit {
 
    cars: Car[] = [];
   trailers: Trailer[] = [];
+
+  selectedCar: number | null = null;
+  selectedTrailer: number | null = null;
 
   constructor(
     private route: ActivatedRoute,
@@ -115,6 +121,26 @@ export class TripsCreateComponent implements OnInit {
         console.error(error);
       },
     });
+  }
+
+  createRequestTrip(form: any): void {
+    const tripData = {
+      driveID: this.request?.id,
+      carID: this.selectedCar,
+      trailerID: this.selectedTrailer,
+    };
+    if (tripData.carID === 0 || tripData.carID === null) {
+      console.error('Car was not found', error);
+    }
+    this.tripsService.createRequestTrip(tripData).subscribe(
+      response => {
+        setTimeout(() => {
+          window.location.reload();
+        }, 200);
+      }, error => {
+        console.error('There was an error!', error);
+      },
+    );
   }
 
   @Input() offer!: GetOffer | undefined;
