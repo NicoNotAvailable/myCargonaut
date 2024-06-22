@@ -16,6 +16,24 @@
         <div class="col-6 text-end">
           <span class="blueText">{{ offer?.price || request?.price || "loading" }}€</span> <span class="blueText">{{ offer?.priceType  || "" }}</span>
         </div>
+        <div class="col-2"></div>
+        <div class="col-2"></div>
+        <div class="col-3 text-start">
+          <span>von Startpunkt: Ort</span>
+        </div>
+        <div class="col-2">
+          <span>nach Ziel: Ort</span>
+        </div>
+        <div class="col-5"></div>
+        <div class="col-2"></div>
+        <div class="col-3 mt-3">
+          <span>Zwischenziele: A, B, C</span>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 col-lg-2 justify-content-center">
+      <div class="row">
+        <img [ngSrc]="window.location.protocol + '//' + window.location.host.replace('4200', '8000') + '/car/image/'+ (offer?.carPicture || null)"  width="70" height="55" class="card-img-top img-fluid backgroundGreen profileCircle my-4" alt="">
       </div>
     </div>
   </div>
@@ -36,14 +54,9 @@
         </div>
       </div>
     </div>
+
 @if(showTripsRead) { <app-trips-read class="col-8"></app-trips-read>}
     @else if(showTripsCreate){<app-trips-create class="col-8"></app-trips-create>}
-
-    <div class="col-12 col-lg-2 justify-content-center">
-      <div class="row">
-        <img [ngSrc]="window.location.protocol + '//' + window.location.host.replace('4200', '8000') + '/car/image/'+ (offer?.carPicture || null)"  width="70" height="55" class="card-img-top img-fluid backgroundGreen profileCircle my-4" alt="">
-      </div>
-    </div>
   </div>
 </div>
 
