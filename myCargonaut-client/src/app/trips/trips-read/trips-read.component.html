@@ -83,7 +83,9 @@
         </div>
         <div class="row ms-3 me-3 mb-4">
           <div class="col-12 col-md-8 col-lg-2 text-start fw-bold">
-            <span>Raucher, Tiere</span>
+            <strong>{{offer?.smokingAllowed? "Rauchen ist erlaubt" : "Rauchen ist nicht erlaubt"}}</strong>
+            <strong>{{offer?.animalsAllowed? "Tiere sind erlaubt" : "Tiere sind nicht erlaubt"}}</strong>
+
           </div>
           <div class="col-12 col-md-8 col-lg-4">
           </div>
@@ -118,10 +120,10 @@
         </div>
         <div class="row ms-3 me-3 mb-4">
           <div class="col-12 col-md-8 col-lg-4 text-start fw-bold">
-            <span>Nicht Raucher</span>
+            <strong>{{request?.smokingAllowed? "Rauchen ist erlaubt" : "Rauchen ist nicht erlaubt"}}</strong>
           </div>
           <div class="col-12 col-md-8 col-lg-3 text-start fw-bold">
-            <span>Keine Tiere</span>
+            <div class="d-flex justify-content-end"><strong>{{request?.animalsAllowed? "Tiere sind erlaubt" : "Tiere sind nicht erlaubt"}}</strong></div>
           </div>
           <div class="col-4 text-end fw-bold">
             <span>Nur Musik hören</span>
@@ -174,4 +176,3 @@
     </div>
   </div>
 }
-
