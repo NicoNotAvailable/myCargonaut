@@ -12,11 +12,11 @@
           <input [(ngModel)]="cargoWeight" #weightInput="ngModel" type="text" name="weightInput"
                  class="rounded-5 p-2 w-100 mb-3" placeholder="Gewicht in kg (Bsp. 5,50)" required>
           <input [(ngModel)]="cargoLength" #lengthInput="ngModel" type="text" name="lengthInput"
-                 class="rounded-5 p-2 w-100 mb-3" placeholder="Länge in m (Bsp. 2,30)" required>
+                 class="rounded-5 p-2 w-100 mb-3" placeholder="Länge in cm" required>
           <input [(ngModel)]="cargoWidth" #widthInput="ngModel" type="text" name="widthInput"
-                 class="rounded-5 p-2 w-100 mb-3" placeholder="Breite in m (Bsp. 1,30)" required>
+                 class="rounded-5 p-2 w-100 mb-3" placeholder="Breite in cm" required>
           <input [(ngModel)]="cargoHeight" #heightInput="ngModel" type="text" name="heightInput"
-                 class="rounded-5 p-2 w-100 mb-3" placeholder="Höhe in m (Bsp. 0,80)" required>
+                 class="rounded-5 p-2 w-100 mb-3" placeholder="Höhe in cm" required>
         </div>
       </div>
     </form>
@@ -32,8 +32,8 @@
 </ng-template>
 
 @if (this.offerBool) {
-      <div class="col-12 col-lg-8">
-        <div class="container greenBackground p-3">
+      <div>
+        <div class="container-fluid greenBackground p-3 pb-5">
           <div class="row mt-3">
             <div class="col-12 col-lg-6">
               <select class="form-select inputField" aria-label="Default select example">
@@ -101,15 +101,6 @@
               <button (click)="openCargoModal(cargoModal)" type="button" class="btn btn-primary blueButton" data-toggle="modal" data-target="#cargoModal">Cargo hinzufügen</button>
               </div>
             </div>
-
-            <div class="row mt-3 whiteText">
-              <div class="col-6 col-lg-3">
-                <span>Gesamtpreis</span>
-              </div>
-              <div class="col-6 col-lg-3 text-end">
-                <span>35€</span>
-              </div>
-            </div>
           </div>
           <div class="row mt-3 horizontal-center">
             <div class="col-6 col-lg-2 horizontal-center">
@@ -118,7 +109,7 @@
           </div>
         </div>
     } @else if (requestBool) {
-      <div class="col-12 col-lg-8">
+      <div>
         <div class="container greenBackground p-3">
           <div class="row mt-3">
             <div class="col-12 col-lg-6">
