@@ -11,7 +11,9 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { Cargo } from '../../drive/Cargo';
 import { RequestService } from '../../../drive/request.service';
 import { SessionService } from '../../services/session.service';
-
+import { VehicleService } from '../../services/vehicle.service';
+import { Car } from "../../profile/Car";
+import { Trailer } from "../../profile/Trailer";
 
 @Component({
   selector: 'app-trips-create',
@@ -40,9 +42,13 @@ export class TripsCreateComponent implements OnInit {
   cargoHeight: number | null = null;
   cargoWeight: number | null = null;
 
+   cars: Car[] = [];
+  trailers: Trailer[] = [];
+
   constructor(
     private route: ActivatedRoute,
     private modalService: NgbModal,
+    private vehicleService: VehicleService,
 
   ) {}
 
@@ -53,6 +59,8 @@ export class TripsCreateComponent implements OnInit {
       } else if (params ['type'] == "request") {
         this.requestBool = true
         this.offerBool = false;
+        this.getCars();
+        this.getTrailers();
       }
 
     });
@@ -86,6 +94,27 @@ export class TripsCreateComponent implements OnInit {
 
   get cargoDataArray() {
     return this.requestService.getCargos();
+  }
+
+  getCars(): void {
+    this.vehicleService.readCars().subscribe( {
+      next: (data: any) => {
+        this.cars = data;
+      },
+      error: (error) => {
+        console.error(error);
+      },
+    });
+  }
+  getTrailers(): void {
+    this.vehicleService.readTrailers().subscribe( {
+      next: (data: any) => {
+        this.trailers = data;
+      },
+      error: (error) => {
+        console.error(error);
+      },
+    });
   }
 
   @Input() offer!: GetOffer | undefined;

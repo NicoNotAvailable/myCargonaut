@@ -115,17 +115,17 @@
             <div class="col-12 col-lg-6">
               <select class="form-select inputField" aria-label="Default select example">
                 <option selected>Dein Auto</option>
-                <option value="1">One</option>
-                <option value="2">Two</option>
-                <option value="3">Three</option>
+                @for (car of cars ; track $index) {
+                  <option value=$index>{{ car.name }}</option>
+                }
               </select>
             </div>
             <div class="col-12 col-lg-6 mt-3 mt-lg-0">
               <select class="form-select inputField" aria-label="Default select example">
                 <option selected>Dein Trailer</option>
-                <option value="1">One</option>
-                <option value="2">Two</option>
-                <option value="3">Three</option>
+                @for (trailer of trailers ; track $index) {
+                  <option value=$index>{{ trailer.name }}</option>
+                }
               </select>
             </div>
           </div>
