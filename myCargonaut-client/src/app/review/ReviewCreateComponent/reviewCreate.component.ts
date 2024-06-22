@@ -7,6 +7,7 @@ import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { TripService } from '../../services/trip-service.service';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { SessionService } from '../../services/session.service';
 
 
 
@@ -27,17 +28,35 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
 
 export class ReviewCreateComponent {
+  public sessionService: SessionService = inject(SessionService);
+
 
   constructor(private http: HttpClient,    private tripService: TripService,
              private router: Router) {}
 
+  currentUserID: number = 0
+  isloggedIn: boolean = false;
 
   ngOnInit(): void {
+    this.sessionService.checkLoginNum().then(currentUser => {
+      if (currentUser != -1) {
+        this.isloggedIn = true;
+        this.currentUserID = currentUser;
+        this.getAllTrips(); // Move getAllTrips() here
+      } else {
+        this.isloggedIn = false;
+      }
+    });
+
     // Subscribe to the trip ID from the service
     this.tripService.currentTripId.subscribe(id => {
       this.tripId = id;
-      console.log(this.tripId);  // Will log the trip ID whenever it changes
+      console.log(this.tripId + "hallo?");  // Will log the trip ID whenever it changes
     });
+    this.getAllTrips()
+
+
+
   }
 
 
@@ -52,6 +71,7 @@ export class ReviewCreateComponent {
   tripId: number | null = null;
   text: string | undefined
   averageFilledStars: number | undefined
+  isUserInvolved: boolean = false;
 
 
   starsFilledOne: boolean[] = [false, false, false, false, false];
@@ -199,6 +219,116 @@ export class ReviewCreateComponent {
     for (let i = 0; i < this.averageStarsFilled.length; i++) {
       this.averageStarsFilled[i] = i < this.averageFilledStars;
     }
+  }
+
+
+  offerTrips: any[] = [];
+  offerDriveTrips: any[] = [];
+  requestTrips: any[] = [];
+  requestDriveTrips: any[] = [];
+
+
+
+  getAllTrips() {
+    console.log("Fetching trips...");
+    this.http.get<any>('http://localhost:8000/trip/user-trips/' + this.currentUserID, { withCredentials: true }).subscribe(
+      (response) => {
+        console.log('Response:', response);
+
+        // Assign fetched trips to class properties
+        this.offerTrips = response.offerTrips || [];
+        console.log(this.offerTrips.length + "hallo " );
+        console.log(this.offerTrips );
+        this.offerDriveTrips = response.offerDriveTrips || [];
+        this.requestTrips = response.requestTrips || [];
+        this.requestDriveTrips = response.requestDriveTrips || [];
+
+        this.checkUserInvolvementInOfferTrips()
+        this.checkUserInvolvementInRequestTrips()
+        this.checkUserInvolvementInOfferDriveTrips()
+        this.checkUserInvolvementInRequestDriveTrips()
+
+      },
+      error => {
+        console.error('Error fetching trips:', error);
+      }
+    );
+  }
+
+
+
+  // Method to check user involvement in offer trips
+  checkUserInvolvementInOfferTrips(): boolean {
+
+    for (let i = 0; i < this.offerTrips.length; i++) {
+      const trip = this.offerTrips[i];
+
+      if (trip.id === this.tripId && trip.requesting && trip.requesting.id === this.currentUserID) {
+        this.isUserInvolved = true;
+        console.log('OfferTrips:', this.isUserInvolved);
+
+      }
+    }
+
+    console.log('OfferTrips:', this.isUserInvolved);
+    return this.isUserInvolved;
+  }
+
+  // Method to check user involvement in request trips
+  checkUserInvolvementInRequestTrips(): boolean {
+
+    // Iterate through requestTrips
+
+    for (let i = 0; i < this.requestTrips.length; i++) {
+      const trip = this.requestTrips[i];
+
+      if (trip.id === this.tripId && trip.requesting && trip.requesting.id === this.currentUserID) {
+        this.isUserInvolved = true;
+        console.log('ReqeustTrips', this.isUserInvolved);
+
+      }
+    }
+
+    console.log('ReqeustTrips', this.isUserInvolved);
+
+    return this.isUserInvolved;
+  }
+
+  // Method to check user involvement in offer drive trips
+  checkUserInvolvementInOfferDriveTrips(): boolean {
+
+    // Iterate through offerDriveTrips
+
+    for (let i = 0; i < this.offerDriveTrips.length; i++) {
+      const trip = this.offerDriveTrips[i];
+
+      if (trip.id === this.tripId && trip.requesting && trip.requesting.id === this.currentUserID) {
+        this.isUserInvolved = true;
+        console.log('offerDriveTrips:', this.isUserInvolved);
+      }
+    }
+
+
+    console.log('offerDriveTrips:', this.isUserInvolved);
+    return this.isUserInvolved;
+  }
+
+  // Method to check user involvement in request drive trips
+  checkUserInvolvementInRequestDriveTrips(): boolean {
+
+    // Iterate through requestDriveTrips
+    for (let i = 0; i < this.requestDriveTrips.length; i++) {
+      const trip = this.requestDriveTrips[i];
+
+      if (trip.id === this.tripId && trip.requesting && trip.requesting.id === this.currentUserID) {
+        this.isUserInvolved = true;
+        console.log('requestDriveTrips:', this.isUserInvolved);
+      }
+    }
+
+
+    console.log('requestDriveTrips:', this.isUserInvolved);
+    return this.isUserInvolved;
   }
 
 
