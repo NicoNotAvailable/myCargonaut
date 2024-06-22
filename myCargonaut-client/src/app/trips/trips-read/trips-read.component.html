@@ -122,34 +122,36 @@
         </div>
         <div class="row ms-3 me-3 mb-4">
           <div class="col-12 col-md-8 col-lg-4 text-start fw-bold">
-            <strong>{{request?.smokingAllowed? "Rauchen ist erlaubt" : "Rauchen ist nicht erlaubt"}}</strong>
+            <strong>{{request?.smokingAllowed? "Ich würde gerne rauchen" : "ich bin Nichtraucher"}}</strong>
           </div>
           <div class="col-12 col-md-8 col-lg-3 text-start fw-bold">
-            <div class="d-flex justify-content-end"><strong>{{request?.animalsAllowed? "Tiere sind erlaubt" : "Tiere sind nicht erlaubt"}}</strong></div>
+            <div class="d-flex justify-content-end"><strong>{{request?.animalsAllowed? "Ich habe Tier(e) dabei" : "Ich habe keine Tiere dabei"}}</strong></div>
           </div>
           <div class="col-4 text-end fw-bold">
             <span>Nur Musik hören</span>
           </div>
         </div>
-        <div class="row ms-3 me-3 mb-2 blueHeader fw-bold">
+        @if (request?.cargo != undefined) {
+        <div class="row ms-3 me-3 mb-4 blueHeader fw-bold">
           <span>Cargo</span>
         </div>
+        @for (cargo of request?.cargo ; track $index) {
         <div class="col-10 col-md-8 col-lg-12 p-2 field">
-          <div class="row ms-1 me-3 blueHeader fw-bold">
-            <span>Antikes Römisches Klavier</span>
+          <div class="row ms-1 me-3 mb-3 mt-2 fw-bold fs-5">
+            <span>{{ (cargo?.description || "") }}</span>
           </div>
           <div class="row ms-1 me-3 mb-4">
             <div class="col-3">
               <span>Länge:</span>
             </div>
             <div class="col-3 fw-bold">
-              <span>100cm</span>
+              <span>{{ (cargo?.length || "") }} cm </span>
             </div>
             <div class="col-3">
               <span>Gewicht:</span>
             </div>
             <div class="col-3 fw-bold">
-              <span>100kg</span>
+              <span>{{ (cargo?.weight || "") }} kg</span>
             </div>
           </div>
           <div class="row ms-1 me-3 mb-4">
@@ -157,7 +159,7 @@
               <span>Breite</span>
             </div>
             <div class="col-3 fw-bold">
-              <span>140cm</span>
+              <span>{{ (cargo?.width || "") }} cm</span>
             </div>
           </div>
           <div class="row ms-1 me-3 mb-4">
@@ -165,10 +167,12 @@
               <span>Höhe:</span>
             </div>
             <div class="col-3 fw-bold">
-              <span>42cm</span>
+              <span>{{ (cargo?.height || "") }} cm</span>
             </div>
           </div>
         </div>
+          }
+        }
         <div class="row justify-content-center">
           <div class="col-12 col-md-8 col-lg-10 mt-5 mb-3 text-center">
             <button type="submit" class="btn blueButton ps-5 pe-5" (click)="onSendRequestClick()">Jetzt Anfrage schicken!</button>

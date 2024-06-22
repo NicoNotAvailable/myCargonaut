@@ -12,6 +12,7 @@ export interface GetOffer {
   smokingAllowed: boolean;
   info: number;
   locations: Array<any>;
+  cargo: Array<any>;
   maxCHeight: number;
   maxCLength: number;
   maxCWeight: number;

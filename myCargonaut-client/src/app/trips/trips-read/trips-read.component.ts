@@ -43,7 +43,6 @@ export class TripsReadComponent implements OnInit {
         this.offerBool = true;
         this.getCar(this.offer?.carID);
         this.getTrailer(this.offer?.trailerID);
-        console.log("fsfesw"+this.offer?.carID);
       } else if (params ['type'] == "request") {
         this.requestBool = true
         this.offerBool = false;
