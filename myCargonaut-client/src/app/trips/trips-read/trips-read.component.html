@@ -28,7 +28,7 @@
             <span>Auto:</span>
           </div>
           <div class="col-12 col-md-8 col-lg-4 text-end fw-bold">
-            <span>{{ (offer?.carID || "loading") }}</span>
+            <span>{{ (carModel|| "loading") }}</span>
           </div>
           <div class="col-3 text-start ">
             <span>Anhänger:</span>
@@ -74,11 +74,13 @@
         </div>
         <div class="row ms-3 me-3 mb-4">
           <div class="col-12 col-md-8 col-lg-2 text-start">
-            <span>Fernseher, Klimaanlage</span>
+            <strong>{{carTV? "Fernseher," : ""}}</strong>
+            <strong>{{carAC? "Klimaanlage" : "keine Klimaanlage"}}</strong>
           </div>
           <div class="col-4"></div>
           <div class="col-12 col-md-8 col-lg-4 text-start">
-            <span>gekühlt, mit Abdeckung</span>
+            <strong>{{trailerCool? "gekühlt" : "ungekühlt"}}</strong>
+            <strong>{{trailerEnclosed? ",mit Abdeckung" : ",ohne Abdeckung"}}</strong>
           </div>
         </div>
         <div class="row ms-3 me-3 mb-4">

@@ -8,6 +8,7 @@ import { GetOffer } from './GetOffer';
 import { GetRequest } from './GetRequest';
 import { DateFormatPipe } from '../search/date-format.pipe';
 import { NgForOf, NgIf, NgOptimizedImage } from '@angular/common';
+import { VehicleService } from '../services/vehicle.service';
 
 @Component({
   selector: 'app-trips',
@@ -92,5 +93,6 @@ export class TripsComponent implements OnInit {
   starFillSrc: string = './assets/star-fill.svg';
   starEmptySrc: string = './assets/star.svg';
   stars: number[] = [1, 2, 3, 4, 5];
+
 
 }
