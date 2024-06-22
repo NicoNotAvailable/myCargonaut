@@ -12,14 +12,21 @@ import {MeineGesucheComponent} from "./meineAnfragenGesuche/meine-gesuche/meine-
 import {RequestAufAnfrageOSucheComponent} from "./meineAnfragenGesuche/request-auf-anfrage-osuche/request-auf-anfrage-osuche.component";
 
 import { TripsComponent } from './trips/trips.component';
+import { RequestComponent } from './drive/request/request.component';
+import { OfferComponent } from './drive/offer/offer.component';
+import { SummaryComponent } from './drive/summary/summary.component';
 
 export const routes: Routes = [
 
-  {path: '', component: FrontpageComponent},
+  { path: '', component: FrontpageComponent},
   { path: 'register', component: RegisterComponent },
   { path: 'login', component: LoginComponent },
+  { path: 'profile', component: ProfileComponent },
+  { path: 'createrequest', component: RequestComponent },
+  { path: 'createoffer', component: OfferComponent },
+  { path: 'summary', component: SummaryComponent },
+  { path: '', component: FrontpageComponent },
 
-  {path: 'profile', component: ProfileComponent},
   {path: 'searchOffer', component: SearchMainComponent},
   {path: 'searchRequest', component: SearchMainGesuchtComponent},
 

@@ -1,6 +1,5 @@
 import { IsBoolean, IsNotEmpty, IsNumber, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
-import { Transform } from 'class-transformer';
 
 export class GetOtherUserDTO {
   @ApiProperty()
@@ -16,13 +15,11 @@ export class GetOtherUserDTO {
   @ApiProperty()
   @IsString()
   @IsNotEmpty()
-  @Transform(({ value }) => value.charAt(0) + '.')
   firstName: string;
 
   @ApiProperty()
   @IsString()
   @IsNotEmpty()
-  @Transform(({ value }) => value.charAt(0) + '.')
   lastName: string;
 
   @ApiProperty()

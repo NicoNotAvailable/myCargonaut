@@ -2,19 +2,7 @@
   background-color: #005B52;
 }
 
-.textGreen {
-  color: #005B52;
-}
-
-.backgroundBlue {
-  background-color: #1A9CC5;
-}
-
-.circle {
-  border-radius: 50%;
-}
-
-#addTrailerArea{
+#addOfferArea{
   font-weight: 500;
   position: relative;
   z-index: 1;
@@ -23,8 +11,8 @@
   padding-top: 1rem !important;
   padding-bottom: 2rem !important;
 }
-#addTrailerArea:hover{
-  box-shadow: 0px 0px 20px #005B52;
+#addOfferArea:hover{
+  box-shadow: 0 0 20px #005B52;
 }
 
 .cancelButton{
@@ -60,22 +48,51 @@ input{
   border: solid #005B52 0.1rem;
 }
 
-.larger-checkbox {
-  height: 2rem;
-  width: 2rem;
+.textGreen {
+  color: #005B52;
+}
+
+.backgroundBlue {
+  background-color: #1A9CC5;
+}
+
+.circle {
+  border-radius: 50%;
+}
+
+.buttonColor:active{
+  background-color: #1a9cc5 !important;
 }
 
 .selectedButton{
-  background-color: #1a9cc5;
+  background-color: #1a9cc5 !important;
+  color: ghostwhite !important;
 }
+
 .deselectedButton{
-  background-color: #005B52;
+  background-color: #005B52 !important;
+  color: ghostwhite !important;
 }
+
 .deleteButton{
   background-color: #005B52;
 }
-.trailerInfo{
+
+.carInfo{
   color: #005B52;
   font-weight: bold;
-  font-size: 1.2rem;
+  font-size: 1.5rem;
+}
+
+.checkboxBorder{
+  border: 1px solid #005B52 !important;
+}
+
+.deleteButton {
+  background-color: #dc3545;
+}
+
+.card .button-container {
+  top: -20px;
+  z-index: 1;
 }

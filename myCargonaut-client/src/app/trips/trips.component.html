@@ -1,7 +1,7 @@
 <div class="container">
   <div class="row mt-5 mb-3">
     <div class="col-12 col-lg-2">
-      <a href="">
+      <a [routerLink]="['/searchOffer']">
         <button type="button" class="btn btn-primary greenButton"><- Alle Angebote</button>
       </a>
       <div class="row">
@@ -28,15 +28,29 @@
           <span>Datum: {{ (offer?.date || request?.date || "loading") | dateFormat  }}</span>
         </div>
         <div class="col-6 text-end">
-          <span class="blueText">{{ offer?.price || request?.price || "loading" }}€</span> <span class="blueText">{{ offer?.priceType  || "" }}</span>
+          <span class="blueText">{{ offer?.price || request?.price || "loading" }}€  </span> <span class="blueText"> @if (offer?.priceType == 1){}
+        @else if (offer?.priceType == 2){pro Person}
+        @else if (offer?.priceType == 3){pro Kilo}</span>
         </div>
         <div class="col-2"></div>
         <div class="col-2"></div>
         <div class="col-3 text-start">
-          <p class="m-0">von Startpunkt:</p><span class="fw-bold">Gießen</span>
+          <p class="m-0">von Startpunkt:</p>
+          <span class="fw-bold">
+          @for (location of offer?.locations; track $index) {
+          @if (location.stopNr == 1) {
+            <span class="highlightText">{{ location.zipCode }} {{ location.city }}</span>
+          }
+        }
+            </span>
         </div>
         <div class="col-5">
-          <p class="m-0">nach Ziel:</p><span class="fw-bold">Hamburg</span>
+          <p class="m-0">nach Ziel:</p><span class="fw-bold">@for (location of offer?.locations; track $index) {
+          @if (location.stopNr == 100) {
+            <span class="highlightText">{{ location.zipCode }} {{ location.city }}</span>
+            <span class="highlightText">{{ location.country }} </span>
+          }
+        }</span>
         </div>
       </div>
     </div>
