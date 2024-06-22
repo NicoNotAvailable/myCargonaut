@@ -57,6 +57,14 @@
 
 @if(showTripsRead) { <app-trips-read class="col-8"></app-trips-read>}
     @else if(showTripsCreate){<app-trips-create class="col-8"></app-trips-create>}
+@if(showTripsRead) { <app-trips-read class="col-8" [offer]="offer" [request]="request" (createTripRequest)="handleCreateTripRequest()"> </app-trips-read>}
+    @else if(showTripsCreate){<app-trips-create class="col-8">  </app-trips-create>}
+
+    <div class="col-12 col-lg-2 justify-content-center">
+      <div class="row">
+        <img [ngSrc]="window.location.protocol + '//' + window.location.host.replace('4200', '8000') + '/car/image/'+ (offer?.carPicture || null)"  width="70" height="55" class="card-img-top img-fluid backgroundGreen profileCircle my-4" alt="">
+      </div>
+    </div>
   </div>
 </div>
 

@@ -1,7 +1,9 @@
-import {Component, OnInit} from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import {FormsModule} from "@angular/forms";
 import {NgIf} from "@angular/common";
 import {ActivatedRoute} from "@angular/router";
+import { GetOffer } from '../GetOffer';
+import { GetRequest } from '../GetRequest';
 
 @Component({
   selector: 'app-trips-read',
@@ -17,6 +19,10 @@ export class TripsReadComponent implements OnInit {
   offerBool: boolean = true;
   requestBool: boolean = false;
 
+  @Input() offer: GetOffer | undefined;
+  @Input() request: GetRequest | undefined;
+  @Output() createTripRequest = new EventEmitter<void>();
+
   constructor(
     private route: ActivatedRoute,
   ) {
@@ -31,5 +37,8 @@ export class TripsReadComponent implements OnInit {
         this.offerBool = false;
       }
     });
+  }
+  onSendRequestClick(): void {
+    this.createTripRequest.emit();
   }
 }
