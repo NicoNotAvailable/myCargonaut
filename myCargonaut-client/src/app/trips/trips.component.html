@@ -4,6 +4,20 @@
       <a [routerLink]="['/searchOffer']">
         <button type="button" class="btn btn-primary greenButton"><- Alle Angebote</button>
       </a>
+      <div class="row">
+        <img [ngSrc]="window.location.protocol + '//' + window.location.host.replace('4200', '8000') + '/user/image/'+ (offer?.user?.profilePic || request?.user?.profilePic)" src="assets/empty.png" width="10px" height="10px" class="card-img-top img-fluid profileCircle my-4" alt="">
+      </div>
+      <div class="row">
+        <span>{{ offer?.user?.firstName || request?.user?.firstName || "loading" }} {{ offer?.user?.lastName || request?.user?.lastName || "loading" }}</span>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <ng-container *ngFor="let star of stars; let i = index">
+            <img [src]="i < rating ? starFillSrc : starEmptySrc" alt="star{{i + 1}}"
+                 class="blueText">
+          </ng-container>
+        </div>
+      </div>
     </div>
     <div class="col-12 col-lg-8 ">
       <div class="row text-center">
@@ -30,7 +44,7 @@
         }
             </span>
         </div>
-        <div class="col-2">
+        <div class="col-5">
           <p class="m-0">nach Ziel:</p><span class="fw-bold">@for (location of offer?.locations; track $index) {
           @if (location.stopNr == 100) {
             <span class="highlightText">{{ location.zipCode }} {{ location.city }}</span>
@@ -47,22 +61,6 @@
     </div>
   </div>
   <div class="row">
-    <div class="col-12 col-lg-2">
-      <div class="row">
-        <img [ngSrc]="window.location.protocol + '//' + window.location.host.replace('4200', '8000') + '/user/image/'+ (offer?.user?.profilePic || request?.user?.profilePic)"  width="150px" height="150px" class="card-img-top img-fluid profileCircle my-4" alt="">
-      </div>
-      <div class="row">
-        <span>{{ offer?.user?.firstName || request?.user?.firstName || "loading" }} {{ offer?.user?.lastName || request?.user?.lastName || "loading" }}</span>
-      </div>
-      <div class="row">
-        <div class="col-12">
-          <ng-container *ngFor="let star of stars; let i = index">
-            <img [src]="i < rating ? starFillSrc : starEmptySrc" alt="star{{i + 1}}"
-                 class="blueText">
-          </ng-container>
-        </div>
-      </div>
-    </div>
 @if(showTripsRead) { <app-trips-read class="col-8" [offer]="offer" [request]="request" (createTripRequest)="handleCreateTripRequest()"> </app-trips-read>}
     @else if(showTripsCreate){<app-trips-create class="col-8">  </app-trips-create>}
 
