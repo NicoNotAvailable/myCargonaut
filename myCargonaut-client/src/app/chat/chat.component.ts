@@ -1,7 +1,7 @@
 import { Component, OnInit, inject, ViewChild, ElementRef } from "@angular/core";
 import { SocketService } from '../services/socket.service';
 import { SessionService } from "../services/session.service";
-import { CommonModule } from "@angular/common";
+import { CommonModule, NgOptimizedImage } from "@angular/common";
 import { FormsModule } from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
 import { HttpClient } from "@angular/common/http";
@@ -11,7 +11,7 @@ import { tr } from "@faker-js/faker";
 @Component({
   selector: 'app-chat',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, NgOptimizedImage],
   templateUrl: './chat.component.html',
   styleUrl: './chat.component.css'
 })
@@ -23,6 +23,7 @@ export class ChatComponent implements OnInit {
   room: string | undefined;
   rooms: string[] = [];
   trips: { [key: string]: any } = {};
+  pathToImage: string = 'empty.png';
 
   private sessionService: SessionService = inject(SessionService);
   private socketService: SocketService = inject(SocketService);
@@ -177,7 +178,6 @@ export class ChatComponent implements OnInit {
     this.room = room;
     console.log('Selected room:', room);
     this.markMessagesAsRead(room);
-    this.selectRoom(room);
     if (this.messageInput) {
       this.messageInput.nativeElement.focus();
     }
@@ -212,9 +212,16 @@ export class ChatComponent implements OnInit {
     }
   }
 
-  fetchOtherUser(trip: any): Promise<any> {
-    const userId = trip.drive ? trip.drive.userId : trip.requesting.userId;
-    return this.http.get<any>(`http://localhost:8000/user/${userId}`, { withCredentials: true }).toPromise();
+  async fetchOtherUser(trip: any): Promise<any> {
+    const otherUserId = this.userId === trip.requesting.id ? trip.drive.user.id : trip.requesting.id;
+    const url = `http://localhost:8000/user/${otherUserId}`;
+    try {
+      const user = await this.http.get<any>(url).toPromise();
+      return user;
+    } catch (error) {
+      console.error('Error fetching user:', error);
+      throw error;
+    }
   }
 
   getInitials(user: any): string {
@@ -237,4 +244,9 @@ export class ChatComponent implements OnInit {
       this.messagesContainer.nativeElement.scrollTop = this.messagesContainer.nativeElement.scrollHeight;
     }
   }
+  getProfilePicUrl(profilePic: string): string {
+    return `${window.location.protocol}//${window.location.host.replace('4200', '8000')}/user/image/${profilePic}`;
+  }
+
+  protected readonly window = window;
 }

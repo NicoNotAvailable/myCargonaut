@@ -110,7 +110,7 @@
 .card-body {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: left;
 }
 
 .card-title {

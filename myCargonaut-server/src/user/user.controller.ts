@@ -3,7 +3,7 @@ import {
     Body,
     Controller,
     Get,
-    Logger,
+    Logger, NotFoundException,
     Param,
     Post,
     Put,
@@ -11,14 +11,14 @@ import {
     Session,
     UploadedFile,
     UseGuards,
-    UseInterceptors,
-} from '@nestjs/common';
+    UseInterceptors
+} from "@nestjs/common";
 import {
     ApiBearerAuth,
-    ApiConsumes,
+    ApiConsumes, ApiOperation, ApiParam,
     ApiResponse,
-    ApiTags,
-} from '@nestjs/swagger';
+    ApiTags
+} from "@nestjs/swagger";
 import { UserService } from './user.service';
 import { CreateUserDTO } from './DTO/CreateUserDTO';
 import { OkDTO } from '../serverDTO/OkDTO';
@@ -379,6 +379,24 @@ export class UserController {
             return new OkDTO(true, 'User was deleted');
         } catch (err) {
             throw new BadRequestException('User could not be deleted');
+        }
+    }
+
+    @Get('/:id')
+    @ApiOperation({ summary: 'Get user by ID' })
+    @ApiParam({ name: 'id', type: 'number', description: 'The ID of the user to retrieve' })
+    @ApiResponse({ status: 200, description: 'The user has been successfully retrieved.', type: UserDB })
+    @ApiResponse({ status: 404, description: 'User not found' })
+    async getUserById(@Param('id') id: number): Promise<UserDB> {
+        try {
+            const user = await this.userService.getUserById(id);
+            console.log(user);
+            return user;
+        } catch (error) {
+            if (error instanceof NotFoundException) {
+                throw new NotFoundException('User not found');
+            }
+            throw error;
         }
     }
 }

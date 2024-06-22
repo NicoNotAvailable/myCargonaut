@@ -14,12 +14,23 @@
           <ng-template #chatList>
             <div>
               <div *ngFor="let room of rooms" (click)="selectRoom(room)" class="trip-card">
-                <div class="card">
-                  <img [src]="trips[room]?.user?.profilePicture" alt="Profile Picture" class="profile-pic">
+                <div class="card row">
+                  <img *ngIf="!trips[room].user.profilePic || trips[room].user.profilePic === 'empty.png'"
+                       class="profileCircle col-6"
+                       [src]="pathToImage"
+                       alt="profile"
+                       width="130"
+                       height="130">
+                  <img *ngIf="trips[room].user.profilePic && trips[room].user.profilePic !== 'empty.png'"
+                       [src]="getProfilePicUrl(trips[room].user.profilePic)"
+                       width="130"
+                       height="130"
+                       class="profileCircle col-6"
+                       alt="profile">
                   <div class="initials">
                     {{ getInitials(trips[room].user) }}
                   </div>
-                  <div class="card-body">
+                  <div class="card row card-body">
                     <h5 class="card-title">{{ trips[room]?.drive?.name || '' }}</h5>
                     <p>{{ formatDate(trips[room]?.drive?.date || '') }}</p>
                   </div>
