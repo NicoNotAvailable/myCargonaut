@@ -28,7 +28,6 @@ export class VehicleService {
     if (owner instanceof UserDB) {
       newCar.owner = owner;
     } else {
-      console.log(owner);
       throw new Error('Invalid owner type');
     }
     // Set the values for the new car
@@ -44,7 +43,6 @@ export class VehicleService {
     try {
       // Save the new car
       const savedCar = await this.carRepository.save(newCar);
-      console.log(savedCar);
       return savedCar;
     } catch (error) {
       console.log('Error saving CarDB:', error);

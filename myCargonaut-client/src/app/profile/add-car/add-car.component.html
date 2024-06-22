@@ -1,6 +1,6 @@
 <div class="container mt-3 mb-3 text-start">
   <div class="text-end col-12">
-    <button type="button" class="btn btn-primary cancelButton text-center" id="cancelButton" (click)="changeAddCarState()">
+    <button type="button" class="btn btn-primary cancelButton text-center" id="cancelButton" *ngIf="!uploadCarImgState" (click)="changeAddCarState()">
       <i>
         <fa-icon [icon]="faXmark"></fa-icon>
       </i>
@@ -9,7 +9,7 @@
   <form #form="ngForm" (ngSubmit)="saveCar(form)">
     <div class="row">
       <div class="p-5" id="addCarArea">
-        <div class="col-12" *ngIf="uploadCarImgState">
+        <div class="col-12" *ngIf="uploadCarImgState" id="bigMargin">
           <div class="row justify-content-center text-center">
             <div class="col-12">
               <div>Füge bitte für {{model}} ein Bild Hinzu!</div>
@@ -22,7 +22,7 @@
           </div>
         </div>
         <div class="row mb-5" *ngIf="!uploadCarImgState">
-          <div class="col-4" *ngIf="editingCar == 0">
+          <div class="col-4">
             <h1 class="textGreen col-7">Sitze:</h1>
             <div class="row">
               <div class="col-2"></div>
@@ -53,38 +53,6 @@
               <div class="col-2 me-2"></div>
               <input [(ngModel)]="seats" #seatsInput="ngModel" type="number" name="seatsInput" class="rounded-5 p-2 col-9" placeholder="Andere Anzahl" (input)="changeSeatCount(seatsInput.value)">
             </div>
-          </div>
-          <div class="col-4" *ngIf="editingCar != 0">
-            <h1 class="textGreen col-7">Sitze:</h1>
-            <div class="row">
-              <div class="col-2"></div>
-              <div class="col-4">
-                <button (click)="changeSeatCount(2)" disabled [ngClass]="seats === 2 ? 'selectedSeats' : 'deselectedSeats'" type="button" class="btn rounded-3 pt-4 pb-4 ps-5 pe-5 text-light"><h1>2</h1>
-                </button>
-              </div>
-              <div class="col-1"></div>
-              <div class="col-4">
-                <button (click)="changeSeatCount(3)" disabled [ngClass]="seats === 3 ? 'selectedSeats' : 'deselectedSeats'" type="button" class="btn rounded-3 pt-4 pb-4 ps-5 pe-5 text-light"><h1>3</h1>
-                </button>
-              </div>
-              <div class="col-1"></div>
-            </div>
-            <div class="row mt-4">
-              <div class="col-2"></div>
-              <div class="col-4">
-                <button (click)="changeSeatCount(4)" disabled [ngClass]="seats === 4 ? 'selectedSeats' : 'deselectedSeats'" type="button" class="btn rounded-3 pt-4 pb-4 ps-5 pe-5 text-light"><h1>4</h1>
-                </button>
-              </div>
-              <div class="col-1"></div>
-              <div class="col-4">
-                <button (click)="changeSeatCount(5)" disabled [ngClass]="seats === 5 ? 'selectedSeats' : 'deselectedSeats'" type="button" class="btn rounded-3 pt-4 pb-4 ps-5 pe-5 text-light"><h1>5</h1>
-                </button>
-              </div>
-            </div>
-            <div class="row mt-3">
-              <div class="col-2 me-2"></div>
-              <input [(ngModel)]="seats" [ngModelOptions]="{standalone: true}" disabled type="number" class="rounded-5 p-2 col-9">
-            </div>
             <div class="col-12 mt-5 align-bottom d-flex justify-content-around align-items-center" *ngIf="enableDeletion">
               <button type="button" class="btn customButton deleteButton text-light" (click)="deleteCar(editingCar)">
                 <i>
@@ -98,20 +66,17 @@
           <div class="col-4">
             <h1 class="textGreen col-5">Infos:</h1>
 
-            <div class="col-12 d-flex" *ngIf="editingCar == 0">
+            <div class="col-12 d-flex">
               <input [(ngModel)]="model" [ngModelOptions]="{standalone: true}" name="modelInput" required type="text" class="rounded-5 p-2 col-12" placeholder="Modell" id="carModel">
             </div>
-            <div class="col-12 d-flex justify-content-center" *ngIf="editingCar != 0">
-              <span class="carInfo">{{ model }}</span>
-            </div>
-            <div class="col-12 mt-5 d-flex justify-content-center">
+            <div class="col-12 mt-5 d-flex justify-content-center" *ngIf="editingCar != 0">
               <p>Bild des Autos</p>
             </div>
             <div class="col-12 flex-column justify-content-center align-items-center">
               <input (change)="onFileChange($event)" *ngIf="editingCar != 0" class="customButton" type="file" required name="carImgInput"><br>
             </div>
           </div>
-          <div class="col-4" *ngIf="editingCar == 0">
+          <div class="col-4">
             <h1 class="textGreen col-5">Maße:</h1>
             <div class="col-12">
               <input [(ngModel)]="weight" [ngModelOptions]="{standalone: true}" name="weightInput" required type="number" class="rounded-5 p-2 col-12" placeholder="Gewicht in KG" id="carWeight">
@@ -135,27 +100,6 @@
             </div>
           </div>
 
-          <div class="col-4" *ngIf="editingCar != 0">
-            <h1 class="textGreen col-5">Maße:</h1>
-            <div class="col-12">
-              <span class="carInfo">{{ weight }}KG Maximal-Gewicht</span>
-            </div>
-            <div class="col-12 mt-5">
-              <span class="carInfo">{{ length }}Meter lang</span>
-            </div>
-            <div class="col-12 mt-5">
-              <span class="carInfo">{{ width }}Meter breit</span>
-            </div>
-            <div class="col-12 mt-5">
-              <span class="carInfo">{{ height }}Meter hoch</span>
-            </div>
-            <div class="col-12 mt-5 form-check text-start flex-row justify-content-start align-items-center">
-              <span class="carInfo">{{ hasTv? "Hat einen Fernseher" : "Hat keinen Fernseher" }}</span>
-            </div>
-            <div class="col-12 mt-5 form-check text-start flex-row justify-content-start align-items-center">
-              <span class="carInfo">{{ hasAc? "Hat eine Klimaanlage" : "Hat keine Klimaanlage" }}</span>
-            </div>
-          </div>
         </div>
         <div class="row d-flex justify-content-center align-bottom text-center">
           <div class="col-12">
