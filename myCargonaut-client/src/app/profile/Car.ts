@@ -12,7 +12,7 @@ export class Car {
 
   constructor(id: number, name: string, weight: number, length: number, height: number, width: number, seats: number, carPicture: string) {
     this.id = id;
-    this.name = name;
+    this.name  = name;
     this.weight = weight;
     this.length = length;
     this.height = height;

@@ -7,8 +7,8 @@ import {
   faCirclePlus, faComment,
   faHouse, faPencil,
   faPenSquare,
-  faPlus,
-  faSignIn,
+  faPlus, faSearchDollar,
+  faSignIn, faTags,
   faUser
 } from "@fortawesome/free-solid-svg-icons";
 import { SessionService } from "../services/session.service";
@@ -66,4 +66,7 @@ export class NavbarComponent {
       }
     )
   }
+
+  protected readonly faTags = faTags;
+  protected readonly faSearchDollar = faSearchDollar;
 }
