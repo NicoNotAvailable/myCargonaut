@@ -1,12 +1,12 @@
-<div class="container">
+<div class="container justify-content-center">
   <div class="row mt-5 mb-3">
     <div class="col-12 col-lg-2">
       <a [routerLink]="['/searchOffer']">
         <button type="button" class="btn btn-primary greenButton"><- Alle Angebote</button>
       </a>
-      <div class="row">
-        <img [ngSrc]="window.location.protocol + '//' + window.location.host.replace('4200', '8000') + '/user/image/'+ (offer?.user?.profilePic || request?.user?.profilePic)" src="assets/empty.png" width="10px" height="10px" class="card-img-top img-fluid profileCircle my-4" alt="">
-      </div>
+        <img
+          [ngSrc]="window.location.protocol + '//' + window.location.host.replace('4200', '8000') + '/user/image/'+ (offer?.user?.profilePic || request?.user?.profilePic)"
+          src="assets/empty.png" width="10px" height="10px" class="card-img-top img-fluid profileCircle my-4" alt="">
       <div class="row">
         <span>{{ offer?.user?.firstName || request?.user?.firstName || "loading" }} {{ offer?.user?.lastName || request?.user?.lastName || "loading" }}</span>
       </div>
@@ -24,24 +24,28 @@
         <h2 class="greenText">{{ offer?.name || request?.name || "loading" }}</h2>
       </div>
       <div class="row">
-        <div class="col-6 text-start">
-          <span>Datum: {{ (offer?.date || request?.date || "loading") | dateFormat  }}</span>
+        <div class="col-2"></div>
+        <div class="col-5 text-start my-auto">
+          <span>Datum: {{ (offer?.date || request?.date || "loading") | dateFormat }}</span>
         </div>
-        <div class="col-6 text-end">
-          <span class="blueText">{{ offer?.price || request?.price || "loading" }}€  </span> <span class="blueText"> @if (offer?.priceType == 1){}
-        @else if (offer?.priceType == 2){pro Person}
-        @else if (offer?.priceType == 3){pro Kilo}</span>
+        <div class="col-5">
+          <span class="blueText">{{ offer?.price || request?.price || "loading" }}€  </span> <span
+          class="blueText"> @if (offer?.priceType == 1) {
+        } @else if (offer?.priceType == 2) {
+          pro Person
+        } @else if (offer?.priceType == 3) {
+          pro Kilo
+        }</span>
         </div>
         <div class="col-2"></div>
-        <div class="col-2"></div>
-        <div class="col-3 text-start">
+        <div class="col-5 text-start">
           <p class="m-0">von Startpunkt:</p>
           <span class="fw-bold">
           @for (location of offer?.locations; track $index) {
-          @if (location.stopNr == 1) {
-            <span class="highlightText">{{ location.zipCode }} {{ location.city }}</span>
+            @if (location.stopNr == 1) {
+              <span class="highlightText">{{ location.zipCode }} {{ location.city }}</span>
+            }
           }
-        }
             </span>
         </div>
         <div class="col-5">
@@ -56,15 +60,18 @@
     </div>
     <div class="col-12 col-lg-2 justify-content-center">
       <div class="row">
-        <img [ngSrc]="window.location.protocol + '//' + window.location.host.replace('4200', '8000') + '/car/image/'+ (offer?.carPicture || null)"  width="70" height="55" class="card-img-top img-fluid backgroundGreen profileCircle my-4" alt="">
+        <img
+          [ngSrc]="window.location.protocol + '//' + window.location.host.replace('4200', '8000') + '/car/image/'+ (offer?.carPicture || null)"
+          width="70" height="55" class="card-img-top img-fluid backgroundGreen profileCircle my-4" alt="">
       </div>
     </div>
   </div>
-  <div class="row">
 
-@if(showTripsRead) { <app-trips-read class="col-8" [offer]="offer" [request]="request" (createTripRequest)="handleCreateTripRequest()"> </app-trips-read>}
-    @else if(showTripsCreate){<app-trips-create class="col-8">  </app-trips-create>}
-
-  </div>
+    @if (showTripsRead) {
+      <app-trips-read class="col-8" [offer]="offer" [request]="request"
+                      (createTripRequest)="handleCreateTripRequest()"></app-trips-read>
+    } @else if (showTripsCreate) {
+      <app-trips-create class="col-8"></app-trips-create>
+    }
 </div>
 
