@@ -4,32 +4,24 @@
           <div class="row mt-3">
             <div class="col-12 col-lg-6">
               <select class="form-select inputField" aria-label="Default select example">
-                <option selected>Dein Startpunkt</option>
-                <option value="1">One</option>
-                <option value="2">Two</option>
-                <option value="3">Three</option>
+                <option selected>Dein Ziel</option>
+                @for (location of offer?.locations ; track $index) {
+                  <option value=$index>{{ location.zipCode }} {{ location.city }}</option>
+                }
               </select>
             </div>
             <div class="col-12 col-lg-6 mt-3 mt-lg-0">
               <select class="form-select inputField" aria-label="Default select example">
                 <option selected>Dein Ziel</option>
-                <option value="1">One</option>
-                <option value="2">Two</option>
-                <option value="3">Three</option>
+                @for (location of offer?.locations ; track $index) {
+                  <option value=$index>{{ location.zipCode }} {{ location.city }}</option>
+                  }
               </select>
             </div>
           </div>
           <div class="row mt-3">
-            <div class="col-12 col-lg-6 ">
-              <select class="form-select inputField" aria-label="Default select example">
-                <option selected>Anzahl Personen</option>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-                <option value="6">6</option>
-              </select>
+            <div class="col-12 col-lg-6">
+              <input type="text" class="form-control inputField" aria-label="Anzahl Personen" placeholder="Anzahl Personen">
             </div>
             <div class="col-12 col-lg-6 mt-3 mt-lg-0">
               <div class="row">

@@ -1,6 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import {NgForOf, NgOptimizedImage} from "@angular/common";
 import { ActivatedRoute } from '@angular/router';
+import { offer } from '../../search/offers';
+import { GetOffer } from '../GetOffer';
+import { GetRequest } from '../GetRequest';
 
 @Component({
   selector: 'app-trips-create',
@@ -32,4 +35,7 @@ export class TripsCreateComponent implements OnInit {
 
     });
   }
+
+  @Input() offer!: GetOffer | undefined;
+  @Input() request!: GetRequest | undefined;
 }
