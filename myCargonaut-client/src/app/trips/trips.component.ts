@@ -7,7 +7,7 @@ import { TripsCreateComponent } from './trips-create/trips-create.component';
 import { GetOffer } from './GetOffer';
 import { GetRequest } from './GetRequest';
 import { DateFormatPipe } from '../search/date-format.pipe';
-import { NgIf, NgOptimizedImage } from '@angular/common';
+import { NgForOf, NgIf, NgOptimizedImage } from '@angular/common';
 
 @Component({
   selector: 'app-trips',
@@ -20,6 +20,7 @@ import { NgIf, NgOptimizedImage } from '@angular/common';
     NgOptimizedImage,
     NgIf,
     RouterLink,
+    NgForOf,
   ],
   styleUrls: ['./trips.component.css'],
 })
