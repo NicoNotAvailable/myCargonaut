@@ -6,7 +6,16 @@
         <div class="col-2"></div>
         <div class="col-3">
           <span>Zwischenziele:</span><br>
-          <span class="fw-bold">Poppendorf, Poppenhausen</span>
+          <span class="fw-bold">
+            @for (location of offer?.locations ; track $index) {
+              @if (location.stopNr != 1 && location.stopNr != 100) {
+                <span class="highlightText">{{ location.zipCode }} {{ location.city }}</span>
+                <p class="highlightText">{{ location.country }} </p>
+              } @else {
+                <span class="highlightText">-</span>
+              }
+            }
+          </span>
         </div>
       </div>
     </div>

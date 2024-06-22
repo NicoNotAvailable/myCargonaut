@@ -25,8 +25,8 @@
       </div>
       <div class="row">
         <div class="col-2"></div>
-        <div class="col-5 text-start my-auto">
-          <span>Datum: {{ (offer?.date || request?.date || "loading") | dateFormat }}</span>
+        <div class="col-5 text-start my-auto fw-bold">
+          <span >Datum: {{ (offer?.date || request?.date || "loading") | dateFormat }}</span>
         </div>
         <div class="col-5">
           <span class="blueText">{{ offer?.price || request?.price || "loading" }}€  </span> <span
@@ -39,20 +39,21 @@
         </div>
         <div class="col-2"></div>
         <div class="col-5 text-start">
-          <p class="m-0">von Startpunkt:</p>
+          <p class="mt-3">von Startpunkt:</p>
           <span class="fw-bold">
-          @for (location of offer?.locations; track $index) {
+          @for (location of offer?.locations || request?.locations ; track $index) {
             @if (location.stopNr == 1) {
               <span class="highlightText">{{ location.zipCode }} {{ location.city }}</span>
+              <p class="highlightText">{{ location.country }} </p>
             }
           }
             </span>
         </div>
         <div class="col-5">
-          <p class="m-0">nach Ziel:</p><span class="fw-bold">@for (location of offer?.locations; track $index) {
+          <p class="mt-3">nach Ziel:</p><span class="fw-bold">@for (location of offer?.locations || request?.locations; track $index) {
           @if (location.stopNr == 100) {
             <span class="highlightText">{{ location.zipCode }} {{ location.city }}</span>
-            <span class="highlightText">{{ location.country }} </span>
+            <p class="highlightText">{{ location.country }} </p>
           }
         }</span>
         </div>
