@@ -40,6 +40,7 @@
           @for (location of offer?.locations; track $index) {
           @if (location.stopNr == 1) {
             <span class="highlightText">{{ location.zipCode }} {{ location.city }}</span>
+            <span class="highlightText">{{ location.country }} </span>
           }
         }
             </span>
