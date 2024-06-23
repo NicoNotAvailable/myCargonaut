@@ -137,8 +137,7 @@ export class TripsCreateComponent implements OnInit {
     this.tripsService.createRequestTrip(tripData).subscribe(
       () => {
         setTimeout(() => {
-          //TODO: navigate to chat
-          window.location.reload();
+          window.location.href = "/chats";
         }, 200);
       }, error => {
         console.error('There was an error!', error);
@@ -163,8 +162,7 @@ export class TripsCreateComponent implements OnInit {
     this.tripsService.createOfferTrip(tripData).subscribe(
       () => {
         setTimeout(() => {
-          //TODO: navigate to chat
-          window.location.reload();
+          window.location.href = "/chats";
         }, 200);
       }, error => {
         console.error('There was an error!', error);
