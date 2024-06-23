@@ -37,6 +37,8 @@ import { extname, join } from 'path';
 import { diskStorage } from 'multer';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { UtilsService } from '../utils/utils.service';
+import { UpdateCarDTO } from "./DTO/UpdateCarDTO";
+import { UpdateTrailerDTO } from "./DTO/UpdateTrailerDTO";
 
 @ApiTags('vehicle')
 @Controller('vehicle')
@@ -58,7 +60,6 @@ export class VehicleController {
   @UseGuards(IsLoggedInGuard)
   async createCar(@Body() body: CreateCarDTO, @Session() session: SessionData) {
     const owner = await this.userService.getUserById(session.currentUser);
-    console.log(session.currentUser);
     if (!owner) {
       throw new BadRequestException('User was not found');
     }
@@ -108,7 +109,7 @@ export class VehicleController {
   @ApiBearerAuth()
   @UseGuards(IsLoggedInGuard)
   async updateCar(
-    @Body() body: CreateCarDTO,
+    @Body() body: UpdateCarDTO,
     @Param('id', ParseIntPipe) id: number,
   ) {
     const car = await this.vehicleService.getCarById(id);
@@ -129,7 +130,8 @@ export class VehicleController {
     }
     if (!body.length || body.length <= 0 || body.length > 100) {
       throw new BadRequestException(
-        'Auto muss länger al 0m und kürzer als 100m sein',
+
+        'Auto muss länger als 0m und kürzer als 100m sein',
       );
     }
     if (!body.height || body.height <= 0 || body.height > 100) {
@@ -146,6 +148,15 @@ export class VehicleController {
       throw new BadRequestException('Sitzplätze nur zwischen 1 und 20');
     }
 
+    car.seats = body.seats;
+    car.name = body.name;
+    car.weight = body.weight;
+    car.height = body.height;
+    car.hasAC = body.hasAC;
+    car.width = body.width;
+    car.length = body.length;
+    car.hasTelevision = body.hasTelevision;
+      
     try {
       await this.vehicleService.updateCar(car);
       return new OkDTO(true, 'Car was updated');
@@ -233,6 +244,14 @@ export class VehicleController {
         'Trailer muss breiter als 0m und dünner als 100m sein',
       );
     }
+
+    trailer.name = body.name;
+    trailer.width = body.width;
+    trailer.height = body.height;
+    trailer.weight = body.weight;
+    trailer.length = body.length;
+    trailer.isCooled = body.isCooled;
+    trailer.isEnclosed = body.isEnclosed;
     try {
       await this.vehicleService.updateTrailer(trailer);
       return new OkDTO(true, 'Trailer was updated');

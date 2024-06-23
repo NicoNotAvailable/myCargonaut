@@ -1,17 +1,18 @@
 import {
-    BadRequestException,
-    Body,
-    Controller,
-    Get,
-    Logger,
-    Param,
-    Post,
-    Put,
-    Res,
-    Session,
-    UploadedFile,
-    UseGuards,
-    UseInterceptors,
+  BadRequestException,
+  Body,
+  Controller,
+  Get,
+  Logger,
+  Param,
+  Post,
+  ParseIntPipe,
+  Put,
+  Res,
+  Session,
+  UploadedFile,
+  UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import {
     ApiBearerAuth,
@@ -37,15 +38,18 @@ import { UserDB } from '../database/UserDB';
 import { Response } from 'express';
 import { ReviewService } from '../review/review.service';
 import { GetOtherUserDTO } from './DTO/GetOtherUserDTO';
+import { UtilsService } from '../utils/utils.service';
 
 @ApiTags('user')
 @Controller('user')
 export class UserController {
-    constructor(
-        private readonly userService: UserService,
-        private readonly reviewService: ReviewService,
-    ) {}
-    private readonly logger = new Logger(UserController.name);
+  constructor(
+    private readonly userService: UserService,
+    private readonly utilsService: UtilsService,
+    private readonly reviewService: ReviewService,
+  ) {}
+
+  private readonly logger = new Logger(UserController.name);
 
     private validateNonEmptyString(value: string, errorMessage: string): void {
         if (!value?.trim()) {
@@ -68,16 +72,52 @@ export class UserController {
         const today = new Date();
         let age = today.getFullYear() - birthday.getFullYear();
         const monthDifference = today.getMonth() - birthday.getMonth();
-
-        if (
+      if (
             monthDifference < 0 ||
             (monthDifference === 0 && today.getDate() < birthday.getDate())
         ) {
             age--;
         }
-
-        return age >= 18;
+            return age >= 18;
     }
+  
+  @ApiResponse({ type: GetOtherUserDTO, description: 'gets other user' })
+  @Get('/:id')
+  async getOtherUser(@Param('id', ParseIntPipe) id: number) {
+    let user: UserDB;
+    try {
+      user = await this.userService.getUserById(id);
+    } catch (err) {
+      console.log(err);
+    }
+    return this.utilsService.transformUserToGetOtherUserDTO(user);
+  }
+
+    @ApiResponse({ type: GetOwnUserDTO, description: 'gets the own user' })
+    @Get()
+    async getUser(@Session() session: SessionData): Promise<GetOwnUserDTO> {
+      let user: UserDB;
+      let rating: number;
+      try {
+        user = await this.userService.getUserById(session.currentUser);
+        rating = await this.reviewService.getRating(session.currentUser);
+      } catch (err) {
+        console.log(err);
+      }
+      const dto: GetOwnUserDTO = new GetOwnUserDTO();
+      dto.lastName = user.lastName;
+      dto.firstName = user.firstName;
+      dto.email = user.email;
+      dto.profilePic = user.profilePic;
+      dto.phoneNumber = user.phoneNumber;
+      dto.birthday = user.birthday;
+      dto.isSmoker = user.isSmoker;
+      dto.profileText = user.profileText;
+      dto.languages = user.languages;
+      dto.rating = rating;
+      return dto;
+    }
+
 
     @ApiResponse({ type: GetOwnUserDTO, description: 'gets the own user' })
     @Get()

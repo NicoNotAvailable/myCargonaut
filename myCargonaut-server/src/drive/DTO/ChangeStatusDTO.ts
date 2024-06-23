@@ -1,11 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import {
-  IsArray,
-  IsNotEmpty,
-  IsNumber,
-  IsOptional,
-  ValidateNested,
-} from 'class-validator';
+import { IsArray, IsNotEmpty, IsNumber, IsOptional, ValidateNested } from 'class-validator';
 import { StatusEnum } from '../../database/enums/StatusEnum';
 
 export class ChangeStatusDTO {

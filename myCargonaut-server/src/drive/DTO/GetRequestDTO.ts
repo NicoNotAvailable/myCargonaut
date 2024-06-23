@@ -8,6 +8,7 @@ import { GetOtherUserDTO } from '../../user/DTO/GetOtherUserDTO';
 import { CreateCargoDTO } from '../../cargo/DTO/CreateCargoDTO';
 import { StatusEnum } from '../../database/enums/StatusEnum';
 
+
 export class GetRequestDTO {
   @ApiProperty()
   id: number;

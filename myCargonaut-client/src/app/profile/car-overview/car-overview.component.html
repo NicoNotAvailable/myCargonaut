@@ -14,9 +14,11 @@
           <div class="card border border-0" style="width: 18rem;">
             <div class="card-body">
               <div class="backgroundGreen">
+                <span>
                 <img *ngIf="car.carPicture !== 'empty.png'" [ngSrc]="window.location.protocol + '//' + window.location.host.replace('4200', '8000') + '/vehicle/image/'+ car.carPicture" width="70" height="55" class="card-img-top img-fluid backgroundGreen mb-4" alt="">
                 <img *ngIf="car.carPicture === 'empty.png'" src="../../../assets/Cybertruck-fremont-cropped.jpg" class="card-img-top img-fluid backgroundGreen mb-4" alt="">
-                <div class="text-light">
+                </span>
+                  <div class="text-light">
                   <h5 class="card-title">{{ car.name }}</h5>
                   <p class="m-0">{{ car.seats }} Sitze</p>
                   <p class="m-0">{{ car.width }}m Breit</p>
@@ -24,7 +26,7 @@
                   <p class="m-0">{{ car.height }}m Hoch</p>
                   <p class="m-0">{{ car.weight }}KG Max. Gewicht</p>
                 </div>
-                <button type="button" class="btn bg-transparent text-light editCar" (click)="changeAddCarsState(car.id)"><h5>Bearbeiten</h5></button>
+                <button type="button" class="btn bg-transparent text-light editButton" (click)="changeAddCarsState(car.id)"><h5>Bearbeiten</h5></button>
               </div>
             </div>
           </div>

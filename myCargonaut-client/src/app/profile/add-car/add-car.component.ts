@@ -63,11 +63,8 @@ export class AddCarComponent {
   }
 
   saveCar(form: any): void {
-    if (this.editingCar != 0) {
-      this.changeAddCarState();
-      return;
-    }
     const carData = {
+      id: this.editingCar,
       name: this.model,
       weight: this.weight == null? 0 : this.weight,
       length: this.length == null ? 0 : this.length,
@@ -78,18 +75,33 @@ export class AddCarComponent {
       hasTelevision: this.hasTv
     };
 
-    this.http.post("http://localhost:8000/vehicle/car", carData, { withCredentials: true }).subscribe(
-      response => {
-        form.resetForm();
-        this.fetchCreatedCar();
-        this.enableImageUpload();
-      },
-      error => {
-        console.error(error);
-        this.errorMessage = error.error.message || "Bitte überprüfen Sie die eingabe";
-        this.removeErrorMessage();
-      }
-    );
+    if (this.editingCar != 0) {
+      this.http.put("http://localhost:8000/vehicle/updateCar/"+this.editingCar, carData, {withCredentials: true}).subscribe(
+        response => {
+          form.resetForm();
+          this.changeAddCarState();
+        },
+        error => {
+          console.error(error);
+          this.errorMessage = error.error.message || "Bitte überprüfen Sie die eingabe";
+          this.removeErrorMessage();
+        }
+      )
+    }
+    else {
+      this.http.post("http://localhost:8000/vehicle/car", carData, { withCredentials: true }).subscribe(
+        response => {
+          form.resetForm();
+          this.fetchCreatedCar();
+          this.enableImageUpload();
+        },
+        error => {
+          console.error(error);
+          this.errorMessage = error.error.message || "Bitte überprüfen Sie die eingabe";
+          this.removeErrorMessage();
+        }
+      );
+    }
   }
 
   fetchCreatedCar(): void {
@@ -106,7 +118,7 @@ export class AddCarComponent {
 
   changeSeatCount(num: any) {
     if (num < 1) {
-      this.errorMessage = "Dein Auto kann nicht weniger als einen Sitz haben wth you talking about";
+      this.errorMessage = "Wert muss mindestens 1 sein";
       this.removeErrorMessage();
       return;
     }
