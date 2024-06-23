@@ -1,13 +1,11 @@
-import {
-  ValidateNested,
-} from 'class-validator';
-import {ApiProperty} from '@nestjs/swagger';
-import {TripInfoEnum} from '../../database/enums/TripInfoEnum';
-import {PriceTypeEnum} from '../../database/enums/PriceTypeEnum';
-import {CreateLocationDTO} from '../../location/DTO/CreateLocationDTO';
-import {Type} from 'class-transformer';
-import {GetOtherUserDTO} from '../../user/DTO/GetOtherUserDTO';
-import {StatusEnum} from "../../database/enums/StatusEnum";
+import { ValidateNested } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
+import { TripInfoEnum } from '../../database/enums/TripInfoEnum';
+import { PriceTypeEnum } from '../../database/enums/PriceTypeEnum';
+import { CreateLocationDTO } from '../../location/DTO/CreateLocationDTO';
+import { Type } from 'class-transformer';
+import { GetOtherUserDTO } from '../../user/DTO/GetOtherUserDTO';
+import { StatusEnum } from '../../database/enums/StatusEnum';
 
 export class GetOfferDTO {
   @ApiProperty()
@@ -76,8 +74,9 @@ export class GetOfferDTO {
   @ApiProperty()
   status: StatusEnum;
 
-  @ApiProperty({type: [CreateLocationDTO]})
-  @ValidateNested({each: true})
+  @ApiProperty({ type: [CreateLocationDTO] })
+  @ValidateNested({ each: true })
+
   @Type(() => CreateLocationDTO)
   locations: CreateLocationDTO[];
 }

@@ -16,7 +16,7 @@ export class MessageDB {
   @Column()
   message: string;
 
-  @Column()
+  @Column({ default: false })
   read: boolean;
 
   @Column({ default: new Date().toISOString() })

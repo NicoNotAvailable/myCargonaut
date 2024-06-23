@@ -6,7 +6,8 @@ import { CreateLocationDTO } from '../../location/DTO/CreateLocationDTO';
 import { Type } from 'class-transformer';
 import { GetOtherUserDTO } from '../../user/DTO/GetOtherUserDTO';
 import { CreateCargoDTO } from '../../cargo/DTO/CreateCargoDTO';
-import {StatusEnum} from "../../database/enums/StatusEnum";
+import { StatusEnum } from '../../database/enums/StatusEnum';
+
 
 export class GetRequestDTO {
   @ApiProperty()

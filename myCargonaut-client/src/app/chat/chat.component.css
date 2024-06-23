@@ -1,0 +1,124 @@
+/* Container for chat messages */
+.chat-window {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.chat-card {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.chat-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+.messages {
+  flex: 1;
+  display: flex;
+  flex-direction: column; /* Reverse order to show latest messages at the top */
+  overflow-y: auto;
+  padding: 10px; /* Add padding for better spacing */
+}
+
+.message {
+  padding: 10px;
+  margin: 5px 0;
+  border-radius: 5px;
+}
+
+/* Align messages sent by the user to the right */
+.message-right {
+  align-self: flex-end;
+  background-color: #daf8cb; /* Light green */
+  color: #000;
+}
+
+/* Align messages received from others to the left */
+.message-left {
+  align-self: flex-start;
+  background-color: #f1f0f0; /* Light grey */
+  color: #000;
+}
+
+/* Input box for sending messages */
+.chat-input-container {
+  display: flex;
+  align-items: center; /* Center vertically */
+  padding: 10px;
+  background-color: #f8f9fa; /* Lighter grey */
+  border-top: 1px solid #ccc; /* Add border on top */
+}
+
+.chat-input {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-right: 10px;
+}
+
+.chat-send-button {
+  padding: 10px 20px;
+  border: none;
+  background-color: #28a745;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.chat-send-button:hover {
+  background-color: #0056b3; /* Darker blue on hover */
+}
+
+/* Styling for trip cards */
+.trip-card {
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+
+.card {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.card img.profile-pic {
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.initials {
+  font-size: 24px;
+  font-weight: bold;
+  margin-right: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.card-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.card-title {
+  font-size: 16px;
+  margin: 0;
+}
+
+.card-text {
+  font-size: 14px;
+  color: #666;
+}

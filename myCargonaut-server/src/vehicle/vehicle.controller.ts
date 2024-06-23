@@ -130,6 +130,7 @@ export class VehicleController {
     }
     if (!body.length || body.length <= 0 || body.length > 100) {
       throw new BadRequestException(
+
         'Auto muss länger als 0m und kürzer als 100m sein',
       );
     }
@@ -155,6 +156,7 @@ export class VehicleController {
     car.width = body.width;
     car.length = body.length;
     car.hasTelevision = body.hasTelevision;
+      
     try {
       await this.vehicleService.updateCar(car);
       return new OkDTO(true, 'Car was updated');
@@ -250,7 +252,6 @@ export class VehicleController {
     trailer.length = body.length;
     trailer.isCooled = body.isCooled;
     trailer.isEnclosed = body.isEnclosed;
-
     try {
       await this.vehicleService.updateTrailer(trailer);
       return new OkDTO(true, 'Trailer was updated');

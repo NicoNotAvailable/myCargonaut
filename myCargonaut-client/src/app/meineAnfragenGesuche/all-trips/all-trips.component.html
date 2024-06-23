@@ -1,0 +1,238 @@
+<app-top-auswahl [allOffers]="allOffers" [allRequests]="allRequests"></app-top-auswahl>
+
+<div class="container">
+  <div class="accordion">
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="headingOne">
+        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+          <h3 class="greenText">Aktive Trips</h3>
+        </button>
+      </h2>
+      <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+        <div class="accordion-body">
+
+          <!-- Display all active trips and roadmap -->
+          <div class="row">
+            <div class="col-12">
+              <div *ngIf="activeTrips.length > 0">
+                <div *ngFor="let activeTrip of activeTrips; let i = index">
+                  <div class="card m-4">
+                    <div class="row no-gutters flex-column flex-lg-row card-horizontal">
+                      <div class="col-lg-3">
+                        <div class="horizontal-center vertical-center">
+                          <div class="sizeRegulator">
+                            <img
+                              src="window.location.protocol + '//' + window.location.host.replace('4200', '8000') + pathToImageArray[offer.id]"
+                              width="400" height="300" class="img-fluid rounded-start bild " alt="">
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-lg-9">
+                        <div class="card-body">
+                          <div class="container-fluid">
+                            <div class="row mb-4">
+                              <div class="col-12 col-lg-6">
+                                <div class="row">
+                                  <h5 class="card-title greenText">{{ activeTrip.name }}</h5>
+                                </div>
+                                <div class="row">
+                                  <div class="col-6">
+                                    <span>{{ activeTrip.user.firstName }} {{ activeTrip.user.lastName }}</span>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="col-6 col-lg-3">
+                                <h5 class="greenText">{{ activeTrip.date | dateFormat }}</h5>
+                              </div>
+                              <div class="col-6 col-lg-3">
+                                <div class="horizontal-right">
+                                  <h5 class="blueText">{{ activeTrip.price }}€
+                                    <span *ngIf="activeTrip.priceType === 1"> </span>
+                                    <span *ngIf="activeTrip.priceType === 2">p. Person</span>
+                                    <span *ngIf="activeTrip.priceType === 3">p. Kilo</span>
+                                  </h5>
+                                </div>
+                              </div>
+                            </div>
+
+                            <div class="row">
+                              <div class="col-12 col-lg-3">
+                                <div class="row">
+                                  <div class="col-6 col-lg-4">
+                                    <span>von:</span>
+                                  </div>
+
+                                  <div class="col-6 col-lg-8">
+                                    @for (location of activeTrip.locations; track $index) {
+                                      @if (location.stopNr == 1) {
+                                        <span class="highlightText">{{ location.zipCode }} {{ location.city }}</span>
+                                      }
+                                    }
+                                  </div>
+
+                                </div>
+                                <div class="row">
+                                  <div class="col-6 col-lg-4">
+                                    <span>nach:</span>
+                                  </div>
+                                  <div class="col-6 col-lg-8">
+                                    @for (location of activeTrip.locations; track $index) {
+                                      @if (location.stopNr == 100) {
+                                        <span class="highlightText">{{ location.zipCode }} {{ location.city }}</span>
+                                      }
+                                    }
+                                  </div>
+                                </div>
+                              </div>
+
+                              <div class="col-12 col-lg-6">
+                                <div class="row">
+                                  <div class="col-6">
+                                    <span>Gesamtgewicht:</span>
+                                  </div>
+                                  <div class="col-6">
+                                    <span class="highlightText">{{ activeTrip.maxCWeight }} kg</span>
+                                  </div>
+                                </div>
+                                <div class="row">
+                                  <div class="col-6">
+                                    <span>Max. Volumen:</span>
+                                  </div>
+                                  <div class="col-6">
+                                    <span class="highlightText">{{ activeTrip.maxCVolumen }} m<sup>3</sup></span>
+                                  </div>
+                                </div>
+                              </div>
+
+                              <div class="col-12 col-lg-3">
+                                <div class="roadmap">
+                                  <div class="dot" [ngClass]="{'highlight': activeTrip.status === 3}"></div>
+                                  <div class="line"></div>
+                                  <div class="dot" [ngClass]="{'highlight': activeTrip.status === 4}"></div>
+                                  <div class="line"></div>
+                                  <div class="dot" [ngClass]="{'highlight': activeTrip.status === 5}"></div>
+                                </div>
+                                <div class="horizontal-right" *ngIf="activeTrip.status === 4">
+                                  <button type="button" (click)="handleButtonClick(activeTrip.id)" class="btn btn-primary greenButton">Zur Review</button>
+                                </div>
+                                <div class="horizontal-right" *ngIf="activeTrip.status === 5">
+                                  <button type="button" (click)="handleButtonClick(activeTrip.id)"  class="btn btn-primary greenButton">Alles Erledigt</button>
+                                </div>
+                              </div>
+
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div *ngIf="activeTrips.length === 0">
+                <p>Keine aktiven Trips gefunden.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="headingTwo">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+          <h3 class="greenText">Deine Anfragen:</h3>
+        </button>
+      </h2>
+      <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+        <div class="accordion-body">
+          <!-- Display all requests where the status is 1 or 2 -->
+          <div *ngFor="let request of allRequests; let i = index">
+            <div class="row">
+              <div class="col-lg-12 col-12">
+                <div class="card m-4">
+                  <div class="row no-gutters flex-column flex-lg-row card-horizontal">
+                    <div class="col-lg-3">
+                      <div class="horizontal-center vertical-center">
+                        <div class="sizeRegulator">
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-lg-9">
+                      <div class="card-body">
+                        <div class="container-fluid">
+                          <div class="row mb-4">
+                            <div class="col-12 col-lg-6">
+                              <div class="row">
+                                <h5 class="card-title greenText">{{ request.name }}</h5>
+                              </div>
+                              <div class="row">
+                                <div class="col-6">
+                                  <span>{{ request.user.firstName }} {{ request.user.lastName }}</span>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-6 col-lg-3">
+                              <h5 class="greenText">{{ request.date | dateFormat }}</h5>
+                            </div>
+                            <div class="col-6 col-lg-3">
+                              <div class="horizontal-right">
+                                <h5 class="blueText">{{ request.price }}€
+                                  <span *ngIf="request.priceType === 1"> </span>
+                                  <span *ngIf="request.priceType === 2">p. Person</span>
+                                  <span *ngIf="request.priceType === 3">p. Kilo</span>
+                                </h5>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div class="row">
+                            <div class="col-12 col-lg-3">
+                              <div class="row">
+                                <div class="col-6 col-lg-4">
+                                  <span>von:</span>
+                                </div>
+                                <div class="col-6 col-lg-8">
+                                  @for (location of request.locations; track $index) {
+                                    @if (location.stopNr == 1) {
+                                      <span class="highlightText">{{ location.zipCode }} {{ location.city }}</span>
+                                    }
+                                  }
+                                </div>
+                              </div>
+                              <div class="row">
+                                <div class="col-6 col-lg-4">
+                                  <span>nach:</span>
+                                </div>
+                                <div class="col-6 col-lg-8">
+                                  @for (location of request.locations; track $index) {
+                                    @if (location.stopNr == 1) {
+                                      <span class="highlightText">{{ location.zipCode }} {{ location.city }}</span>
+                                    }
+                                  }
+                                </div>
+                              </div>
+                            </div>
+
+                            <div class="col-12 col-lg-6">
+                              <div class="row">
+                                <div class="col-6">
+                                  <span>Plätze:</span>
+                                </div>
+                                <div class="col-6">
+                                  <span class="highlightText">{{ request.seats }}</span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

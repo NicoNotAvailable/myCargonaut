@@ -85,7 +85,7 @@ describe('VehicleController', () => {
     jest.spyOn(userService, 'createUser').mockImplementation(async () => {
       return mockUser as unknown as UserDB;
     });
-
+    
     jest
       .spyOn(userService, 'getUserById')
       .mockResolvedValue(mockUser as unknown as UserDB);

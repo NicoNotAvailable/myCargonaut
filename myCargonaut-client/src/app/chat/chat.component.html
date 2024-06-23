@@ -1,0 +1,53 @@
+<div class="container">
+  <div class="row m-5">
+    <div class="col-12 my-auto">
+      <div class="row text-center">
+        <h1 class="textGreen">Deine Chats</h1>
+      </div>
+    </div>
+    <div class="col-12">
+      <div class="row">
+        <div class="trips col-6">
+          <div *ngIf="rooms.length === 0; else chatList">
+            <p>Bisher hast Du keine Chats!</p>
+          </div>
+          <ng-template #chatList>
+            <div>
+              <div *ngFor="let room of rooms" (click)="selectRoom(room)" class="trip-card">
+                <div class="card">
+                  <img [src]="trips[room]?.user?.profilePicture" alt="Profile Picture" class="profile-pic">
+                  <div class="initials">
+                    {{ getInitials(trips[room].user) }}
+                  </div>
+                  <div class="card-body">
+                    <h5 class="card-title">{{ trips[room]?.drive?.name || '' }}</h5>
+                    <p>{{ formatDate(trips[room]?.drive?.date || '') }}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </ng-template>
+        </div>
+        <div class="chat-window col-6">
+          <div *ngIf="room" class="chat-card">
+            <h4>Room: {{ room }}</h4>
+            <div class="chat-container">
+              <div class="messages" #messagesContainer>
+                <div *ngFor="let message of messages[room]" [ngClass]="['message', getMessageClasses(message)]">
+                  {{ message.message }}
+                </div>
+              </div>
+              <div class="chat-input-container">
+                <input class="chat-input" #messageInput type="text" [(ngModel)]="message" (keyup.enter)="sendMessage(message)" />
+                <button class="chat-send-button" (click)="sendMessage(message)">Send</button>
+              </div>
+            </div>
+          </div>
+          <div *ngIf="!room">
+            <p>Wähle einen Chat aus, um zu schreiben!</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

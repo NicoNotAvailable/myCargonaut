@@ -40,6 +40,7 @@ export class SearchCardComponent {
   @Input() masse!: number[];
   @Input() requestBool!: boolean;
   @Input() offerBool!: boolean;
+  @Input() lastRideBool!: boolean;
   @Input() pathToImageArray!: string[];
 
   constructor(private router: Router) {

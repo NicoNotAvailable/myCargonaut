@@ -4,7 +4,7 @@ import {CarouselComponent} from "./carousel/carousel.component";
 import {offer} from "../search/offers";
 import {HttpClient} from "@angular/common/http";
 import {NgOptimizedImage} from "@angular/common";
-import { AktuelleFahrtenComponent } from "./aktuelle-fahrten/aktuelle-fahrten.component";
+// import { AktuelleFahrtenComponent } from "./aktuelle-fahrten/aktuelle-fahrten.component";
 
 
 
@@ -15,7 +15,7 @@ import { AktuelleFahrtenComponent } from "./aktuelle-fahrten/aktuelle-fahrten.co
     NgbSlide,
     CarouselComponent,
     NgOptimizedImage,
-    AktuelleFahrtenComponent
+    //AktuelleFahrtenComponent
   ],
   templateUrl: './frontpage.component.html',
   styleUrl: './frontpage.component.css'

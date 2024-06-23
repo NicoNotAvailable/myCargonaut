@@ -16,7 +16,13 @@ import { DriveService } from '../drive/drive.service';
 import { UserService } from '../user/user.service';
 import { VehicleService } from '../vehicle/vehicle.service';
 import { TripService } from './trip.service';
-import { ApiBearerAuth, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiParam,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { OkDTO } from '../serverDTO/OkDTO';
 import { IsLoggedInGuard } from '../session/is-logged-in.guard';
 import { SessionData } from 'express-session';
@@ -242,6 +248,31 @@ export class TripController {
       throw new BadRequestException('An error occurred: ' + err.message);
     }
   }
+
+  @ApiOperation({
+    summary: 'Get user trips (offer/request trips, offer/request drive trips)',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'User trips retrieved successfully.',
+    type: 'object',
+  })
+  @ApiBearerAuth()
+  @UseGuards(IsLoggedInGuard)
+  @Get('user-trips/:userId')
+  async getUserTrips(@Param('userId', ParseIntPipe) userId: number): Promise<{
+    offerTrips: any[];
+    requestTrips: any[];
+    offerDriveTrips: any[];
+    requestDriveTrips: any[];
+  }> {
+    try {
+      return await this.tripService.getUserTrips(userId);
+    } catch (err) {
+      throw new BadRequestException('An error occurred: ' + err.message);
+    }
+  }
+
   @ApiResponse({
     type: OkDTO,
     description: 'accepts a trip',
