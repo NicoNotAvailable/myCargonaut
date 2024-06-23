@@ -147,13 +147,11 @@ export class UtilsService {
       dto.maxTWeight = offer.maxTWeight;
       dto.maxTHeight = offer.maxTHeight;
       dto.maxTWidth = offer.maxTWidth;
-      dto.priceType = offer.priceType;
-      const locations = await offer.location;
-      dto.locations = locations.map(
-        this.transformLocationDBToCreateLocationDTO,
-      );
-      return dto;
     }
+    dto.priceType = offer.priceType;
+    const locations = await offer.location;
+    dto.locations = locations.map(this.transformLocationDBToCreateLocationDTO);
+    return dto;
   }
 
   async transformRequestDBtoGetRequestDTO(
