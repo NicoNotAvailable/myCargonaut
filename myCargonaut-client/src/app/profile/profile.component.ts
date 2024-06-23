@@ -10,7 +10,7 @@ import {
   faSmoking,
   faStar
 } from "@fortawesome/free-solid-svg-icons";
-import { NgIf } from "@angular/common";
+import { NgForOf, NgIf } from '@angular/common';
 import { TrailerOverviewComponent } from "./trailer-overview/trailer-overview.component";
 import { HttpClient } from "@angular/common/http";
 import { DateUtils } from "../../../../utils/DateUtils";
@@ -22,7 +22,7 @@ import { UserService } from "../services/user.service";
 @Component({
   selector: "app-profile",
   standalone: true,
-  imports: [UserDescriptionComponent, AddCarComponent, AddTrailerComponent, CarOverviewComponent, FaIconComponent, NgOptimizedImage, TrailerOverviewComponent, NgIf],
+  imports: [UserDescriptionComponent, AddCarComponent, AddTrailerComponent, CarOverviewComponent, FaIconComponent, NgOptimizedImage, TrailerOverviewComponent, NgIf, NgForOf],
   templateUrl: "./profile.component.html",
   styleUrl: "./profile.component.css"
 })
@@ -58,6 +58,7 @@ export class ProfileComponent {
   birthday: string = "";
   pathToImage: string = "empty.png";
   profilePic: string = "";
+  rating: number = 0;
 
   constructor(private http: HttpClient) {
   }
@@ -97,6 +98,7 @@ export class ProfileComponent {
         this.profilePic = response.profilePic;
         this.pathToImage = imagePath === "empty.png" ? "assets/empty.png" : prePath.concat(imagePath);
         this.smoker = this.formatSmokeBool(response.isSmoker);
+        this.rating = response.rating;
       },
       error => {
         console.error("There was an error!", error);
@@ -133,6 +135,10 @@ export class ProfileComponent {
     this.addTrailers = !this.addTrailers;
     this.viewTrailers = !this.viewTrailers;
   }
+
+  starFillSrc: string = './assets/star-fill.svg';
+  starEmptySrc: string = './assets/star.svg';
+  stars: number[] = [1, 2, 3, 4, 5];
 
   protected readonly window = window;
 }
