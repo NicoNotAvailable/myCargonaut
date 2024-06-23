@@ -2,26 +2,26 @@
   <ng-template #carModal let-modal>
     <div class="modal-header">
       <h4 class="modal-title" id="modal-car-title">Auto anpassen</h4>
-      <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+      <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')" aria-labelledby="modal-car-title"></button>
     </div>
     <div class="modal-body">
       <form>
         <div class="mb-3">
           <div class="input-group">
-            <input [(ngModel)]="carWeight" [ngModelOptions]="{standalone: true}" name="carWeight" required
-                   type="text" class="rounded-5 p-2 mb-2 col-12" placeholder="Gewicht in kg (2,50)" id="carWeight">
-            <input [(ngModel)]="carLength" [ngModelOptions]="{standalone: true}" name="carLength" required
-                   type="text" class="rounded-5 p-2 mb-2 col-12" placeholder="Länge in m (3,20)" id="carLength">
-            <input [(ngModel)]="carWidth" [ngModelOptions]="{standalone: true}" name="carWidth" required
-                   type="text" class="rounded-5 p-2 mb-2 col-12" placeholder="Breite in m (3,55)" id="carWidth">
-            <input [(ngModel)]="carHeight" [ngModelOptions]="{standalone: true}" name="carHeight" required
-                   type="text" class="rounded-5 p-2 mb-2 col-12" placeholder="Höhe in m (2,55)" id="carHeight">
+            <input [(ngModel)]="editCarWeight" [ngModelOptions]="{standalone: true}" name="carWeight" required
+                   type="number" class="rounded-5 p-2 mb-2 col-12" placeholder="Gewicht in kg (2,50)" id="carWeight">
+            <input [(ngModel)]="editCarLength" [ngModelOptions]="{standalone: true}" name="carLength" required
+                   type="number" class="rounded-5 p-2 mb-2 col-12" placeholder="Länge in m (3,20)" id="carLength">
+            <input [(ngModel)]="editCarWidth" [ngModelOptions]="{standalone: true}" name="carWidth" required
+                   type="number" class="rounded-5 p-2 mb-2 col-12" placeholder="Breite in m (3,55)" id="carWidth">
+            <input [(ngModel)]="editCarHeight" [ngModelOptions]="{standalone: true}" name="carHeight" required
+                   type="number" class="rounded-5 p-2 mb-2 col-12" placeholder="Höhe in m (2,55)" id="carHeight">
           </div>
         </div>
       </form>
     </div>
     <div class="modal-footer justify-content-center">
-      <button type="button" class="btn customButton exitButton text-light mt-2">
+      <button type="button" (click)="changeCarProperties()" class="btn customButton exitButton text-light mt-2">
         <i>
           <fa-icon [icon]="faSave"></fa-icon>
         </i>
@@ -32,26 +32,26 @@
   <ng-template #trailerModal let-modal>
     <div class="modal-header">
       <h4 class="modal-title" id="modal-trailer-title">Anhänger anpassen</h4>
-      <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+      <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')" aria-labelledby="modal-trailer-title"></button>
     </div>
     <div class="modal-body">
       <form>
         <div class="mb-3">
           <div class="input-group">
-            <input [(ngModel)]="trailerWeight" [ngModelOptions]="{standalone: true}" name="trailerWeight" required
+            <input [(ngModel)]="editTrailerWeight" [ngModelOptions]="{standalone: true}" name="trailerWeight" required
                    type="text" class="rounded-5 p-2 mb-2 col-12" placeholder="Gewicht in kg (2,50)" id="trailerWeight">
-            <input [(ngModel)]="trailerLength" [ngModelOptions]="{standalone: true}" name="trailerLength" required
+            <input [(ngModel)]="editTrailerLength" [ngModelOptions]="{standalone: true}" name="trailerLength" required
                    type="text" class="rounded-5 p-2 mb-2 col-12" placeholder="Länge in m (3,20)" id="trailerLength">
-            <input [(ngModel)]="trailerWidth" [ngModelOptions]="{standalone: true}" name="trailerWidth" required
+            <input [(ngModel)]="editTrailerWidth" [ngModelOptions]="{standalone: true}" name="trailerWidth" required
                    type="text" class="rounded-5 p-2 mb-2 col-12" placeholder="Breite in m (3,55)" id="trailerWidth">
-            <input [(ngModel)]="trailerHeight" [ngModelOptions]="{standalone: true}" name="trailerHeight" required
+            <input [(ngModel)]="editTrailerHeight" [ngModelOptions]="{standalone: true}" name="trailerHeight" required
                    type="text" class="rounded-5 p-2 mb-2 col-12" placeholder="Höhe in m (2,55)" id="trailerHeight">
           </div>
         </div>
       </form>
     </div>
     <div class="modal-footer justify-content-center">
-      <button type="button" class="btn customButton exitButton text-light mt-2">
+      <button (click)="changeTrailerProperties()" type="button" class="btn customButton exitButton text-light mt-2">
         <i>
           <fa-icon [icon]="faSave"></fa-icon>
         </i>
@@ -61,8 +61,8 @@
   </ng-template>
   <ng-template #stopModal let-modal>
     <div class="modal-header">
-      <h4 class="modal-title" id="modal-stop-title">Zwischenstopp hinzufügen</h4>
-      <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+      <h4 class="modal-title" id="modal-stop-title">Zwischenstopp  {{ editModeText }}</h4>
+      <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"  aria-labelledby="modal-stop-title"></button>
     </div>
     <div class="modal-body">
       <form>
@@ -83,7 +83,7 @@
       </form>
     </div>
     <div class="modal-footer justify-content-center">
-      <button type="button" class="btn customButton exitButton text-light mt-2">
+      <button (click)="addStopToArray()" type="button" class="btn customButton exitButton text-light mt-2">
         <i>
           <fa-icon [icon]="faSave"></fa-icon>
         </i>
@@ -91,7 +91,7 @@
       </button>
     </div>
   </ng-template>
-  <form #form="ngForm" (ngSubmit)="createSummaryOffer(form)">
+  <form #form="ngForm" (ngSubmit)="validInputs() && createSummaryOffer()">
     <div class="row">
       <div class="p-5" id="addOfferArea">
         <div class="row mb-5 justify-content-between">
@@ -99,26 +99,26 @@
             <h2 class="textGreen col-7 mt-5">Sitze:</h2>
             <div class="row mt-4">
               <div class="hstack justify-content-between">
-                <button (click)="changeSeatCount(2)" [ngClass]="seats === 2 ? 'selectedButton' : 'deselectedButton'"
+                <button (click)="changeSeatCount(2)" [ngClass]="offerService.seats === 2 ? 'selectedButton' : 'deselectedButton'"
                         type="button" class="btn rounded-3 py-1 px-3 text-light">
                   <h2>2</h2>
                 </button>
-                <button (click)="changeSeatCount(3)" [ngClass]="seats === 3 ? 'selectedButton' : 'deselectedButton'"
+                <button (click)="changeSeatCount(3)" [ngClass]="offerService.seats === 3 ? 'selectedButton' : 'deselectedButton'"
                         type="button" class="btn rounded-3 py-1 px-3 text-light">
                   <h2>3</h2>
                 </button>
-                <button (click)="changeSeatCount(4)" [ngClass]="seats === 4 ? 'selectedButton' : 'deselectedButton'"
+                <button (click)="changeSeatCount(4)" [ngClass]="offerService.seats === 4 ? 'selectedButton' : 'deselectedButton'"
                         type="button" class="btn rounded-3 py-1 px-3 text-light">
                   <h2>4</h2>
                 </button>
-                <button (click)="changeSeatCount(5)" [ngClass]="seats === 5 ? 'selectedButton' : 'deselectedButton'"
+                <button (click)="changeSeatCount(5)" [ngClass]="offerService.seats === 5 ? 'selectedButton' : 'deselectedButton'"
                         type="button" class="btn rounded-3 py-1 px-3 text-light">
                   <h2>5</h2>
                 </button>
               </div>
             </div>
             <div class="mt-3 justify-content-center">
-              <input [(ngModel)]="seats" #seatsInput="ngModel" type="number" name="seatsInput"
+              <input [(ngModel)]="offerService.seats" #seatsInput="ngModel" type="number" name="seatsInput"
                      class="rounded-5 p-2 w-100" placeholder="Andere Anzahl"
                      (input)="changeSeatCount(seatsInput.value)">
             </div>
@@ -128,7 +128,7 @@
               </div>
             </div>
 
-            <button (click)="changeSeatCount(1)" [ngClass]="seats === 1 ? 'selectedButton' : 'deselectedButton'"
+            <button (click)="changeSeatCount(1)" [ngClass]="offerService.seats === 1 ? 'selectedButton' : 'deselectedButton'"
                     type="button" class="btn rounded-3 text-light w-100">
               <h2>Nur Cargo</h2>
             </button>
@@ -138,27 +138,26 @@
               </div>
             </div>
             <div class="hstack justify-content-center">
-              <input [(ngModel)]="offeredPrice" #requestedPriceInput="ngModel" type="number"
+              <input [(ngModel)]="offerService.price" #requestedPriceInput="ngModel" type="number"
                      name="requestedPriceInput"
-                     class="rounded-5 p-2 w-100" placeholder="Andere Anzahl"
-                     (input)="changeOfferedPrice(requestedPriceInput.value)">
+                     class="rounded-5 p-2 w-100" placeholder="Andere Anzahl"/>
             </div>
             <div class="col-12 mt-3">
               <div class="btn-group d-flex" role="group">
                 <input type="radio" class="btn-check" name="musicOrTalk" id="totalPrice" autocomplete="off"
                        (click)="changePriceType(1)">
                 <label class="btn customButton flex-fill checkboxBorder" for="totalPrice"
-                       [ngClass]="offeredPriceType === 1 ? 'selectedButton' : 'deselectedButton'">Gesamt</label>
+                       [ngClass]="offerService.priceType === 1 ? 'selectedButton' : 'deselectedButton'">Gesamt</label>
 
                 <input type="radio" class="btn-check" name="musicOrTalk" id="perPersonPrice" autocomplete="off"
                        (click)="changePriceType(2)">
                 <label class="btn customButton flex-fill checkboxBorder" for="perPersonPrice"
-                       [ngClass]="offeredPriceType === 2 ? 'selectedButton' : 'deselectedButton'">Pro Person</label>
+                       [ngClass]="offerService.priceType === 2 ? 'selectedButton' : 'deselectedButton'">Pro Person</label>
 
                 <input type="radio" class="btn-check" name="musicOrTalk" id="perWeightPrice" autocomplete="off"
                        (click)="changePriceType(3)">
                 <label class="btn customButton flex-fill checkboxBorder" for="perWeightPrice"
-                       [ngClass]="offeredPriceType === 3 ? 'selectedButton' : 'deselectedButton'">Pro KG</label>
+                       [ngClass]="offerService.priceType === 3 ? 'selectedButton' : 'deselectedButton'">Pro KG</label>
               </div>
             </div>
           </div>
@@ -169,7 +168,7 @@
             <h2 class="textGreen col-5 mb-3 mt-5">Infos:</h2>
 
             <div class="col-12">
-              <input [(ngModel)]="name" [ngModelOptions]="{standalone: true}" name="nameInput" required type="text"
+              <input [(ngModel)]="offerService.name" [ngModelOptions]="{standalone: true}" name="nameInput" required type="text"
                      class="form-control rounded-5 p-2 col-12" placeholder="Name des Trips" id="nameInput">
             </div>
             <div class="row mt-3">
@@ -177,13 +176,13 @@
                 <div class="dropdown w-100">
                   <a class="btn customButton dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
                      aria-expanded="false">
-                    Auto wählen
+                    {{ offerService.selectedCar ? offerService.selectedCar.name : 'Auto auswählen' }}
                   </a>
 
                   <ul class="dropdown-menu">
-                    <li><a class="dropdown-item">Mercedes CL500</a></li>
-                    <li><a class="dropdown-item">Porsche 911</a></li>
-                    <li><a class="dropdown-item">Lamborghini Countach</a></li>
+                    @for (car of offerService.cars; track car.id; let i = $index) {
+                      <li><a class="dropdown-item" (click)="selectCar(i)">{{ car.name }}</a></li>
+                    }
                   </ul>
                 </div>
               </div>
@@ -195,18 +194,46 @@
                 </button>
               </div>
             </div>
+
+            <div *ngIf="offerService.selectedCar" class="card border-0 mt-3">
+              <div class="card-body backgroundGreen my-2">
+                <div class="text-light mx-3 pt-2">
+                  <h4 class="card-title ms-1 mt-1 text-center">{{ offerService.selectedCar.name }}</h4>
+                  <p class="ms-2">Max. Gewicht: {{ offerService.maxCWeight }}kg</p>
+                  <div class="row">
+                    <div class="col">
+                      <p class="ms-2">{{ offerService.maxCLength }}m <br>
+                        Lang</p>
+                    </div>
+                    <div class="col">
+                      <p class="mx-1">{{ offerService.maxCWidth }}m <br>
+                        Breit </p>
+                    </div>
+                    <div class="col">
+                      <p class="me-2">{{ offerService.maxCHeight }}m <br>
+                        Hoch</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
             <div class="row mt-3">
               <div class="col-5">
                 <div class="dropdown w-100">
                   <a class="btn customButton dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
                      aria-expanded="false">
-                    Anhänger wählen
+                    <span>{{ !hadTrailerSelection ? 'Anhänger auswählen' :(offerService.selectedTrailer ? offerService.selectedTrailer.name : 'Kein Anhänger') }}
+                    </span>
+
                   </a>
 
                   <ul class="dropdown-menu">
-                    <li><a class="dropdown-item">Kramer KL 200</a></li>
-                    <li><a class="dropdown-item">Anhänger 1</a></li>
-                    <li><a class="dropdown-item">Anhänger 2</a></li>
+                    <li><a class="dropdown-item" (click)="selectNoTrailer()"> Kein Anhänger </a></li>
+
+                    @for (trailer of offerService.trailers; track trailer.id; let i = $index) {
+                      <li><a class="dropdown-item" (click)="selectTrailer(i)">{{ trailer.name }}</a></li>
+                    }
                   </ul>
                 </div>
               </div>
@@ -219,6 +246,28 @@
               </div>
             </div>
 
+            <div *ngIf="offerService.selectedTrailer" class="card border-0 mt-3">
+              <div class="card-body backgroundGreen my-2">
+                <div class="text-light mx-3 pt-2">
+                  <h4 class="card-title ms-1 mt-1 text-center">{{ offerService.selectedTrailer.name }}</h4>
+                  <p class="ms-2">Max. Gewicht: {{ offerService.maxTWeight }}kg</p>
+                  <div class="row">
+                    <div class="col">
+                      <p class="ms-2">{{ offerService.maxTLength }}m <br>
+                        Lang</p>
+                    </div>
+                    <div class="col">
+                      <p class="mx-1">{{ offerService.maxTWidth }}m <br>
+                        Breit </p>
+                    </div>
+                    <div class="col">
+                      <p class="me-2">{{ offerService.maxTHeight }}m <br>
+                        Hoch</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
 
             <div class="col-12 mt-3">
               <p>Mitfahrer darf folgende Eigenschaften haben:</p>
@@ -229,7 +278,8 @@
                       Raucher <br>
                       ‎
                     </label>
-                    <input class="form-check-input" type="checkbox" value="" id="checkSmoker">
+                    <input [(ngModel)]="offerService.smokingAllowed"
+                           class="form-check-input" type="checkbox" id="checkSmoker" name="checkSmoker">
                   </div>
                 </div>
                 <div class="col-5 checkboxBorder rounded-pill p-3">
@@ -238,29 +288,30 @@
                       Haustier- <br>
                       besitzer*in <br>
                     </label>
-                    <input class="form-check-input" type="checkbox" value="" id="checkPets">
+                    <input [(ngModel)]="offerService.animalsAllowed"
+                           class="form-check-input" type="checkbox" id="checkPets" name="checkPets">
                   </div>
                 </div>
               </div>
             </div>
 
-            <p class="mt-3">Auf der Fahrt:</p>
+            <p class="mt-3">Kommunikationswunsch:</p>
             <div class="col-12 mt-3">
               <div class="btn-group d-flex" role="group">
                 <input type="radio" class="btn-check" name="musicOrTalk" id="onlyMusic" autocomplete="off"
                        (click)="changeTalkMode(1)">
                 <label class="btn customButton flex-fill checkboxBorder" for="onlyMusic"
-                       [ngClass]="talkMode === 1 ? 'selectedButton' : 'deselectedButton'">Nur Musik</label>
+                       [ngClass]="offerService.info === 1 ? 'selectedButton' : 'deselectedButton'">Nur Musik</label>
 
                 <input type="radio" class="btn-check" name="musicOrTalk" id="onlyTalk" autocomplete="off"
                        (click)="changeTalkMode(2)">
                 <label class="btn customButton flex-fill checkboxBorder" for="onlyTalk"
-                       [ngClass]="talkMode === 2 ? 'selectedButton' : 'deselectedButton'">Nur Reden</label>
+                       [ngClass]="offerService.info === 2 ? 'selectedButton' : 'deselectedButton'">Nur Reden</label>
 
                 <input type="radio" class="btn-check" name="musicOrTalk" id="byRequest" autocomplete="off"
                        (click)="changeTalkMode(3)">
                 <label class="btn customButton flex-fill checkboxBorder" for="byRequest"
-                       [ngClass]="talkMode === 3 ? 'selectedButton' : 'deselectedButton'">Nach Wunsch</label>
+                       [ngClass]="offerService.info === 3 ? 'selectedButton' : 'deselectedButton'">Nach Wunsch</label>
               </div>
             </div>
           </div>
@@ -270,46 +321,46 @@
           <div class="col-xl-3 col-12" *ngIf="editingOffer == 0">
             <h2 class="textGreen col-12 mb-3 mt-5">Zeit & Ort</h2>
             <div class="col-12">
-              <input [(ngModel)]="date" [ngModelOptions]="{standalone: true}" name="dateInput" required
+              <input [(ngModel)]="this.offerService.date" [ngModelOptions]="{standalone: true}" name="dateInput" required
                      class="form-control rounded-5 p-2 col-12" placeholder="Datum der Fahrt" id="dateInput"
-                     ngbDatepicker #d="ngbDatepicker" type="text">
+                     ngbDatepicker #d="ngbDatepicker" type="date">
             </div>
             <div class="col-12 mt-2">
-              <input [(ngModel)]="time" [ngModelOptions]="{standalone: true}" name="timeInput" required
+              <input [(ngModel)]="this.offerService.time" [ngModelOptions]="{standalone: true}" name="timeInput" required
+                     pattern="^(2[0-3]|[01]?[0-9]):([0-5]?[0-9])$"
                      type="text" class="rounded-5 p-2 col-12" placeholder="Uhrzeit" id="timeInput">
             </div>
 
             <h2 class="textGreen col-12 mt-5">Startpunkt</h2>
             <div class="col-12">
-              <input [(ngModel)]="startLand" [ngModelOptions]="{standalone: true}" name="startLandInput" required
-                     type="text" class="rounded-5 p-2 col-12" placeholder="Land" id="startLandInput">
+              <input [(ngModel)]="this.offerService.startLocation.country" [ngModelOptions]="{standalone: true}" #startLandInput="ngModel"
+                     name="startLandInput" required  type="text" class="rounded-5 p-2 col-12" placeholder="Land" id="startLandInput">
             </div>
             <div class="hstack justify-content-between">
               <div class="col-4 mt-2">
-                <input [(ngModel)]="startPLZ" [ngModelOptions]="{standalone: true}" name="startPLZInput" required
-                       type="text" class="rounded-5 p-2 col-12" placeholder="PLZ" id="startPLZInput">
+                <input [(ngModel)]="this.offerService.startLocation.zipCode" [ngModelOptions]="{standalone: true}" #startPLZInput="ngModel"
+                       name="startPLZInput" required  type="text" class="rounded-5 p-2 col-12" placeholder="PLZ" id="startPLZInput">
               </div>
               <div class="col-7 mt-2">
-                <input [(ngModel)]="startPlace" [ngModelOptions]="{standalone: true}" name="startPlaceInput" required
-                       type="text" class="rounded-5 p-2 col-12" placeholder="Ort" id="startPlaceInput">
+                <input [(ngModel)]="this.offerService.startLocation.city" [ngModelOptions]="{standalone: true}" #startPlaceInput="ngModel"
+                       name="startPlaceInput" required type="text" class="rounded-5 p-2 col-12" placeholder="Ort" id="startPlaceInput">
               </div>
             </div>
 
             <div class="hstack mt-5 col-12">
                 <h2 class="textGreen">Zwischenstopp</h2>
-                <a (click)="openStopModal(stopModal)" class="non-pointable fa-stack fa-2x mt-2 text.">
+                <a (click)="addLocationStopClicked(stopModal)" class="non-pointable fa-stack fa-2x mt-2 text.">
                   <fa-icon [icon]="faCircle"
                            class="fa-stack-2x text-center white-fade fa-2xs pe-1 pt-3 ms-3 add-fix"></fa-icon>
                   <fa-icon [icon]="faCirclePlus" class="fa-stack-1x btn-blue ms-3 pointable add-fix"></fa-icon>
                 </a>
             </div>
-
-            <div class="mt-2">
+            <div *ngFor="let stop of stopsDataArray; let i = index" class="mt-2">
               <div class="hstack justify-content-between">
-                <h3 class="textGreen">1. Stopp</h3>
+                <h3 class="textGreen">{{ i + 1 }}. Stopp</h3>
                 <div class="hstack mb-2 text-end">
                   <div class="text-end">
-                    <button (click)="openStopModal(stopModal)" type="button" class="btn btn-primary editButton text-end me-1"
+                    <button (click)="editLocationClicked(stopModal, i)" type="button" class="btn btn-primary editButton text-end me-1"
                             id="editButton">
                       <i>
                         <fa-icon [icon]="faPenToSquare"></fa-icon>
@@ -317,7 +368,7 @@
                     </button>
                   </div>
                   <div class="text-end">
-                    <button type="button" class="btn btn-danger deleteButton text-end" id="deleteButton">
+                    <button (click)="deleteStop(i)" type="button" class="btn btn-danger deleteButton text-end" id="deleteButton">
                       <i>
                         <fa-icon [icon]="faX"></fa-icon>
                       </i>
@@ -328,8 +379,8 @@
               <div class="card mb-3">
                 <div class="card-body">
                   <p class="card-text">
-                    {{ stopLand }}  <br>
-                    {{ stopPLZ }} {{ stopPlace }}
+                    {{ stop.country }} <br>
+                    {{ stop.zipCode }} {{ stop.city }}
                   </p>
                 </div>
               </div>
@@ -337,17 +388,17 @@
 
             <h2 class="textGreen col-12 mt-5">Zielort</h2>
             <div class="col-12">
-              <input [(ngModel)]="endLand" [ngModelOptions]="{standalone: true}" name="endLandInput" required
-                     type="text" class="rounded-5 p-2 col-12" placeholder="Land" id="endLandInput">
+              <input [(ngModel)]="this.offerService.endLocation.country" [ngModelOptions]="{standalone: true}" #endLandInput="ngModel"
+                     name="endLandInput" required  type="text" class="rounded-5 p-2 col-12" placeholder="Land" id="endLandInput">
             </div>
             <div class="hstack justify-content-between">
               <div class="col-4 mt-2">
-                <input [(ngModel)]="endPLZ" [ngModelOptions]="{standalone: true}" name="endPLZInput" required
-                       type="text" class="rounded-5 p-2 col-12" placeholder="PLZ" id="endPLZInput">
+                <input [(ngModel)]="this.offerService.endLocation.zipCode" [ngModelOptions]="{standalone: true}" #endPLZInput="ngModel"
+                       name="endPLZInput" required type="text" class="rounded-5 p-2 col-12" placeholder="PLZ" id="endPLZInput">
               </div>
               <div class="col-7 mt-2">
-                <input [(ngModel)]="endPlace" [ngModelOptions]="{standalone: true}" name="endPlaceInput" required
-                       type="text" class="rounded-5 p-2 col-12" placeholder="Ort" id="endPlaceInput">
+                <input [(ngModel)]="this.offerService.endLocation.city" [ngModelOptions]="{standalone: true}" #endPlaceInput="ngModel"
+                       name="endPlaceInput" required type="text" class="rounded-5 p-2 col-12" placeholder="Ort" id="endPlaceInput">
               </div>
             </div>
           </div>
@@ -359,9 +410,9 @@
         </div>
       </div>
       <div class="col-12 align-bottom d-flex justify-content-around align-items-center" *ngIf="editingOffer == 0">
-        <a href="/summary"  class="btn customButton exitButton text-light">
+        <button type="submit" class="btn customButton exitButton text-light">
             <span class="px-3">Weiter <fa-icon [icon]="faArrowRight"></fa-icon></span>
-        </a>
+        </button>
       </div>
     </div>
   </form>
