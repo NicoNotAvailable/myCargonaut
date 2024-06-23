@@ -1,12 +1,13 @@
 import {Component, inject} from '@angular/core';
-import { FormsModule, NgForm } from '@angular/forms';
-import { NgForOf, NgIf } from '@angular/common';
-import {ActivatedRoute} from "@angular/router";
+import { FormsModule } from '@angular/forms';
+import { NgForOf, NgIf, NgOptimizedImage } from '@angular/common';
+import {ActivatedRoute, Router} from "@angular/router";
 import {SessionService} from "../../services/session.service";
 import { faArrowLeft, faSave, faStar } from '@fortawesome/free-solid-svg-icons';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { faStar as faStarRegular } from '@fortawesome/free-regular-svg-icons';
-import { RequestService } from '../../../drive/request.service';
+import { RequestService } from '../../services/drive/request.service';
+import { OfferService } from '../../services/drive/offer.service';
 
 
 @Component({
@@ -17,27 +18,26 @@ import { RequestService } from '../../../drive/request.service';
     NgIf,
     FaIconComponent,
     NgForOf,
+    NgOptimizedImage,
   ],
   templateUrl: './summary.component.html',
   styleUrl: './summary.component.css'
 })
 export class SummaryComponent {
-  templateToLoad: string = "summaryRequest";
+  templateToLoad: string = "";
 
   public sessionService: SessionService = inject(SessionService);
   public requestService: RequestService = inject(RequestService);
+  public offerService: OfferService = inject(OfferService);
 
 
   isLoggedIn: boolean = false;
 
-  private http: any;
-
-  constructor(private route: ActivatedRoute) {
+  constructor(private route: ActivatedRoute, private router: Router) {
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.sessionService.checkLoginNum().then(isLoggedIn => {
-      console.log('Login status:', isLoggedIn);
       isLoggedIn == -1 ? this.isLoggedIn = false : this.isLoggedIn = true;
       if (!this.isLoggedIn) {
         window.location.href = "/profile";
@@ -50,58 +50,28 @@ export class SummaryComponent {
         this.templateToLoad = 'summaryRequest';
       } else if (origin === 'createoffer') {
         this.templateToLoad = 'summaryOffer';
+      } else {
+        this.templateToLoad = 'summaryRequest';
       }
     });
   }
 
+  navigateBack(): void {
+    if (this.templateToLoad === 'summaryOffer') {
+      this.router.navigate(['/createoffer']);
+    } else if (this.templateToLoad === 'summaryRequest') {
+      this.router.navigate(['/createrequest']);
+    }
+  }
+
   get cargoDataArray() {
-    return this.requestService.getCargos();
-  }
-
-  saveOffer(form: NgForm) {
-
-  }
-
-  saveRequest(form: NgForm) {
-
+    return this.requestService.getCargos;
   }
 
   protected readonly faSave = faSave;
   protected readonly faStar = faStar;
-
   protected readonly faStarRegular = faStarRegular;
   protected readonly faArrowLeft = faArrowLeft;
 
-  createOffer() {
-
-  }
-
-  createRequest() {
-
-    //const requestData = {
-    //  email: this.email,
-    //  password: this.password,
-    //};
-
-    /*this.http.post("http://localhost:8000/drive/request", userData, { withCredentials: true }).subscribe(
-      response =>{
-        form.resetForm();
-        console.log(response);
-        this.textColor = "successText"
-        this.message = "Anmeldung lief swaggy";
-        window.location.href = "/profile";
-        setTimeout(() => {
-          this.message = "";
-          this.textColor = "errorText"
-        }, 5000);
-      },
-      error => {
-        console.error(error);
-        this.message = error.error.message || "Passwort oder Email stimmt nicht überein";
-        setTimeout(()=> {
-          this.message = "";
-        }, 5000);
-      }
-    );*/
-  }
+  protected readonly window = window;
 }
