@@ -301,6 +301,8 @@ export class OfferComponent {
     if (!this.offerService.info || this.offerService.info < 1 || this.offerService.info > 3 ) errors.push('Bitte ihren Kommunikationswunsch angeben');
     if (!this.offerService.priceType || this.offerService.priceType < 1 || this.offerService.priceType > 3 ) errors.push('Bitte eine Preisart festlegen');
 
+    if (this.offerService.profilePic == "empty.png") errors.push('Bitte ein Profilbild hochladen vor dem Erstellen ihres Angebots');
+
     if (!this.offerService.selectedCar) {
       errors.push('Bitte ein Auto für die Fahrt auswählen');
     }
