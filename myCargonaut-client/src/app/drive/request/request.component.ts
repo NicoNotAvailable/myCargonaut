@@ -231,6 +231,8 @@ export class RequestComponent {
 
     if (!this.requestService.info || this.requestService.info < 1 || this.requestService.info > 3 ) errors.push('Bitte ihren Kommunikationswunsch angeben');
 
+    if (this.requestService.profilePic == "empty.png") errors.push('Bitte ein Profilbild hochladen vor dem Erstellen ihres Gesuches');
+
     if (this.requestService.locations[0].country === undefined || this.requestService.locations[0].country.trim() === "")
       errors.push('Bitte einen gültiges Land als Startpunkt angeben');
     if (this.requestService.locations[0].zipCode === undefined || this.requestService.locations[0].zipCode.trim() === "")
