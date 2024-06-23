@@ -10,7 +10,7 @@
 
 html, body {
   background-color: ghostwhite !important;
-  height: 100%;
+  height: 100vh;
   margin: 0;
   font-family: Roboto, sans-serif;
 }
@@ -31,10 +31,6 @@ html, body {
 
 .mc-green {
   background-color: #005B52;
-}
-
-.textGreen {
-  color: #005B52;
 }
 
 .btn-blue {
@@ -105,6 +101,8 @@ html, body {
 .editButton:hover {
   text-decoration: underline;
   color: #ffffff;
+  box-shadow: #1a9cc5 0 0 20px;
+  text-shadow: ghostwhite 0 0 10px;
 }
 
 .editButton, .deleteButton{
@@ -114,11 +112,6 @@ html, body {
   border-radius: 5rem;
   border-color: transparent;
   transition: all 0.3s ease;
-}
-
-.editButton:hover {
-  box-shadow: #1a9cc5 0 0 20px;
-  text-shadow: ghostwhite 0 0 10px;
 }
 
 .deleteButton:hover {
