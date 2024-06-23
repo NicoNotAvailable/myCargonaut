@@ -17,12 +17,13 @@ import { DateUtils } from "../../../../utils/DateUtils";
 import { NgOptimizedImage } from "@angular/common";
 import { SessionService } from "../services/session.service";
 import { UserService } from "../services/user.service";
+import { ReviewReadComponent } from '../review/ReviewReadComponent/review-read.component';
 
 
 @Component({
   selector: "app-profile",
   standalone: true,
-  imports: [UserDescriptionComponent, AddCarComponent, AddTrailerComponent, CarOverviewComponent, FaIconComponent, NgOptimizedImage, TrailerOverviewComponent, NgIf],
+  imports: [UserDescriptionComponent, AddCarComponent, AddTrailerComponent, CarOverviewComponent, FaIconComponent, NgOptimizedImage, TrailerOverviewComponent, NgIf, ReviewReadComponent],
   templateUrl: "./profile.component.html",
   styleUrl: "./profile.component.css"
 })

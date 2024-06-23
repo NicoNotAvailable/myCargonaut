@@ -1,38 +1,24 @@
 <div class="container">
-  <div class="row">
+  <div class="row " *ngFor="let review of reviewsArray">
     <div class="col-lg-12 col-12">
       <div class="card m-4">
         <div class="row no-gutters flex-column flex-lg-row card-horizontal">
           <div class="col-lg-12">
             <div class="card-body">
               <div class="headline">
-                <h5 class="card-title greenText">Hier kommt der Titel rein</h5>
+                <h5 class="card-title greenText">{{ review.writer.firstName }} {{ review.writer.lastName }}</h5>
               </div>
-              <div class="col-4 margin-vertical ">
-                <div class="stars" matTooltip="Durchschnitt der Bewertung"
-                     matTooltipPosition="before"
-                     aria-label="Button that displays a tooltip when focused or hovered over">
-                  <button
-                    class="star-button">
-                    <fa-icon [icon]="faStar" class="star-icon"></fa-icon>
-                    <fa-icon [icon]="faStar" class="star-icon"></fa-icon>
-                    <fa-icon [icon]="faStar" class="star-icon"></fa-icon>
-                    <fa-icon [icon]="faStar" class="star-icon"></fa-icon>
-                    <fa-icon [icon]="faStar" class="star-icon"></fa-icon>
+              <div class="col margin-vertical ">
+                <div class="stars" >
+                  <button class="star-button" *ngFor="let filled of getStarsArray(review.rating)">
+                    <fa-icon [icon]="filled ? faStar : faStarRegular" class="star-icon"></fa-icon>
                   </button>
-
                 </div>
-                <img src="assets/person-circle.svg" alt="filler" class="profilPic" >
-              </div>
-              <div class=" ReviewText">
-                <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr,
-                  sed diam nonumy eirmod tempor invidunt ut labore et dolore
-                  magna aliquyam erat, sed diam voluptua. At vero eos et accusam
-                  et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea
-                  takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit
-                  ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et
-                  accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren,
-                  no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
+                <img *ngIf="profilePic === 'empty.png' " class="profileCircle" [ngSrc]="pathToImage" alt="profile" width="150" height="150">
+                <img *ngIf="profilePic !== 'empty.png' " [ngSrc]="window.location.protocol + '//' + window.location.host.replace('4200', '8000') + '/user/image/'+ profilePic" width="70" height="55" class="card-img-top img-fluid backgroundGreen profileCircle my-4" alt="">
+              <div [ngClass]="reviewContent" class=" ReviewText">
+                <p>{{ review.text }}</p>
+
               </div>
 
             </div>
