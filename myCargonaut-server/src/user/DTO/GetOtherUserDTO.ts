@@ -1,8 +1,4 @@
-import {
-  IsBoolean,
-  IsNotEmpty, IsNumber,
-  IsString,
-} from 'class-validator';
+import { IsBoolean, IsNotEmpty, IsNumber, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
 
@@ -42,4 +38,8 @@ export class GetOtherUserDTO {
   @IsBoolean()
   @IsNotEmpty()
   isSmoker: boolean;
+
+  @ApiProperty()
+  @IsNumber()
+  rating: number;
 }

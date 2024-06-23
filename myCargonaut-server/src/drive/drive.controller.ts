@@ -25,6 +25,7 @@ import { GetOfferDTO } from './DTO/GetOfferDTO';
 import { GetRequestDTO } from './DTO/GetRequestDTO';
 import { UtilsService } from '../utils/utils.service';
 import { ChangeStatusDTO } from './DTO/ChangeStatusDTO';
+import { UserDB } from '../database/UserDB';
 
 @ApiTags('drive')
 @Controller('drive')
@@ -187,9 +188,13 @@ export class DriveController {
     description: 'gets all offers',
   })
   @Get('/all/offers')
-  async getAllOffers() {
+  async getAllOffers(@Session() session: SessionData) {
+    let user: UserDB;
+    if (session.currentUser) {
+      user = await this.userService.getUserById(session.currentUser);
+    }
     try {
-      const offers = await this.driveService.getAllOffers();
+      const offers = await this.driveService.getAllOffers(user);
       return await Promise.all(
         offers.map(async (offer) => {
           return this.utilsService.transformOfferDBtoGetOfferDTO(offer);
@@ -244,9 +249,13 @@ export class DriveController {
     description: 'gets all requests',
   })
   @Get('/all/requests')
-  async getAllRequests() {
+  async getAllRequests(@Session() session: SessionData) {
+    let user: UserDB;
+    if (session.currentUser) {
+      user = await this.userService.getUserById(session.currentUser);
+    }
     try {
-      const requests = await this.driveService.getAllRequests();
+      const requests = await this.driveService.getAllRequests(user);
       return await Promise.all(
         requests.map(async (request) => {
           return this.utilsService.transformRequestDBtoGetRequestDTO(request);
