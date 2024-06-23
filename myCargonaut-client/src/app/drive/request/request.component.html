@@ -23,7 +23,7 @@
       </form>
     </div>
     <div class="modal-footer justify-content-center">
-      <button type="button" (click)="addCargoToArray(cargoModal)" class="btn customButton exitButton text-light mt-2">
+      <button type="button" (click)="addCargoToArray()" class="btn customButton exitButton text-light mt-2">
           <i>
             <fa-icon [icon]="faSave"></fa-icon>
           </i>
@@ -31,7 +31,7 @@
       </button>
     </div>
   </ng-template>
-  <form #form="ngForm" (ngSubmit)="validInputs() && createSummaryRequest(form)">
+  <form #form="ngForm" (ngSubmit)="validInputs() && createSummaryRequest()">
     <div class="row">
       <div class="p-5" id="addOfferArea">
         <div class="row mb-5 justify-content-between">
@@ -201,7 +201,7 @@
             <h2 class="textGreen col-12 mb-3 mt-5">Zeit & Ort</h2>
             <div class="col-12">
               <input [(ngModel)]="this.requestService.date" [ngModelOptions]="{standalone: true}" name="dateInput" required
-                     class="form-control rounded-5 p-2 col-12" placeholder="Datum der Fahrt" id="dateInput"
+                     class="form-control rounded-5 p-2 col-12" id="dateInput"
                      placeholder="Datum der Fahrt" ngbDatepicker #d="ngbDatepicker" type="date">
             </div>
             <div class="col-12 mt-2">

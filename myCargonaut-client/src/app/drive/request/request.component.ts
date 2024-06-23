@@ -1,4 +1,4 @@
-import {Component, EventEmitter, inject, Input, Output, TemplateRef} from "@angular/core";
+import {Component, EventEmitter, inject, Output, TemplateRef} from "@angular/core";
 import {SessionService} from "../../services/session.service";
 import { NgClass, NgForOf, NgIf, NgOptimizedImage } from '@angular/common';
 import {
@@ -10,11 +10,11 @@ import {
   faSave,
   faX,
 } from '@fortawesome/free-solid-svg-icons';
-import {FormsModule, NgForm} from "@angular/forms";
+import {FormsModule} from "@angular/forms";
 import {FaIconComponent} from "@fortawesome/angular-fontawesome";
 import {NgbInputDatepicker} from "@ng-bootstrap/ng-bootstrap";
-import {NgbActiveModal, NgbModal, NgbModalRef, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
-import { RequestService } from '../../../drive/request.service';
+import { NgbModal, NgbModalRef} from '@ng-bootstrap/ng-bootstrap';
+import { RequestService } from '../../services/drive/request.service';
 import { Cargo } from '../Cargo';
 import { Router } from '@angular/router';
 import { UserService } from '../../services/user.service';
@@ -65,7 +65,6 @@ export class RequestComponent {
   errorMessage: string = "";
 
   isLoggedIn: boolean = false;
-  private http: any;
   private cargoModalRef: NgbModalRef | undefined;
 
 
@@ -114,7 +113,7 @@ export class RequestComponent {
     this.requestService.info = Number(num);
   }
 
-  createSummaryRequest(form: any): void {
+  createSummaryRequest(): void {
     this.router.navigate(['/summary'], { queryParams: { origin: 'createrequest' } });
   }
 
@@ -159,7 +158,7 @@ export class RequestComponent {
     this.openCargoModal(content);
   }
 
-  addCargoToArray(modal: any) {
+  addCargoToArray() {
     if (this.cargoDescription != null && this.cargoWeight != null &&
       this.cargoLength != null && this.cargoWidth != null &&
       this.cargoHeight != null) {
@@ -249,13 +248,13 @@ export class RequestComponent {
       if (!cargo.description?.trim())
         errors.push('Bitte Name des Cargos angeben');
       if (cargo.weight < 1 || cargo.weight > 1000)
-        errors.push('Cargogewicht von ' + cargo.description + ' muss zwischen 1 und 1000 sein');
+        errors.push('Cargogewicht von ' + cargo.description + ' muss zwischen 1 und 1000kg sein');
       if (cargo.length < 1 || cargo.length > 1000)
-        errors.push('Cargolänge von ' + cargo.description + ' muss zwischen 1 und 1000 sein');
+        errors.push('Cargolänge von ' + cargo.description + ' muss zwischen 1 und 1000cm sein');
       if (cargo.height < 1 || cargo.height > 1000)
-        errors.push('Cargobreite von ' + cargo.description + ' muss zwischen 1 und 1000 sein');
+        errors.push('Cargobreite von ' + cargo.description + ' muss zwischen 1 und 1000cm sein');
       if (cargo.width < 1 || cargo.width > 1000)
-        errors.push('Cargohöhe von ' + cargo.description + ' muss zwischen 1 und 1000 sein');
+        errors.push('Cargohöhe von ' + cargo.description + ' muss zwischen 1 und 1000cm sein');
     });
 
     if (errors.length) {
@@ -266,6 +265,7 @@ export class RequestComponent {
       } else {
         this.errorMessage= errors.join(', ');
       }
+      this.removeErrorMessage();
       return false;
     }
     return true;

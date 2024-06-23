@@ -1,6 +1,6 @@
 import { Component, EventEmitter, inject, Input, Output, TemplateRef } from '@angular/core';
 import { FaIconComponent } from "@fortawesome/angular-fontawesome";
-import {FormsModule, NgForm, ReactiveFormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import { NgClass, NgForOf, NgIf } from '@angular/common';
 import { NgbInputDatepicker, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import {
@@ -15,14 +15,10 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import {SessionService} from "../../services/session.service";
 import { Router } from '@angular/router';
-import { RequestService } from '../../../drive/request.service';
 import { UserService } from '../../services/user.service';
-import { OfferService } from '../../../drive/offer.service';
-import { Cargo } from '../Cargo';
+import { OfferService } from '../../services/drive/offer.service';
 import { LocationDrive } from '../LocationDrive';
 import { VehicleService } from '../../services/vehicle.service';
-import { Car } from '../../profile/Car';
-import { Trailer } from '../../profile/Trailer';
 
 @Component({
   selector: 'app-offer',
@@ -49,6 +45,8 @@ export class OfferComponent {
   @Input() editingOffer!: number;
   @Output() changeAddCar = new EventEmitter<void>();
 
+  hadTrailerSelection : boolean = false
+
   talkMode: number | null = null;
   seats: number | null = null;
 
@@ -73,7 +71,6 @@ export class OfferComponent {
   errorMessage: string = "";
 
   isLoggedIn: boolean = false;
-  private http: any;
   private carModalRef: NgbModalRef | undefined;
   private trailerModalRef: NgbModalRef | undefined;
   private stopModalRef: NgbModalRef | undefined;
@@ -118,13 +115,6 @@ export class OfferComponent {
     }, 5000);
   }
 
-  protected readonly faPlus = faPlus;
-
-  protected readonly faArrowRight = faArrowRight;
-  protected readonly faSave = faSave;
-  protected readonly faCircle = faCircle;
-  protected readonly faCirclePlus = faCirclePlus;
-
   openCarModal(content: TemplateRef<any>) {
     if (!this.offerService.selectedCar) {
       this.errorMessage = "Kein Auto ausgewählt";
@@ -135,6 +125,12 @@ export class OfferComponent {
       this.editCarHeight = this.offerService.maxCHeight;
 
       this.carModalRef = this.modalService.open(content, { ariaLabelledBy: 'modal-car-title' })
+    }
+  }
+
+  closeCarModal() {
+    if (this.trailerModalRef) {
+      this.trailerModalRef.close();
     }
   }
 
@@ -153,15 +149,6 @@ export class OfferComponent {
 
   openStopModal(content: TemplateRef<any>) {
     this.stopModalRef = this.modalService.open(content, { ariaLabelledBy: 'modal-stop-title' })
-  }
-
-  changePriceType(num: number) {
-    if (num < 1) {
-      this.errorMessage = "Dein Auto kann nicht weniger als einen Sitz haben";
-      this.removeErrorMessage();
-      return;
-    }
-    this.offerService.priceType = Number(num);
   }
 
   changeCarProperties() {
@@ -186,6 +173,15 @@ export class OfferComponent {
     }
   }
 
+  changePriceType(num: number) {
+    if (num < 1) {
+      this.errorMessage = "Bitte eine Preisart festlegen";
+      this.removeErrorMessage();
+      return;
+    }
+    this.offerService.priceType = Number(num);
+  }
+
   addLocationStopClicked(content: TemplateRef<any>) {
     this.stopLand = null;
     this.stopPLZ = null;
@@ -200,7 +196,7 @@ export class OfferComponent {
     return this.offerService.getStops;
   }
 
-  createSummaryOffer(form: NgForm) {
+  createSummaryOffer() {
     this.router.navigate(['/summary'], { queryParams: { origin: 'createoffer' } })
   }
 
@@ -219,12 +215,9 @@ export class OfferComponent {
     this.offerService.stops.splice(index, 1);
   }
 
-  protected readonly faPenToSquare = faPenToSquare;
 
-  protected readonly faX = faX;
-  protected readonly faArrowLeft = faArrowLeft;
 
-  addStopToArray(stopModal: TemplateRef<any>) {
+  addStopToArray() {
     if (this.stopLand != null && this.stopPLZ != null &&
       this.stopPlace != null) {
       if (this.editedStop < 0) {
@@ -271,6 +264,14 @@ export class OfferComponent {
     this.offerService.maxTLength = this.offerService.selectedTrailer.length;
     this.offerService.maxTWidth = this.offerService.selectedTrailer.width;
     this.offerService.maxTHeight = this.offerService.selectedTrailer.height;
+
+    this.hadTrailerSelection = true;
+  }
+
+  selectNoTrailer() {
+    this.offerService.selectedTrailer = null;
+
+    this.hadTrailerSelection = true;
   }
 
   private validTime() {
@@ -305,24 +306,24 @@ export class OfferComponent {
     }
     else {
       if (this.offerService.maxCWeight! < 1 || this.offerService.maxCWeight! > 1000)
-        errors.push('Autogewicht muss zwischen 1 und 1000 sein');
+        errors.push('Autogewicht muss zwischen 1 und 1000kg sein');
       if (this.offerService.maxCLength! < 1 || this.offerService.maxCLength! > 1000)
-        errors.push('Autolänge muss zwischen 1 und 1000 sein');
+        errors.push('Autolänge muss zwischen 1 und 1000cm sein');
       if (this.offerService.maxCWidth! < 1 || this.offerService.maxCWidth! > 1000)
-        errors.push('Autobreite muss zwischen 1 und 1000 sein');
+        errors.push('Autobreite muss zwischen 1 und 1000cm sein');
       if (this.offerService.maxCHeight! < 1 || this.offerService.maxCHeight! > 1000)
-        errors.push('Autohöhe muss zwischen 1 und 1000 sein');
+        errors.push('Autohöhe muss zwischen 1 und 1000cm sein');
     }
 
     if (this.offerService.selectedTrailer) {
       if (this.offerService.maxTWeight! < 1 || this.offerService.maxTWeight! > 1000)
-        errors.push('Anhängergewicht muss zwischen 1 und 1000 sein');
+        errors.push('Anhängergewicht muss zwischen 1 und 1000kg sein');
       if (this.offerService.maxTLength! < 1 || this.offerService.maxTLength! > 1000)
-        errors.push('Anhängerlänge muss zwischen 1 und 1000 sein');
+        errors.push('Anhängerlänge muss zwischen 1 und 1000cm sein');
       if (this.offerService.maxTWidth! < 1 || this.offerService.maxTWidth! > 1000)
-        errors.push('Anhängerbreite muss zwischen 1 und 1000 sein');
+        errors.push('Anhängerbreite muss zwischen 1 und 1000cm sein');
       if (this.offerService.maxTHeight! < 1 || this.offerService.maxTHeight! > 1000)
-        errors.push('Anhängerhöhe muss zwischen 1 und 1000 sein');
+        errors.push('Anhängerhöhe muss zwischen 1 und 1000cm sein');
     }
 
     if (this.offerService.startLocation.country === undefined || this.offerService.startLocation.country.trim() === "")
@@ -356,12 +357,18 @@ export class OfferComponent {
       } else {
         this.errorMessage= errors.join(', ');
       }
+      this.removeErrorMessage();
       return false;
     }
     return true;
   }
 
-  selectNoTrailer() {
-    this.offerService.selectedTrailer = null;
-  }
+  protected readonly faPenToSquare = faPenToSquare;
+  protected readonly faX = faX;
+  protected readonly faArrowLeft = faArrowLeft;
+  protected readonly faPlus = faPlus;
+  protected readonly faArrowRight = faArrowRight;
+  protected readonly faSave = faSave;
+  protected readonly faCircle = faCircle;
+  protected readonly faCirclePlus = faCirclePlus;
 }

@@ -1,9 +1,8 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Cargo } from '../app/drive/Cargo';
-import { LocationDrive } from '../app/drive/LocationDrive';
-import { DateUtils } from '../../../utils/DateUtils';
-import { UserService } from '../app/services/user.service';
+import { Cargo } from '../../drive/Cargo';
+import { LocationDrive } from '../../drive/LocationDrive';
+import { UserService } from '../user.service';
 
 @Injectable({
   providedIn: 'root'
@@ -104,7 +103,7 @@ export class RequestService {
         location: locationsWithStopNr,
       };
       this.http.post("http://localhost:8000/drive/request", requestData, { withCredentials: true }).subscribe(
-        response =>{
+        () =>{
           window.location.href = "/";
         },
         error => {

@@ -1,11 +1,10 @@
 import { inject, Injectable } from '@angular/core';
-import { LocationDrive } from '../app/drive/LocationDrive';
+import { LocationDrive } from '../../drive/LocationDrive';
 import { HttpClient } from '@angular/common/http';
-import { Cargo } from '../app/drive/Cargo';
-import { UserService } from '../app/services/user.service';
-import { Car } from '../app/profile/Car';
-import { VehicleService } from '../app/services/vehicle.service';
-import { Trailer } from '../app/profile/Trailer';
+import { UserService } from '../user.service';
+import { Car } from '../../profile/Car';
+import { VehicleService } from '../vehicle.service';
+import { Trailer } from '../../profile/Trailer';
 
 @Injectable({
   providedIn: 'root'
@@ -190,7 +189,7 @@ export class OfferService {
         };
       }
       this.http.post("http://localhost:8000/drive/offer", offerData, { withCredentials: true }).subscribe(
-        response => {
+        () => {
           window.location.href = "/";
         },
         error => {

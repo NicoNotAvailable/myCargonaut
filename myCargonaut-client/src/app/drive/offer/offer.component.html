@@ -2,7 +2,7 @@
   <ng-template #carModal let-modal>
     <div class="modal-header">
       <h4 class="modal-title" id="modal-car-title">Auto anpassen</h4>
-      <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+      <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')" aria-labelledby="modal-car-title"></button>
     </div>
     <div class="modal-body">
       <form>
@@ -32,7 +32,7 @@
   <ng-template #trailerModal let-modal>
     <div class="modal-header">
       <h4 class="modal-title" id="modal-trailer-title">Anhänger anpassen</h4>
-      <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+      <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')" aria-labelledby="modal-trailer-title"></button>
     </div>
     <div class="modal-body">
       <form>
@@ -62,7 +62,7 @@
   <ng-template #stopModal let-modal>
     <div class="modal-header">
       <h4 class="modal-title" id="modal-stop-title">Zwischenstopp  {{ editModeText }}</h4>
-      <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+      <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"  aria-labelledby="modal-stop-title"></button>
     </div>
     <div class="modal-body">
       <form>
@@ -83,7 +83,7 @@
       </form>
     </div>
     <div class="modal-footer justify-content-center">
-      <button (click)="addStopToArray(stopModal)" type="button" class="btn customButton exitButton text-light mt-2">
+      <button (click)="addStopToArray()" type="button" class="btn customButton exitButton text-light mt-2">
         <i>
           <fa-icon [icon]="faSave"></fa-icon>
         </i>
@@ -91,7 +91,7 @@
       </button>
     </div>
   </ng-template>
-  <form #form="ngForm" (ngSubmit)="validInputs() && createSummaryOffer(form)">
+  <form #form="ngForm" (ngSubmit)="validInputs() && createSummaryOffer()">
     <div class="row">
       <div class="p-5" id="addOfferArea">
         <div class="row mb-5 justify-content-between">
@@ -223,7 +223,9 @@
                 <div class="dropdown w-100">
                   <a class="btn customButton dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
                      aria-expanded="false">
-                    {{ offerService.selectedTrailer ? offerService.selectedTrailer.name : 'Anhänger auswählen' }}
+                    <span>{{ !hadTrailerSelection ? 'Anhänger auswählen' :(offerService.selectedTrailer ? offerService.selectedTrailer.name : 'Kein Anhänger') }}
+                    </span>
+
                   </a>
 
                   <ul class="dropdown-menu">
