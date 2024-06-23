@@ -67,13 +67,12 @@ export class SearchCardComponent {
     } else if (this.currentRoute === "searchOffer") {
       this.buttonText = "Fahrt ansehen";
       this.plaetze = "verfügbare Plätze";
-      this.href = "trips";
+      this.href = "trips/offer";
 
     } else if (this.currentRoute === "myOffer") {
       this.buttonText = "Anfragen ansehen";
       this.plaetze = "verfügbare Plätze";
       this.href = "offer";
-
 
     }else if (this.currentRoute === "myRequest") {
       this.buttonText = "Anfragen ansehen";
