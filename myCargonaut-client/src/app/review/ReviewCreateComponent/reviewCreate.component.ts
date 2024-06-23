@@ -4,7 +4,6 @@ import { faStar as faStarRegular } from '@fortawesome/free-regular-svg-icons';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { NgClass, NgForOf, NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import {MatTooltipModule} from "@angular/material/tooltip";
 import { HttpClient } from '@angular/common/http';
 import { TripService } from '../../services/trip-service.service';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
