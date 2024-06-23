@@ -2,12 +2,13 @@ import { Component, inject } from '@angular/core';
 import { faSave, faStar, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { faStar as faStarRegular } from '@fortawesome/free-regular-svg-icons';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { NgForOf, NgIf } from '@angular/common';
+import { NgClass, NgForOf, NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { TripService } from '../../services/trip-service.service';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { SessionService } from '../../services/session.service';
+import { response } from 'express';
 
 
 
@@ -21,6 +22,7 @@ import { SessionService } from '../../services/session.service';
     NgIf,
 
     RouterLink,
+    NgClass,
   ],
   templateUrl: './reviewCreate.component.html',
   styleUrl: './reviewCreate.component.css'
@@ -104,9 +106,12 @@ export class ReviewCreateComponent {
 
         },
         error => {
-
+          if (error.status === 400) {
+            this.message =  "Du hast diese Fahrt schon bewertet";
+          } else {
+            this.message = error.error.message || "Bitte überprüfen Sie die Eingabe";
+          }
           console.error('There was an error!', error);
-          this.message = error.error.message || "Bitte überprüfen Sie die Eingabe";
           setTimeout(() => {
             this.message = '';
           }, 5000);
