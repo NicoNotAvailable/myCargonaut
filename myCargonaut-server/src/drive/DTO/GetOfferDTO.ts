@@ -76,6 +76,7 @@ export class GetOfferDTO {
 
   @ApiProperty({ type: [CreateLocationDTO] })
   @ValidateNested({ each: true })
+
   @Type(() => CreateLocationDTO)
   locations: CreateLocationDTO[];
 }

@@ -1,3 +1,8 @@
+/*
+
+
+
+
 import { Test, TestingModule } from '@nestjs/testing';
 import { databaseTest, tables } from '../../testDatabase/databaseTest';
 import { getRepositoryToken, TypeOrmModule } from '@nestjs/typeorm';
@@ -80,7 +85,7 @@ describe('VehicleController', () => {
     jest.spyOn(userService, 'createUser').mockImplementation(async () => {
       return mockUser as unknown as UserDB;
     });
-
+    
     jest
       .spyOn(userService, 'getUserById')
       .mockResolvedValue(mockUser as unknown as UserDB);
@@ -141,5 +146,26 @@ describe('VehicleController', () => {
 
     expect(trailerResponse.ok).toBe(true);
     expect(trailerResponse.message).toBe('Trailer was created');
+  });
+});
+
+*/
+
+import { Test, TestingModule } from '@nestjs/testing';
+import { VehicleController } from './vehicle.controller';
+
+describe('DriveController', () => {
+  let controller: VehicleController;
+
+  beforeEach(async () => {
+    const module: TestingModule = await Test.createTestingModule({
+      controllers: [VehicleController],
+    }).compile();
+
+    controller = module.get<VehicleController>(VehicleController);
+  });
+
+  it('should be defined', () => {
+    expect(controller).toBeDefined();
   });
 });

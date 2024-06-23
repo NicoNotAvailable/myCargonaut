@@ -65,10 +65,10 @@ input{
   width: 2rem;
 }
 
-.selectedSeats{
+.selectedButton{
   background-color: #1a9cc5;
 }
-.deselectedSeats{
+.deselectedButton{
   background-color: #005B52;
 }
 .deleteButton{

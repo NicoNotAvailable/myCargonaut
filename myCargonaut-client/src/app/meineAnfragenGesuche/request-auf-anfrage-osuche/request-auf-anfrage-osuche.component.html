@@ -27,7 +27,7 @@
                     <div class="row">
                       <div class="col-12">
                         <ng-container *ngFor="let star of stars; let i = index">
-                          <img [src]="i < bewertungsDummy ? starFillSrc : starEmptySrc" alt="star{{i + 1}}"
+                          <img ngSrc="i < bewertungsDummy ? starFillSrc : starEmptySrc" alt="star{{i + 1}}"
                                class="blueText">
                         </ng-container>
                       </div>
@@ -141,7 +141,7 @@
                     <div class="row">
                       <div class="col-12">
                         <ng-container *ngFor="let star of stars; let i = index">
-                          <img [src]="i < bewertungsDummy ? starFillSrc : starEmptySrc" alt="star{{i + 1}}"
+                          <img ngSrc="i < bewertungsDummy ? starFillSrc : starEmptySrc" alt="star{{i + 1}}"
                                class="blueText">
                         </ng-container>
                       </div>

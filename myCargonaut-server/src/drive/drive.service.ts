@@ -149,13 +149,17 @@ export class DriveService {
     }
     return drive;
   }
-  async getAllOffers(): Promise<OfferDB[]> {
+  async getAllOffers(user?: UserDB): Promise<OfferDB[]> {
     const offers = await this.offerRepository.find({
       relations: ['user', 'car', 'trailer', 'location'],
     });
     if (!offers) {
       throw new NotFoundException('Offers not found');
     }
+    if (user) {
+      return offers.filter((offer) => offer.user.id !== user.id);
+    }
+
     return offers;
   }
   async getOwnOffers(user: number): Promise<OfferDB[]> {
@@ -168,12 +172,15 @@ export class DriveService {
     }
     return offers;
   }
-  async getAllRequests(): Promise<RequestDB[]> {
+  async getAllRequests(user?: UserDB): Promise<RequestDB[]> {
     const requests = await this.requestRepository.find({
       relations: ['user', 'cargo', 'location'],
     });
     if (!requests) {
       throw new NotFoundException('Requests not found');
+    }
+    if (user) {
+      return requests.filter((request) => request.user.id !== user.id);
     }
     return requests;
   }

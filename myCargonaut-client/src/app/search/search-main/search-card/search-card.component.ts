@@ -1,5 +1,5 @@
 import {Component, Input} from '@angular/core';
-import {NavigationEnd, Router} from "@angular/router";
+import { NavigationEnd, Router, RouterLink } from '@angular/router';
 import {filter} from "rxjs/operators";
 
 import {offer} from "../../offers"
@@ -16,7 +16,8 @@ import { NgForOf, NgIf, NgOptimizedImage } from "@angular/common";
     DateFormatPipe,
     NgIf,
     NgForOf,
-    NgOptimizedImage
+    NgOptimizedImage,
+    RouterLink,
   ],
   templateUrl: './search-card.component.html',
   styleUrl: './search-card.component.css'
@@ -39,6 +40,7 @@ export class SearchCardComponent {
   @Input() masse!: number[];
   @Input() requestBool!: boolean;
   @Input() offerBool!: boolean;
+  @Input() lastRideBool!: boolean;
   @Input() pathToImageArray!: string[];
 
   constructor(private router: Router) {
@@ -60,15 +62,18 @@ export class SearchCardComponent {
     if (this.currentRoute === "searchRequest") {
       this.buttonText = "Suche ansehen";
       this.plaetze = "benötigte Plätze";
+      this.href = "trips/request";
 
     } else if (this.currentRoute === "searchOffer") {
       this.buttonText = "Fahrt ansehen";
       this.plaetze = "verfügbare Plätze";
+      this.href = "trips";
 
     } else if (this.currentRoute === "myOffer") {
       this.buttonText = "Anfragen ansehen";
       this.plaetze = "verfügbare Plätze";
       this.href = "offer";
+
 
     }else if (this.currentRoute === "myRequest") {
       this.buttonText = "Anfragen ansehen";

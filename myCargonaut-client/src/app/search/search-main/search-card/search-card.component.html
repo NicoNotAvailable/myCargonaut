@@ -39,7 +39,7 @@
                             </div>
                             <div class="col-6">
                               <ng-container *ngFor="let star of stars; let i = index">
-                                <img [src]="i < bewertungsDummy ? starFillSrc : starEmptySrc" alt="star{{i + 1}}"
+                                <img [src]="i <  element.user.rating  ? starFillSrc : starEmptySrc" alt="star{{i + 1}}"
                                      class="blueText">
                               </ng-container>
                             </div>
@@ -50,7 +50,11 @@
                         </div>
                         <div class="col-6 col-lg-3">
                           <div class="horizontal-right">
-                            <h5 class="blueText">{{ element.price }}€</h5>
+                            <h5 class="blueText">{{ element.price }}€
+                              @if (element.priceType == 1){}
+                              @else if (element.priceType == 2){p. Person}
+                              @else if (element.priceType == 3){p. Kilo}
+                            </h5>
                           </div>
                         </div>
                       </div>
@@ -114,7 +118,7 @@
 
                         <div class="col-12 col-lg-3">
                           <div class="horizontal-right">
-                            <a href="{{href}}/{{element.id}}">
+                            <a [routerLink]="['/trips/offer/', element.id]">
                               <button type="button" class="btn btn-primary greenButton">{{ buttonText }}</button>
                             </a>
                           </div>
@@ -163,7 +167,7 @@
                             </div>
                             <div class="col-6">
                               <ng-container *ngFor="let star of stars; let i = index">
-                                <img [src]="i < bewertungsDummy ? starFillSrc : starEmptySrc" alt="star{{i + 1}}"
+                                <img [src]="i <  element.user.rating  ? starFillSrc : starEmptySrc" alt="star{{i + 1}}"
                                      class="blueText">
                               </ng-container>
                             </div>
@@ -174,7 +178,11 @@
                         </div>
                         <div class="col-6 col-lg-3">
                           <div class="horizontal-right">
-                            <h5 class="blueText">{{ element.price }}€</h5>
+                            <h5 class="blueText">{{ element.price }}€
+                              @if (element.priceType == 1){}
+                              @else if (element.priceType == 2){p. Person}
+                              @else if (element.priceType == 3){p. Kilo}
+                            </h5>
                           </div>
                         </div>
                       </div>
@@ -235,8 +243,6 @@
                             </div>
                           </div>
                         </div>
-
-
                         <div class="col-12 col-lg-3">
                           <div class="horizontal-right">
                             <a href="{{href}}/{{element.id}}">
@@ -256,118 +262,7 @@
           </div>
         </div>
       }
-    } @else {
-      <div class="row">
-        <div class="col-lg-12 col-12">
-          <div class="card m-4">
-            <div class="row no-gutters flex-column flex-lg-row card-horizontal">
-              <div class="col-lg-3">
-                <div class="horizontal-center">
-
-                  <ng-content></ng-content>
-
-                </div>
-              </div>
-              <div class="col-lg-9">
-                <div class="card-body">
-                  <div class="container-fluid">
-                    <div class="row mb-4">
-                      <div class="col-12 col-lg-6">
-                        <div class="row">
-                          <h5 class="card-title greenText">Entspannte Fahrt in meinem Tesla</h5>
-                        </div>
-                        <div class="row">
-                          <div class="col-6">
-                            <span>Elon Musk</span>
-                          </div>
-                          <div class="col-6">
-                            <ng-container *ngFor="let star of stars; let i = index">
-                              <img [src]="i < bewertungsDummy ? starFillSrc : starEmptySrc" alt="star{{i + 1}}"
-                                   class="blueText">
-                            </ng-container>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-6 col-lg-3">
-                        <h5 class="greenText">06.09.4002</h5>
-                      </div>
-                      <div class="col-6 col-lg-3">
-                        <div class="horizontal-right">
-                          <h5 class="blueText">69€</h5>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div class="row">
-                      <div class="col-12 col-lg-3">
-                        <div class="row">
-                          <div class="col-6 col-lg-4">
-                            <span>von:</span>
-                          </div>
-                          <div class="col-6 col-lg-8">
-                            <span class="highlightText">30324 LA</span>
-                          </div>
-                        </div>
-                        <div class="row">
-                          <div class="col-6 col-lg-4">
-                            <span>nach:</span>
-                          </div>
-                          <div class="col-6 col-lg-8">
-                            <span class="highlightText">35390 Gießen</span>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div class="col-12 col-lg-4">
-                        <div class="row">
-                          <div class="col-6">
-                            <span>max Gewicht:</span>
-                          </div>
-                          <div class="col-6">
-                            <span class="highlightText">30000 Kilo</span>
-                          </div>
-                        </div>
-                        <div class="row">
-                          <div class="col-6">
-                            <span>max Maße:</span>
-                          </div>
-                          <div class="col-6">
-                            <span class="highlightText">5m / 3m / 2m</span>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div class="col-12 col-lg-3">
-                        <div class="row">
-                          <div class="col-6">
-                            <span>{{ plaetze }}:</span>
-                          </div>
-                          <div class="col-6">
-                            <span class="highlightText">3</span>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div class="col-12 col-lg-2">
-                        <div class="horizontal-right">
-                          <a href="{{href}}">
-                            <button type="button" class="btn btn-primary greenButton">{{ buttonText }}</button>
-                          </a>
-                        </div>
-                      </div>
-                    </div>
-
-                  </div>
-
-                </div>
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </div>
     }
-
 
   </div>
 </div>

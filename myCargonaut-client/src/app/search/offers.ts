@@ -1,11 +1,12 @@
 export class offer {
   id: number;
-  user: { id: number, profilePic: string, firstName: string, lastName: string };
+  user: { id: number, profilePic: string, firstName: string, lastName: string, rating: number };
   carID: number;
   carPicture: string;
   name: string;
   date: string;
   price: number;
+  priceType: number;
   seats: number;
   animalsAllowed: boolean;
   smokingAllowed: boolean;
@@ -23,12 +24,13 @@ export class offer {
 
   constructor(
     id: number,
-    user: { id: number, profilePic: string, firstName: string, lastName: string },
+    user: { id: number, profilePic: string, firstName: string, lastName: string, rating: number },
     carID: number,
     carPicture: string,
     name: string,
     date: string,
     price: number,
+    priceType: number,
     seats: number,
     animalsAllowed: boolean,
     smokingAllowed: boolean,
@@ -51,6 +53,7 @@ export class offer {
     this.name = name;
     this.date = date;
     this.price = price;
+    this.priceType = priceType;
     this.seats = seats;
     this.animalsAllowed = animalsAllowed;
     this.smokingAllowed = smokingAllowed;

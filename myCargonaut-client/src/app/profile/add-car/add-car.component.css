@@ -56,6 +56,10 @@ input{
   background-color: #1A9CC5;
 }
 
+#bigMargin{
+  padding: 5rem;
+}
+
 .circle {
   border-radius: 50%;
 }

@@ -12,13 +12,27 @@ import {MeineGesucheComponent} from "./meineAnfragenGesuche/meine-gesuche/meine-
 
 import {RequestAufAnfrageOSucheComponent} from "./meineAnfragenGesuche/request-auf-anfrage-osuche/request-auf-anfrage-osuche.component";
 
-import {TripsCreateComponent} from "./trips-create/trips-create.component";
+import {
+  MeineLetztenFahrtenComponent
+} from './meineAnfragenGesuche/meine-letzten-fahrten/meine-letzten-fahrten.component';
+import { AllTripsComponent } from './meineAnfragenGesuche/all-trips/all-trips.component';
+import { ReviewComponent } from './review/review.component';
+
+import { TripsComponent } from './trips/trips.component';
+import { RequestComponent } from './drive/request/request.component';
+import { OfferComponent } from './drive/offer/offer.component';
+import { SummaryComponent } from './drive/summary/summary.component';
 
 export const routes: Routes = [
 
-  {path: '', component: FrontpageComponent},
+  { path: '', component: FrontpageComponent},
   { path: 'register', component: RegisterComponent },
   { path: 'login', component: LoginComponent },
+  { path: 'profile', component: ProfileComponent },
+  { path: 'createrequest', component: RequestComponent },
+  { path: 'createoffer', component: OfferComponent },
+  { path: 'summary', component: SummaryComponent },
+  { path: '', component: FrontpageComponent },
 
   {path: 'profile', component: ProfileComponent},
   {path: 'search', component: SearchMainComponent},
@@ -32,5 +46,10 @@ export const routes: Routes = [
   {path: 'request/:id', component: RequestAufAnfrageOSucheComponent},
   {path: 'offer/:id', component: RequestAufAnfrageOSucheComponent},
 
-  {path: 'trips/create', component: TripsCreateComponent},
+  {path: 'myLastRides', component: MeineLetztenFahrtenComponent},
+  {path: 'allTrips' , component: AllTripsComponent},
+
+  {path: 'review', component: ReviewComponent},
+
+  {path: 'trips/:type/:id', component: TripsComponent},
 ];
