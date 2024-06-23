@@ -36,25 +36,25 @@
         <div class="container-fluid greenBackground p-3 pb-5">
           <div class="row mt-3">
             <div class="col-12 col-lg-6">
-              <select class="form-select inputField" aria-label="Default select example">
-                <option selected>Dein Startpunkt</option>
-                @for (location of offer?.locations ; track $index) {
-                  <option value=$index>{{ location.zipCode }} {{ location.city }}</option>
+              <p class="text-light me-2">Dein Startpunkt:<br>
+                <select class="form-select inputField" [(ngModel)]="startLocation" aria-label="Default select example">
+                @for (location of offer?.locations ; track location.id) {
+                  <option [value]="location.id">{{ location.zipCode }} {{ location.city }}</option>
                 }
               </select>
             </div>
             <div class="col-12 col-lg-6 mt-3 mt-lg-0">
-              <select class="form-select inputField" aria-label="Default select example">
-                <option selected>Dein Ziel</option>
-                @for (location of offer?.locations ; track $index) {
-                  <option value=$index>{{ location.zipCode }} {{ location.city }}</option>
+              <p class="text-light me-2">Dein Ziel:<br>
+              <select class="form-select inputField" [(ngModel)]="endLocation" aria-label="Default select example">
+                @for (location of offer?.locations ; track location.id) {
+                  <option [value]="location.id">{{ location.zipCode }} {{ location.city }}</option>
                   }
               </select>
             </div>
           </div>
           <div class="row mt-3">
             <div class="col-12 col-lg-6">
-              <input type="text" class="form-control inputField" aria-label="Anzahl Personen" placeholder="Anzahl Personen">
+              <input type="text" class="form-control inputField" [(ngModel)]="seats" aria-label="Anzahl Personen" placeholder="Anzahl Personen">
             </div>
             <div class="col-12 col-lg-6 mt-3 mt-lg-0">
               <div class="row">
@@ -104,7 +104,7 @@
           </div>
           <div class="row mt-3 horizontal-center">
             <div class="col-6 col-lg-2 horizontal-center">
-              <button type="button" class="btn btn-primary blueButton transform">Abschicken</button>
+              <button type="button" class="btn btn-primary blueButton transform" (click)="createOfferTrip()">Abschicken</button>
             </div>
           </div>
         </div>

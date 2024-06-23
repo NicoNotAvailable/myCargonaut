@@ -49,6 +49,10 @@ export class TripsCreateComponent implements OnInit {
   selectedCar: number | null = null;
   selectedTrailer: number | null = null;
 
+  seats: number = 0;
+  startLocation: number | null = null;
+  endLocation: number | null = null;
+
   constructor(
     private route: ActivatedRoute,
     private modalService: NgbModal,
@@ -131,6 +135,32 @@ export class TripsCreateComponent implements OnInit {
       console.error('Car was not found');
     }
     this.tripsService.createRequestTrip(tripData).subscribe(
+      response => {
+        setTimeout(() => {
+          //TODO: navigate to chat
+          window.location.reload();
+        }, 200);
+      }, error => {
+        console.error('There was an error!', error);
+      },
+    );
+  }
+
+  createOfferTrip(): void {
+    const tripData = {
+      driveID: this.offer?.id,
+      seats: this.seats,
+      startLocation: this.startLocation,
+      endLocation: this.endLocation,
+      cargo: this.cargoDataArray,
+    };
+    if (tripData.startLocation === 0 || tripData.startLocation === null) {
+      console.error('Location was not found');
+    }
+    if (tripData.endLocation === 0 || tripData.endLocation === null) {
+      console.error('Location was not found');
+    }
+    this.tripsService.createOfferTrip(tripData).subscribe(
       response => {
         setTimeout(() => {
           //TODO: navigate to chat
