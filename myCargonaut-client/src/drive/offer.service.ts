@@ -1,12 +1,25 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { LocationDrive } from '../app/drive/LocationDrive';
 import { HttpClient } from '@angular/common/http';
+import { Cargo } from '../app/drive/Cargo';
+import { UserService } from '../app/services/user.service';
+import { Car } from '../app/profile/Car';
+import { VehicleService } from '../app/services/vehicle.service';
+import { Trailer } from '../app/profile/Trailer';
 
 @Injectable({
   providedIn: 'root'
 })
 export class OfferService {
-  locations: LocationDrive[]
+
+  public userService: UserService = inject(UserService);
+  public vehicleService: VehicleService = inject(VehicleService);
+
+  stops: LocationDrive[];
+  locations: LocationDrive[];
+
+  cars: Car[];
+  trailers: Trailer[];
 
   firstName: string | null = null;
   lastName: string | null = null;
@@ -15,9 +28,31 @@ export class OfferService {
   time: string | null = null;
   name: string | null = null;
   seats: number | null = null;
+
   info: number | null = null;
+  priceType: number | null = null;
+
   smokingAllowed: boolean = false;
   animalsAllowed: boolean = false;
+
+  selectedCar: Car | null = null;
+  selectedTrailer: Trailer | null = null;
+
+  carId: number | null = null;
+  maxCWeight: number | null = null;
+  maxCLength: number | null = null;
+  maxCWidth: number | null = null;
+  maxCHeight: number | null = null;
+
+  trailerId: number | null = null;
+  maxTWeight: number | null = null;
+  maxTLength: number | null = null;
+  maxTWidth: number | null = null;
+  maxTHeight: number | null = null;
+
+  startLocation: LocationDrive = new LocationDrive("", "", "");
+  endLocation: LocationDrive = new LocationDrive("", "", "");
+
 
   pathToImage: string = "empty.png";
   profilePic: string = "";
@@ -26,63 +61,140 @@ export class OfferService {
 
 
   constructor(private http: HttpClient) {
+    this.stops = [];
     this.locations = [];
-
-    this.locations[0] = new LocationDrive(1, "", "", "");
-    this.locations[1] = new LocationDrive(100, "", "", "");
+    this.cars = [];
+    this.trailers = [];
   }
 
-  setSmokingAllowed(value: boolean) {
-    this.smokingAllowed = value;
+  readCars() {
+    this.vehicleService.readCars().subscribe(
+      response => {
+        this.cars = response;
+      },
+      error => {
+        console.error(error);
+      }
+    )
   }
 
-  setAnimalsAllowed(value: boolean) {
-    this.animalsAllowed = value;
+  readTrailers() {
+    this.vehicleService.readTrailers().subscribe(
+      response => {
+        this.trailers = response;
+      },
+      error => {
+        console.error(error);
+      }
+    )
   }
 
-  createRequest() {
-    // Prepare date string in "yyyy-mm-dd" format
-    if (this.date && this.time) {
-      const dateString = `${this.date.year}-${this.date.month}-${this.date.day}`;
+  readUser() {
+    const prePath: string = "assets/";
 
-      // Prepare time string in "hh:mm:ss.sss" format
+    this.userService.readUser().subscribe(
+
+      response => {
+        this.firstName = response.firstName;
+        this.lastName = response.lastName;
+
+        const imagePath: string = response.profilePic;
+        this.profilePic = response.profilePic;
+        this.pathToImage = imagePath === "empty.png" ? "assets/empty.png" : prePath.concat(imagePath);
+      },
+      error => {
+        console.error("There was an error!", error);
+      }
+    );
+  }
+
+  addStop(stop: LocationDrive): void {
+    this.stops.push(stop);
+  }
+
+  get getStops() {
+    return this.stops;
+  }
+
+  createOffer() {
+    let offerData;
+
+    if (this.date && this.time && this.selectedCar) {
+      const year = this.date.year.toString().padStart(4, '0');
+      const month = this.date.month.toString().padStart(2, '0');
+      const day = this.date.day.toString().padStart(2, '0');
+      const dateString = `${year}-${month}-${day}`;
       const timeString = `${this.time}:00.000`;
 
-      // Combine date and time into ISO 8601 format
-      const dateTimeString = `${dateString}T${timeString}Z`;
+      const dateTimeString = `${dateString} ${timeString}`;
+      this.locations.push(this.endLocation);
 
-      const requestData = {
-        //date: "2024-12-13T18:12:02.549Z",
-        date: dateTimeString,
-        name: this.name,
-        price: this.price,
-        seats: this.seats,
-        info: this.info,
-        smokingAllowed: this.smokingAllowed,
-        animalsAllowed: this.animalsAllowed,
-        location: this.locations,
-      };
+      this.locations.unshift(this.startLocation);
+      const locationsWithStopNr = this.locations.map((location, index) => {
+        let stopNr;
 
-      console.log(JSON.stringify(requestData));
+        if (index === 0) {
+          // First Stop
+          stopNr = 1;
+        } else if (index === this.locations.length - 1) {
+          // Last Stop
+          stopNr = 100;
+        } else {
+          stopNr = index + 1;
+        }
+        return {
+          ...location,
+          stopNr: stopNr
+        };
+      });
 
-      this.http.post("http://localhost:8000/drive/request", requestData, { withCredentials: true }).subscribe(
-        response =>{
-          //form.resetForm();
-          //console.log(response);
-          //this.textColor = "successText"
-          //this.message = "Anmeldung lief swaggy";
+      if (!this.selectedTrailer) {
+        offerData = {
+          name: this.name,
+          carID: this.carId,
+          trailerID: null,
+          date: dateTimeString,
+          price: this.price,
+          seats: this.seats,
+          smokingAllowed: this.smokingAllowed,
+          animalsAllowed: this.animalsAllowed,
+          info: this.info,
+          maxCWeight: this.maxCWeight,
+          maxCLength: this.maxCLength,
+          maxCWidth: this.maxCWidth,
+          maxCHeight: this.maxCHeight,
+          priceType: this.priceType,
+          location: locationsWithStopNr
+        };
+      } else {
+        offerData = {
+          name: this.name,
+          carID: this.carId,
+          trailerID: this.trailerId,
+          date: dateTimeString,
+          price: this.price,
+          seats: this.seats,
+          smokingAllowed: this.smokingAllowed,
+          animalsAllowed: this.animalsAllowed,
+          info: this.info,
+          maxCWeight: this.maxCWeight,
+          maxCLength: this.maxCLength,
+          maxCWidth: this.maxCWidth,
+          maxCHeight: this.maxCHeight,
+          maxTWeight: this.maxTWeight,
+          maxTLength: this.maxTLength,
+          maxTWidth: this.maxTWidth,
+          maxTHeight: this.maxTHeight,
+          priceType: this.priceType,
+          location: locationsWithStopNr
+        };
+      }
+      this.http.post("http://localhost:8000/drive/offer", offerData, { withCredentials: true }).subscribe(
+        response => {
           window.location.href = "/";
-          /*setTimeout(() => {
-            this.message = "";
-            this.textColor = "errorText"
-          }, 5000);*/
         },
         error => {
           console.error(error);
-          //this.message = error.error.message || "Passwort oder Email stimmt nicht überein";
-          /*setTimeout(()=> {
-            this.message = "";
-          }, 5000);*/
         }
       );
     }

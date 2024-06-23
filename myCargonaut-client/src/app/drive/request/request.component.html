@@ -23,7 +23,7 @@
       </form>
     </div>
     <div class="modal-footer justify-content-center">
-      <button type="button" (click)="addCargoToArray(modal)" class="btn customButton exitButton text-light mt-2">
+      <button type="button" (click)="addCargoToArray(cargoModal)" class="btn customButton exitButton text-light mt-2">
           <i>
             <fa-icon [icon]="faSave"></fa-icon>
           </i>
@@ -80,8 +80,7 @@
             <div class="hstack justify-content-center">
               <input [(ngModel)]="requestService.price" #requestedPriceInput="ngModel" type="number"
                      name="requestedPriceInput"
-                     class="rounded-5 p-2 w-100" placeholder="Andere Anzahl"
-                     (input)="changeRequestedPrice(requestedPriceInput.value)" required>
+                     class="rounded-5 p-2 w-100" placeholder="Andere Anzahl" required>
             </div>
           </div>
 

@@ -7,6 +7,7 @@ import { faArrowLeft, faSave, faStar } from '@fortawesome/free-solid-svg-icons';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { faStar as faStarRegular } from '@fortawesome/free-regular-svg-icons';
 import { RequestService } from '../../../drive/request.service';
+import { OfferService } from '../../../drive/offer.service';
 
 
 @Component({
@@ -27,6 +28,7 @@ export class SummaryComponent {
 
   public sessionService: SessionService = inject(SessionService);
   public requestService: RequestService = inject(RequestService);
+  public offerService: OfferService = inject(OfferService);
 
 
   isLoggedIn: boolean = false;
@@ -45,7 +47,7 @@ export class SummaryComponent {
       }
     });
 
-    console.log(this.requestService.date);
+    console.log(this.offerService.date);
 
     this.route.queryParams.subscribe(params => {
       const origin = params['origin'];
@@ -70,7 +72,7 @@ export class SummaryComponent {
   }
 
   get cargoDataArray() {
-    return this.requestService.getCargos();
+    return this.requestService.getCargos;
   }
 
   saveOffer(form: NgForm) {

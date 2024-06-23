@@ -10,6 +10,8 @@ import { UserService } from '../app/services/user.service';
 })
 export class RequestService {
 
+  public userService: UserService = inject(UserService);
+
   cargos: Cargo[]
   locations: LocationDrive[]
 
@@ -34,15 +36,34 @@ export class RequestService {
     this.cargos = [];
     this.locations = [];
 
-    this.locations[0] = new LocationDrive(1, "", "", "");
-    this.locations[1] = new LocationDrive(100, "", "", "");
+    this.locations[0] = new LocationDrive("", "", "");
+    this.locations[1] = new LocationDrive("", "", "");
+  }
+
+  readUser() {
+    const prePath: string = "assets/";
+
+    this.userService.readUser().subscribe(
+
+      response => {
+        this.firstName = response.firstName;
+        this.lastName = response.lastName;
+
+        const imagePath: string = response.profilePic;
+        this.profilePic = response.profilePic;
+        this.pathToImage = imagePath === "empty.png" ? "assets/empty.png" : prePath.concat(imagePath);
+      },
+      error => {
+        console.error("There was an error!", error);
+      }
+    );
   }
 
   addCargo(cargo: Cargo): void {
     this.cargos.push(cargo);
   }
 
-  getCargos() {
+  get getCargos() {
     return this.cargos;
   }
 
@@ -57,16 +78,21 @@ export class RequestService {
   createRequest() {
     // Prepare date string in "yyyy-mm-dd" format
     if (this.date && this.time) {
-      const dateString = `${this.date.year}-${this.date.month}-${this.date.day}`;
+      const year = this.date.year.toString().padStart(4, '0');
+      const month = this.date.month.toString().padStart(2, '0');
+      const day = this.date.day.toString().padStart(2, '0');
 
-      // Prepare time string in "hh:mm:ss.sss" format
+      const dateString = `${year}-${month}-${day}`;
       const timeString = `${this.time}:00.000`;
 
-      // Combine date and time into ISO 8601 format
-      const dateTimeString = `${dateString}T${timeString}Z`;
+      const dateTimeString = `${dateString} ${timeString}`;
+
+      const locationsWithStopNr = [
+        { ...this.locations[0], stopNr: 1 },
+        { ...this.locations[1], stopNr: 100 }
+      ];
 
       const requestData = {
-        //date: "2024-12-13T18:12:02.549Z",
         date: dateTimeString,
         name: this.name,
         price: this.price,
@@ -75,29 +101,14 @@ export class RequestService {
         smokingAllowed: this.smokingAllowed,
         animalsAllowed: this.animalsAllowed,
         cargo: this.cargos,
-        location: this.locations,
+        location: locationsWithStopNr,
       };
-
-      console.log(JSON.stringify(requestData));
-
       this.http.post("http://localhost:8000/drive/request", requestData, { withCredentials: true }).subscribe(
         response =>{
-          //form.resetForm();
-          //console.log(response);
-          //this.textColor = "successText"
-          //this.message = "Anmeldung lief swaggy";
           window.location.href = "/";
-          /*setTimeout(() => {
-            this.message = "";
-            this.textColor = "errorText"
-          }, 5000);*/
         },
         error => {
           console.error(error);
-          //this.message = error.error.message || "Passwort oder Email stimmt nicht überein";
-          /*setTimeout(()=> {
-            this.message = "";
-          }, 5000);*/
         }
       );
     }

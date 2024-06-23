@@ -1,8 +1,8 @@
 import { Component, EventEmitter, inject, Input, Output, TemplateRef } from '@angular/core';
 import { FaIconComponent } from "@fortawesome/angular-fontawesome";
 import {FormsModule, NgForm, ReactiveFormsModule} from "@angular/forms";
-import {NgClass, NgIf} from "@angular/common";
-import {NgbInputDatepicker, NgbModal} from "@ng-bootstrap/ng-bootstrap";
+import { NgClass, NgForOf, NgIf } from '@angular/common';
+import { NgbInputDatepicker, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import {
   faArrowLeft,
   faArrowRight,
@@ -15,6 +15,14 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import {SessionService} from "../../services/session.service";
 import { Router } from '@angular/router';
+import { RequestService } from '../../../drive/request.service';
+import { UserService } from '../../services/user.service';
+import { OfferService } from '../../../drive/offer.service';
+import { Cargo } from '../Cargo';
+import { LocationDrive } from '../LocationDrive';
+import { VehicleService } from '../../services/vehicle.service';
+import { Car } from '../../profile/Car';
+import { Trailer } from '../../profile/Trailer';
 
 @Component({
   selector: 'app-offer',
@@ -25,7 +33,8 @@ import { Router } from '@angular/router';
     NgIf,
     ReactiveFormsModule,
     NgbInputDatepicker,
-    NgClass
+    NgClass,
+    NgForOf,
   ],
   templateUrl: './offer.component.html',
   styleUrl: './offer.component.css'
@@ -33,52 +42,46 @@ import { Router } from '@angular/router';
 export class OfferComponent {
 
   public sessionService: SessionService = inject(SessionService);
+  public offerService: OfferService = inject(OfferService);
+  public userService: UserService = inject(UserService);
+  public vehicleService: VehicleService = inject(VehicleService);
 
   @Input() editingOffer!: number;
   @Output() changeAddCar = new EventEmitter<void>();
 
-  offeredPrice: number | null = null;
-  offeredPriceType: number | null = null;
   talkMode: number | null = null;
   seats: number | null = null;
 
-  carWeight:  number | null = null;
-  carLength:  number | null = null;
-  carWidth:  number | null = null;
-  carHeight:  number | null = null;
+  editCarWeight:  number | null = null;
+  editCarLength:  number | null = null;
+  editCarWidth:  number | null = null;
+  editCarHeight:  number | null = null;
 
-  trailerWeight:  number | null = null;
-  trailerLength:  number | null = null;
-  trailerWidth:  number | null = null;
-  trailerHeight:  number | null = null;
+  editTrailerWeight:  number | null = null;
+  editTrailerLength:  number | null = null;
+  editTrailerWidth:  number | null = null;
+  editTrailerHeight:  number | null = null;
 
-  name: string = "";
-  date: string = "";
-  time: string = "";
+  stopLand: string | null = null;
+  stopPLZ: string | null = null;
+  stopPlace: string | null = null;
 
-  startLand: string = "";
-  startPLZ: string = "";
-  startPlace: string = "";
+  editedStop: number = -1;
 
-  endLand: string = "";
-  endPLZ: string = "";
-  endPlace: string = "";
-
-  stopLand: string = "Deutschland";
-  stopPLZ: string = "35390";
-  stopPlace: string = "Gießen";
+  editModeText: string = "hinzufügen";
 
   errorMessage: string = "";
 
   isLoggedIn: boolean = false;
   private http: any;
+  private carModalRef: NgbModalRef | undefined;
+  private trailerModalRef: NgbModalRef | undefined;
+  private stopModalRef: NgbModalRef | undefined;
 
   constructor(private modalService: NgbModal, private router: Router) {}
 
   ngOnInit(): void {
-    //console.log(this.sessionService.checkLogin());
     this.sessionService.checkLoginNum().then(isLoggedIn => {
-      console.log('Login status:', isLoggedIn);
       isLoggedIn == -1 ? this.isLoggedIn = false : this.isLoggedIn = true;
       if (!this.isLoggedIn) {
         window.location.href = "/profile";
@@ -86,6 +89,10 @@ export class OfferComponent {
     });
     this.editingOffer = 0;
     this.talkMode = 3;
+
+    this.offerService.readUser();
+    this.offerService.readCars();
+    this.offerService.readTrailers();
   }
 
   changeTalkMode(num: any) {
@@ -93,11 +100,7 @@ export class OfferComponent {
       this.removeErrorMessage();
       return;
     }
-    this.talkMode = Number(num);
-  }
-
-  changeOfferedPrice(value: any) {
-    //TODO changing the price
+    this.offerService.info = Number(num);
   }
 
   changeSeatCount(num: any) {
@@ -106,11 +109,7 @@ export class OfferComponent {
       this.removeErrorMessage();
       return;
     }
-    this.seats = Number(num);
-  }
-
-  createSummaryOffer(form: NgForm) {
-    this.router.navigate(['/summary'], { queryParams: { origin: 'createoffer' } })
+    this.offerService.seats = Number(num);
   }
 
   removeErrorMessage(): void {
@@ -120,27 +119,40 @@ export class OfferComponent {
   }
 
   protected readonly faPlus = faPlus;
+
   protected readonly faArrowRight = faArrowRight;
   protected readonly faSave = faSave;
   protected readonly faCircle = faCircle;
   protected readonly faCirclePlus = faCirclePlus;
 
   openCarModal(content: TemplateRef<any>) {
-    this.modalService.open(content, { ariaLabelledBy: 'modal-car-title' }).result.then((result) => {
-    }, (reason) => {
-    });
+    if (!this.offerService.selectedCar) {
+      this.errorMessage = "Kein Auto ausgewählt";
+    } else {
+      this.editCarWeight = this.offerService.maxCWeight;
+      this.editCarLength = this.offerService.maxCLength;
+      this.editCarWidth = this.offerService.maxCWidth;
+      this.editCarHeight = this.offerService.maxCHeight;
+
+      this.carModalRef = this.modalService.open(content, { ariaLabelledBy: 'modal-car-title' })
+    }
   }
 
   openTrailerModal(content: TemplateRef<any>) {
-    this.modalService.open(content, { ariaLabelledBy: 'modal-trailer-title' }).result.then((result) => {
-    }, (reason) => {
-    });
+    if (!this.offerService.selectedTrailer) {
+      this.errorMessage = "Kein Anhänger ausgewählt";
+    } else {
+      this.editTrailerWeight = this.offerService.maxTWeight;
+      this.editTrailerLength = this.offerService.maxTLength;
+      this.editTrailerWidth = this.offerService.maxTWidth;
+      this.editTrailerHeight = this.offerService.maxTHeight;
+
+      this.trailerModalRef = this.modalService.open(content, { ariaLabelledBy: 'modal-trailer-title' })
+    }
   }
 
   openStopModal(content: TemplateRef<any>) {
-    this.modalService.open(content, { ariaLabelledBy: 'modal-stop-title' }).result.then((result) => {
-    }, (reason) => {
-    });
+    this.stopModalRef = this.modalService.open(content, { ariaLabelledBy: 'modal-stop-title' })
   }
 
   changePriceType(num: number) {
@@ -149,10 +161,207 @@ export class OfferComponent {
       this.removeErrorMessage();
       return;
     }
-    this.offeredPriceType = Number(num);
+    this.offerService.priceType = Number(num);
+  }
+
+  changeCarProperties() {
+    this.offerService.maxCWeight = this.editCarWeight;
+    this.offerService.maxCLength = this.editCarLength;
+    this.offerService.maxCWidth = this.editCarWidth;
+    this.offerService.maxCHeight = this.editCarHeight;
+
+    if (this.carModalRef) {
+      this.carModalRef.close();
+    }
+  }
+
+  changeTrailerProperties() {
+    this.offerService.maxTWeight = this.editTrailerWeight;
+    this.offerService.maxTLength = this.editTrailerLength;
+    this.offerService.maxTWidth = this.editTrailerWidth;
+    this.offerService.maxTHeight = this.editTrailerHeight;
+
+    if (this.trailerModalRef) {
+      this.trailerModalRef.close();
+    }
+  }
+
+  addLocationStopClicked(content: TemplateRef<any>) {
+    this.stopLand = null;
+    this.stopPLZ = null;
+    this.stopPlace = null;
+
+    this.editModeText = "hinzufügen";
+
+    this.openStopModal(content);
+  }
+
+  get stopsDataArray() {
+    return this.offerService.getStops;
+  }
+
+  createSummaryOffer(form: NgForm) {
+    this.router.navigate(['/summary'], { queryParams: { origin: 'createoffer' } })
+  }
+
+  editLocationClicked(content: TemplateRef<any>, index: number) {
+    this.stopLand = this.offerService.stops[index].country;
+    this.stopPLZ = this.offerService.stops[index].zipCode;
+    this.stopPlace = this.offerService.stops[index].city;
+
+    this.editedStop = index;
+    this.editModeText = "bearbeiten";
+
+    this.openStopModal(content);
+  }
+
+  deleteStop(index: number) {
+    this.offerService.stops.splice(index, 1);
   }
 
   protected readonly faPenToSquare = faPenToSquare;
+
   protected readonly faX = faX;
   protected readonly faArrowLeft = faArrowLeft;
+
+  addStopToArray(stopModal: TemplateRef<any>) {
+    if (this.stopLand != null && this.stopPLZ != null &&
+      this.stopPlace != null) {
+      if (this.editedStop < 0) {
+        const newStop = new LocationDrive(this.stopLand, this.stopPLZ, this.stopPlace);
+        this.offerService.addStop(newStop);
+
+        this.stopLand = null;
+        this.stopPLZ = null;
+        this.stopPlace = null;
+      } else if (this.editedStop >= 0) {
+        this.editStop();
+        this.editedStop = -1;
+      }
+
+    } else {
+
+    }
+    if (this.stopModalRef) {
+      this.stopModalRef.close();
+    }
+  }
+  editStop() {
+    if (this.stopLand != null && this.stopPLZ != null &&
+      this.stopPlace != null) {
+      this.offerService.stops[this.editedStop].country = this.stopLand;
+      this.offerService.stops[this.editedStop].zipCode = this.stopPLZ;
+      this.offerService.stops[this.editedStop].city = this.stopPlace;
+    }
+  }
+
+  selectCar(index: number): void {
+    this.offerService.selectedCar = this.offerService.cars[index];
+    this.offerService.carId = this.offerService.selectedCar.id;
+    this.offerService.maxCWeight = this.offerService.selectedCar.weight;
+    this.offerService.maxCLength = this.offerService.selectedCar.length;
+    this.offerService.maxCWidth = this.offerService.selectedCar.width;
+    this.offerService.maxCHeight = this.offerService.selectedCar.height;
+  }
+
+  selectTrailer(index: number): void {
+    this.offerService.selectedTrailer = this.offerService.trailers[index];
+    this.offerService.trailerId = this.offerService.selectedTrailer.id;
+    this.offerService.maxTWeight = this.offerService.selectedTrailer.weight;
+    this.offerService.maxTLength = this.offerService.selectedTrailer.length;
+    this.offerService.maxTWidth = this.offerService.selectedTrailer.width;
+    this.offerService.maxTHeight = this.offerService.selectedTrailer.height;
+  }
+
+  private validTime() {
+    if (this.offerService.time !== null) {
+      const timePattern: RegExp = /^(2[0-3]|[01]?[0-9]):([0-5]?[0-9])$/;
+      return timePattern.test(this.offerService.time);
+    }
+    return false;
+  }
+
+  validInputs(): boolean {
+    const errors = [];
+
+    if (!this.offerService.name?.trim()) errors.push('Bitte Namen für den Trip angeben');
+    if (!this.offerService.price) errors.push('Bitte einen Preisvorschlag festlegen');
+    if (this.offerService.seats !== undefined && this.offerService.seats !== null && this.offerService.seats > 10)
+      errors.push('Bitte eine gültige Anzahl der Sitze bis 10 angeben');
+
+    if (!this.offerService.date) errors.push('Bitte ein Datum festlegen');
+    if (!this.offerService.time || !this.validTime()) errors.push('Bitte eine Uhrzeit festlegen');
+
+    if (this.offerService.smokingAllowed === undefined)
+      errors.push('Bitte angeben, ob sie Raucher mitnehmen möchten');
+    if (this.offerService.animalsAllowed === undefined)
+      errors.push('Bitte angeben, ob sie Haustierbesitzer mitnehmen möchte');
+
+    if (!this.offerService.info || this.offerService.info < 1 || this.offerService.info > 3 ) errors.push('Bitte ihren Kommunikationswunsch angeben');
+    if (!this.offerService.priceType || this.offerService.priceType < 1 || this.offerService.priceType > 3 ) errors.push('Bitte eine Preisart festlegen');
+
+    if (!this.offerService.selectedCar) {
+      errors.push('Bitte ein Auto für die Fahrt auswählen');
+    }
+    else {
+      if (this.offerService.maxCWeight! < 1 || this.offerService.maxCWeight! > 1000)
+        errors.push('Autogewicht muss zwischen 1 und 1000 sein');
+      if (this.offerService.maxCLength! < 1 || this.offerService.maxCLength! > 1000)
+        errors.push('Autolänge muss zwischen 1 und 1000 sein');
+      if (this.offerService.maxCWidth! < 1 || this.offerService.maxCWidth! > 1000)
+        errors.push('Autobreite muss zwischen 1 und 1000 sein');
+      if (this.offerService.maxCHeight! < 1 || this.offerService.maxCHeight! > 1000)
+        errors.push('Autohöhe muss zwischen 1 und 1000 sein');
+    }
+
+    if (this.offerService.selectedTrailer) {
+      if (this.offerService.maxTWeight! < 1 || this.offerService.maxTWeight! > 1000)
+        errors.push('Anhängergewicht muss zwischen 1 und 1000 sein');
+      if (this.offerService.maxTLength! < 1 || this.offerService.maxTLength! > 1000)
+        errors.push('Anhängerlänge muss zwischen 1 und 1000 sein');
+      if (this.offerService.maxTWidth! < 1 || this.offerService.maxTWidth! > 1000)
+        errors.push('Anhängerbreite muss zwischen 1 und 1000 sein');
+      if (this.offerService.maxTHeight! < 1 || this.offerService.maxTHeight! > 1000)
+        errors.push('Anhängerhöhe muss zwischen 1 und 1000 sein');
+    }
+
+    if (this.offerService.startLocation.country === undefined || this.offerService.startLocation.country.trim() === "")
+      errors.push('Bitte ein gültiges Land als Startpunkt angeben');
+    if (this.offerService.startLocation.zipCode === undefined || this.offerService.startLocation.zipCode.trim() === "")
+      errors.push('Bitte eine gültige PLZ als Startpunkt angeben');
+    if (this.offerService.startLocation.city === undefined || this.offerService.startLocation.city.trim() === "")
+      errors.push('Bitte einen gültigen Ort als Startpunkt angeben');
+
+    if (this.offerService.endLocation.country === undefined || this.offerService.endLocation.country.trim() === "")
+      errors.push('Bitte ein gültiges Land als Zielort angeben');
+    if (this.offerService.endLocation.zipCode === undefined || this.offerService.endLocation.zipCode.trim() === "")
+      errors.push('Bitte eine gültige PLZ als Zielort angeben');
+    if (this.offerService.endLocation.city === undefined || this.offerService.endLocation.city.trim() === "")
+      errors.push('Bitte einen gültigen Ort als Zielort angeben');
+
+    this.offerService.stops.forEach((stop) => {
+      if (stop.country === undefined || stop.country === "")
+        errors.push('Bitte gebe ein gültigen Wert für das Land im Zwischenstopp an');
+      if (stop.zipCode === undefined || stop.zipCode === "")
+        errors.push('Bitte gebe ein gültigen Wert für die PLZ im Zwischenstopp an');
+      if (stop.city === undefined || stop.city === "")
+        errors.push('Bitte gebe ein gültigen Wert für die Stadt im Zwischenstopp an');
+    });
+
+    if (errors.length) {
+      if (errors.length > 2) {
+        errors.splice(2)
+        this.errorMessage= errors.join(', ');
+        this.errorMessage += " und weitere Fehler."
+      } else {
+        this.errorMessage= errors.join(', ');
+      }
+      return false;
+    }
+    return true;
+  }
+
+  selectNoTrailer() {
+    this.offerService.selectedTrailer = null;
+  }
 }

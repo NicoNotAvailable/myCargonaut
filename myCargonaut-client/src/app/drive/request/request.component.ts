@@ -41,38 +41,24 @@ export class RequestComponent {
   public requestService: RequestService = inject(RequestService);
   public userService: UserService = inject(UserService);
 
-
   @Output() changeAddCar = new EventEmitter<void>();
 
   editedCargo: number = -1;
 
   message: string = "";
-  textColor: string = "errorText";
 
   smokingAllowed = false;
   animalsAllowed = false;
 
-  requestedPrice: number | null = null;
   talkMode: number | null = null;
 
   seats: number | null = null;
 
-  //Cargo
   cargoDescription: string | null = null;
   cargoLength: number | null = null;
   cargoWidth: number | null = null;
   cargoHeight: number | null = null;
   cargoWeight: number | null = null;
-
-  time: string = "";
-
-  startLand: string = "";
-  startPLZ: string = "";
-  startPlace: string = "";
-
-  endLand: string = "";
-  endPLZ: string = "";
-  endPlace: string = "";
 
   editModeText: string = "hinzufügen";
 
@@ -87,17 +73,13 @@ export class RequestComponent {
   }
 
   ngOnInit(): void {
-    //console.log(this.sessionService.checkLogin());
     this.sessionService.checkLoginNum().then(isLoggedIn => {
-      console.log('Login status:', isLoggedIn);
       isLoggedIn == -1 ? this.isLoggedIn = false : this.isLoggedIn = true;
       if (!this.isLoggedIn) {
         window.location.href = "/profile";
       }
     });
     this.talkMode = 3;
-
-
 
     this.readUser();
   }
@@ -106,7 +88,6 @@ export class RequestComponent {
     const prePath: string = "assets/";
 
     this.userService.readUser().subscribe(
-
       response => {
         this.requestService.firstName = response.firstName;
         this.requestService.lastName = response.lastName;
@@ -135,33 +116,6 @@ export class RequestComponent {
 
   createSummaryRequest(form: any): void {
     this.router.navigate(['/summary'], { queryParams: { origin: 'createrequest' } });
-  }
-
-  changeAddCarState(): void {
-    this.changeAddCar.emit();
-  }
-
-  changeRequestedPrice(num: any) {
-    //TODO changing the price
-  }
-
-  setSmokingAllowed(value: boolean) {
-    this.requestService.setSmokingAllowed(value);
-  }
-
-  setAnimalsAllowed(value: boolean) {
-    this.requestService.setAnimalsAllowed(value);
-  }
-
-  deleteRequest(id: number) {
-    /*this.http.delete("http://localhost:8000/drive/" + id, { withCredentials: true }).subscribe(
-      response => {
-        this.changeAddCarState();
-      },
-      error => {
-        console.error(error);
-      }
-    );*/
   }
 
   changeSeatCount(num: any) {
@@ -212,7 +166,6 @@ export class RequestComponent {
       if (this.editedCargo < 0) {
         const newCargo = new Cargo(this.cargoDescription, this.cargoWeight, this.cargoLength, this.cargoWidth, this.cargoHeight);
         this.requestService.addCargo(newCargo);
-        console.log('Cargo added:', newCargo);
 
         this.cargoDescription = null;
         this.cargoWeight = null;
@@ -220,7 +173,6 @@ export class RequestComponent {
         this.cargoWidth = null;
         this.cargoHeight = null;
 
-        console.log(this.requestService.cargos);
       } else if (this.editedCargo >= 0) {
         this.editCargo();
         this.editedCargo = -1;
@@ -229,7 +181,6 @@ export class RequestComponent {
     } else {
 
     }
-    // Close the modal
     if (this.cargoModalRef) {
       this.cargoModalRef.close();
     }
@@ -247,7 +198,7 @@ export class RequestComponent {
     }
   }
   get cargoDataArray() {
-    return this.requestService.getCargos();
+    return this.requestService.getCargos;
   }
 
   deleteCargo(index: number) {
