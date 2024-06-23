@@ -61,7 +61,7 @@
 
               </div>
 
-              @for (cargo of cargoDataArray  ; track $index) {
+              @for (cargo of cargoDataArray;  track cargo; let index = $index) {
                 <div class="border-1 position-relative mt-3">
                   <div class="button-container position-absolute end-0 mt-1 me-3">
                     <button (click)="openCargoModal(cargoModal)" type="button"
@@ -70,7 +70,7 @@
                         <fa-icon [icon]="faPenToSquare"></fa-icon>
                       </i>
                     </button>
-                    <button type="button" class="btn btn-danger deleteButton text-end" id="deleteButton">
+                    <button type="button" class="btn btn-danger deleteButton text-end" (click)="deleteCargo(index)" id="deleteButton">
                       <i>
                         <fa-icon [icon]="faX"></fa-icon>
                       </i>

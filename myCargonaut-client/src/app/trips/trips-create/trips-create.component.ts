@@ -170,6 +170,10 @@ export class TripsCreateComponent implements OnInit {
     );
   }
 
+  deleteCargo(index: number) {
+    this.requestService.cargos.splice(index, 1);
+  }
+
   @Input() offer!: GetOffer | undefined;
   @Input() request!: GetRequest | undefined;
   protected readonly faSave = faSave;

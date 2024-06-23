@@ -46,7 +46,7 @@
         <div class="col-1 line">
           <span class="vl"></span>
         </div>
-        <div class="chat-window col-5">
+        <div class="chat-window col-5 ">
           <div *ngIf="room" class="chat-card">
             <div class="card messages" #messagesContainer>
               <div *ngFor="let message of messages[room]" [ngClass]="['message', getMessageClasses(message)]">
