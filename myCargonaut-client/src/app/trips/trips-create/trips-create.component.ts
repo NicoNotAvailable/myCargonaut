@@ -8,7 +8,7 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { Cargo } from '../../drive/Cargo';
-import { RequestService } from '../../../drive/request.service';
+import { RequestService } from '../../services/drive/request.service';
 import { SessionService } from '../../services/session.service';
 import { VehicleService } from '../../services/vehicle.service';
 import { Car } from "../../profile/Car";
@@ -78,7 +78,7 @@ export class TripsCreateComponent implements OnInit {
     this.cargoModalRef = this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' });
   }
 
-  addCargoToArray(modal: any) {
+  addCargoToArray() {
     if (this.cargoDescription != null && this.cargoWeight != null &&
       this.cargoLength != null && this.cargoWidth != null &&
       this.cargoHeight != null) {
@@ -101,7 +101,7 @@ export class TripsCreateComponent implements OnInit {
   }
 
   get cargoDataArray() {
-    return this.requestService.getCargos();
+    return this.requestService.getCargos;
   }
 
   getCars(): void {
@@ -135,7 +135,7 @@ export class TripsCreateComponent implements OnInit {
       console.error('Car was not found');
     }
     this.tripsService.createRequestTrip(tripData).subscribe(
-      response => {
+      () => {
         setTimeout(() => {
           //TODO: navigate to chat
           window.location.reload();
@@ -161,7 +161,7 @@ export class TripsCreateComponent implements OnInit {
       console.error('Location was not found');
     }
     this.tripsService.createOfferTrip(tripData).subscribe(
-      response => {
+      () => {
         setTimeout(() => {
           //TODO: navigate to chat
           window.location.reload();
