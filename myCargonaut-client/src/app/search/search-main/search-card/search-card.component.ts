@@ -79,9 +79,7 @@ export class SearchCardComponent {
       this.buttonText = "Anfragen ansehen";
       this.plaetze = "benötigte Plätze";
       this.href = "request";
-
     }
-
 
   }
 

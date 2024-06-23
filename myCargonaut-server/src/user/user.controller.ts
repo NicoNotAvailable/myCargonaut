@@ -5,6 +5,7 @@ import {
   Get,
   Logger,
   Param,
+  ParseIntPipe,
   Post,
   Put,
   Res,
@@ -376,7 +377,8 @@ export class UserController {
       throw new BadRequestException('User could not be deleted');
     }
   }
-
+}
+/*
   @Get('/:id')
   @ApiOperation({ summary: 'Get user by ID' })
   @ApiParam({
@@ -403,3 +405,4 @@ export class UserController {
     }
   }
 }
+*/
