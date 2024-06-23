@@ -245,9 +245,7 @@
                         </div>
                         <div class="col-12 col-lg-3">
                           <div class="horizontal-right">
-                            <a href="{{href}}/{{element.id}}">
-                              <button type="button" class="btn btn-primary greenButton">{{ buttonText }}</button>
-                            </a>
+                              <button type="button" class="btn btn-primary greenButton" (click)="sendToDetail(element.id)">{{ buttonText }}</button>
                           </div>
                         </div>
                       </div>
