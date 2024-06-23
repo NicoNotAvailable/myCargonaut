@@ -1,3 +1,7 @@
+/*
+
+
+
 import {
   BadRequestException,
   Body,
@@ -398,3 +402,4 @@ export class VehicleController {
     return new OkDTO(true, 'Trailer was created');
   }
 }
+*/
