@@ -1,0 +1,140 @@
+<ng-template #cargoModal let-modal="modal">
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Cargo Hinzufügen</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+  </div>
+  <div class="modal-body">
+    <form>
+      <div class="mb-3">
+        <div class="input-group">
+          <input [(ngModel)]="cargoDescription" #descriptionInput="ngModel" type="text" name="descriptionInput"
+                 class="rounded-5 p-2 w-100 mb-3" placeholder="Name des Cargos" required>
+          <input [(ngModel)]="cargoWeight" #weightInput="ngModel" type="text" name="weightInput"
+                 class="rounded-5 p-2 w-100 mb-3" placeholder="Gewicht in kg (Bsp. 5,50)" required>
+          <input [(ngModel)]="cargoLength" #lengthInput="ngModel" type="text" name="lengthInput"
+                 class="rounded-5 p-2 w-100 mb-3" placeholder="Länge in cm" required>
+          <input [(ngModel)]="cargoWidth" #widthInput="ngModel" type="text" name="widthInput"
+                 class="rounded-5 p-2 w-100 mb-3" placeholder="Breite in cm" required>
+          <input [(ngModel)]="cargoHeight" #heightInput="ngModel" type="text" name="heightInput"
+                 class="rounded-5 p-2 w-100 mb-3" placeholder="Höhe in cm" required>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer justify-content-center">
+    <button type="button" (click)="addCargoToArray()" class="btn customButton exitButton text-light mt-2">
+      <i>
+        <fa-icon [icon]="faSave"></fa-icon>
+      </i>
+      <span class="ms-3">Speichern</span>
+    </button>
+  </div>
+</ng-template>
+
+@if (this.offerBool) {
+      <div>
+        <div class="container-fluid greenBackground p-3 pb-5">
+          <div class="row mt-3">
+            <div class="col-12 col-lg-6">
+              <p class="text-light me-2">Dein Startpunkt:<br>
+                <select class="form-select inputField" [(ngModel)]="startLocation" aria-label="Default select example">
+                @for (location of offer?.locations ; track location.id) {
+                  <option [value]="location.id">{{ location.zipCode }} {{ location.city }}</option>
+                }
+              </select>
+            </div>
+            <div class="col-12 col-lg-6 mt-3 mt-lg-0">
+              <p class="text-light me-2">Dein Ziel:<br>
+              <select class="form-select inputField" [(ngModel)]="endLocation" aria-label="Default select example">
+                @for (location of offer?.locations ; track location.id) {
+                  <option [value]="location.id">{{ location.zipCode }} {{ location.city }}</option>
+                  }
+              </select>
+            </div>
+          </div>
+          <div class="row mt-3">
+            <div class="col-12 col-lg-6">
+              <input type="text" class="form-control inputField" [(ngModel)]="seats" aria-label="Anzahl Personen" placeholder="Anzahl Personen">
+            </div>
+            <div class="col-12 col-lg-6 mt-3 mt-lg-0">
+              <div class="row">
+
+              </div>
+
+              @for (cargo of cargoDataArray  ; track $index) {
+                <div class="border-1 position-relative mt-3">
+                  <div class="button-container position-absolute end-0 mt-1 me-3">
+                    <button (click)="openCargoModal(cargoModal)" type="button"
+                            class="btn btn-primary editButton text-end me-1" id="editButton">
+                      <i>
+                        <fa-icon [icon]="faPenToSquare"></fa-icon>
+                      </i>
+                    </button>
+                    <button type="button" class="btn btn-danger deleteButton text-end" id="deleteButton">
+                      <i>
+                        <fa-icon [icon]="faX"></fa-icon>
+                      </i>
+                    </button>
+                  </div>
+                  <div class="card-body backgroundGreen">
+                    <div class="text-light mx-3 pt-2">
+                      <h4 class="card-title ms-1 mt-1 text-center">{{ cargo.description }}</h4>
+                      <p class="ms-2">{{ cargo.weight }} kg</p>
+                      <div class="row">
+                        <div class="col">
+                          <p class="ms-2">Länge:<br>
+                            {{ cargo.length }}cm </p>
+                        </div>
+                        <div class="col">
+                          <p class="mx-1">Breite:<br>
+                            {{ cargo.width }}cm </p>
+                        </div>
+                        <div class="col">
+                          <p class="me-2">Höhe:<br>
+                            {{ cargo.height }}cm </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              }
+              <button (click)="openCargoModal(cargoModal)" type="button" class="btn btn-primary blueButton" data-toggle="modal" data-target="#cargoModal">Cargo hinzufügen</button>
+              </div>
+            </div>
+          </div>
+          <div class="row mt-3 horizontal-center">
+            <div class="col-6 col-lg-2 horizontal-center">
+              <button type="button" class="btn btn-primary blueButton transform" (click)="createOfferTrip()">Abschicken</button>
+            </div>
+          </div>
+        </div>
+    } @else if (requestBool) {
+      <div>
+        <div class="container greenBackground p-3">
+          <div class="row mt-3">
+            <div class="col-12 col-lg-6">
+              <p class="text-light me-2">Dein Auto:<br>
+                <select class="form-select inputField" [(ngModel)]="selectedCar" aria-label="Default select example">
+                @for (car of cars ; track car.id) {
+                  <option [value]="car.id">{{ car.name }}</option>
+                }
+              </select>
+            </div>
+            <div class="col-12 col-lg-6 mt-3 mt-lg-0">
+              <p class="text-light me-2">Dein Trailer:<br>
+              <select class="form-select inputField" [(ngModel)]="selectedTrailer" aria-label="Default select example">
+                @for (trailer of trailers ; track trailer.id) {
+                  <option [value]="trailer.id">{{ trailer.name }}</option>
+                }
+              </select>
+            </div>
+          </div>
+          <div class="row mt-3 horizontal-center">
+            <div class="col-6 col-lg-2 horizontal-center">
+              <button type="button" class="btn btn-primary blueButton transform" (click)="createRequestTrip()">Abschicken</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    }
+
