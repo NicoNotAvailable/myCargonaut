@@ -59,7 +59,6 @@ export class AddTrailerComponent {
 
 
   saveTrailer(form: any): void {
-    if (this.editingTrailer != 0) return;
     const trailerData = {
       name: this.model,
       weight: this.weight == null ? 0 : this.weight,
@@ -69,17 +68,32 @@ export class AddTrailerComponent {
       isCooled: this.isCooled,
       isEnclosed: this.isEnclosed,
     };
-    this.http.post("http://localhost:8000/vehicle/trailer", trailerData, {withCredentials: true}).subscribe(
-      response => {
-        this.changeAddTrailerState();
-        form.resetForm();
-      },
-      error => {
-        console.error(error);
-        this.errorMessage = error.error.message || "Bitte überprüfen Sie die Eingabe";
-        this.removeErrorMessage();
-      }
-    )
+    if (this.editingTrailer != 0) {
+      this.http.put("http://localhost:8000/vehicle/updateTrailer/"+this.editingTrailer, trailerData, {withCredentials: true}).subscribe(
+        response => {
+          form.resetForm();
+          this.changeAddTrailerState();
+        },
+        error => {
+          console.error(error);
+          this.errorMessage = error.error.message || "Bitte überprüfen Sie die Eingabe";
+          this.removeErrorMessage();
+        }
+      )
+    }
+    else {
+      this.http.post("http://localhost:8000/vehicle/trailer", trailerData, { withCredentials: true }).subscribe(
+        response => {
+          this.changeAddTrailerState();
+          form.resetForm();
+        },
+        error => {
+          console.error(error);
+          this.errorMessage = error.error.message || "Bitte überprüfen Sie die Eingabe";
+          this.removeErrorMessage();
+        }
+      )
+    }
   }
 
   deleteTrailer(id: number) {

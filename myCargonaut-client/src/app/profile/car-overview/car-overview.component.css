@@ -70,3 +70,7 @@ img{
   margin: 0 auto;
   float: none;
 }
+
+.imageHolder{
+  height: 10px;
+}
