@@ -49,11 +49,33 @@ export class SearchCardComponent {
   ngOnInit(): void {
     this.updateCurrentRoute();
 
+    this.setHref();
+
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd)
     ).subscribe(() => {
       this.updateCurrentRoute();
     });
+  }
+
+  sendToDetail(id: any): void {
+    window.location.href = this.href + id.toString();
+  }
+
+  private setHref(): void {
+    const url: string = this.router.url;
+    if (url.includes('searchOffer')){
+      this.href = "/trips/offer/";
+    }
+    if (url.includes('searchRequest')){
+      this.href = "/trips/request/";
+    }
+    if (url.includes('myRequest')){
+      this.href = "/request/";
+    }
+    if (url.includes('myOffer')){
+      this.href = "/offer/";
+    }
   }
 
   private updateCurrentRoute(): void {
@@ -62,22 +84,18 @@ export class SearchCardComponent {
     if (this.currentRoute === "searchRequest") {
       this.buttonText = "Suche ansehen";
       this.plaetze = "benötigte Plätze";
-      this.href = "trips/request";
 
     } else if (this.currentRoute === "searchOffer") {
       this.buttonText = "Fahrt ansehen";
       this.plaetze = "verfügbare Plätze";
-      this.href = "trips/offer";
 
     } else if (this.currentRoute === "myOffer") {
       this.buttonText = "Anfragen ansehen";
       this.plaetze = "verfügbare Plätze";
-      this.href = "offer";
 
     }else if (this.currentRoute === "myRequest") {
       this.buttonText = "Anfragen ansehen";
       this.plaetze = "benötigte Plätze";
-      this.href = "request";
     }
 
   }
