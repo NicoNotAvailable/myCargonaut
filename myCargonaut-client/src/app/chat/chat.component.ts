@@ -93,13 +93,15 @@ export class ChatComponent implements OnInit {
           const trips = [...offerTrips, ...requestTrips, ...offerDriveTrips, ...requestDriveTrips];
 
           trips.forEach(trip => {
-            if (trip.__messages__ && trip.__messages__.length > 0) {
               const roomName = `trip_${trip.id}`;
               this.trips[roomName] = trip;  // Store trip details
 
               this.fetchOtherUser(trip).then(user => {
+                if (user.profilePic === null) user.profilePic = 'empty.png';
                 this.trips[roomName].user = user;  // Store user details
               });
+
+              console.log(this.trips);
 
               this.http.get<Message[]>(`http://localhost:8000/chat/messages/${trip.id}`, { withCredentials: true })
                 .subscribe(
@@ -113,7 +115,6 @@ export class ChatComponent implements OnInit {
                     console.log(error);
                   }
                 );
-            }
           });
         },
         (error) => {
@@ -141,8 +142,11 @@ export class ChatComponent implements OnInit {
       console.error('Room or userId not defined');
       return;
     }
+    console.log('hier wird gesendet' + this.room);
+
 
     const tripId: number = parseInt(this.room.split('_')[1]);
+    console.log(tripId);
     const messageData: Message = {
       id: 0,  //mock
       writer: {
@@ -156,11 +160,12 @@ export class ChatComponent implements OnInit {
       timestamp: new Date().toISOString(),
     };
 
-    this.http.post<Message>("http://localhost:8000/chat/message", messageData, { withCredentials: true })
+    console.log(messageData);
+    this.http.post<Message>("http://localhost:8000/chat/message", {writer: messageData.writer.id, tripId: messageData.trip.id, message: messageData.message}, { withCredentials: true })
       .subscribe(
         (response: any) => {
           console.log('Message sent successfully');
-          this.socketService.emit('message', { room: `trip_${tripId}`, message: messageData });
+          this.socketService.emit('message', { room: `trip_${tripId}`, message: response });
         },
         error => {
           console.error('There was an error sending the message:', error);

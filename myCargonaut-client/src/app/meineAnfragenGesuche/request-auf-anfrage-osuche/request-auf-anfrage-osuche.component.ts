@@ -213,9 +213,8 @@ export class RequestAufAnfrageOSucheComponent  implements OnInit {
 
   }
 
-  navigateToChat(targetUserId: number): void {
-    window.location.href = "/chats";
-    this.router.navigate(['/chats'], { queryParams: { targetUserId } });
+  navigateToChat(tripId: number): void {
+    this.router.navigate(['/chats'], { queryParams: { tripId } });
   }
 
 
