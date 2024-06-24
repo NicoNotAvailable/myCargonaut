@@ -23,6 +23,7 @@ import {
 import { CreateMessageDTO } from './DTO/CreateMessageDTO';
 import { SessionData } from 'express-session';
 import { GetMessageDTO } from './DTO/GetMessageDTO';
+import { MessageDB } from "../database/MessageDB";
 
 @ApiTags('chat')
 @Controller('chat')
@@ -41,7 +42,7 @@ export class ChatController {
   async sendMessage(
     @Body() body: CreateMessageDTO,
     @Session() session: SessionData,
-  ): Promise<CreateMessageDTO> {
+  ): Promise<MessageDB> {
     const dto = new CreateMessageDTO();
     const userId = session.currentUser;
 
@@ -52,8 +53,11 @@ export class ChatController {
     dto.tripId = body.tripId;
     dto.message = body.message;
     try {
-      await this.chatService.createMessage(userId, body.tripId, body.message);
-      return dto;
+      return await this.chatService.createMessage(
+        userId,
+        body.tripId,
+        body.message,
+      );
     } catch (err) {
       throw new Error(err);
     }

@@ -7,7 +7,8 @@ export class requestTrips {
     lastName: string,
     languages: string,
     profileText: string,
-    isSmoker: boolean
+    isSmoker: boolean,
+    rating: number
   };
   car: {
     id: number,
@@ -41,7 +42,8 @@ export class requestTrips {
       lastName: string,
       languages: string,
       profileText: string,
-      isSmoker: boolean
+      isSmoker: boolean,
+      rating: number
     },
     car: {
       id: number,

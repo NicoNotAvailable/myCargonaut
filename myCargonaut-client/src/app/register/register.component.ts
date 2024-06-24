@@ -1,9 +1,9 @@
-import { Component, inject } from "@angular/core";
-import {FormsModule} from "@angular/forms";
-import {HTTP_INTERCEPTORS, HttpClient, HttpClientModule} from '@angular/common/http';
-import {NgIf} from "@angular/common";
-import {NgbInputDatepicker} from "@ng-bootstrap/ng-bootstrap";
-import { SessionService } from "../services/session.service";
+import { Component, inject } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { HTTP_INTERCEPTORS, HttpClient, HttpClientModule } from '@angular/common/http';
+import { NgIf } from '@angular/common';
+import { NgbInputDatepicker } from '@ng-bootstrap/ng-bootstrap';
+import { SessionService } from '../services/session.service';
 
 
 @Component({
@@ -16,23 +16,23 @@ import { SessionService } from "../services/session.service";
     NgbInputDatepicker,
   ],
   templateUrl: './register.component.html',
-  styleUrl: './register.component.css'
+  styleUrl: './register.component.css',
 })
 export class RegisterComponent {
   isLoggedIn: boolean = false;
 
-  message: string = ""
+  message: string = '';
 
-  firstName: string = "";
-  lastName: string = "";
-  email: string = "";
-  emailConfirm: string = "";
-  password: string = "";
-  passwordConfirm: string = "";
-  phonenumber: string = "";
+  firstName: string = '';
+  lastName: string = '';
+  email: string = '';
+  emailConfirm: string = '';
+  password: string = '';
+  passwordConfirm: string = '';
+  phonenumber: string = '';
   agb: boolean = false;
 
-  birthDate: any = "";
+  birthDate: any = '';
 
   public sessionService: SessionService = inject(SessionService);
 
@@ -46,7 +46,7 @@ export class RegisterComponent {
       console.log('Login status:', isLoggedIn);
       isLoggedIn == -1 ? this.isLoggedIn = false : this.isLoggedIn = true;
       if (this.isLoggedIn) {
-        window.location.href = "/profile";
+        window.location.href = '/profile';
       }
     });
   }
@@ -74,7 +74,7 @@ export class RegisterComponent {
 
 
   showInputDate() {
-    console.log(this.birthDate.year + this.birthDate.month + this.birthDate.day)
+    console.log(this.birthDate.year + this.birthDate.month + this.birthDate.day);
   }
 
   addUser(form: any): void {
@@ -95,12 +95,12 @@ export class RegisterComponent {
 
     console.log('User Data:', userData);
 
-    this.http.post("http://localhost:8000/user",userData, { withCredentials: true })
+    this.http.post('http://localhost:8000/user', userData, { withCredentials: true })
       .subscribe(
         response => {
           form.resetForm();
           console.log('User added successfully', response);
-          this.message = "Nutzer erfolgreich angelegt";
+          this.message = 'Nutzer erfolgreich angelegt';
           setTimeout(() => {
             this.message = '';
             window.location.reload();
@@ -110,24 +110,24 @@ export class RegisterComponent {
         error => {
 
           console.error('There was an error!', error);
-          this.message = error.error.message || "Bitte überprüfen Sie die Eingabe";
+          this.message = error.error.message || 'Bitte überprüfen Sie die Eingabe';
           setTimeout(() => {
             this.message = '';
           }, 5000);
-        }
+        },
       );
 
   }
 
-  checkAGB(){
-    this.message = "Bitte akzeptieren Sie die AGBs";
+  checkAGB() {
+    this.message = 'Bitte akzeptieren Sie die AGBs';
     setTimeout(() => {
       this.message = '';
     }, 5000);
   }
 
-  checkInputs(){
-    this.message = "Bitte füllen Sie alle Pflichfelder aus";
+  checkInputs() {
+    this.message = 'Bitte füllen Sie alle Pflichfelder aus';
     setTimeout(() => {
       this.message = '';
     }, 5000);
