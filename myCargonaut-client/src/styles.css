@@ -75,6 +75,7 @@ html, body {
 
 .notification {
   background-color: #005B52;
+  box-shadow: 0 0 20px ghostwhite;
   color: ghostwhite;
   font-weight: bold;
   border-radius: 15px;
@@ -84,7 +85,7 @@ html, body {
 
 .notification:hover {
   cursor: pointer;
-  box-shadow: 0 0 20px #005B52;
+  box-shadow: 0 0 20px #1a9cc5;
 }
 
 

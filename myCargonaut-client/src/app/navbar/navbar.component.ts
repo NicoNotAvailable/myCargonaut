@@ -121,7 +121,7 @@ export class NavbarComponent {
 
     this.socketService.on('message').subscribe((message: any) => {
       if (!window.location.href.includes('/chats')) {
-        this.notificationService.showNotification(`Du hast eine neue Nachricht im Raum ${room}: ${message.message}`);
+        this.notificationService.showNotification(`Du hast eine neue Nachricht: "${message.message}"`);
       }
     });
   }
