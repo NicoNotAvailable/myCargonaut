@@ -11,6 +11,7 @@ import {
   faStar
 } from "@fortawesome/free-solid-svg-icons";
 import { NgForOf, NgIf } from '@angular/common';
+import { ActivatedRoute, Router } from "@angular/router";
 import { TrailerOverviewComponent } from "./trailer-overview/trailer-overview.component";
 import { HttpClient } from "@angular/common/http";
 import { DateUtils } from "../../../../utils/DateUtils";
@@ -61,7 +62,7 @@ export class ProfileComponent {
   profilePic: string = "";
   rating: number = 0;
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private route: ActivatedRoute, private router: Router) {
   }
 
   ngOnInit(): void {
@@ -71,7 +72,7 @@ export class ProfileComponent {
       if (!this.isLoggedIn && typeof window !== undefined) {
         window.location.href = "/login";
       } else {
-        this.readUser();
+        this.getProfile();
         setTimeout(()=>{
           this.loaded = true;
         }, 100);
@@ -79,8 +80,16 @@ export class ProfileComponent {
     });
   }
 
-  readUser(): void {
+  getProfile(): void {
+    const url: string = this.router.url;
+    if (url.includes('userProfile')) {
+      this.readOtherUser();
+    } else {
+      this.readOwnUser();
+    }
+  }
 
+  readOwnUser(): void {
     const prePath: string = "assets/";
 
     setTimeout(() => {
@@ -105,6 +114,10 @@ export class ProfileComponent {
         console.error("There was an error!", error);
       }
     );
+  }
+
+  readOtherUser(): void {
+
   }
 
   formatSmokeBool(bool: boolean): string{
