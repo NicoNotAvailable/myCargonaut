@@ -46,13 +46,14 @@ export class ChatComponent implements OnInit {
       }
       this.userId = await this.sessionService.checkLoginNum();
 
+      setTimeout(() => {
+        this.loadChatsWithMessages();
+      }, 200);
+
       this.route.queryParams.subscribe(params => {
         this.selectRoom('trip_'+params['tripId']);
       });
 
-      setTimeout(() => {
-        this.loadChatsWithMessages();
-      }, 200);
     });
 
     this.socketService.on('message').subscribe((message: any) => {
