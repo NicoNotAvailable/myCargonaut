@@ -216,9 +216,6 @@ export class TripService {
     if (!trip) {
       throw new NotFoundException('Trip not found');
     }
-    if (trip.requesting.id !== userId) {
-      throw new UnauthorizedException('Trip is not yours!');
-    }
     await this.tripRepository.remove(trip);
   }
   async getUserTrips(user: number) {

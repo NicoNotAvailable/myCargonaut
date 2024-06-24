@@ -214,8 +214,9 @@ export class RequestAufAnfrageOSucheComponent  implements OnInit {
     this.router.navigate(['/chats'], { queryParams: { tripId } });
   }
 
+
   acceptDrive(tripId:number): void {
-    this.http.post('http://localhost:8000/trip/accept/', tripId, { withCredentials: true })
+    this.http.put('http://localhost:8000/trip/accept/' + tripId, {},{ withCredentials: true })
       .subscribe(
         response => {
           console.log('Request accepted', response);
