@@ -100,7 +100,6 @@ export class ProfileComponent {
     }, 200);
     this.userService.readUser().subscribe(
       response => {
-        console.log("Userdata read successfully", response);
         this.firstName.set(response.firstName);
         this.lastName.set(response.lastName);
         this.birthday = DateUtils.parseDate(response.birthday);
@@ -111,13 +110,30 @@ export class ProfileComponent {
         this.rating = response.rating;
       },
       error => {
-        console.error("There was an error!", error);
       }
     );
   }
 
   readOtherUser(): void {
+    const prePath: string = "assets/";
+    this.pathToImage = "";
+    let imagePath: string = "empty.png";
+    this.pathToImage = prePath.concat(imagePath);
 
+    let user;
+
+    this.userService.otherUser$.subscribe(otherUser => {
+      user = otherUser;
+    });
+
+    this.firstName.set(user!.firstName);
+    this.lastName.set(user!.lastName);
+    this.birthday = user!.birthyear.toString();
+    imagePath = user!.profilePic;
+    this.profilePic = user!.profilePic;
+    this.pathToImage = imagePath === "empty.png" ? "assets/empty.png" : prePath.concat(imagePath);
+    this.smoker = this.formatSmokeBool(user!.isSmoker);
+    this.rating = user!.rating;
   }
 
   formatSmokeBool(bool: boolean): string{

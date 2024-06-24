@@ -45,6 +45,8 @@ export class UserDescriptionComponent {
   newLastname: string = '';
   newPfp: any = "";
 
+  unchangable: boolean = false;
+
 
   public userService: UserService = inject(UserService);
 
@@ -74,8 +76,6 @@ export class UserDescriptionComponent {
   deleteBoolean: boolean = false;
   isLoggedIn: boolean = false;
 
-
-
   emailMatchError: boolean = false;
   errorMessage: string = '';
 
@@ -83,17 +83,25 @@ export class UserDescriptionComponent {
 
   totalDrives = computed(() => this.offeredDrives() + this.takenDrives());
 
+
   ngOnInit(): void {
-    this.readUser();
+    this.getUserData();
+  }
+
+  getUserData(): void {
+    const url: string = this.router.url;
+    if (url.includes('userProfile')) {
+      this.unchangable = true;
+      this.readOtherUser();
+    } else {
+      this.unchangable = false;
+      this.readUser();
+    }
   }
 
   readUser(): void {
-    setTimeout(() => {
-    }, 200);
     this.userService.readUser().subscribe(
       response => {
-        this.newFirstname = response.firstName;
-        this.newLastname = response.lastName;
         this.profileText = response.profileText == null || response.profileText === '' ? 'Deine Beschreibung...' : response.profileText;
         response.offeredDrives == null ? this.offeredDrives.set(1234) : this.offeredDrives.set(response.offeredDrives);
         response.takenDrives == null ? this.takenDrives.set(123) : this.takenDrives.set(response.takenDrives);
@@ -106,11 +114,26 @@ export class UserDescriptionComponent {
         this.startedSmoking = response.isSmoker;
       },
       error => {
-        console.error('There was an error!', error);
         this.errorMessage = 'Email ist ungültig';
         this.removeErrorMessage();
       },
     );
+  }
+
+  readOtherUser(): void {
+    let user;
+
+    this.userService.otherUser$.subscribe(otherUser => {
+      user = otherUser;
+    });
+    this.profileText = user!.profileText == null || user!.profileText === '' ? `${user!.firstName}s Beschreibung...` : user!.profileText;
+    user!.offeredDrives == null ? this.offeredDrives.set(1234) : this.offeredDrives.set(user!.offeredDrives);
+    user!.takenDrives == null ? this.takenDrives.set(123) : this.takenDrives.set(user!.takenDrives);
+    this.distanceDriven = user!.distanceDriven == null ? 0 : user!.distanceDriven;
+    this.totalPassengers = user!.totalPassengers == null ? 12 : user!.totalPassengers;
+    this.highestWeight = user!.highestWeight == null ? 12 : user!.highestWeight;
+    this.languages = user!.languages == null || user!.languages === '' ? 'Keine Sprache angegeben' : user!.languages;
+    this.email = "";
   }
 
   saveUser(form: any): void {
@@ -141,7 +164,6 @@ export class UserDescriptionComponent {
           window.location.reload();
         }, 200);
       }, error => {
-        console.error('There was an error!', error);
       },
     );
 
@@ -168,7 +190,6 @@ export class UserDescriptionComponent {
           this.enableImgUpload();
         },
         error => {
-          console.error(error);
           this.errorMessage = "Etwas ist schiefgelaufen";
           this.removeErrorMessage();
         }

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, inject, Input, OnInit } from "@angular/core";
 import { DriveService } from '../services/drive.service';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { SessionService } from '../services/session.service';
@@ -9,6 +9,7 @@ import { GetRequest } from './GetRequest';
 import { DateFormatPipe } from '../search/date-format.pipe';
 import { NgForOf, NgIf, NgOptimizedImage } from '@angular/common';
 import { VehicleService } from '../services/vehicle.service';
+import { UserService } from "../services/user.service";
 
 @Component({
   selector: 'app-trips',
@@ -41,6 +42,8 @@ export class TripsComponent implements OnInit {
   pathToImage: string = 'empty.png';
   profilePic: string = '';
 
+  public userService: UserService = inject(UserService);
+
   protected readonly window = window;
 
   constructor(
@@ -59,6 +62,10 @@ export class TripsComponent implements OnInit {
         this.getRequestDetails(this.driveId);
       }
     });
+  }
+
+  saveUserToService(): void {
+    this.userService.readOtherUser(Number(this.offer?.user.id));
   }
 
   getOfferDetails(id: number): void {

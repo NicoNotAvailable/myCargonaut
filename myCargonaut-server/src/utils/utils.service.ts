@@ -118,6 +118,7 @@ export class UtilsService {
     dto.lastName = user.lastName.charAt(0).toUpperCase() + '.';
     dto.languages = user.languages;
     dto.profileText = user.profileText;
+    dto.birthyear = user.birthday.getFullYear();
     dto.isSmoker = user.isSmoker;
     dto.rating = await this.reviewService.getRating(user.id);
     return dto;

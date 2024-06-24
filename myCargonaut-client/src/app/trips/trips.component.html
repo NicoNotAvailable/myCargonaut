@@ -4,8 +4,8 @@
       <a [routerLink]="['/searchOffer']">
         <button type="button" class="btn btn-primary greenButton"><- Alle Angebote</button>
       </a>
-      <a routerLink="['/userProfile']">
-        <img
+      <a href="/userProfile">
+        <img (click)="saveUserToService()"
           [ngSrc]="window.location.protocol + '//' + window.location.host.replace('4200', '8000') + '/user/image/'+ (offer?.user?.profilePic || request?.user?.profilePic)"
           src="assets/empty.png" width="10px" height="10px" class="card-img-top img-fluid profileCircle my-4" alt="">
       </a>
