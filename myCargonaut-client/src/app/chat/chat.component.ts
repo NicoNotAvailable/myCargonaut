@@ -47,10 +47,7 @@ export class ChatComponent implements OnInit {
       this.userId = await this.sessionService.checkLoginNum();
 
       this.route.queryParams.subscribe(params => {
-        this.targetUserId = +params['targetUserId'];
-        if (this.targetUserId) {
-          this.initiateChat(this.targetUserId);
-        }
+        this.selectRoom('trip_'+params['tripId']);
       });
 
       setTimeout(() => {
