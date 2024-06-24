@@ -1,6 +1,6 @@
 export class offerTrips {
   id: number;
-  requesting: { id: number, profilePic: string, firstName: string, lastName: string, languages: string, profileText: string, isSmoker: boolean };
+  requesting: { id: number, profilePic: string, firstName: string, lastName: string, languages: string, profileText: string, isSmoker: boolean, rating: number };
   usedSeats: number;
   startLocation: { stopNr: number, country:string; zipCode:number; city: string };
   endLocation: { stopNr: number, country:string; zipCode:number; city: string };
@@ -24,6 +24,7 @@ export class offerTrips {
       languages: string;
       profileText: string;
       isSmoker: boolean;
+      rating: number;
     },
     usedSeats: number,
     startLocation: {
