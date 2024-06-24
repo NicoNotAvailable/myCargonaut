@@ -126,11 +126,23 @@ export class TripsCreateComponent implements OnInit {
   }
 
   createRequestTrip(): void {
-    const tripData = {
-      driveID: this.request?.id,
-      carID: this.selectedCar,
-      trailerID: this.selectedTrailer,
-    };
+
+    let tripData: any;
+
+    if (this.selectedTrailer) {
+       tripData = {
+        driveID: this.request?.id,
+        carID: this.selectedCar,
+        trailerID: this.selectedTrailer,
+      };
+    } else {
+      tripData = {
+        driveID: this.request?.id,
+        carID: this.selectedCar,
+      };
+    }
+
+
     if (tripData.carID === 0 || tripData.carID === null) {
       console.error('Car was not found');
     }
@@ -169,6 +181,7 @@ export class TripsCreateComponent implements OnInit {
       },
     );
   }
+
 
   deleteCargo(index: number) {
     this.requestService.cargos.splice(index, 1);
