@@ -211,11 +211,16 @@ export class AllTripsComponent {
             maxCVolumen: (requestDriveTrips.drive.maxCLength * requestDriveTrips.drive.maxCWidth * requestDriveTrips.drive.maxCHeight) / 1000000,
             status: requestDriveTrips.drive.status,
             locations: requestDriveTrips.locations || []
-          }));
 
+          }));
+        console.log(requestDriveTrips.locations + "Test");
+        console.log(requestTrips.locations + "Test");
+        console.log(offerDriveTrips.locations + "Test");
+        console.log(offerTrips.locations + "Test");
         // Combine all trips into activeTrips
         this.activeTrips = [].concat(offerTrips, requestTrips, offerDriveTrips, requestDriveTrips);
         console.log('Active Trips:', this.activeTrips);
+        console.log("Requesst:", this.allRequests)
       },
       error => {
         console.error('Error fetching requests:', error);
