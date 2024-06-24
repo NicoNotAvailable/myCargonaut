@@ -29,6 +29,7 @@ export const routes: Routes = [
   { path: 'register', component: RegisterComponent },
   { path: 'login', component: LoginComponent },
   { path: 'profile', component: ProfileComponent },
+  { path: 'userProfile', component: ProfileComponent },
   { path: 'createrequest', component: RequestComponent },
   { path: 'createoffer', component: OfferComponent },
   { path: 'summary', component: SummaryComponent },
