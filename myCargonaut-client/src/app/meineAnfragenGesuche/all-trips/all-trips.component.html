@@ -116,7 +116,7 @@
                                   <div class="dot" [ngClass]="{'highlight': activeTrip.status === 4}"></div>
                                 </div>
                                 <div class="horizontal-right" *ngIf="activeTrip.status === 3">
-                                  <button (click)="changeStatus()" type="button" class="btn btn-primary greenButton m-2">Angekommen</button>
+                                  <button  type="button" class="btn btn-primary greenButton m-2">Angekommen</button>
                                 </div>
                                 <div class="horizontal-right" *ngIf="activeTrip.status === 4">
                                   <button type="button" (click)="handleButtonClick(activeTrip.id)" class="btn btn-primary greenButton">Zur Review</button>
