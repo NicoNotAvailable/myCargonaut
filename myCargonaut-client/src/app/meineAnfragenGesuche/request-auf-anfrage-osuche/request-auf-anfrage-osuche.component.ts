@@ -205,9 +205,6 @@ export class RequestAufAnfrageOSucheComponent  implements OnInit {
             console.error('Fehler beim Abrufen der Angebote:', error);
           }
         );
-
-
-
     }
 
 
@@ -217,6 +214,18 @@ export class RequestAufAnfrageOSucheComponent  implements OnInit {
     this.router.navigate(['/chats'], { queryParams: { tripId } });
   }
 
+  acceptDrive(tripId:number): void {
+    this.http.post('http://localhost:8000/trip/accept/', tripId, { withCredentials: true })
+      .subscribe(
+        response => {
+          console.log('Request accepted', response);
+        },
+        error => {
+
+          console.error('There was an error!', error);
+        },
+      );
+  }
 
   protected readonly window = window;
 }
