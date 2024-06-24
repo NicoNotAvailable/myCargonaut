@@ -3,8 +3,6 @@ import {ActivatedRoute, NavigationEnd, Router} from "@angular/router";
 import {offerTrips} from "../offerTrips";
 import {HttpClient} from "@angular/common/http";
 import {filter} from "rxjs/operators";
-import { offer } from "../../search/offers";
-import { request } from "../../search/requests";
 import { requestTrips } from "../requestTrips";
 import { SessionService } from "../../services/session.service";
 import { UserService } from "../../services/user.service";
@@ -206,8 +204,6 @@ export class RequestAufAnfrageOSucheComponent  implements OnInit {
           }
         );
     }
-
-
   }
 
   navigateToChat(tripId: number): void {

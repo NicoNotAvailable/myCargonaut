@@ -5,7 +5,7 @@ import { OfferDB } from './DriveDB';
 
 @ChildEntity()
 export class CarDB extends VehicleDB {
-  @Column({ default: 'empty.png' })
+  @Column({ default: 'pexels-mikebirdy-116675.jpg' })
   carPicture: string;
 
   @Column()
