@@ -108,7 +108,7 @@ export class UserDescriptionComponent {
         this.distanceDriven = response.distanceDriven == null ? 0 : response.distanceDriven;
         this.totalPassengers = response.totalPassengers == null ? 12 : response.totalPassengers;
         this.highestWeight = response.highestWeight == null ? 12 : response.highestWeight;
-        this.phoneNumber = response.phoneNumber;
+        this.phoneNumber = response.phoneNumber == null || response.phoneNumber === '' ? 'Keine Nummer angegeben' : response.phoneNumber;
         this.languages = response.languages == null || response.languages === '' ? 'Keine Sprache angegeben' : response.languages;
         this.email = response.email;
         this.startedSmoking = response.isSmoker;
