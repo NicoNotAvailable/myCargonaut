@@ -220,6 +220,7 @@ export class RequestAufAnfrageOSucheComponent  implements OnInit {
       .subscribe(
         response => {
           console.log('Request accepted', response);
+          this.router.navigate(['/allTrips'], { queryParams: { tripId } });
         },
         error => {
 
