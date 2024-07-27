@@ -22,6 +22,7 @@ import { TripsComponent } from './trips/trips.component';
 import { RequestComponent } from './drive/request/request.component';
 import { OfferComponent } from './drive/offer/offer.component';
 import { SummaryComponent } from './drive/summary/summary.component';
+import {PaymentComponent} from "./payment/payment.component";
 
 export const routes: Routes = [
 
@@ -33,7 +34,10 @@ export const routes: Routes = [
   { path: 'createrequest', component: RequestComponent },
   { path: 'createoffer', component: OfferComponent },
   { path: 'summary', component: SummaryComponent },
+  { path: 'payment', component: PaymentComponent },
+
   { path: '', component: FrontpageComponent },
+
 
   {path: 'profile', component: ProfileComponent},
   {path: 'search', component: SearchMainComponent},
