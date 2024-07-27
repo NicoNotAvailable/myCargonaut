@@ -1,0 +1,72 @@
+<h2 class="textGreen text-center mt-4">Checkout</h2>
+<div *ngIf="isLoggedIn" class="container mt-3 mb-3 text-start">
+  <div class="row justify-content-center">
+    <div class="col-lg-6 col-12">
+      <form #form="ngForm" (ngSubmit)="validInputs() && createSummaryOffer()">
+        <div class="p-5" id="paymentArea">
+          <div class="row mt-1">
+            <div class="col-6 text-end">
+              <h5 class="text-decoration-underline">Pro Person:</h5>
+            </div>
+            <div class="col-lg-4 col-6 text-end">
+              <h5 class="text-decoration-underline">9€</h5>
+            </div>
+            <div class="col-2"></div>
+          </div>
+          <div class="row mt-1">
+            <div class="col-6 text-end">
+              <h5 class="text-decoration-underline">Anzahl der Personen:</h5>
+            </div>
+            <div class="col-lg-4 col-6 text-end">
+              <h5 class="text-decoration-underline">5€</h5>
+            </div>
+            <div class="col-2"></div>
+          </div>
+          <div class="row mt-1">
+            <div class="col-6 text-end">
+              <h5 class="text-decoration-underline">+Servicegebühren:</h5>
+            </div>
+            <div class="col-lg-4 col-6 text-end">
+              <h5 class="text-decoration-underline">2,25€</h5>
+            </div>
+            <div class="col-2"></div>
+          </div>
+          <div class="row justify-content-start">
+            <div class="col-auto">
+              <div class="image-cropper">
+                <img src="assets/empty.png" alt="Profilbild des angemeldeten ">
+              </div>
+            </div>
+          </div>
+          <div class="text-decoration-underline text-end mt-3">
+            <h3>Gesamt: 47,25€</h3>
+          </div>
+        </div>
+        <h3 class="textGreen text-center mt-4">Zahlungsmethode auswählen</h3>
+        <div class="row justify-content-center">
+          <div class="col-12 col-lg-8">
+            <div class="row mt-4 justify-content-between">
+              <div class="col-auto">
+                <button type="submit" class="btn customButton paymentNonactiveButton text-light">
+                  <img class="paypal-logo object-fit-contain" src="assets/payment/paypal-payment.png" alt="PayPal-Logo">
+                </button>
+              </div>
+              <div class="col-auto">
+                <button type="submit" class="btn customButton paymentActiveButton text-light">
+                  <img class="sepa-logo object-fit-contain" src="assets/payment/sepa-payment.png" alt="SEPA-Lastschrift Logo">
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row mt-5 justify-content-center">
+          <div class="col-auto text-center">
+            <button type="submit" class="btn customButton exitButton text-light">
+              <span class="px-3">Bezahlen</span>
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
