@@ -126,8 +126,8 @@ export class OfferService {
       const timeString = `${this.time}:00.000`;
 
       const dateTimeString = `${dateString} ${timeString}`;
+      this.locations = [...this.stops]
       this.locations.push(this.endLocation);
-
       this.locations.unshift(this.startLocation);
       const locationsWithStopNr = this.locations.map((location, index) => {
         let stopNr;

@@ -49,7 +49,11 @@ export class TripsCreateComponent implements OnInit {
   selectedCar: number | null = null;
   selectedTrailer: number | null = null;
 
-  seats: number = 0;
+  seats: number | null = null;
+
+  validStartLocations: Array<any> | null | undefined = null;
+  validEndLocations: Array<any> | null | undefined = null;
+
   startLocation: number | null = null;
   endLocation: number | null = null;
 
@@ -63,6 +67,14 @@ export class TripsCreateComponent implements OnInit {
   ngOnInit(): void {
     this.route.params.subscribe(params => {
       if (params ['type'] == "offer") {
+        console.log(this.offer?.locations);
+
+      setTimeout(  () => {
+        this.validStartLocations = this.offer?.locations.slice(0,-1)
+        console.log(this.validStartLocations);
+        console.log(this.offer?.locations);
+      }, 2000)
+
         this.offerBool = true;
       } else if (params ['type'] == "request") {
         this.requestBool = true
@@ -182,10 +194,17 @@ export class TripsCreateComponent implements OnInit {
     );
   }
 
-
   deleteCargo(index: number) {
     this.requestService.cargos.splice(index, 1);
   }
+
+  startpointChanged(event: Event) {
+    this.validEndLocations = this.offer?.locations.slice(this.startLocation!);
+    console.log(this.validEndLocations)
+    console.log(this.startLocation)
+  }
+
+
 
   @Input() offer!: GetOffer | undefined;
   @Input() request!: GetRequest | undefined;

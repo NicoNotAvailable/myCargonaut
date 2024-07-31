@@ -38,17 +38,17 @@
           <div class="row mt-3">
             <div class="col-12 col-lg-6">
               <p class="text-light me-2">Dein Startpunkt:<br>
-                <select class="form-select inputField" [(ngModel)]="startLocation" aria-label="Default select example">
-                @for (location of offer?.locations ; track location.id) {
-                  <option [value]="location.id">{{ location.zipCode }} {{ location.city }}</option>
+                <select class="form-select inputField" [(ngModel)]="startLocation" (ngModelChange)="startpointChanged($event)" aria-label="Default select example">
+                @for (location of validStartLocations ; track location.id) {
+                  <option [ngValue]="location.stopNr">{{ location.zipCode }} {{ location.city }}</option>
                 }
-              </select>
+                </select>
             </div>
             <div class="col-12 col-lg-6 mt-3 mt-lg-0">
               <p class="text-light me-2">Dein Ziel:<br>
               <select class="form-select inputField" [(ngModel)]="endLocation" aria-label="Default select example">
-                @for (location of offer?.locations ; track location.id) {
-                  <option [value]="location.id">{{ location.zipCode }} {{ location.city }}</option>
+                @for (location of validEndLocations ; track location.id) {
+                  <option [ngValue]="location.stopNr">{{ location.zipCode }} {{ location.city }}</option>
                   }
               </select>
             </div>
