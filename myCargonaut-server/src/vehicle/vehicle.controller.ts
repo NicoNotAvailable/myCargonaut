@@ -37,8 +37,8 @@ import { extname, join } from 'path';
 import { diskStorage } from 'multer';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { UtilsService } from '../utils/utils.service';
-import { UpdateCarDTO } from "./DTO/UpdateCarDTO";
-import { UpdateTrailerDTO } from "./DTO/UpdateTrailerDTO";
+import { UpdateCarDTO } from './DTO/UpdateCarDTO';
+import { UpdateTrailerDTO } from './DTO/UpdateTrailerDTO';
 
 @ApiTags('vehicle')
 @Controller('vehicle')
@@ -76,7 +76,7 @@ export class VehicleController {
     }
     if (!body.length || body.length <= 0 || body.length > 100) {
       throw new BadRequestException(
-        'Auto muss länger al 0m und kürzer als 100m sein',
+        'Auto muss länger als 0m und kürzer als 100m sein',
       );
     }
     if (!body.height || body.height <= 0 || body.height > 100) {
@@ -130,7 +130,6 @@ export class VehicleController {
     }
     if (!body.length || body.length <= 0 || body.length > 100) {
       throw new BadRequestException(
-
         'Auto muss länger als 0m und kürzer als 100m sein',
       );
     }
@@ -156,7 +155,7 @@ export class VehicleController {
     car.width = body.width;
     car.length = body.length;
     car.hasTelevision = body.hasTelevision;
-      
+
     try {
       await this.vehicleService.updateCar(car);
       return new OkDTO(true, 'Car was updated');
