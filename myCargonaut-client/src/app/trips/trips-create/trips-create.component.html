@@ -12,11 +12,11 @@
           <input [(ngModel)]="cargoWeight" #weightInput="ngModel" type="text" name="weightInput"
                  class="rounded-5 p-2 w-100 mb-3" placeholder="max. Gewicht in kg (Bsp. 535,50)" required>
           <input [(ngModel)]="cargoLength" #lengthInput="ngModel" type="text" name="lengthInput"
-                 class="rounded-5 p-2 w-100 mb-3" placeholder="Länge in cm (Bsp. 3,20)" required>
+                 class="rounded-5 p-2 w-100 mb-3" placeholder="Länge in cm (Bsp. 320)" required>
           <input [(ngModel)]="cargoWidth" #widthInput="ngModel" type="text" name="widthInput"
-                 class="rounded-5 p-2 w-100 mb-3" placeholder="Breite in cm (Bsp. 1,30)" required>
+                 class="rounded-5 p-2 w-100 mb-3" placeholder="Breite in cm (Bsp. 130)" required>
           <input [(ngModel)]="cargoHeight" #heightInput="ngModel" type="text" name="heightInput"
-                 class="rounded-5 p-2 w-100 mb-3" placeholder="Höhe in cm (Bsp. 0,80)" required>
+                 class="rounded-5 p-2 w-100 mb-3" placeholder="Höhe in cm (Bsp. 80)" required>
         </div>
       </div>
     </form>
@@ -34,12 +34,12 @@
 
 @if (this.offerBool) {
       <div>
-        <div class="container-fluid greenBackground p-3 pb-5">
+        <div class="container-fluid greenBackground p-3">
           <div class="row mt-3">
             <div class="col-12 col-lg-6">
               <p class="text-light me-2">Dein Startpunkt:<br>
-                <select class="form-select inputField" [(ngModel)]="startLocation" (ngModelChange)="startpointChanged($event)" aria-label="Default select example">
-                @for (location of validStartLocations ; track location.id) {
+                <select class="form-select inputField" [(ngModel)]="startLocation" (ngModelChange)="startpointChanged()" aria-label="Default select example">
+                @for (location of validStartLocations ; track location.stopNr) {
                   <option [ngValue]="location.stopNr">{{ location.zipCode }} {{ location.city }}</option>
                 }
                 </select>
@@ -47,7 +47,7 @@
             <div class="col-12 col-lg-6 mt-3 mt-lg-0">
               <p class="text-light me-2">Dein Ziel:<br>
               <select class="form-select inputField" [(ngModel)]="endLocation" aria-label="Default select example">
-                @for (location of validEndLocations ; track location.id) {
+                @for (location of validEndLocations ; track location.stopNr) {
                   <option [ngValue]="location.stopNr">{{ location.zipCode }} {{ location.city }}</option>
                   }
               </select>
@@ -102,6 +102,11 @@
               <button (click)="openCargoModal(cargoModal)" type="button" class="btn btn-primary blueButton" data-toggle="modal" data-target="#cargoModal">Cargo hinzufügen</button>
               </div>
             </div>
+          <div class="row d-flex justify-content-center align-bottom text-end mt-3 me-3">
+            <div class="col-12">
+              <span class="text-danger">{{ errorMessage }}</span>
+            </div>
+          </div>
           </div>
           <div class="row mt-3 horizontal-center">
             <div class="col-6 col-lg-2 horizontal-center">
@@ -128,6 +133,11 @@
                   <option [value]="trailer.id">{{ trailer.name }}</option>
                 }
               </select>
+            </div>
+            <div class="row d-flex justify-content-center align-bottom text-end mt-3 me-3">
+              <div class="col-12">
+                <span class="text-danger">{{ errorMessage }}</span>
+              </div>
             </div>
           </div>
           <div class="row mt-3 horizontal-center">

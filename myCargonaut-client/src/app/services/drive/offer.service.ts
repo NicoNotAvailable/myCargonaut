@@ -129,6 +129,8 @@ export class OfferService {
       this.locations = [...this.stops]
       this.locations.push(this.endLocation);
       this.locations.unshift(this.startLocation);
+      console.log(this.stops)
+      console.log(this.locations)
       const locationsWithStopNr = this.locations.map((location, index) => {
         let stopNr;
 
@@ -147,6 +149,7 @@ export class OfferService {
         };
       });
 
+      console.log(locationsWithStopNr)
       if (!this.selectedTrailer) {
         offerData = {
           name: this.name,

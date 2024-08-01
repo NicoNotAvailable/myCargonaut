@@ -1,8 +1,8 @@
-import { Component, EventEmitter, inject, Input, Output, TemplateRef } from '@angular/core';
-import { FaIconComponent } from "@fortawesome/angular-fontawesome";
+import {Component, EventEmitter, inject, Input, Output, TemplateRef} from '@angular/core';
+import {FaIconComponent} from "@fortawesome/angular-fontawesome";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
-import { NgClass, NgForOf, NgIf } from '@angular/common';
-import { NgbInputDatepicker, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import {NgClass, NgForOf, NgIf} from '@angular/common';
+import {NgbInputDatepicker, NgbModal, NgbModalRef} from '@ng-bootstrap/ng-bootstrap';
 import {
   faArrowLeft,
   faArrowRight,
@@ -14,11 +14,11 @@ import {
   faX,
 } from '@fortawesome/free-solid-svg-icons';
 import {SessionService} from "../../services/session.service";
-import { Router } from '@angular/router';
-import { UserService } from '../../services/user.service';
-import { OfferService } from '../../services/drive/offer.service';
-import { LocationDrive } from '../LocationDrive';
-import { VehicleService } from '../../services/vehicle.service';
+import {Router} from '@angular/router';
+import {UserService} from '../../services/user.service';
+import {OfferService} from '../../services/drive/offer.service';
+import {LocationDrive} from '../LocationDrive';
+import {VehicleService} from '../../services/vehicle.service';
 
 @Component({
   selector: 'app-offer',
@@ -45,20 +45,20 @@ export class OfferComponent {
   @Input() editingOffer!: number;
   @Output() changeAddCar = new EventEmitter<void>();
 
-  hadTrailerSelection : boolean = false
+  hadTrailerSelection: boolean = false
 
   talkMode: number | null = null;
   seats: number | null = null;
 
-  editCarWeight:  number | null = null;
-  editCarLength:  number | null = null;
-  editCarWidth:  number | null = null;
-  editCarHeight:  number | null = null;
+  editCarWeight: number | null = null;
+  editCarLength: number | null = null;
+  editCarWidth: number | null = null;
+  editCarHeight: number | null = null;
 
-  editTrailerWeight:  number | null = null;
-  editTrailerLength:  number | null = null;
-  editTrailerWidth:  number | null = null;
-  editTrailerHeight:  number | null = null;
+  editTrailerWeight: number | null = null;
+  editTrailerLength: number | null = null;
+  editTrailerWidth: number | null = null;
+  editTrailerHeight: number | null = null;
 
   stopLand: string | null = null;
   stopPLZ: string | null = null;
@@ -75,7 +75,8 @@ export class OfferComponent {
   private trailerModalRef: NgbModalRef | undefined;
   private stopModalRef: NgbModalRef | undefined;
 
-  constructor(private modalService: NgbModal, private router: Router) {}
+  constructor(private modalService: NgbModal, private router: Router) {
+  }
 
   ngOnInit(): void {
     this.sessionService.checkLoginNum().then(isLoggedIn => {
@@ -101,8 +102,8 @@ export class OfferComponent {
   }
 
   changeSeatCount(num: any) {
-    if (num < 1) {
-      this.errorMessage = "Dein Auto kann nicht weniger als einen Sitz haben";
+    if (num < 0) {
+      this.errorMessage = "Gültige Anzahl der Sitze angeben";
       this.removeErrorMessage();
       return;
     }
@@ -124,7 +125,7 @@ export class OfferComponent {
       this.editCarWidth = this.offerService.maxCWidth;
       this.editCarHeight = this.offerService.maxCHeight;
 
-      this.carModalRef = this.modalService.open(content, { ariaLabelledBy: 'modal-car-title' })
+      this.carModalRef = this.modalService.open(content, {ariaLabelledBy: 'modal-car-title'})
     }
   }
 
@@ -143,12 +144,12 @@ export class OfferComponent {
       this.editTrailerWidth = this.offerService.maxTWidth;
       this.editTrailerHeight = this.offerService.maxTHeight;
 
-      this.trailerModalRef = this.modalService.open(content, { ariaLabelledBy: 'modal-trailer-title' })
+      this.trailerModalRef = this.modalService.open(content, {ariaLabelledBy: 'modal-trailer-title'})
     }
   }
 
   openStopModal(content: TemplateRef<any>) {
-    this.stopModalRef = this.modalService.open(content, { ariaLabelledBy: 'modal-stop-title' })
+    this.stopModalRef = this.modalService.open(content, {ariaLabelledBy: 'modal-stop-title'})
   }
 
   changeCarProperties() {
@@ -197,7 +198,7 @@ export class OfferComponent {
   }
 
   createSummaryOffer() {
-    this.router.navigate(['/summary'], { queryParams: { origin: 'createoffer' } })
+    this.router.navigate(['/summary'], {queryParams: {origin: 'createoffer'}})
   }
 
   editLocationClicked(content: TemplateRef<any>, index: number) {
@@ -214,7 +215,6 @@ export class OfferComponent {
   deleteStop(index: number) {
     this.offerService.stops.splice(index, 1);
   }
-
 
 
   addStopToArray() {
@@ -239,6 +239,7 @@ export class OfferComponent {
       this.stopModalRef.close();
     }
   }
+
   editStop() {
     if (this.stopLand != null && this.stopPLZ != null &&
       this.stopPlace != null) {
@@ -287,8 +288,8 @@ export class OfferComponent {
 
     if (!this.offerService.name?.trim()) errors.push('Bitte Namen für den Trip angeben');
     if (!this.offerService.price) errors.push('Bitte einen Preisvorschlag festlegen');
-    if (this.offerService.seats !== undefined && this.offerService.seats !== null && this.offerService.seats > 10)
-      errors.push('Bitte eine gültige Anzahl der Sitze bis 10 angeben');
+    if (this.offerService.seats !== undefined && this.offerService.seats !== null && this.offerService.seats > this.offerService.selectedCar?.seats! - 1)
+      errors.push('Bitte eine gültige Anzahl der Autositze');
 
     if (!this.offerService.date) errors.push('Bitte ein Datum festlegen');
     if (!this.offerService.time || !this.validTime()) errors.push('Bitte eine Uhrzeit festlegen');
@@ -298,15 +299,14 @@ export class OfferComponent {
     if (this.offerService.animalsAllowed === undefined)
       errors.push('Bitte angeben, ob sie Haustierbesitzer mitnehmen möchte');
 
-    if (!this.offerService.info || this.offerService.info < 1 || this.offerService.info > 3 ) errors.push('Bitte ihren Kommunikationswunsch angeben');
-    if (!this.offerService.priceType || this.offerService.priceType < 1 || this.offerService.priceType > 3 ) errors.push('Bitte eine Preisart festlegen');
+    if (!this.offerService.info || this.offerService.info < 1 || this.offerService.info > 3) errors.push('Bitte ihren Kommunikationswunsch angeben');
+    if (!this.offerService.priceType || this.offerService.priceType < 1 || this.offerService.priceType > 3) errors.push('Bitte eine Preisart festlegen');
 
     if (this.offerService.profilePic == "empty.png") errors.push('Bitte ein Profilbild hochladen vor dem Erstellen ihres Angebots');
 
     if (!this.offerService.selectedCar) {
       errors.push('Bitte ein Auto für die Fahrt auswählen');
-    }
-    else {
+    } else {
       if (this.offerService.maxCWeight! < 1 || this.offerService.maxCWeight! > 1000)
         errors.push('Autogewicht muss zwischen 1 und 1000kg sein');
       if (this.offerService.maxCLength! < 1 || this.offerService.maxCLength! > 1000)
@@ -351,18 +351,18 @@ export class OfferComponent {
         errors.push('Bitte gebe ein gültigen Wert für die Stadt im Zwischenstopp an');
     });
 
-    if (errors.length) {
-      if (errors.length > 2) {
-        errors.splice(2)
-        this.errorMessage= errors.join(', ');
-        this.errorMessage += " und weitere Fehler."
-      } else {
-        this.errorMessage= errors.join(', ');
-      }
-      this.removeErrorMessage();
-      return false;
+    if (!errors.length) {
+      return true;
     }
-    return true;
+    if (errors.length > 2) {
+      errors.splice(2)
+      this.errorMessage = errors.join(', ');
+      this.errorMessage += " und weitere Fehler."
+    } else {
+      this.errorMessage = errors.join(', ');
+    }
+    this.removeErrorMessage();
+    return false;
   }
 
   protected readonly faPenToSquare = faPenToSquare;

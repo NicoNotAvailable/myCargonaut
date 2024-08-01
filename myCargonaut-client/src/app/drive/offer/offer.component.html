@@ -11,11 +11,11 @@
             <input [(ngModel)]="editCarWeight" [ngModelOptions]="{standalone: true}" name="carWeight" required
                    type="number" class="rounded-5 p-2 mb-2 col-12" placeholder="max. Gewicht in kg (Bsp. 535,50)" id="carWeight">
             <input [(ngModel)]="editCarLength" [ngModelOptions]="{standalone: true}" name="carLength" required
-                   type="number" class="rounded-5 p-2 mb-2 col-12" placeholder="Länge in cm (Bsp. 3,20)" id="carLength">
+                   type="number" class="rounded-5 p-2 mb-2 col-12" placeholder="Länge in cm (Bsp. 320)" id="carLength">
             <input [(ngModel)]="editCarWidth" [ngModelOptions]="{standalone: true}" name="carWidth" required
-                   type="number" class="rounded-5 p-2 mb-2 col-12" placeholder="Breite in cm (Bsp. 1,30)" id="carWidth">
+                   type="number" class="rounded-5 p-2 mb-2 col-12" placeholder="Breite in cm (Bsp. 130)" id="carWidth">
             <input [(ngModel)]="editCarHeight" [ngModelOptions]="{standalone: true}" name="carHeight" required
-                   type="number" class="rounded-5 p-2 mb-2 col-12" placeholder="Höhe in cm (Bsp. 0,80)" id="carHeight">
+                   type="number" class="rounded-5 p-2 mb-2 col-12" placeholder="Höhe in cm (Bsp. 180)" id="carHeight">
           </div>
         </div>
       </form>
@@ -41,11 +41,11 @@
             <input [(ngModel)]="editTrailerWeight" [ngModelOptions]="{standalone: true}" name="trailerWeight" required
                    type="text" class="rounded-5 p-2 mb-2 col-12" placeholder="max. Gewicht in kg (Bsp. 535,50)" id="trailerWeight">
             <input [(ngModel)]="editTrailerLength" [ngModelOptions]="{standalone: true}" name="trailerLength" required
-                   type="text" class="rounded-5 p-2 mb-2 col-12" placeholder="Länge in cm (Bsp. 3,20)" id="trailerLength">
+                   type="text" class="rounded-5 p-2 mb-2 col-12" placeholder="Länge in cm (Bsp. 320)" id="trailerLength">
             <input [(ngModel)]="editTrailerWidth" [ngModelOptions]="{standalone: true}" name="trailerWidth" required
-                   type="text" class="rounded-5 p-2 mb-2 col-12" placeholder="Breite in cm (Bsp. 1,30)" id="trailerWidth">
+                   type="text" class="rounded-5 p-2 mb-2 col-12" placeholder="Breite in cm (Bsp. 130)" id="trailerWidth">
             <input [(ngModel)]="editTrailerHeight" [ngModelOptions]="{standalone: true}" name="trailerHeight" required
-                   type="text" class="rounded-5 p-2 mb-2 col-12" placeholder="Höhe in cm (Bsp. 0,80)" id="trailerHeight">
+                   type="text" class="rounded-5 p-2 mb-2 col-12" placeholder="Höhe in cm (Bsp. 80)" id="trailerHeight">
           </div>
         </div>
       </form>
@@ -96,9 +96,13 @@
       <div class="p-5" id="addOfferArea">
         <div class="row mb-5 justify-content-between">
           <div class="col-xl-3 col-12" *ngIf="editingOffer == 0">
-            <h2 class="textGreen col-7 mt-5">Sitze:</h2>
+            <h2 class="textGreen mt-5">Verfügbare Sitze:</h2>
             <div class="row mt-4">
               <div class="hstack justify-content-between">
+                <button (click)="changeSeatCount(1)" [ngClass]="offerService.seats === 1 ? 'selectedButton' : 'deselectedButton'"
+                        type="button" class="btn rounded-3 py-1 px-3 text-light">
+                  <h2>1</h2>
+                </button>
                 <button (click)="changeSeatCount(2)" [ngClass]="offerService.seats === 2 ? 'selectedButton' : 'deselectedButton'"
                         type="button" class="btn rounded-3 py-1 px-3 text-light">
                   <h2>2</h2>
@@ -110,10 +114,6 @@
                 <button (click)="changeSeatCount(4)" [ngClass]="offerService.seats === 4 ? 'selectedButton' : 'deselectedButton'"
                         type="button" class="btn rounded-3 py-1 px-3 text-light">
                   <h2>4</h2>
-                </button>
-                <button (click)="changeSeatCount(5)" [ngClass]="offerService.seats === 5 ? 'selectedButton' : 'deselectedButton'"
-                        type="button" class="btn rounded-3 py-1 px-3 text-light">
-                  <h2>5</h2>
                 </button>
               </div>
             </div>
@@ -128,7 +128,7 @@
               </div>
             </div>
 
-            <button (click)="changeSeatCount(1)" [ngClass]="offerService.seats === 1 ? 'selectedButton' : 'deselectedButton'"
+            <button (click)="changeSeatCount(0)" [ngClass]="offerService.seats === 0 ? 'selectedButton' : 'deselectedButton'"
                     type="button" class="btn rounded-3 text-light w-100">
               <h2>Nur Cargo</h2>
             </button>

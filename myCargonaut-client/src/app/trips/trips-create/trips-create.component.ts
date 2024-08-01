@@ -1,19 +1,19 @@
-import { Component, inject, Input, OnInit, TemplateRef } from '@angular/core';
+import {Component, inject, Input, OnInit, TemplateRef} from '@angular/core';
 import {NgForOf, NgOptimizedImage} from "@angular/common";
-import { ActivatedRoute } from '@angular/router';
-import { GetOffer } from '../GetOffer';
-import { GetRequest } from '../GetRequest';
-import { faCircle, faCirclePlus, faPenToSquare, faSave, faX } from '@fortawesome/free-solid-svg-icons';
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { Cargo } from '../../drive/Cargo';
-import { RequestService } from '../../services/drive/request.service';
-import { SessionService } from '../../services/session.service';
-import { VehicleService } from '../../services/vehicle.service';
-import { Car } from "../../profile/Car";
-import { Trailer } from "../../profile/Trailer";
-import { TripsService } from '../../services/trips.service';
+import {ActivatedRoute} from '@angular/router';
+import {GetOffer} from '../GetOffer';
+import {GetRequest} from '../GetRequest';
+import {faCircle, faCirclePlus, faPenToSquare, faSave, faX} from '@fortawesome/free-solid-svg-icons';
+import {FaIconComponent} from '@fortawesome/angular-fontawesome';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {NgbModal, NgbModalRef} from '@ng-bootstrap/ng-bootstrap';
+import {Cargo} from '../../drive/Cargo';
+import {RequestService} from '../../services/drive/request.service';
+import {SessionService} from '../../services/session.service';
+import {VehicleService} from '../../services/vehicle.service';
+import {Car} from "../../profile/Car";
+import {Trailer} from "../../profile/Trailer";
+import {TripsService} from '../../services/trips.service';
 
 @Component({
   selector: 'app-trips-create',
@@ -43,7 +43,7 @@ export class TripsCreateComponent implements OnInit {
   cargoHeight: number | null = null;
   cargoWeight: number | null = null;
 
-   cars: Car[] = [];
+  cars: Car[] = [];
   trailers: Trailer[] = [];
 
   selectedCar: number | null = null;
@@ -57,23 +57,23 @@ export class TripsCreateComponent implements OnInit {
   startLocation: number | null = null;
   endLocation: number | null = null;
 
+  errorMessage: string = "";
+
   constructor(
     private route: ActivatedRoute,
     private modalService: NgbModal,
     private vehicleService: VehicleService,
-
-  ) {}
+  ) {
+  }
 
   ngOnInit(): void {
     this.route.params.subscribe(params => {
       if (params ['type'] == "offer") {
         console.log(this.offer?.locations);
 
-      setTimeout(  () => {
-        this.validStartLocations = this.offer?.locations.slice(0,-1)
+        this.validStartLocations = this.offer?.locations.slice(0, this.offer?.locations.length - 1)
         console.log(this.validStartLocations);
         console.log(this.offer?.locations);
-      }, 2000)
 
         this.offerBool = true;
       } else if (params ['type'] == "request") {
@@ -87,7 +87,7 @@ export class TripsCreateComponent implements OnInit {
   }
 
   openCargoModal(content: TemplateRef<any>) {
-    this.cargoModalRef = this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' });
+    this.cargoModalRef = this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'});
   }
 
   addCargoToArray() {
@@ -103,10 +103,8 @@ export class TripsCreateComponent implements OnInit {
       this.cargoLength = null;
       this.cargoWidth = null;
       this.cargoHeight = null;
-    } else {
-
     }
-    // Close the modal
+
     if (this.cargoModalRef) {
       this.cargoModalRef.close();
     }
@@ -117,7 +115,7 @@ export class TripsCreateComponent implements OnInit {
   }
 
   getCars(): void {
-    this.vehicleService.readCars().subscribe( {
+    this.vehicleService.readCars().subscribe({
       next: (data: any) => {
         this.cars = data;
       },
@@ -126,8 +124,9 @@ export class TripsCreateComponent implements OnInit {
       },
     });
   }
+
   getTrailers(): void {
-    this.vehicleService.readTrailers().subscribe( {
+    this.vehicleService.readTrailers().subscribe({
       next: (data: any) => {
         this.trailers = data;
       },
@@ -142,7 +141,7 @@ export class TripsCreateComponent implements OnInit {
     let tripData: any;
 
     if (this.selectedTrailer) {
-       tripData = {
+      tripData = {
         driveID: this.request?.id,
         carID: this.selectedCar,
         trailerID: this.selectedTrailer,
@@ -178,32 +177,48 @@ export class TripsCreateComponent implements OnInit {
       cargo: this.cargoDataArray,
     };
     if (tripData.startLocation === 0 || tripData.startLocation === null) {
-      console.error('Location was not found');
+      this.errorMessage = "Bitte gebe deinen Startpunkt an";
+      setTimeout(() => {
+        this.errorMessage = "";
+      }, 5000);
+    } else if (tripData.endLocation === 0 || tripData.endLocation === null) {
+      this.errorMessage = "Bitte gebe dein Ziel an";
+      setTimeout(() => {
+        this.errorMessage;
+      }, 5000);
+    } else if (tripData.seats === 0 || tripData.seats === null) {
+      this.errorMessage = "Bitte lege fest, wie viele Personen mitkommen";
+      setTimeout(() => {
+        this.errorMessage = "";
+      }, 5000);
+    } else if (tripData.seats > this.offer?.seats!) {
+      this.errorMessage = "Zu viele Personen für diese Fahrt";
+      setTimeout(() => {
+        this.errorMessage = "";
+      }, 5000);
+    } else {
+      this.tripsService.createOfferTrip(tripData).subscribe(
+        () => {
+          setTimeout(() => {
+            window.location.href = "/chats";
+          }, 200);
+        }, error => {
+          console.error('There was an error!', error);
+        },
+      );
     }
-    if (tripData.endLocation === 0 || tripData.endLocation === null) {
-      console.error('Location was not found');
-    }
-    this.tripsService.createOfferTrip(tripData).subscribe(
-      () => {
-        setTimeout(() => {
-          window.location.href = "/chats";
-        }, 200);
-      }, error => {
-        console.error('There was an error!', error);
-      },
-    );
+
   }
 
   deleteCargo(index: number) {
     this.requestService.cargos.splice(index, 1);
   }
 
-  startpointChanged(event: Event) {
+  startpointChanged() {
     this.validEndLocations = this.offer?.locations.slice(this.startLocation!);
     console.log(this.validEndLocations)
     console.log(this.startLocation)
   }
-
 
 
   @Input() offer!: GetOffer | undefined;

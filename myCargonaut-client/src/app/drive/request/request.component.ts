@@ -120,8 +120,8 @@ export class RequestComponent {
   }
 
   changeSeatCount(num: any) {
-    if (num < 1) {
-      this.errorMessage = "Dein Auto kann nicht weniger als einen Sitz haben";
+    if (num < 0) {
+      this.errorMessage = "Gebe eine gültige Anzahl an Sitzen an";
       this.removeErrorMessage();
       return;
     }
@@ -219,8 +219,8 @@ export class RequestComponent {
 
     if (!this.requestService.name?.trim()) errors.push('Bitte Namen für den Trip angeben');
     if (!this.requestService.price) errors.push('Bitte einen Preisvorschlag festlegen');
-    if (this.requestService.seats == undefined || this.requestService.seats > 10)
-      errors.push('Bitte eine gültige Anzahl der Sitze bis 10 angeben');
+    if (this.requestService.seats == undefined || this.requestService.seats > 9)
+      errors.push('Bitte eine gültige Anzahl der Sitze bis 9 angeben');
     if (!this.requestService.date) errors.push('Bitte ein Datum festlegen');
     if (!this.requestService.time || !this.validTime()) errors.push('Bitte eine Uhrzeit festlegen');
 

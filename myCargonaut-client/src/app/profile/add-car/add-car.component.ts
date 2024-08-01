@@ -68,7 +68,7 @@ export class AddCarComponent {
       name: this.model,
       weight: this.weight == null? 0 : this.weight,
       length: this.length == null ? 0 : this.length,
-      height: this.height == null? 0 : this.height,
+      height: this.height == null ? 0 : this.height,
       width: this.width == null ? 0 : this.width,
       seats: this.seats == null ? 0 : this.seats,
       hasAC: this.hasAc,
@@ -97,7 +97,7 @@ export class AddCarComponent {
         },
         error => {
           console.error(error);
-          this.errorMessage = error.error.message || "Bitte überprüfen Sie die eingabe";
+          this.errorMessage = error.error.message || "Bitte überprüfen Sie die Eingabe";
           this.removeErrorMessage();
         }
       );

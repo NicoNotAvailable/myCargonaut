@@ -5,15 +5,18 @@
       <div class="row">
         <div class="col-2"></div>
         <div class="col-3">
-          <span>Zwischenziele:</span><br>
+          <p>Zwischenziele:</p>
           <span class="fw-bold">
-            @for (location of offer?.locations ; track $index) {
-              @if (location.stopNr != 1 && location.stopNr != 100) {
-                <span class="highlightText">{{ location.zipCode }} {{ location.city }}</span>
-                <p class="highlightText">{{ location.country }} </p>
-              } @else {
-                <span class="highlightText">-</span>
+            @if (offer?.locations!.length != 2) {
+              @for (location of offer?.locations; track $index) {
+                @if (location.stopNr != 1 && location.stopNr != 100) {
+                  <span class="highlightText">{{ location.zipCode }} {{ location.city }}</span>
+                  <p class="highlightText">{{ location.country }} </p>
+                }
               }
+            } @else {
+              <br>
+              - keine
             }
           </span>
         </div>
@@ -28,7 +31,7 @@
             <span>Auto:</span>
           </div>
           <div class="col-12 col-md-8 col-lg-4 text-end fw-bold">
-            <span>{{ (carModel|| "loading") }}</span>
+            <span>{{ (carModel || "loading") }}</span>
           </div>
           <div class="col-3 text-start ">
             <span>Anhänger:</span>
@@ -54,12 +57,14 @@
             <span>Maximale Maße:</span>
           </div>
           <div class="col-12 col-md-8 col-lg-4 text-end fw-bold">
-            <span>{{ (offer?.maxCLength || "") }}cm / {{ (offer?.maxCWidth || "") }}cm / {{ (offer?.maxCHeight || "") }}cm</span>
+            <span>{{ (offer?.maxCLength || "") }}cm / {{ (offer?.maxCWidth || "") }}cm / {{ (offer?.maxCHeight || "") }}
+              cm</span>
           </div>
           <div class="col-3">
           </div>
           <div class="col-3 text-end fw-bold">
-            <span>{{ (offer?.maxTLength || "") }}cm / {{ (offer?.maxTWidth || "") }}cm / {{ (offer?.maxTHeight || "") }}cm</span>
+            <span>{{ (offer?.maxTLength || "") }}cm / {{ (offer?.maxTWidth || "") }}cm / {{ (offer?.maxTHeight || "") }}
+              cm</span>
           </div>
         </div>
         <div class="row ms-3 me-3 mb-4">
@@ -72,30 +77,32 @@
         </div>
         <div class="row ms-3 me-3 mb-4">
           <div class="col-12 col-md-8 col-lg-2 text-start">
-            <strong>{{carTV? "Fernseher," : ""}}</strong>
-            <strong>{{carAC? "Klimaanlage" : "keine Klimaanlage"}}</strong>
+            <strong>{{ carTV ? "Fernseher," : "" }}</strong>
+            <strong>{{ carAC ? "Klimaanlage" : "keine Klimaanlage" }}</strong>
           </div>
           <div class="col-4"></div>
           <div class="col-12 col-md-8 col-lg-4 text-start">
-            <strong>{{trailerCool? "gekühlt" : "ungekühlt"}}</strong>
-            <strong>{{trailerEnclosed? ",mit Abdeckung" : ",ohne Abdeckung"}}</strong>
+            <strong>{{ trailerCool ? "gekühlt" : "ungekühlt" }}</strong>
+            <strong>{{ trailerEnclosed ? ",mit Abdeckung" : ",ohne Abdeckung" }}</strong>
           </div>
         </div>
         <div class="row ms-3 me-3 mb-4">
           <div class="col-12 col-md-8 col-lg-2 text-start fw-bold">
-            <strong>{{offer?.smokingAllowed? "Rauchen ist erlaubt" : "Rauchen ist nicht erlaubt"}}</strong>
-            <strong>{{offer?.animalsAllowed? "Tiere sind erlaubt" : "Tiere sind nicht erlaubt"}}</strong>
+            <strong>{{ offer?.smokingAllowed ? "Rauchen ist erlaubt" : "Rauchen ist nicht erlaubt" }}</strong>
+            <strong>{{ offer?.animalsAllowed ? "Tiere sind erlaubt" : "Tiere sind nicht erlaubt" }}</strong>
 
           </div>
           <div class="col-12 col-md-8 col-lg-4">
           </div>
           <div class="col-3 text-start fw-bold">
             <span>
-              @if (offer?.info == 1) { gerne quatschen!
-            } @else if (offer?.info == 2) {
-              lieber nur Musik hören
-            } @else if (offer?.info == 3) {
-              ich passe mich gerne an!}
+              @if (offer?.info == 1) {
+                gerne quatschen!
+              } @else if (offer?.info == 2) {
+                lieber nur Musik hören
+              } @else if (offer?.info == 3) {
+                ich passe mich gerne an!
+              }
             </span>
           </div>
           <div class="col-3">
@@ -121,69 +128,75 @@
             <span>Sitzplätze:</span>
           </div>
           <div class="col-12 col-md-8 col-lg-4 text-start fw-bold">
-            <span>{{ (request?.seats || "") }}</span>
+            <span>{{ (request?.seats) }}</span>
           </div>
         </div>
         <div class="row ms-3 me-3 mb-4">
           <div class="col-12 col-md-8 col-lg-4 text-start fw-bold">
-            <strong>{{request?.smokingAllowed? "Ich würde gerne rauchen" : "ich bin Nichtraucher"}}</strong>
+            <strong>{{ request?.smokingAllowed ? "Ich würde gerne rauchen" : "ich bin Nichtraucher" }}</strong>
           </div>
           <div class="col-12 col-md-8 col-lg-3 text-start fw-bold">
-            <div class="d-flex justify-content-end"><strong>{{request?.animalsAllowed? "Ich habe Tier(e) dabei" : "Ich habe keine Tiere dabei"}}</strong></div>
+            <div class="d-flex justify-content-end">
+              <strong>{{ request?.animalsAllowed ? "Ich habe Tier(e) dabei" : "Ich habe keine Tiere dabei" }}</strong>
+            </div>
           </div>
           <div class="col-4 text-end fw-bold">
-            <span> @if (request?.info == 1) { gerne quatschen!
+            <span> @if (request?.info == 1) {
+              gerne quatschen!
             } @else if (request?.info == 2) {
               lieber nur Musik hören
             } @else if (request?.info == 3) {
-              ich passe mich gerne an!}</span>
+              ich passe mich gerne an!
+            }</span>
           </div>
         </div>
         @if (request?.cargo != undefined) {
-        <div class="row ms-3 me-3 mb-4 blueHeader fw-bold">
-          <span>Cargo</span>
-        </div>
-        @for (cargo of request?.cargo ; track $index) {
-        <div class="col-10 col-md-8 col-lg-12 p-2 field">
-          <div class="row ms-1 me-3 mb-3 mt-2 fw-bold fs-5">
-            <span>{{ (cargo?.description || "") }}</span>
+          <div class="row ms-3 me-3 mb-4 blueHeader fw-bold">
+            <span>Cargo</span>
           </div>
-          <div class="row ms-1 me-3 mb-4">
-            <div class="col-3">
-              <span>Länge:</span>
+          @for (cargo of request?.cargo; track $index) {
+            <div class="col-10 col-md-8 col-lg-12 p-2 field">
+              <div class="row ms-1 me-3 mb-3 mt-2 fw-bold fs-5">
+                <span>{{ (cargo?.description || "") }}</span>
+              </div>
+              <div class="row ms-1 me-3 mb-4">
+                <div class="col-3">
+                  <span>Länge:</span>
+                </div>
+                <div class="col-3 fw-bold">
+                  <span>{{ (cargo?.length || "") }} cm </span>
+                </div>
+                <div class="col-3">
+                  <span>Gewicht:</span>
+                </div>
+                <div class="col-3 fw-bold">
+                  <span>{{ (cargo?.weight || "") }} kg</span>
+                </div>
+              </div>
+              <div class="row ms-1 me-3 mb-4">
+                <div class="col-3">
+                  <span>Breite</span>
+                </div>
+                <div class="col-3 fw-bold">
+                  <span>{{ (cargo?.width || "") }} cm</span>
+                </div>
+              </div>
+              <div class="row ms-1 me-3 mb-4">
+                <div class="col-3">
+                  <span>Höhe:</span>
+                </div>
+                <div class="col-3 fw-bold">
+                  <span>{{ (cargo?.height || "") }} cm</span>
+                </div>
+              </div>
             </div>
-            <div class="col-3 fw-bold">
-              <span>{{ (cargo?.length || "") }} cm </span>
-            </div>
-            <div class="col-3">
-              <span>Gewicht:</span>
-            </div>
-            <div class="col-3 fw-bold">
-              <span>{{ (cargo?.weight || "") }} kg</span>
-            </div>
-          </div>
-          <div class="row ms-1 me-3 mb-4">
-            <div class="col-3">
-              <span>Breite</span>
-            </div>
-            <div class="col-3 fw-bold">
-              <span>{{ (cargo?.width || "") }} cm</span>
-            </div>
-          </div>
-          <div class="row ms-1 me-3 mb-4">
-            <div class="col-3">
-              <span>Höhe:</span>
-            </div>
-            <div class="col-3 fw-bold">
-              <span>{{ (cargo?.height || "") }} cm</span>
-            </div>
-          </div>
-        </div>
           }
         }
         <div class="row justify-content-center">
           <div class="col-12 col-md-8 col-lg-10 mt-5 mb-3 text-center">
-            <button type="submit" class="btn blueButton ps-5 pe-5" (click)="onSendRequestClick()">Jetzt Anfrage schicken!</button>
+            <button type="submit" class="btn blueButton ps-5 pe-5" (click)="onSendRequestClick()">Jetzt Anfrage
+              schicken!
+            </button>
           </div>
         </div>
       </div>

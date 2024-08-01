@@ -13,11 +13,11 @@
             <input [(ngModel)]="cargoWeight" #cargoWeightInput="ngModel" type="text" name="weightInput"
                    class="rounded-5 p-2 w-100 mb-3" placeholder="max. Gewicht in kg (Bsp. 535,50)" required>
             <input [(ngModel)]="cargoLength" #cargoLengthInput="ngModel" type="text" name="lengthInput"
-                   class="rounded-5 p-2 w-100 mb-3" placeholder="Länge in cm (Bsp. 3,20)" required>
+                   class="rounded-5 p-2 w-100 mb-3" placeholder="Länge in cm (Bsp. 320)" required>
             <input [(ngModel)]="cargoWidth" #cargoWidthInput="ngModel" type="text" name="widthInput"
-                   class="rounded-5 p-2 w-100 mb-3" placeholder="Breite in cm (Bsp. 1,30)" required>
+                   class="rounded-5 p-2 w-100 mb-3" placeholder="Breite in cm (Bsp. 130)" required>
             <input [(ngModel)]="cargoHeight" #cargoHeightInput="ngModel" type="text" name="heightInput"
-                   class="rounded-5 p-2 w-100 mb-3" placeholder="Höhe in cm (Bsp. 0,80)" required>
+                   class="rounded-5 p-2 w-100 mb-3" placeholder="Höhe in cm (Bsp. 80)" required>
           </div>
         </div>
       </form>
@@ -36,9 +36,13 @@
       <div class="p-5" id="addOfferArea">
         <div class="row mb-5 justify-content-between">
           <div class="col-xl-3 col-12">
-            <h2 class="textGreen col-7 mt-5">Sitze:</h2>
+            <h2 class="textGreen mt-5">Benötigte Sitze:</h2>
             <div class="row mt-4">
               <div class="hstack justify-content-between">
+                <button (click)="changeSeatCount(1)" [ngClass]="requestService.seats === 1 ? 'selectedButton' : 'deselectedButton'"
+                        type="button" class="btn rounded-3 py-1 px-3 text-light">
+                  <h2>1</h2>
+                </button>
                 <button (click)="changeSeatCount(2)" [ngClass]="requestService.seats === 2 ? 'selectedButton' : 'deselectedButton'"
                         type="button" class="btn rounded-3 py-1 px-3 text-light">
                   <h2>2</h2>
@@ -50,10 +54,6 @@
                 <button (click)="changeSeatCount(4)" [ngClass]="requestService.seats === 4 ? 'selectedButton' : 'deselectedButton'"
                         type="button" class="btn rounded-3 py-1 px-3 text-light">
                   <h2>4</h2>
-                </button>
-                <button (click)="changeSeatCount(5)" [ngClass]="requestService.seats === 5 ? 'selectedButton' : 'deselectedButton'"
-                        type="button" class="btn rounded-3 py-1 px-3 text-light">
-                  <h2>5</h2>
                 </button>
               </div>
             </div>
@@ -68,7 +68,7 @@
               </div>
             </div>
 
-            <button (click)="changeSeatCount(1)" [ngClass]="requestService.seats === 1 ? 'selectedButton' : 'deselectedButton'"
+            <button (click)="changeSeatCount(0)" [ngClass]="requestService.seats === 0 ? 'selectedButton' : 'deselectedButton'"
                     type="button" class="btn rounded-3 text-light w-100">
               <h2>Nur Cargo</h2>
             </button>
@@ -207,7 +207,7 @@
             <div class="col-12 mt-2">
               <input [(ngModel)]="this.requestService.time" [ngModelOptions]="{standalone: true}" name="timeInput" required
                      pattern="^(2[0-3]|[01]?[0-9]):([0-5]?[0-9])$"
-                     type="text" class="rounded-5 p-2 col-12" placeholder="Uhrzeit" id="timeInput">
+                     type="text" class="rounded-5 p-2 col-12" placeholder="Uhrzeit (10:30)" id="timeInput">
             </div>
 
             <h2 class="textGreen col-12 mt-5">Startpunkt</h2>

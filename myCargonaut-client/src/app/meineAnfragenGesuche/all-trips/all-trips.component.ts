@@ -213,10 +213,6 @@ export class AllTripsComponent {
             locations: requestDriveTrips.locations || []
 
           }));
-        console.log(requestDriveTrips.locations + "Test");
-        console.log(requestTrips.locations + "Test");
-        console.log(offerDriveTrips.locations + "Test");
-        console.log(offerTrips.locations + "Test");
         // Combine all trips into activeTrips
         this.activeTrips = [].concat(offerTrips, requestTrips, offerDriveTrips, requestDriveTrips);
         console.log('Active Trips:', this.activeTrips);

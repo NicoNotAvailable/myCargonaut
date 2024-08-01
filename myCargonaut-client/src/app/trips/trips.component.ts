@@ -72,6 +72,7 @@ export class TripsComponent implements OnInit {
     this.driveService.readOffer(id).subscribe({
       next: (data: GetOffer) => {
         this.offer = data;
+        console.log(this.offer);
         this.rating = this.offer.user.rating;
         console.log('Offer Details:', this.offer);
       },
