@@ -42,8 +42,6 @@ export class SummaryComponent {
       if (!this.isLoggedIn) {
         window.location.href = "/profile";
       }
-      console.log(this.offerService.locations);
-      console.log(this.offerService.stops);
     });
 
     this.route.queryParams.subscribe(params => {

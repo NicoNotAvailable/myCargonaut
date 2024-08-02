@@ -51,8 +51,6 @@ export class AllTripsComponent {
       if (currentUser != -1) {
         this.isLoggedIn = true;
         this.userID = currentUser;
-        console.log(currentUser + ' this is the user ID');
-        console.log(this.userID + ' this is the user ID');
         this.getAllTrips(); // Move getAllTrips() here
         this.loadTripsData();
       } else {
@@ -134,7 +132,6 @@ export class AllTripsComponent {
   }
 
   handleButtonClick(number: number) {
-    console.log(number);
     this.sendTripId(number)
   }
 
@@ -142,16 +139,10 @@ export class AllTripsComponent {
     this.tripService.changeTripId(number);  // Update the trip ID in the service
     this.router.navigate(['/review']);      // Navigate to the review route
   }
-  handleButtonClick2(number: number) {
-    console.log(number);
-  }
 
   getAllTrips() {
-    console.log("getAllTrips");
     this.http.get('http://localhost:8000/trip/user-trips/' + this.userID, { withCredentials: true }).subscribe(
       (response: any) => {
-        // Log the response to understand its structure
-        console.log('Response:', response);
 
         const offerTrips = response.offerTrips
           .filter((offerTrip: any) => offerTrip.drive && (offerTrip.drive.status === 3 || offerTrip.drive.status === 4 || offerTrip.drive.status === 5))
@@ -215,8 +206,6 @@ export class AllTripsComponent {
           }));
         // Combine all trips into activeTrips
         this.activeTrips = [].concat(offerTrips, requestTrips, offerDriveTrips, requestDriveTrips);
-        console.log('Active Trips:', this.activeTrips);
-        console.log("Requesst:", this.allRequests)
       },
       error => {
         console.error('Error fetching requests:', error);

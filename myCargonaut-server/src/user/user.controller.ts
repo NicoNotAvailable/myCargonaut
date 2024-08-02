@@ -87,7 +87,7 @@ export class UserController {
     try {
       user = await this.userService.getUserById(id);
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
     return this.utilsService.transformUserToGetOtherUserDTO(user);
   }
@@ -101,7 +101,7 @@ export class UserController {
       user = await this.userService.getUserById(session.currentUser);
       rating = await this.reviewService.getRating(session.currentUser);
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
     const dto: GetOwnUserDTO = new GetOwnUserDTO();
     dto.lastName = user.lastName;

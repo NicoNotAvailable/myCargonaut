@@ -124,15 +124,12 @@ export class MeineLetztenFahrtenComponent {
   }
 
   handleButtonClick(number: number) {
-    console.log(number);
     this.tripService.changeTripId(number);
     this.router.navigate(['/review']);  }
 
   handleButtonClick2(number: number) {
-    console.log(number);
     this.tripService.changeTripId(number);
     this.router.navigate(['/review']);
-
   }
 
   protected readonly window = window;

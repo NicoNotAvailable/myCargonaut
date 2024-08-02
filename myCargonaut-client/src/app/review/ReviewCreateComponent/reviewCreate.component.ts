@@ -53,7 +53,6 @@ export class ReviewCreateComponent {
     // Subscribe to the trip ID from the service
     this.tripService.currentTripId.subscribe(id => {
       this.tripId = id;
-      console.log(this.tripId + "hallo?");  // Will log the trip ID whenever it changes
     });
     this.getAllTrips()
 
@@ -88,9 +87,6 @@ export class ReviewCreateComponent {
    * then handles the server response and any errors.
    */
   createReview(){
-    console.log("createReview");
-    console.log(this.tripId);
-
 
     const reviewData = {
       tripId: this.tripId,
@@ -101,7 +97,6 @@ export class ReviewCreateComponent {
     this.http.post("http://localhost:8000/review",reviewData, { withCredentials: true })
       .subscribe(
         response => {
-          console.log('Review added successfully', response);
           this.router.navigate(['/myOffer']);
 
         },
@@ -235,15 +230,11 @@ export class ReviewCreateComponent {
 
 
   getAllTrips() {
-    console.log("Fetching trips...");
     this.http.get<any>('http://localhost:8000/trip/user-trips/' + this.currentUserID, { withCredentials: true }).subscribe(
       (response) => {
-        console.log('Response:', response);
 
         // Assign fetched trips to class properties
         this.offerTrips = response.offerTrips || [];
-        console.log(this.offerTrips.length + "hallo " );
-        console.log(this.offerTrips );
         this.offerDriveTrips = response.offerDriveTrips || [];
         this.requestTrips = response.requestTrips || [];
         this.requestDriveTrips = response.requestDriveTrips || [];
@@ -270,12 +261,8 @@ export class ReviewCreateComponent {
 
       if (trip.id === this.tripId && trip.requesting && trip.requesting.id === this.currentUserID) {
         this.isUserInvolved = true;
-        console.log('OfferTrips:', this.isUserInvolved);
-
       }
     }
-
-    console.log('OfferTrips:', this.isUserInvolved);
     return this.isUserInvolved;
   }
 
@@ -289,13 +276,8 @@ export class ReviewCreateComponent {
 
       if (trip.id === this.tripId && trip.requesting && trip.requesting.id === this.currentUserID) {
         this.isUserInvolved = true;
-        console.log('ReqeustTrips', this.isUserInvolved);
-
       }
     }
-
-    console.log('ReqeustTrips', this.isUserInvolved);
-
     return this.isUserInvolved;
   }
 
@@ -309,12 +291,8 @@ export class ReviewCreateComponent {
 
       if (trip.id === this.tripId && trip.requesting && trip.requesting.id === this.currentUserID) {
         this.isUserInvolved = true;
-        console.log('offerDriveTrips:', this.isUserInvolved);
       }
     }
-
-
-    console.log('offerDriveTrips:', this.isUserInvolved);
     return this.isUserInvolved;
   }
 
@@ -327,12 +305,8 @@ export class ReviewCreateComponent {
 
       if (trip.id === this.tripId && trip.requesting && trip.requesting.id === this.currentUserID) {
         this.isUserInvolved = true;
-        console.log('requestDriveTrips:', this.isUserInvolved);
       }
     }
-
-
-    console.log('requestDriveTrips:', this.isUserInvolved);
     return this.isUserInvolved;
   }
 

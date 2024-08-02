@@ -108,7 +108,6 @@ export class AddCarComponent {
     this.vehicleService.readCars().subscribe(
       response => {
         this.editingCar = response[response.length - 1].id;
-        console.log(this.editingCar);
       },
       error => {
         console.error(error);

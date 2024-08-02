@@ -69,12 +69,7 @@ export class TripsCreateComponent implements OnInit {
   ngOnInit(): void {
     this.route.params.subscribe(params => {
       if (params ['type'] == "offer") {
-        console.log(this.offer?.locations);
-
-        this.validStartLocations = this.offer?.locations.slice(0, this.offer?.locations.length - 1)
-        console.log(this.validStartLocations);
-        console.log(this.offer?.locations);
-
+        this.validStartLocations = this.offer?.locations.slice(0, this.offer?.locations.length - 1);
         this.offerBool = true;
       } else if (params ['type'] == "request") {
         this.requestBool = true
@@ -96,7 +91,6 @@ export class TripsCreateComponent implements OnInit {
       this.cargoHeight != null) {
       const newCargo = new Cargo(this.cargoDescription, this.cargoWeight, this.cargoLength, this.cargoWidth, this.cargoHeight);
       this.requestService.addCargo(newCargo);
-      console.log('Cargo added:', newCargo);
 
       this.cargoDescription = null;
       this.cargoWeight = null;
@@ -216,8 +210,6 @@ export class TripsCreateComponent implements OnInit {
 
   startpointChanged() {
     this.validEndLocations = this.offer?.locations.slice(this.startLocation!);
-    console.log(this.validEndLocations)
-    console.log(this.startLocation)
   }
 
 

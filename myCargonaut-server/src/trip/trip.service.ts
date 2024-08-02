@@ -219,7 +219,6 @@ export class TripService {
     await this.tripRepository.remove(trip);
   }
   async getUserTrips(user: number) {
-    console.log('userId ' + user);
     const offerTrips = await this.offerTripRepository.find({
       where: { requesting: { id: user } },
       relations: ['requesting', 'drive', 'messages', 'drive.user'],

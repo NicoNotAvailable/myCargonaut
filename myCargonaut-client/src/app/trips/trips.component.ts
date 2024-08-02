@@ -72,9 +72,7 @@ export class TripsComponent implements OnInit {
     this.driveService.readOffer(id).subscribe({
       next: (data: GetOffer) => {
         this.offer = data;
-        console.log(this.offer);
         this.rating = this.offer.user.rating;
-        console.log('Offer Details:', this.offer);
       },
       error: (error) => {
         console.error('Error fetching offer details:', error);
@@ -86,7 +84,6 @@ export class TripsComponent implements OnInit {
       next: (data: GetRequest) => {
         this.request = data;
         this.rating = this.request.user.rating;
-        console.log('Offer Details:', this.request);
         },
       error: (error) => {
         console.error('Error fetching offer details:', error);

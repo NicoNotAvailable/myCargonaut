@@ -43,9 +43,6 @@ export class AktuelleFahrtenComponent {
             this.pathToImage = imagePath === "empty.png" ? "/empty.png" : prePath.concat(imagePath);
             this.pathToImageArray.push(this.pathToImage);
 
-
-            console.log(this.pathToImageArray);
-
             if(response[i] !== undefined) {
               this.allOffers.push(response[i]);
             }

@@ -40,7 +40,6 @@ export class ChatComponent implements OnInit {
   ngOnInit(): void {
     this.sessionService.checkLoginNum().then(async isLoggedIn => {
       isLoggedIn == -1 ? this.isLoggedIn = false : this.isLoggedIn = true;
-      console.log("islogged" + isLoggedIn);
       if (!this.isLoggedIn) {
         window.location.href = "/";
       }
@@ -57,7 +56,6 @@ export class ChatComponent implements OnInit {
     });
 
     this.socketService.on('message').subscribe((message: any) => {
-      console.log('Received message:', message);
       const roomName = `trip_${message.trip.id}`;
 
       if (!this.rooms.includes(roomName)) {
@@ -67,8 +65,6 @@ export class ChatComponent implements OnInit {
       if (!this.messages[roomName]) {
         this.messages[roomName] = [];
       }
-
-      console.log('Received message:', message, 'for room:', roomName);
       this.messages[roomName].push(message);
       setTimeout(() => this.scrollToBottom(), 0);
     });
@@ -98,9 +94,6 @@ export class ChatComponent implements OnInit {
                 if (user.profilePic === null) user.profilePic = 'empty.png';
                 this.trips[roomName].user = user;  // Store user details
               });
-
-              console.log(this.trips);
-
               this.http.get<Message[]>(`http://localhost:8000/chat/messages/${trip.id}`, { withCredentials: true })
                 .subscribe(
                   (data) => {
@@ -110,7 +103,7 @@ export class ChatComponent implements OnInit {
                     }
                   },
                   (error) => {
-                    console.log(error);
+                    console.error(error);
                   }
                 );
           });
@@ -140,11 +133,8 @@ export class ChatComponent implements OnInit {
       console.error('Room or userId not defined');
       return;
     }
-    console.log('hier wird gesendet' + this.room);
-
 
     const tripId: number = parseInt(this.room.split('_')[1]);
-    console.log(tripId);
     const messageData: Message = {
       id: 0,  //mock
       writer: {
@@ -158,11 +148,9 @@ export class ChatComponent implements OnInit {
       timestamp: new Date().toISOString(),
     };
 
-    console.log(messageData);
     this.http.post<Message>("http://localhost:8000/chat/message", {writer: messageData.writer.id, tripId: messageData.trip.id, message: messageData.message}, { withCredentials: true })
       .subscribe(
         (response: any) => {
-          console.log('Message sent successfully');
           this.socketService.emit('message', { room: `trip_${tripId}`, message: response });
         },
         error => {
@@ -179,7 +167,6 @@ export class ChatComponent implements OnInit {
 
   selectRoom(room: string): void {
     this.room = room;
-    console.log('Selected room:', room);
     this.markMessagesAsRead(room);
     if (this.messageInput) {
       this.messageInput.nativeElement.focus();
@@ -197,7 +184,6 @@ export class ChatComponent implements OnInit {
         this.http.put<Message>(`http://localhost:8000/chat/message/${message.id}`, { read: true }, { withCredentials: true })
           .subscribe(
             response => {
-              console.log('Message read status updated successfully');
             },
             error => {
               console.error('There was an error updating message read status:', error);

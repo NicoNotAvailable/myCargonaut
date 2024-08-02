@@ -4,6 +4,7 @@ import {CarouselComponent} from "./carousel/carousel.component";
 import {offer} from "../search/offers";
 import {HttpClient} from "@angular/common/http";
 import {NgOptimizedImage} from "@angular/common";
+import {RouterLink} from "@angular/router";
 // import { AktuelleFahrtenComponent } from "./aktuelle-fahrten/aktuelle-fahrten.component";
 
 
@@ -15,6 +16,7 @@ import {NgOptimizedImage} from "@angular/common";
     NgbSlide,
     CarouselComponent,
     NgOptimizedImage,
+    RouterLink,
     //AktuelleFahrtenComponent
   ],
   templateUrl: './frontpage.component.html',
@@ -49,9 +51,6 @@ export class FrontpageComponent {
               const imagePath: string = response[i].carPicture;
               this.pathToImage = imagePath === "empty.png" ? "/empty.png" : prePath.concat(imagePath);
               this.pathToImageArray.push(this.pathToImage);
-
-
-              console.log(this.pathToImageArray);
 
             if(response[i] !== undefined) {
               this.allOffers.push(response[i]);

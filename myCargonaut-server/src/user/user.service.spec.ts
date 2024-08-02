@@ -37,7 +37,7 @@ describe('UserService', () => {
     // Delete the test database file
     try {
       await fs.unlink('./testDatabase/dbTest.sqlite');
-      console.log('Test database file removed');
+      console.error('Test database file removed');
     } catch (err) {
       console.error('Error removing test database file:', err);
     }

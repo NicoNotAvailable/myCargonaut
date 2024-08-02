@@ -62,7 +62,6 @@ export class TripsReadComponent implements OnInit {
         this.carModel = data.name;
         this.carTV = data.hasTelevision;
         this.carAC = data.hasAC;
-        console.log(this.carModel);
       },
       error: (error) => {
         console.error(error);

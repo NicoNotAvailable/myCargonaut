@@ -76,8 +76,6 @@ export class RequestAufAnfrageOSucheComponent  implements OnInit {
     });
 
     this.id = Number(this.route.snapshot.paramMap.get('id'));    // Jetzt kannst du mit der ID arbeiten
-    console.log('Request ID:', this.id);
-
     this.updateCurrentRoute();
 
     this.router.events.pipe(
@@ -148,8 +146,6 @@ export class RequestAufAnfrageOSucheComponent  implements OnInit {
               this.masse.push(this.gesamtHeight);
               this.masse.push(this.gesamtWidth);
 
-              console.log(this.masse)
-
               this.gesamtWidth = 0;
               this.gesamtLength = 0;
               this.gesamtHeight = 0;
@@ -191,13 +187,10 @@ export class RequestAufAnfrageOSucheComponent  implements OnInit {
             this.prePath = "/user/image/"
 
             for (let element of response) {
-              console.log(element)
               const imagePath: string = element.requesting.profilePic;
               this.pathToImage = imagePath === "empty.png" ? "/empty.png" : this.prePath.concat(imagePath);
               this.pathToImageArray.push(this.pathToImage);
             }
-            console.log(this.pathToImageArray);
-
           },
           (error: { error: { message: string; }; }) => {
             console.error('Fehler beim Abrufen der Angebote:', error);
@@ -215,7 +208,6 @@ export class RequestAufAnfrageOSucheComponent  implements OnInit {
     this.http.put('http://localhost:8000/trip/accept/' + tripId, {},{ withCredentials: true })
       .subscribe(
         response => {
-          console.log('Request accepted', response);
           this.router.navigate(['/allTrips'], { queryParams: { tripId } });
         },
         error => {

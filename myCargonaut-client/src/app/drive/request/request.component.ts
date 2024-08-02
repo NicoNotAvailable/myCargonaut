@@ -79,10 +79,7 @@ export class RequestComponent {
       }
     });
     this.talkMode = 3;
-
     this.readUser();
-    console.log(this.requestService.seats);
-
   }
 
   readUser() {

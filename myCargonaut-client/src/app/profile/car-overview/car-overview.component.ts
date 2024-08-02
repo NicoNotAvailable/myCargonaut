@@ -33,7 +33,6 @@ export class CarOverviewComponent {
   ngOnInit(): void {
     this.vehicleService.readCars().subscribe(
       response => {
-        console.log(response);
         this.cars = response;
       },
       error => {

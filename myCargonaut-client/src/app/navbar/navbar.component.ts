@@ -59,7 +59,6 @@ export class NavbarComponent {
     this.sessionService.checkLoginNum().then(currentUser => {
       if (currentUser != -1){
         this.isLoggedIn = true;
-        console.log(currentUser + ' heyyyyyyyyyyyyyyyyyyyyyyy');
         this.socketService.emit('register', currentUser);
         this.joinChatRooms(currentUser);
       } else {
@@ -75,7 +74,7 @@ export class NavbarComponent {
         window.location.href = "/";
       },
       error => {
-        console.log(error);
+        console.error(error);
       }
     )
   }
@@ -84,8 +83,6 @@ export class NavbarComponent {
     this.http.get(`http://localhost:8000/trip/user-trips/${userId}`, { withCredentials: true }).subscribe(
       (response: any) => {
         if (response) {
-          console.log('joinChatRooms FUNC');
-          console.log(response);
           response.offerTrips.forEach((trip: any) => {
             this.joinRoom(userId, trip.id);
           });
@@ -117,7 +114,6 @@ export class NavbarComponent {
     const payload = { userId, tripId };
 
     this.socketService.emit('createOrJoinRoom', payload);
-    console.log(`Requested to join room: ${room}`);
 
     this.socketService.on('message').subscribe((message: any) => {
       if (!window.location.href.includes('/chats')) {

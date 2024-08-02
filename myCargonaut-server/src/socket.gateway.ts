@@ -41,7 +41,6 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
   }
 
   handleDisconnect(client: Socket) {
-    console.log('Client disconnected:', client.id);
     this.removeUserFromRooms(client);
   }
 
@@ -52,7 +51,6 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
   ): Promise<void> {
     this.users.set(userId, client.id);
     client.join(`user_${userId}`);
-    console.log(`User ${userId} registered with socket ID ${client.id}`);
 
     const tripsObject = await this.tripService.getUserTrips(userId);
 
@@ -61,7 +59,6 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
         const roomName = `trip_${trip.id}`;
         client.join(roomName);
         this.addUserToRoom(userId, trip.id);
-        console.log(`Joined room ${roomName}`);
       });
     };
 
@@ -85,10 +82,7 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
     @MessageBody() payload: { room: string; message: MessageDB },
   ): void {
     const { room, message } = payload;
-    console.log('rooooooooooooooooooooom ' + room);
-    console.log(this.activeRooms);
     this.server.to(room).emit('message', message);
-    console.log(`Message sent to room ${room}: ${JSON.stringify(message)}`);
   }
 
   @SubscribeMessage('createOrJoinRoom')

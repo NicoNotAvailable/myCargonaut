@@ -41,9 +41,7 @@ export class RegisterComponent {
   }
 
   ngOnInit(): void {
-    //console.log(this.sessionService.checkLogin());
     this.sessionService.checkLoginNum().then(isLoggedIn => {
-      console.log('Login status:', isLoggedIn);
       isLoggedIn == -1 ? this.isLoggedIn = false : this.isLoggedIn = true;
       if (this.isLoggedIn) {
         window.location.href = '/profile';
@@ -72,11 +70,6 @@ export class RegisterComponent {
     }
   }
 
-
-  showInputDate() {
-    console.log(this.birthDate.year + this.birthDate.month + this.birthDate.day);
-  }
-
   addUser(form: any): void {
 
     let date: Date = new Date(this.birthDate.year, this.birthDate.month - 1, this.birthDate.day + 1);
@@ -93,13 +86,10 @@ export class RegisterComponent {
       agb: this.agb,
     };
 
-    console.log('User Data:', userData);
-
     this.http.post('http://localhost:8000/user', userData, { withCredentials: true })
       .subscribe(
         response => {
           form.resetForm();
-          console.log('User added successfully', response);
           this.message = 'Nutzer erfolgreich angelegt';
           setTimeout(() => {
             this.message = '';

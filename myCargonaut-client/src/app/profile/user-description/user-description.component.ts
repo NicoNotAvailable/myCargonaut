@@ -230,7 +230,6 @@ export class UserDescriptionComponent {
   }
 
   deleteUserQuestion() {
-    console.log("deleteUserQuestion");
     this.deleteBoolean = !this.deleteBoolean;
   }
 
@@ -239,7 +238,6 @@ export class UserDescriptionComponent {
       withCredentials: true,
       headers: { 'Content-Type': 'application/json' },
     }).subscribe(data => {
-      console.log(data);
       this.runLogOut()
       this.router.navigate(['/'])
     }, error => {
@@ -255,7 +253,7 @@ export class UserDescriptionComponent {
         window.location.href = "/";
       },
       error => {
-        console.log(error);
+        console.error(error);
       }
     )
   }
