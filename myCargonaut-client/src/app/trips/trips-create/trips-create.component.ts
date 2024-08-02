@@ -210,6 +210,7 @@ export class TripsCreateComponent implements OnInit {
 
   startpointChanged() {
     this.validEndLocations = this.offer?.locations.slice(this.startLocation!);
+    this.endLocation = null;
   }
 
 
