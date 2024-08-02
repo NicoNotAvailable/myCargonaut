@@ -144,9 +144,9 @@ export class TripsCreateComponent implements OnInit {
       tripData = {
         driveID: this.request?.id,
         carID: this.selectedCar,
+        trailerID: null,
       };
     }
-
 
     if (tripData.carID === 0 || tripData.carID === null) {
       this.errorMessage = "Wähle ein Auto aus"

@@ -85,7 +85,7 @@ export class TripController {
         startLocation,
         endLocation,
       );
-      return new OkDTO(true, 'Request for the offer was created');
+      new OkDTO(true, 'Request for the offer was created');
     } catch (err) {
       throw new BadRequestException('An error occurred: ' + err.message);
     }
@@ -163,6 +163,7 @@ export class TripController {
     @Session() session: SessionData,
   ) {
     const user = await this.userService.getUserById(session.currentUser);
+    console.log(body);
     if (!user) {
       throw new BadRequestException('User was not found');
     }
@@ -179,7 +180,16 @@ export class TripController {
       throw new BadRequestException('You cant request your own offer!');
     }
     const car = await this.vehicleService.getCarById(body.carID);
-    const trailer = await this.vehicleService.getTrailerById(body.trailerID);
+    let trailer = null;
+    console.log(trailer);
+    if (body.trailerID != null && body.trailerID != 0) {
+      trailer = await this.vehicleService.getTrailerById(body.trailerID);
+    }
+
+    console.log('Trip Controller');
+    console.log(trailer);
+    console.log(body);
+    console.log('=====');
     try {
       await this.tripService.createRequestTrip(user, request, car, trailer);
       return new OkDTO(true, 'Request for the offer was created');

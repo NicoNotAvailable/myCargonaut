@@ -18,5 +18,5 @@ export class CreateRequestTripDTO {
   })
   @IsOptional()
   @IsNumber()
-  trailerID: number;
+  trailerID?: number;
 }

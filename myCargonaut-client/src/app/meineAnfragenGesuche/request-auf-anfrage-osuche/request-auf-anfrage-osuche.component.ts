@@ -168,8 +168,6 @@ export class RequestAufAnfrageOSucheComponent  implements OnInit {
       this.http.get(`http://localhost:8000/drive/request/${this.id}`, {withCredentials: true})
         .subscribe(
           (response: any) => {
-
-
             this.thisRequestLocations = response.locations;
             this.thisRequestName = response.name;
           },
@@ -182,6 +180,7 @@ export class RequestAufAnfrageOSucheComponent  implements OnInit {
       this.http.get(`http://localhost:8000/trip/request/requestTrips/${this.id}`, { withCredentials: true })
         .subscribe(
           (response: any) => {
+            console.log(response);
             this.allTripsRequest = response;
 
             this.prePath = "/user/image/"

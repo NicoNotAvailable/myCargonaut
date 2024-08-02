@@ -219,21 +219,21 @@
                           <div class="col-12 ">
                             <div class="row mt-2">
                               <div class="col-6">
-                                <span>Trailer Gewicht:</span>
+                                <span>{{ element.trailer ? "Trailer Gewicht:" : null }}</span>
                               </div>
                               <div class="col-6">
-                                <span class="highlightText">{{ element.trailer.weight}} Kilo </span>
+                                <span class="highlightText">{{ element.trailer ? element.trailer.weight + " Kilo" : null }}  </span>
                               </div>
                             </div>
                           </div>
                           <div class="col-12">
                             <div class="row mt-2">
                               <div class="col-6">
-                                <span>Trailer Maße:</span>
+                                <span>{{ element.trailer ? "Trailer Maße:" : null }}</span>
                               </div>
                               <div class="col-6">
-                            <span class="highlightText">{{ element.trailer.length }}m / {{ element.trailer.height }}
-                              m / {{ element.trailer.width }}m </span>
+                            <span class="highlightText">{{ element.trailer ? element.trailer.length + " m /" : null }} {{ element.trailer ? element.trailer.height + " m /": null }}
+                              {{ element.trailer ? element.trailer.width + "m" : null }} </span>
                               </div>
                             </div>
                           </div>
