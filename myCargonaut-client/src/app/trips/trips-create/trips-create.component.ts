@@ -149,7 +149,11 @@ export class TripsCreateComponent implements OnInit {
 
 
     if (tripData.carID === 0 || tripData.carID === null) {
-      console.error('Car was not found');
+      this.errorMessage = "Wähle ein Auto aus"
+      setTimeout(() => {
+        this.errorMessage = '';
+      }, 5000);
+      return;
     }
     this.tripsService.createRequestTrip(tripData).subscribe(
       () => {
