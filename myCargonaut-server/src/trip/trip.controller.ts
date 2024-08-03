@@ -163,7 +163,6 @@ export class TripController {
     @Session() session: SessionData,
   ) {
     const user = await this.userService.getUserById(session.currentUser);
-    console.log(body);
     if (!user) {
       throw new BadRequestException('User was not found');
     }
@@ -181,15 +180,9 @@ export class TripController {
     }
     const car = await this.vehicleService.getCarById(body.carID);
     let trailer = null;
-    console.log(trailer);
     if (body.trailerID != null && body.trailerID != 0) {
       trailer = await this.vehicleService.getTrailerById(body.trailerID);
     }
-
-    console.log('Trip Controller');
-    console.log(trailer);
-    console.log(body);
-    console.log('=====');
     try {
       await this.tripService.createRequestTrip(user, request, car, trailer);
       return new OkDTO(true, 'Request for the offer was created');

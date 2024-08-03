@@ -119,7 +119,6 @@ export class TripService {
     } else {
       throw new Error('Invalid car type');
     }
-    console.log(trailer);
     if (trailer === null || trailer instanceof TrailerDB) {
       newRequestTrip.trailer = trailer;
     } else {
