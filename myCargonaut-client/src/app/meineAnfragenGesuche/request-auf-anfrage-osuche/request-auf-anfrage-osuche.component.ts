@@ -7,6 +7,7 @@ import { requestTrips } from "../requestTrips";
 import { SessionService } from "../../services/session.service";
 import { UserService } from "../../services/user.service";
 import { NgForOf, NgOptimizedImage } from "@angular/common";
+import {PaymentService} from "../../services/payment.service";
 
 @Component({
   selector: 'app-request-auf-anfrage-osuche',
@@ -23,6 +24,8 @@ export class RequestAufAnfrageOSucheComponent  implements OnInit {
 
   allTripsOffer: offerTrips[] = [];
   allTripsRequest: requestTrips[] = [];
+
+  driveStatus = 0;
 
   thisRequestLocations: any[] = [];
 
@@ -63,6 +66,7 @@ export class RequestAufAnfrageOSucheComponent  implements OnInit {
   isLoggedIn: boolean = false;
   public sessionService: SessionService = inject(SessionService);
   public userService: UserService = inject(UserService);
+  public paymentService: PaymentService = inject(PaymentService);
 
   ngOnInit(): void {
 
@@ -88,6 +92,7 @@ export class RequestAufAnfrageOSucheComponent  implements OnInit {
 
   private updateCurrentRoute(): void {
     const route = this.router.url.split('/');
+    console.log(route)
 
     if (route.length > 1 && route[1]) {
       this.currentRoute = route[1];
@@ -170,6 +175,7 @@ export class RequestAufAnfrageOSucheComponent  implements OnInit {
           (response: any) => {
             this.thisRequestLocations = response.locations;
             this.thisRequestName = response.name;
+            this.driveStatus = response.status
           },
           (error: { error: { message: string; }; }) => {
             console.error('Fehler beim Abrufen der Angebote:', error);
@@ -180,7 +186,6 @@ export class RequestAufAnfrageOSucheComponent  implements OnInit {
       this.http.get(`http://localhost:8000/trip/request/requestTrips/${this.id}`, { withCredentials: true })
         .subscribe(
           (response: any) => {
-            console.log(response);
             this.allTripsRequest = response;
 
             this.prePath = "/user/image/"
@@ -214,6 +219,11 @@ export class RequestAufAnfrageOSucheComponent  implements OnInit {
           console.error('There was an error!', error);
         },
       );
+  }
+
+  toPaymentPage() {
+    console.log("Test");
+    this.router.navigate(['/request/' + this.id + '/payment'], { queryParams: { this: this.id } });
   }
 
   protected readonly window = window;

@@ -34,7 +34,6 @@ export const routes: Routes = [
   { path: 'createrequest', component: RequestComponent },
   { path: 'createoffer', component: OfferComponent },
   { path: 'summary', component: SummaryComponent },
-  { path: 'payment', component: PaymentComponent },
 
   { path: '', component: FrontpageComponent },
 
@@ -50,6 +49,8 @@ export const routes: Routes = [
 
   {path: 'request/:id', component: RequestAufAnfrageOSucheComponent},
   {path: 'offer/:id', component: RequestAufAnfrageOSucheComponent},
+
+  {path: 'request/:id/payment', component: PaymentComponent},
 
   {path: 'myLastRides', component: MeineLetztenFahrtenComponent},
   {path: 'allTrips' , component: AllTripsComponent},

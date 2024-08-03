@@ -1,8 +1,12 @@
-import { Component } from '@angular/core';
+import {Component, inject} from '@angular/core';
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
-import {NgIf} from "@angular/common";
+import {CurrencyPipe, formatCurrency, NgIf} from "@angular/common";
 import {faArrowRight} from "@fortawesome/free-solid-svg-icons";
 import {FaIconComponent} from "@fortawesome/angular-fontawesome";
+import {ActivatedRoute, Router} from "@angular/router";
+import {HttpClient} from "@angular/common/http";
+import {SessionService} from "../services/session.service";
+import {PaymentService} from "../services/payment.service";
 
 @Component({
   selector: 'app-payment',
@@ -11,7 +15,8 @@ import {FaIconComponent} from "@fortawesome/angular-fontawesome";
     FormsModule,
     ReactiveFormsModule,
     NgIf,
-    FaIconComponent
+    FaIconComponent,
+    CurrencyPipe
   ],
   templateUrl: './payment.component.html',
   styleUrl: './payment.component.css'
@@ -19,6 +24,43 @@ import {FaIconComponent} from "@fortawesome/angular-fontawesome";
 export class PaymentComponent {
 
   isLoggedIn: boolean = true;
+
+  public sessionService: SessionService = inject(SessionService);
+  public paymentService: PaymentService = inject(PaymentService);
+
+  constructor(private route: ActivatedRoute, private http: HttpClient,  private router: Router) { }
+
+  ngOnInit() {
+
+    this.sessionService.checkLoginNum().then(isLoggedIn => {
+      isLoggedIn == -1 ? this.isLoggedIn = false : this.isLoggedIn = true;
+      if (!this.isLoggedIn && typeof window !== undefined) {
+        this.router.navigate(['login'])
+        return;
+      }
+      this.updateCurrentRoute()
+
+    });
+
+    this.paymentService.id = Number(this.route.snapshot.paramMap.get('id'));    // Jetzt kannst du mit der ID arbeiten
+  }
+
+  private updateCurrentRoute(): void {
+    const route = this.router.url.split('/');
+    console.log(route)
+
+    if (route.length > 1 && route[1]) {
+      this.paymentService.currentRoute = route[1];
+    } else {
+      this.paymentService.currentRoute = '';
+    }
+
+    if (this.paymentService.currentRoute === "offer") {
+      this.paymentService.loadOfferPayment()
+    } else if (this.paymentService.currentRoute === "request") {
+      this.paymentService.loadRequestPayment()
+    }
+  }
 
   validInputs() {
     //TODO: Add payment Client Logic
@@ -30,4 +72,5 @@ export class PaymentComponent {
   }
 
   protected readonly faArrowRight = faArrowRight;
+  protected readonly formatCurrency = formatCurrency;
 }

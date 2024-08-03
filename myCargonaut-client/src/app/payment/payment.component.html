@@ -4,30 +4,50 @@
     <div class="col-lg-6 col-12">
       <form #form="ngForm" (ngSubmit)="validInputs() && createSummaryOffer()">
         <div class="p-5" id="paymentArea">
-          <div class="row mt-1">
-            <div class="col-6 text-end">
-              <h5 class="text-decoration-underline">Pro Person:</h5>
+          @if (paymentService.currentRoute == 'offer') {
+            @if (paymentService.priceType == 1) {
+
+            } @else if (paymentService.priceType == 2) {
+              <div class="row mt-1">
+                <div class="col-6 text-end">
+                  <h5 class="text-decoration-underline">Pro Person:</h5>
+                </div>
+                <div class="col-lg-4 col-6 text-end">
+                  <h5 class="text-decoration-underline">9€</h5>
+                </div>
+                <div class="col-2"></div>
+              </div>
+              <div class="row mt-1">
+                <div class="col-6 text-end">
+                  <h5 class="text-decoration-underline">Anzahl der Personen:</h5>
+                </div>
+                <div class="col-lg-4 col-6 text-end">
+                  <h5 class="text-decoration-underline">{{ this.paymentService.seats }}</h5>
+                </div>
+                <div class="col-2"></div>
+              </div>
+            } @else if (paymentService.priceType == 3) {
+
+            }
+          } @else if (paymentService.currentRoute == 'request') {
+            <div class="row mt-1">
+              <div class="col-6 text-end">
+                <h5 class="text-decoration-underline">Kosten der Fahrt:</h5>
+              </div>
+              <div class="col-lg-4 col-6 text-end">
+                <h5 class="text-decoration-underline">{{ this.paymentService.price }}€</h5>
+              </div>
+              <div class="col-2"></div>
             </div>
-            <div class="col-lg-4 col-6 text-end">
-              <h5 class="text-decoration-underline">9€</h5>
-            </div>
-            <div class="col-2"></div>
-          </div>
-          <div class="row mt-1">
-            <div class="col-6 text-end">
-              <h5 class="text-decoration-underline">Anzahl der Personen:</h5>
-            </div>
-            <div class="col-lg-4 col-6 text-end">
-              <h5 class="text-decoration-underline">5€</h5>
-            </div>
-            <div class="col-2"></div>
-          </div>
+          }
+
+
           <div class="row mt-1">
             <div class="col-6 text-end">
               <h5 class="text-decoration-underline">+Servicegebühren:</h5>
             </div>
             <div class="col-lg-4 col-6 text-end">
-              <h5 class="text-decoration-underline">2,25€</h5>
+              <h5 class="text-decoration-underline">{{ paymentService.totalPrice | currency: 'EUR':true }}</h5>
             </div>
             <div class="col-2"></div>
           </div>
@@ -39,7 +59,7 @@
             </div>
           </div>
           <div class="text-decoration-underline text-end mt-3">
-            <h3>Gesamt: 47,25€</h3>
+            <h3>Gesamt: {{ paymentService.totalPrice | currency: 'EUR':true }} </h3>
           </div>
         </div>
         <h3 class="textGreen text-center mt-4">Zahlungsmethode auswählen</h3>
