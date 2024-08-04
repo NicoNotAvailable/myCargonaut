@@ -6,7 +6,11 @@ import {offer} from "../../offers"
 import {request} from "../../requests"
 
 import {DateFormatPipe} from "../../date-format.pipe";
-import { NgForOf, NgIf, NgOptimizedImage } from "@angular/common";
+import {CurrencyPipe, NgForOf, NgIf, NgOptimizedImage} from "@angular/common";
+import {LOCALE_ID} from '@angular/core';
+import {registerLocaleData} from '@angular/common';
+import localeDe from '@angular/common/locales/de';
+import localeDeExtra from '@angular/common/locales/extra/de';
 
 
 @Component({
@@ -18,6 +22,7 @@ import { NgForOf, NgIf, NgOptimizedImage } from "@angular/common";
     NgForOf,
     NgOptimizedImage,
     RouterLink,
+    CurrencyPipe,
   ],
   templateUrl: './search-card.component.html',
   styleUrl: './search-card.component.css'

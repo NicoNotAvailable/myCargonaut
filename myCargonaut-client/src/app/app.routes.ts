@@ -51,6 +51,7 @@ export const routes: Routes = [
   {path: 'offer/:id', component: RequestAufAnfrageOSucheComponent},
 
   {path: 'request/:id/payment', component: PaymentComponent},
+  {path: 'offer/:id/payment', component: PaymentComponent},
 
   {path: 'myLastRides', component: MeineLetztenFahrtenComponent},
   {path: 'allTrips' , component: AllTripsComponent},

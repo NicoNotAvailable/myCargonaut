@@ -73,6 +73,7 @@ export class TripsComponent implements OnInit {
       next: (data: GetOffer) => {
         this.offer = data;
         this.rating = this.offer.user.rating;
+        this.offer.locations.sort((a, b) => a.stopNr - b.stopNr);
       },
       error: (error) => {
         console.error('Error fetching offer details:', error);

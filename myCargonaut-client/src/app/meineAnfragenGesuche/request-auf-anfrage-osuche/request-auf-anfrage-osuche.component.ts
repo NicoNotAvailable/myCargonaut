@@ -92,8 +92,6 @@ export class RequestAufAnfrageOSucheComponent  implements OnInit {
 
   private updateCurrentRoute(): void {
     const route = this.router.url.split('/');
-    console.log(route)
-
     if (route.length > 1 && route[1]) {
       this.currentRoute = route[1];
     } else {
@@ -112,6 +110,7 @@ export class RequestAufAnfrageOSucheComponent  implements OnInit {
         .subscribe(
           (response: any) => {
             this.thisOfferName = response.name;
+            this.driveStatus = response.status;
             },
           (error: { error: { message: string; }; }) => {
             console.error('Fehler beim Abrufen der Angebote:', error);
@@ -124,7 +123,6 @@ export class RequestAufAnfrageOSucheComponent  implements OnInit {
         .subscribe(
           (response: any) => {
             this.allTripsOffer = response;
-
 
             this.prePath = "/user/image/"
 
@@ -222,7 +220,6 @@ export class RequestAufAnfrageOSucheComponent  implements OnInit {
   }
 
   toPaymentPage() {
-    console.log("Test");
     this.router.navigate(['/request/' + this.id + '/payment'], { queryParams: { this: this.id } });
   }
 

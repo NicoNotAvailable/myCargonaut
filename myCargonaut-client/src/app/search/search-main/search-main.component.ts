@@ -36,7 +36,6 @@ export class SearchMainComponent implements OnInit {
     this.http.get("http://localhost:8000/drive/all/offers", { withCredentials: true })
       .subscribe(
         (response: any) => {
-
           for (let element of response) {
             const imagePath: string = element.carPicture;
             this.pathToImage = imagePath === "empty.png" ? "/empty.png" : prePath.concat(imagePath);

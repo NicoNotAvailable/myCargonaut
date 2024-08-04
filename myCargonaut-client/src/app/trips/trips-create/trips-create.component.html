@@ -9,13 +9,13 @@
         <div class="input-group">
           <input [(ngModel)]="cargoDescription" #descriptionInput="ngModel" type="text" name="descriptionInput"
                  class="rounded-5 p-2 w-100 mb-3" placeholder="Name des Cargos" required>
-          <input [(ngModel)]="cargoWeight" #weightInput="ngModel" type="text" name="weightInput"
+          <input [(ngModel)]="cargoWeight" #weightInput="ngModel" type="number" name="weightInput"
                  class="rounded-5 p-2 w-100 mb-3" placeholder="max. Gewicht in kg (Bsp. 535,50)" required>
-          <input [(ngModel)]="cargoLength" #lengthInput="ngModel" type="text" name="lengthInput"
+          <input [(ngModel)]="cargoLength" #lengthInput="ngModel" type="number" name="lengthInput"
                  class="rounded-5 p-2 w-100 mb-3" placeholder="Länge in cm (Bsp. 320)" required>
-          <input [(ngModel)]="cargoWidth" #widthInput="ngModel" type="text" name="widthInput"
+          <input [(ngModel)]="cargoWidth" #widthInput="ngModel" type="number" name="widthInput"
                  class="rounded-5 p-2 w-100 mb-3" placeholder="Breite in cm (Bsp. 130)" required>
-          <input [(ngModel)]="cargoHeight" #heightInput="ngModel" type="text" name="heightInput"
+          <input [(ngModel)]="cargoHeight" #heightInput="ngModel" type="number" name="heightInput"
                  class="rounded-5 p-2 w-100 mb-3" placeholder="Höhe in cm (Bsp. 80)" required>
         </div>
       </div>

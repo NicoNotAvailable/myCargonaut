@@ -21,15 +21,15 @@ export class CargoDB {
   @Column()
   description: string;
 
-  @Column()
+  @Column('decimal', { precision: 10, scale: 2 })
   weight: number;
 
-  @Column()
+  @Column('decimal', { precision: 10, scale: 2 })
   length: number;
 
-  @Column()
+  @Column('decimal', { precision: 10, scale: 2 })
   height: number;
 
-  @Column()
+  @Column('decimal', { precision: 10, scale: 2 })
   width: number;
 }

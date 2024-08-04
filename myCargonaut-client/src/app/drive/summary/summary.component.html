@@ -32,7 +32,7 @@
                   </div>
                 </div>
                 <div class="col-4">
-                  <h4>{{ offerService.price }}€</h4>
+                  <h4>{{ offerService.price | currency: 'EUR':'symbol':'1.2-2':'de-DE' }}</h4>
                   <p>
                     {{ offerService.priceType === 2 ? 'Pro Person' : offerService.info === 3 ? 'Pro KG' : 'Gesamt' }}
                   </p>
@@ -64,9 +64,9 @@
               </div>
               <div>
                 <p>maximale Maße: <br>
-                Länge: <span class="fw-bold">{{ offerService.maxCLength }}m</span> /
-                Breite: <span class="fw-bold">{{ offerService.maxCWidth }}m</span> /
-                Höhe: <span class="fw-bold">{{ offerService.maxCLength }}m</span>
+                Länge: <span class="fw-bold">{{ offerService.maxCLength }}cm</span> /
+                Breite: <span class="fw-bold">{{ offerService.maxCWidth }}cm</span> /
+                Höhe: <span class="fw-bold">{{ offerService.maxCLength }}cm</span>
                 </p>
               </div>
               @if (offerService.selectedTrailer) {
@@ -82,9 +82,9 @@
                   </div>
                   <div>
                     <p>maximale Maße: <br>
-                      Länge: <span class="fw-bold">{{ offerService.maxTLength }}m</span> /
-                      Breite: <span class="fw-bold">{{ offerService.maxTLength }}m</span> /
-                      Höhe: <span class="fw-bold">{{ offerService.maxTLength }}m</span>
+                      Länge: <span class="fw-bold">{{ offerService.maxTLength }}cm</span> /
+                      Breite: <span class="fw-bold">{{ offerService.maxTLength }}cm</span> /
+                      Höhe: <span class="fw-bold">{{ offerService.maxTLength }}cm</span>
                     </p>
                   </div>
                 </div>
@@ -185,7 +185,7 @@
                   </div>
                 </div>
                 <div class="col-4">
-                  <h4>{{ requestService.price }} €</h4>
+                  <h4>{{ requestService.price | currency: 'EUR':'symbol':'1.2-2':'de-DE' }}</h4>
                   <p>Gesamt</p>
                 </div>
               </div>

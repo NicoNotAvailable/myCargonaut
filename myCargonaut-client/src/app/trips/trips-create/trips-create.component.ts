@@ -174,6 +174,7 @@ export class TripsCreateComponent implements OnInit {
       endLocation: this.endLocation,
       cargo: this.cargoDataArray,
     };
+
     if (tripData.startLocation === 0 || tripData.startLocation === null) {
       this.errorMessage = "Bitte gebe deinen Startpunkt an";
       setTimeout(() => {

@@ -6,9 +6,14 @@ import { SessionService } from '../../services/session.service';
 import { UserService } from '../../services/user.service';
 import { DateFormatPipe } from '../../search/date-format.pipe';
 import { offer } from '../../search/offers';
-import { DatePipe, NgClass, NgForOf, NgIf, NgOptimizedImage } from '@angular/common';
+import {CurrencyPipe, DatePipe, NgClass, NgForOf, NgIf, NgOptimizedImage} from '@angular/common';
 import { SearchCardComponent } from '../../search/search-main/search-card/search-card.component';
 import { TripService } from '../../services/trip-service.service';
+
+import {LOCALE_ID} from '@angular/core';
+import {registerLocaleData} from '@angular/common';
+import localeDe from '@angular/common/locales/de';
+import localeDeExtra from '@angular/common/locales/extra/de';
 
 @Component({
   selector: 'app-all-trips',
@@ -22,6 +27,7 @@ import { TripService } from '../../services/trip-service.service';
     NgIf,
     NgClass,
     DatePipe,
+    CurrencyPipe,
   ],
   templateUrl: './all-trips.component.html',
   styleUrls: ['./all-trips.component.css']

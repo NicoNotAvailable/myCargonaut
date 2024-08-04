@@ -95,9 +95,13 @@
 
                       <div class="col-12 col-lg-3">
                         <div class="horizontal-right">
+                          @if (this.driveStatus == 0) {
                             <button (click)="acceptDrive(element.id)" type="button" class="btn btn-primary greenButton m-2">Anfrage annehmen</button>
-                            <button (click)="navigateToChat(element.requesting.id)" type="button" class="btn btn-primary greenButton m-2">Chatnachricht schreiben
-                            </button>
+                            <button (click)="navigateToChat(element.id)" type="button" class="btn btn-primary greenButton m-2">Chatnachricht schreiben</button>
+                          } @else if (this.driveStatus == 1) {
+                            <button (click)="toPaymentPage()" type="button" class="btn btn-primary greenButton m-2">Fahrt bezahlen</button>
+                            <button (click)="navigateToChat(element.id)" type="button" class="btn btn-primary greenButton m-2">Chatnachricht schreiben</button>
+                          }
                         </div>
                       </div>
                     </div>
