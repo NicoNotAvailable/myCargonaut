@@ -170,17 +170,17 @@ export class TripsCreateComponent implements OnInit {
     const tripData = {
       driveID: this.offer?.id,
       seats: this.seats,
-      startLocation: this.startLocation,
-      endLocation: this.endLocation,
+      startLocationID: this.startLocation,
+      endLocationID: this.endLocation,
       cargo: this.cargoDataArray,
     };
 
-    if (tripData.startLocation === 0 || tripData.startLocation === null) {
+    if (tripData.startLocationID === 0 || tripData.startLocationID === null) {
       this.errorMessage = "Bitte gebe deinen Startpunkt an";
       setTimeout(() => {
         this.errorMessage = "";
       }, 5000);
-    } else if (tripData.endLocation === 0 || tripData.endLocation === null) {
+    } else if (tripData.endLocationID === 0 || tripData.endLocationID === null) {
       this.errorMessage = "Bitte gebe dein Ziel an";
       setTimeout(() => {
         this.errorMessage;

@@ -59,6 +59,7 @@ export class TripController {
     if (!user) {
       throw new BadRequestException('User was not found');
     }
+
     if (user.profilePic === 'empty.png') {
       throw new BadRequestException(
         'You need a profile pic to request an offer',
@@ -71,12 +72,17 @@ export class TripController {
     if (offer.user.id == user.id) {
       throw new BadRequestException('You cant request your own offer!');
     }
-    const startLocation = await this.locationService.getLocationById(
+    console.log(body);
+
+    const startLocation = await this.locationService.getLocationsOfDrive(
       body.startLocationID,
+      body.driveID,
     );
-    const endLocation = await this.locationService.getLocationById(
+    const endLocation = await this.locationService.getLocationsOfDrive(
       body.endLocationID,
+      body.driveID,
     );
+
     try {
       await this.tripService.createOfferTrip(
         user,

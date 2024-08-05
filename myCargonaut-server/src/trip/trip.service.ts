@@ -17,6 +17,7 @@ import { TrailerDB } from '../database/TrailerDB';
 import { CreateCargoDTO } from '../cargo/DTO/CreateCargoDTO';
 import { LocationDB } from '../database/LocationDB';
 import { StatusEnum } from '../database/enums/StatusEnum';
+import {displayManualRestartTip} from "@nestjs/cli/lib/compiler/helpers/manual-restart";
 
 @Injectable()
 export class TripService {
@@ -51,9 +52,11 @@ export class TripService {
     } else {
       throw new Error('Invalid offer type');
     }
+
     newOfferTrip.usedSeats = body.usedSeats;
     newOfferTrip.startLocation = startLocation;
     newOfferTrip.endLocation = endLocation;
+
     try {
       const savedOfferTrip = await this.offerTripRepository.save(newOfferTrip);
       const cargoPromises = body.cargo.map((cargoData: CreateCargoDTO) => {

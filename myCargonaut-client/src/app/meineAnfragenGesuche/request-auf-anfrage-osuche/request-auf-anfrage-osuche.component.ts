@@ -124,6 +124,7 @@ export class RequestAufAnfrageOSucheComponent  implements OnInit {
           (response: any) => {
             this.allTripsOffer = response;
 
+
             this.prePath = "/user/image/"
 
             for (let element of response) {

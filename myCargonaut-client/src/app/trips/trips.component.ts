@@ -99,6 +99,4 @@ export class TripsComponent implements OnInit {
   starFillSrc: string = './assets/star-fill.svg';
   starEmptySrc: string = './assets/star.svg';
   stars: number[] = [1, 2, 3, 4, 5];
-
-
 }
