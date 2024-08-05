@@ -124,6 +124,7 @@ export class RequestAufAnfrageOSucheComponent  implements OnInit {
           (response: any) => {
             this.allTripsOffer = response;
 
+            console.log(response)
 
             this.prePath = "/user/image/"
 
@@ -139,23 +140,24 @@ export class RequestAufAnfrageOSucheComponent  implements OnInit {
               }
             }
 
-            for (let elements of this.allTripsOffer) {
-              for (let cargo of elements.cargo) {
-                this.gesamtLength = this.gesamtLength + cargo.length;
-                this.gesamtHeight = this.gesamtHeight + cargo.height;
-                this.gesamtWidth = this.gesamtWidth + cargo.width;
+            if (this.allTripsOffer[0].cargo.length !== 0) {
+              for (let elements of this.allTripsOffer) {
+                for (let cargo of elements.cargo) {
+                  this.gesamtLength = this.gesamtLength + cargo.length;
+                  this.gesamtHeight = this.gesamtHeight + cargo.height;
+                  this.gesamtWidth = this.gesamtWidth + cargo.width;
+                }
+
+                this.masse.push(this.gesamtLength);
+                this.masse.push(this.gesamtHeight);
+                this.masse.push(this.gesamtWidth);
+
+                this.gesamtWidth = 0;
+                this.gesamtLength = 0;
+                this.gesamtHeight = 0;
+
               }
-
-              this.masse.push(this.gesamtLength);
-              this.masse.push(this.gesamtHeight);
-              this.masse.push(this.gesamtWidth);
-
-              this.gesamtWidth = 0;
-              this.gesamtLength = 0;
-              this.gesamtHeight = 0;
-
             }
-
           },
           (error: { error: { message: string; }; }) => {
             console.error('Fehler beim Abrufen der Angebote:', error);

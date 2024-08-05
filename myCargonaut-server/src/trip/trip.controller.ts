@@ -72,7 +72,6 @@ export class TripController {
     if (offer.user.id == user.id) {
       throw new BadRequestException('You cant request your own offer!');
     }
-    console.log(body);
 
     const startLocation = await this.locationService.getLocationsOfDrive(
       body.startLocationID,

@@ -169,7 +169,7 @@ export class TripsCreateComponent implements OnInit {
   createOfferTrip(): void {
     const tripData = {
       driveID: this.offer?.id,
-      seats: this.seats,
+      usedSeats: this.seats,
       startLocationID: this.startLocation,
       endLocationID: this.endLocation,
       cargo: this.cargoDataArray,
@@ -185,12 +185,12 @@ export class TripsCreateComponent implements OnInit {
       setTimeout(() => {
         this.errorMessage;
       }, 5000);
-    } else if (tripData.seats === 0 || tripData.seats === null) {
+    } else if (tripData.usedSeats === 0 || tripData.usedSeats === null) {
       this.errorMessage = "Bitte lege fest, wie viele Personen mitkommen";
       setTimeout(() => {
         this.errorMessage = "";
       }, 5000);
-    } else if (tripData.seats > this.offer?.seats!) {
+    } else if (tripData.usedSeats > this.offer?.seats!) {
       this.errorMessage = "Zu viele Personen für diese Fahrt";
       setTimeout(() => {
         this.errorMessage = "";

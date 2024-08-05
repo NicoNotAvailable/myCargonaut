@@ -68,19 +68,21 @@
                       <div class="col-12 col-lg-6">
                         <div class="row">
                           <div class="col-6">
-                            <span>Gesamtgewicht:</span>
+                            <span>{{ this.masse.length !== 0 ? "Gesamtgewicht:" : "" }}</span>
                           </div>
                           <div class="col-6">
-                            <span class="highlightText">{{ gesamtgewicht }} Kilo</span>
+                            <span class="highlightText">{{ this.masse.length !== 0 ? gesamtgewicht + " Kilo" : "" }}</span>
                           </div>
                         </div>
                         <div class="row">
                           <div class="col-6">
-                            <span>gesamt Maße:</span>
+                            <span>{{ this.masse.length !== 0 ? "gesamt Maße:" : "" }} </span>
                           </div>
                           <div class="col-6">
-                            <span class="highlightText">{{ masse[($index * 3)] }}cm / {{ masse[($index * 3) + 1] }}
-                              cm / {{ masse[($index * 3)] + 2 }}cm</span>
+                            <span class="highlightText">
+                              {{ this.masse.length !== 0 ? masse[($index * 3)] + "cm / " : "" }}
+                              {{ this.masse.length !== 0 ? masse[($index * 3) + 1] + "cm / " : "" }}
+                              {{ this.masse.length !== 0 ? masse[($index * 3) + 2] : "" }}</span>
                           </div>
                         </div>
                         <div class="row">
