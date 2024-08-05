@@ -278,6 +278,54 @@ export class TripController {
 
   @ApiResponse({
     type: OkDTO,
+    description:
+      'By paying only the one who made a request to an offer can update the status of a drive to 2 (paid)',
+  })
+  @ApiBearerAuth()
+  @UseGuards(IsLoggedInGuard)
+  @Put('offer/:id/payment')
+  async setOfferStatusPaid(
+    @Param('id') driveId: number,
+    @Session() session: SessionData,
+  ): Promise<OkDTO> {
+    const userId = session.currentUser;
+    try {
+      await this.tripService.setOfferStatusPaid(driveId, userId);
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw new NotFoundException(error.message);
+      }
+      throw error;
+    }
+    return new OkDTO(true, 'request was updated');
+  }
+
+  @ApiResponse({
+    type: OkDTO,
+    description:
+      'Only the one who made a request to an offer can update the status of a drive to 2 (paid) by paying',
+  })
+  @ApiBearerAuth()
+  @UseGuards(IsLoggedInGuard)
+  @Put('request/:id/payment')
+  async setRequestStatusPaid(
+    @Param('id') driveId: number,
+    @Session() session: SessionData,
+  ): Promise<OkDTO> {
+    const userId = session.currentUser;
+    try {
+      await this.tripService.setRequestStatusPaid(driveId, userId);
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw new NotFoundException(error.message);
+      }
+      throw error;
+    }
+    return new OkDTO(true, 'request was updated');
+  }
+
+  @ApiResponse({
+    type: OkDTO,
     description: 'accepts a trip',
   })
   @ApiBearerAuth()

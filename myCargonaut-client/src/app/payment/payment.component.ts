@@ -82,16 +82,7 @@ export class PaymentComponent {
     this.changeTextAfterTime("Zahlung erfolgreich, danke für Ihre Buchung!", 9000);
 
     setTimeout(() => {
-      this.http.put<any>("http://localhost:8000/drive/status/" + this.paymentService.id, {newStatus: 2},
-        {withCredentials: true})
-        .subscribe(
-          (response: any) => {
-            this.router.navigate(['/profile']);
-          },
-          (error: { error: { message: string; }; }) => {
-            console.error('Fehler beim Abrufen der Angebote:', error);
-          }
-        );
+      this.paymentService.setDriveStatusPaid()
     }, 10000)
   }
 
