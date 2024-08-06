@@ -37,7 +37,7 @@ export class PaymentComponent {
   public sessionService: SessionService = inject(SessionService);
   public paymentService: PaymentService = inject(PaymentService);
 
-  isLoggedIn: boolean = true;
+  isLoggedIn: boolean = false;
   errorMessage: string | null = null;
   textColor: string = "errorText";
 

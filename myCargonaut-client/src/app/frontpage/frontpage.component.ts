@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import {Component, inject} from '@angular/core';
 import {NgbSlide} from "@ng-bootstrap/ng-bootstrap";
 import {CarouselComponent} from "./carousel/carousel.component";
 import {offer} from "../search/offers";
 import {HttpClient} from "@angular/common/http";
 import {NgOptimizedImage} from "@angular/common";
 import {RouterLink} from "@angular/router";
+import {SessionService} from "../services/session.service";
 // import { AktuelleFahrtenComponent } from "./aktuelle-fahrten/aktuelle-fahrten.component";
 
 
@@ -24,9 +25,13 @@ import {RouterLink} from "@angular/router";
 })
 export class FrontpageComponent {
 
+  public sessionService: SessionService = inject(SessionService);
+
   allOffers: offer[] = [];
   pathToImage: string = "empty.png";
   pathToImageArray: string[] = [];
+
+  isLoggedIn: boolean = false;
 
   constructor(private http: HttpClient) { }
 
@@ -40,6 +45,13 @@ export class FrontpageComponent {
 
   ngOnInit(): void {
     const prePath: string = "/vehicle/image/";
+
+    this.sessionService.checkLoginNum().then(isLoggedIn => {
+      isLoggedIn == -1 ? this.isLoggedIn = false : this.isLoggedIn = true;
+      if (!this.isLoggedIn && typeof window !== undefined) {
+        return;
+      }
+    });
 
 
     this.http.get("http://localhost:8000/drive/all/offers", { withCredentials: true })
