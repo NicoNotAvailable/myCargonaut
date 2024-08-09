@@ -51,9 +51,6 @@ export class SearchMainGesuchtComponent {
             this.pathToImageArray.push(this.pathToImage);
           }
 
-          console.log(this.pathToImageArray);
-
-
           for (let elements of this.allRequests) {
             for (let cargo of elements.cargo) {
                 this.gesamtgewicht = this.gesamtgewicht + cargo.weight;

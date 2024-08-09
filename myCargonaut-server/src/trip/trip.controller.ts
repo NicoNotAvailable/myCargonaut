@@ -59,6 +59,7 @@ export class TripController {
     if (!user) {
       throw new BadRequestException('User was not found');
     }
+
     if (user.profilePic === 'empty.png') {
       throw new BadRequestException(
         'You need a profile pic to request an offer',
@@ -71,12 +72,16 @@ export class TripController {
     if (offer.user.id == user.id) {
       throw new BadRequestException('You cant request your own offer!');
     }
-    const startLocation = await this.locationService.getLocationById(
+
+    const startLocation = await this.locationService.getLocationsOfDrive(
       body.startLocationID,
+      body.driveID,
     );
-    const endLocation = await this.locationService.getLocationById(
+    const endLocation = await this.locationService.getLocationsOfDrive(
       body.endLocationID,
+      body.driveID,
     );
+
     try {
       await this.tripService.createOfferTrip(
         user,
@@ -85,7 +90,7 @@ export class TripController {
         startLocation,
         endLocation,
       );
-      return new OkDTO(true, 'Request for the offer was created');
+      new OkDTO(true, 'Request for the offer was created');
     } catch (err) {
       throw new BadRequestException('An error occurred: ' + err.message);
     }
@@ -179,7 +184,10 @@ export class TripController {
       throw new BadRequestException('You cant request your own offer!');
     }
     const car = await this.vehicleService.getCarById(body.carID);
-    const trailer = await this.vehicleService.getTrailerById(body.trailerID);
+    let trailer = null;
+    if (body.trailerID != null && body.trailerID != 0) {
+      trailer = await this.vehicleService.getTrailerById(body.trailerID);
+    }
     try {
       await this.tripService.createRequestTrip(user, request, car, trailer);
       return new OkDTO(true, 'Request for the offer was created');
@@ -271,6 +279,54 @@ export class TripController {
     } catch (err) {
       throw new BadRequestException('An error occurred: ' + err.message);
     }
+  }
+
+  @ApiResponse({
+    type: OkDTO,
+    description:
+      'By paying only the one who made a request to an offer can update the status of a drive to 2 (paid)',
+  })
+  @ApiBearerAuth()
+  @UseGuards(IsLoggedInGuard)
+  @Put('offer/:id/payment')
+  async setOfferStatusPaid(
+    @Param('id') driveId: number,
+    @Session() session: SessionData,
+  ): Promise<OkDTO> {
+    const userId = session.currentUser;
+    try {
+      await this.tripService.setOfferStatusPaid(driveId, userId);
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw new NotFoundException(error.message);
+      }
+      throw error;
+    }
+    return new OkDTO(true, 'request was updated');
+  }
+
+  @ApiResponse({
+    type: OkDTO,
+    description:
+      'Only the one who made a request to an offer can update the status of a drive to 2 (paid) by paying',
+  })
+  @ApiBearerAuth()
+  @UseGuards(IsLoggedInGuard)
+  @Put('request/:id/payment')
+  async setRequestStatusPaid(
+    @Param('id') driveId: number,
+    @Session() session: SessionData,
+  ): Promise<OkDTO> {
+    const userId = session.currentUser;
+    try {
+      await this.tripService.setRequestStatusPaid(driveId, userId);
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw new NotFoundException(error.message);
+      }
+      throw error;
+    }
+    return new OkDTO(true, 'request was updated');
   }
 
   @ApiResponse({

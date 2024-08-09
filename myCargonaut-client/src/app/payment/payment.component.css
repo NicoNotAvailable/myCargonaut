@@ -63,3 +63,10 @@
   height: 30px;
   object-fit: contain;
 }
+
+.errorText{
+  color: darkred;
+}
+.successText{
+  color: #1a9cc5;
+}

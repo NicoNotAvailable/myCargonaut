@@ -68,19 +68,21 @@
                       <div class="col-12 col-lg-6">
                         <div class="row">
                           <div class="col-6">
-                            <span>Gesamtgewicht:</span>
+                            <span>{{ this.masse.length !== 0 ? "Gesamtgewicht:" : "" }}</span>
                           </div>
                           <div class="col-6">
-                            <span class="highlightText">{{ gesamtgewicht }} Kilo</span>
+                            <span class="highlightText">{{ this.masse.length !== 0 ? gesamtgewicht + " Kilo" : "" }}</span>
                           </div>
                         </div>
                         <div class="row">
                           <div class="col-6">
-                            <span>gesamt Maße:</span>
+                            <span>{{ this.masse.length !== 0 ? "gesamt Maße:" : "" }} </span>
                           </div>
                           <div class="col-6">
-                            <span class="highlightText">{{ masse[($index * 3)] }}cm / {{ masse[($index * 3) + 1] }}
-                              cm / {{ masse[($index * 3)] + 2 }}cm</span>
+                            <span class="highlightText">
+                              {{ this.masse.length !== 0 ? masse[($index * 3)] + "cm / " : "" }}
+                              {{ this.masse.length !== 0 ? masse[($index * 3) + 1] + "cm / " : "" }}
+                              {{ this.masse.length !== 0 ? masse[($index * 3) + 2] : "" }}</span>
                           </div>
                         </div>
                         <div class="row">
@@ -95,9 +97,13 @@
 
                       <div class="col-12 col-lg-3">
                         <div class="horizontal-right">
+                          @if (this.driveStatus == 0) {
                             <button (click)="acceptDrive(element.id)" type="button" class="btn btn-primary greenButton m-2">Anfrage annehmen</button>
-                            <button (click)="navigateToChat(element.requesting.id)" type="button" class="btn btn-primary greenButton m-2">Chatnachricht schreiben
-                            </button>
+                            <button (click)="navigateToChat(element.id)" type="button" class="btn btn-primary greenButton m-2">Chatnachricht schreiben</button>
+                          } @else if (this.driveStatus == 1) {
+                            <button (click)="toPaymentPage()" type="button" class="btn btn-primary greenButton m-2">Fahrt bezahlen</button>
+                            <button (click)="navigateToChat(element.id)" type="button" class="btn btn-primary greenButton m-2">Chatnachricht schreiben</button>
+                          }
                         </div>
                       </div>
                     </div>
@@ -199,8 +205,8 @@
                                 <span>Maße:</span>
                               </div>
                               <div class="col-6">
-                            <span class="highlightText">{{ element.car.length }}m / {{ element.car.height }}
-                              m / {{ element.car.width }}m </span>
+                            <span class="highlightText">{{ element.car.length }}cm / {{ element.car.height }}
+                              cm / {{ element.car.width }}cm </span>
                               </div>
                             </div>
                           </div>
@@ -219,21 +225,21 @@
                           <div class="col-12 ">
                             <div class="row mt-2">
                               <div class="col-6">
-                                <span>Trailer Gewicht:</span>
+                                <span>{{ element.trailer ? "Trailer Gewicht:" : null }}</span>
                               </div>
                               <div class="col-6">
-                                <span class="highlightText">{{ element.trailer.weight}} Kilo </span>
+                                <span class="highlightText">{{ element.trailer ? element.trailer.weight + " Kilo" : null }}  </span>
                               </div>
                             </div>
                           </div>
                           <div class="col-12">
                             <div class="row mt-2">
                               <div class="col-6">
-                                <span>Trailer Maße:</span>
+                                <span>{{ element.trailer ? "Trailer Maße:" : null }}</span>
                               </div>
                               <div class="col-6">
-                            <span class="highlightText">{{ element.trailer.length }}m / {{ element.trailer.height }}
-                              m / {{ element.trailer.width }}m </span>
+                            <span class="highlightText">{{ element.trailer ? element.trailer.length + " m /" : null }} {{ element.trailer ? element.trailer.height + " m /": null }}
+                              {{ element.trailer ? element.trailer.width + "m" : null }} </span>
                               </div>
                             </div>
                           </div>
@@ -243,10 +249,13 @@
 
                       <div class="col-12 col-lg-3">
                         <div class="horizontal-right">
-
+                          @if (this.driveStatus == 0) {
                             <button (click)="acceptDrive(element.id)" type="button" class="btn btn-primary greenButton m-2">Anfrage annehmen</button>
-                            <button (click)="navigateToChat(element.id)" type="button" class="btn btn-primary greenButton m-2">Chatnachricht schreiben
-                            </button>
+                            <button (click)="navigateToChat(element.id)" type="button" class="btn btn-primary greenButton m-2">Chatnachricht schreiben</button>
+                          } @else if (this.driveStatus == 1) {
+                            <button (click)="toPaymentPage()" type="button" class="btn btn-primary greenButton m-2">Fahrt bezahlen</button>
+                            <button (click)="navigateToChat(element.id)" type="button" class="btn btn-primary greenButton m-2">Chatnachricht schreiben</button>
+                          }
 
 
                         </div>

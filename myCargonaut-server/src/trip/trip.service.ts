@@ -17,6 +17,7 @@ import { TrailerDB } from '../database/TrailerDB';
 import { CreateCargoDTO } from '../cargo/DTO/CreateCargoDTO';
 import { LocationDB } from '../database/LocationDB';
 import { StatusEnum } from '../database/enums/StatusEnum';
+import {displayManualRestartTip} from "@nestjs/cli/lib/compiler/helpers/manual-restart";
 
 @Injectable()
 export class TripService {
@@ -51,9 +52,11 @@ export class TripService {
     } else {
       throw new Error('Invalid offer type');
     }
+
     newOfferTrip.usedSeats = body.usedSeats;
     newOfferTrip.startLocation = startLocation;
     newOfferTrip.endLocation = endLocation;
+
     try {
       const savedOfferTrip = await this.offerTripRepository.save(newOfferTrip);
       const cargoPromises = body.cargo.map((cargoData: CreateCargoDTO) => {
@@ -219,7 +222,6 @@ export class TripService {
     await this.tripRepository.remove(trip);
   }
   async getUserTrips(user: number) {
-    console.log('userId ' + user);
     const offerTrips = await this.offerTripRepository.find({
       where: { requesting: { id: user } },
       relations: ['requesting', 'drive', 'messages', 'drive.user'],
@@ -253,5 +255,62 @@ export class TripService {
     });
 
     return { offerTrips, requestTrips, offerDriveTrips, requestDriveTrips };
+  }
+
+  async setOfferStatusPaid(offerId: number, userId: number): Promise<DriveDB> {
+    const drive = await this.driveRepository.findOne({
+      where: { id: offerId },
+    });
+    if (!drive) {
+      throw new NotFoundException('Offer not found');
+    }
+    const trip = await this.tripRepository
+      .createQueryBuilder('trip')
+      .leftJoinAndSelect('trip.requesting', 'user')
+      .leftJoinAndSelect('trip.drive', 'drive')
+      .where('trip.driveId = :offerId', { offerId })
+      .andWhere('trip.requestingId = :userId', { userId })
+      .getOne();
+    if (!trip || trip.requesting.id !== userId) {
+      throw new UnauthorizedException(
+        'User is not the one who requested this offer',
+      );
+    }
+
+    drive.status = 2;
+
+    try {
+      return await this.driveRepository.save(drive);
+    } catch (error) {
+      throw new Error('An error occurred while updating the offer');
+    }
+  }
+
+  async setRequestStatusPaid(
+    offerId: number,
+    userId: number,
+  ): Promise<DriveDB> {
+    const drive = await this.driveRepository.findOne({
+      where: { id: offerId, user: { id: userId } },
+      relations: ['user'],
+    });
+
+    if (!drive) {
+      throw new NotFoundException('Request not found');
+    }
+
+    if (drive.user.id !== userId) {
+      throw new NotFoundException(
+        'User is not the one who created this request',
+      );
+    }
+
+    drive.status = 2;
+
+    try {
+      return await this.driveRepository.save(drive);
+    } catch (error) {
+      throw new Error('An error occurred while updating the offer');
+    }
   }
 }

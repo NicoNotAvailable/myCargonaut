@@ -15,7 +15,7 @@
           <div class="col-5">
             <h1 class="textGreen col-7">Infos:</h1>
             <div class="col-12">
-              <input [(ngModel)]="model" [ngModelOptions]="{standalone: true}" type="text" class="rounded-5 p-2 col-8" required placeholder="Modell" id="trailerModel">
+              <input [(ngModel)]="model" [ngModelOptions]="{standalone: true}" type="text" class="rounded-5 p-2 col-8" required placeholder="Modellname" id="trailerModel">
             </div>
             <div class="col-12 mt-5 d-flex align-bottom justify-content-start align-items-center" *ngIf="editingTrailer != 0">
               <button type="button" class="btn customButton deleteButton text-light" (click)="deleteTrailer(editingTrailer)">
@@ -29,16 +29,16 @@
           <div class="col-5">
             <h1 class="textGreen col-7">Maße:</h1>
             <div class="col-12">
-              <input [(ngModel)]="weight" [ngModelOptions]="{standalone: true}" type="number" required class="rounded-5 p-2 col-8" placeholder="Gewicht in KG" id="trailerWeight">
+              <input [(ngModel)]="weight" [ngModelOptions]="{standalone: true}" type="number" required class="rounded-5 p-2 col-8" placeholder="max. Gewicht in kg (Bsp. 535,50)" id="trailerWeight">
             </div>
             <div class="col-12 mt-5">
-              <input [(ngModel)]="length" [ngModelOptions]="{standalone: true}" type="number" required class="rounded-5 p-2 col-8" placeholder="Länge in M" id="trailerLength">
+              <input [(ngModel)]="length" [ngModelOptions]="{standalone: true}" type="number" required class="rounded-5 p-2 col-8" placeholder="Länge in cm (Bsp. 320)" id="trailerLength">
             </div>
             <div class="col-12 mt-5">
-              <input [(ngModel)]="width" [ngModelOptions]="{standalone: true}" type="number" required class="rounded-5 p-2 col-8" placeholder="Breite in M" id="trailerWidth">
+              <input [(ngModel)]="width" [ngModelOptions]="{standalone: true}" type="number" required class="rounded-5 p-2 col-8" placeholder="Breite in cm (Bsp. 130)" id="trailerWidth">
             </div>
             <div class="col-12 mt-5">
-              <input [(ngModel)]="height" [ngModelOptions]="{standalone: true}" type="number" required class="rounded-5 p-2 col-8" placeholder="Höhe in M" id="trailerHeight">
+              <input [(ngModel)]="height" [ngModelOptions]="{standalone: true}" type="number" required class="rounded-5 p-2 col-8" placeholder="Höhe in cm (Bsp. 80)" id="trailerHeight">
             </div>
             <div class="col-12 mt-3">
               <div class="row">

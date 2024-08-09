@@ -56,15 +56,10 @@ export class ReviewReadComponent {
   }
 
   getReview() {
-    console.log("getReview");
-
     this.http.get("http://localhost:8000/review", { withCredentials: true })
       .subscribe(
         (response: any) => {
-          console.log('Reviews2', response.length);
-
           this.reviewsArray = response;
-          console.log(this.reviewsArray);
           for (let i: number = 0; i < response.length; i++) {
             this.reviewTitle = response[i].writer.firstName + " " + response[i].writer.lastName;
             this.reviewContent = response[i].text;

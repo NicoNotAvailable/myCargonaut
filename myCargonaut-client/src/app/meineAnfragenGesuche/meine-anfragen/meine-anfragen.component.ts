@@ -60,7 +60,6 @@ export class MeineAnfragenComponent {
           }
 
 
-          console.log(this.allOffers)
         },
         (error: { error: { message: string; }; }) => {
           console.error('Fehler beim Abrufen der Angebote:', error);

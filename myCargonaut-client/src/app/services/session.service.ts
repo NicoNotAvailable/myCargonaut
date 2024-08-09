@@ -17,8 +17,6 @@ export class SessionService {
     try {
       const response = await this.http.get<any>("http://localhost:8000/session/getSessionUser", { withCredentials: true }).toPromise();
       this.userID = response.id;
-      console.log("Hallo " + response.id);
-      console.log(this.userID);
       return this.userID;
     } catch (error) {
       console.error(error);

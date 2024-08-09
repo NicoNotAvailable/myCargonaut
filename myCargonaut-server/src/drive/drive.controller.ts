@@ -105,7 +105,7 @@ export class DriveController {
     if (!body.name?.trim()) errors.push('Request name cannot be empty');
     if (!body.date) errors.push('Date cannot be empty');
     if (!body.price) errors.push('Price cannot be empty');
-    if (body.seats !== undefined && body.seats > 10)
+    if (body.seats !== undefined && body.seats > 9)
       errors.push('Too many seats');
     if (body.smokingAllowed === undefined)
       errors.push('Smoking allowed must be specified');

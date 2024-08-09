@@ -13,13 +13,13 @@ export class SocketService {
   constructor() {}
 
   public init(): void {
-    console.log('Socket initialization started...');
+    //console.log('Socket initialization started...');
     if (!this.socketInitialized) {
       this.socket = io(this.url, {
         autoConnect: true
       });
       this.socketInitialized = true;
-      console.log('Socket initialized:', this.socketInitialized);
+      //console.log('Socket initialized:', this.socketInitialized);
     }
   }
 

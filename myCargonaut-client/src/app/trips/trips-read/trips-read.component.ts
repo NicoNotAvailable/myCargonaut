@@ -5,6 +5,7 @@ import {ActivatedRoute} from "@angular/router";
 import { GetOffer } from '../GetOffer';
 import { GetRequest } from '../GetRequest';
 import { VehicleService } from '../../services/vehicle.service';
+import {offer} from "../../search/offers";
 
 @Component({
   selector: 'app-trips-read',
@@ -24,8 +25,8 @@ export class TripsReadComponent implements OnInit {
   carTV: boolean = false;
   carAC: boolean = false;
 
-  trailerCool: boolean = false;
-  trailerEnclosed: boolean = false;
+  trailerCool: boolean | null = null;
+  trailerEnclosed: boolean | null = null;
 
   @Input() offer: GetOffer | undefined;
   @Input() request: GetRequest | undefined;
@@ -62,7 +63,6 @@ export class TripsReadComponent implements OnInit {
         this.carModel = data.name;
         this.carTV = data.hasTelevision;
         this.carAC = data.hasAC;
-        console.log(this.carModel);
       },
       error: (error) => {
         console.error(error);

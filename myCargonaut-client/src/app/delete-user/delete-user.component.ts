@@ -60,9 +60,7 @@ export class DeleteUserComponent {
         headers: { 'Content-Type': 'application/json' },
       },
     ).subscribe(data => {
-      console.log(data);
       sessionStorage.clear();
-
     });
 
   }

@@ -67,7 +67,7 @@
             <h1 class="textGreen col-5">Infos:</h1>
 
             <div class="col-12 d-flex">
-              <input [(ngModel)]="model" [ngModelOptions]="{standalone: true}" name="modelInput" required type="text" class="rounded-5 p-2 col-12" placeholder="Modell" id="carModel">
+              <input [(ngModel)]="model" [ngModelOptions]="{standalone: true}" name="modelInput" required type="text" class="rounded-5 p-2 col-12" placeholder="Modellname" id="carModel">
             </div>
             <div class="col-12 mt-5 d-flex justify-content-center" *ngIf="editingCar != 0">
               <p>Bild des Autos</p>
@@ -79,16 +79,16 @@
           <div class="col-4">
             <h1 class="textGreen col-5">Maße:</h1>
             <div class="col-12">
-              <input [(ngModel)]="weight" [ngModelOptions]="{standalone: true}" name="weightInput" required type="number" class="rounded-5 p-2 col-12" placeholder="Gewicht in KG" id="carWeight">
+              <input [(ngModel)]="weight" [ngModelOptions]="{standalone: true}" name="weightInput" required type="number" class="rounded-5 p-2 col-12" placeholder="max. Gewicht in kg (Bsp. 535,50)" id="carWeight">
             </div>
             <div class="col-12 mt-5">
-              <input [(ngModel)]="length" [ngModelOptions]="{standalone: true}" name="lengthInput" required type="number" class="rounded-5 p-2 col-12" placeholder="Länge in M" id="carLength">
+              <input [(ngModel)]="length" [ngModelOptions]="{standalone: true}" name="lengthInput" required type="number" class="rounded-5 p-2 col-12" placeholder="Länge in cm (Bsp. 320)" id="carLength">
             </div>
             <div class="col-12 mt-5">
-              <input [(ngModel)]="width" [ngModelOptions]="{standalone: true}" name="widthInput" required type="number" class="rounded-5 p-2 col-12" placeholder="Breite in M" id="carWidth">
+              <input [(ngModel)]="width" [ngModelOptions]="{standalone: true}" name="widthInput" required type="number" class="rounded-5 p-2 col-12" placeholder="Breite in cm (Bsp. 130)" id="carWidth">
             </div>
             <div class="col-12 mt-5">
-              <input [(ngModel)]="height" [ngModelOptions]="{standalone: true}" name="heightInput" required type="number" class="rounded-5 p-2 col-12" placeholder="Höhe in M" id="carHeight">
+              <input [(ngModel)]="height" [ngModelOptions]="{standalone: true}" name="heightInput" required type="number" class="rounded-5 p-2 col-12" placeholder="Höhe in cm (Bsp. 80)" id="carHeight">
             </div>
             <div class="col-12 mt-5 form-check text-start flex-row justify-content-start align-items-center">
               <input [(ngModel)]="hasTv" [ngModelOptions]="{standalone: true}" name="hasTvCheckbox" type="checkbox" class="form-check-input me-3" id="flexCheckDefault" style="width: 2rem; height: 2rem">

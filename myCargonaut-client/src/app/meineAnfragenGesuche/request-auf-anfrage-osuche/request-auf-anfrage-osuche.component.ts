@@ -7,6 +7,7 @@ import { requestTrips } from "../requestTrips";
 import { SessionService } from "../../services/session.service";
 import { UserService } from "../../services/user.service";
 import { NgForOf, NgOptimizedImage } from "@angular/common";
+import {PaymentService} from "../../services/payment.service";
 
 @Component({
   selector: 'app-request-auf-anfrage-osuche',
@@ -23,6 +24,8 @@ export class RequestAufAnfrageOSucheComponent  implements OnInit {
 
   allTripsOffer: offerTrips[] = [];
   allTripsRequest: requestTrips[] = [];
+
+  driveStatus = 0;
 
   thisRequestLocations: any[] = [];
 
@@ -63,6 +66,7 @@ export class RequestAufAnfrageOSucheComponent  implements OnInit {
   isLoggedIn: boolean = false;
   public sessionService: SessionService = inject(SessionService);
   public userService: UserService = inject(UserService);
+  public paymentService: PaymentService = inject(PaymentService);
 
   ngOnInit(): void {
 
@@ -76,8 +80,6 @@ export class RequestAufAnfrageOSucheComponent  implements OnInit {
     });
 
     this.id = Number(this.route.snapshot.paramMap.get('id'));    // Jetzt kannst du mit der ID arbeiten
-    console.log('Request ID:', this.id);
-
     this.updateCurrentRoute();
 
     this.router.events.pipe(
@@ -90,7 +92,6 @@ export class RequestAufAnfrageOSucheComponent  implements OnInit {
 
   private updateCurrentRoute(): void {
     const route = this.router.url.split('/');
-
     if (route.length > 1 && route[1]) {
       this.currentRoute = route[1];
     } else {
@@ -109,6 +110,7 @@ export class RequestAufAnfrageOSucheComponent  implements OnInit {
         .subscribe(
           (response: any) => {
             this.thisOfferName = response.name;
+            this.driveStatus = response.status;
             },
           (error: { error: { message: string; }; }) => {
             console.error('Fehler beim Abrufen der Angebote:', error);
@@ -122,6 +124,7 @@ export class RequestAufAnfrageOSucheComponent  implements OnInit {
           (response: any) => {
             this.allTripsOffer = response;
 
+            console.log(response)
 
             this.prePath = "/user/image/"
 
@@ -137,25 +140,24 @@ export class RequestAufAnfrageOSucheComponent  implements OnInit {
               }
             }
 
-            for (let elements of this.allTripsOffer) {
-              for (let cargo of elements.cargo) {
-                this.gesamtLength = this.gesamtLength + cargo.length;
-                this.gesamtHeight = this.gesamtHeight + cargo.height;
-                this.gesamtWidth = this.gesamtWidth + cargo.width;
+            if (this.allTripsOffer[0].cargo.length !== 0) {
+              for (let elements of this.allTripsOffer) {
+                for (let cargo of elements.cargo) {
+                  this.gesamtLength = this.gesamtLength + cargo.length;
+                  this.gesamtHeight = this.gesamtHeight + cargo.height;
+                  this.gesamtWidth = this.gesamtWidth + cargo.width;
+                }
+
+                this.masse.push(this.gesamtLength);
+                this.masse.push(this.gesamtHeight);
+                this.masse.push(this.gesamtWidth);
+
+                this.gesamtWidth = 0;
+                this.gesamtLength = 0;
+                this.gesamtHeight = 0;
+
               }
-
-              this.masse.push(this.gesamtLength);
-              this.masse.push(this.gesamtHeight);
-              this.masse.push(this.gesamtWidth);
-
-              console.log(this.masse)
-
-              this.gesamtWidth = 0;
-              this.gesamtLength = 0;
-              this.gesamtHeight = 0;
-
             }
-
           },
           (error: { error: { message: string; }; }) => {
             console.error('Fehler beim Abrufen der Angebote:', error);
@@ -172,10 +174,9 @@ export class RequestAufAnfrageOSucheComponent  implements OnInit {
       this.http.get(`http://localhost:8000/drive/request/${this.id}`, {withCredentials: true})
         .subscribe(
           (response: any) => {
-
-
             this.thisRequestLocations = response.locations;
             this.thisRequestName = response.name;
+            this.driveStatus = response.status
           },
           (error: { error: { message: string; }; }) => {
             console.error('Fehler beim Abrufen der Angebote:', error);
@@ -191,13 +192,10 @@ export class RequestAufAnfrageOSucheComponent  implements OnInit {
             this.prePath = "/user/image/"
 
             for (let element of response) {
-              console.log(element)
               const imagePath: string = element.requesting.profilePic;
               this.pathToImage = imagePath === "empty.png" ? "/empty.png" : this.prePath.concat(imagePath);
               this.pathToImageArray.push(this.pathToImage);
             }
-            console.log(this.pathToImageArray);
-
           },
           (error: { error: { message: string; }; }) => {
             console.error('Fehler beim Abrufen der Angebote:', error);
@@ -215,7 +213,6 @@ export class RequestAufAnfrageOSucheComponent  implements OnInit {
     this.http.put('http://localhost:8000/trip/accept/' + tripId, {},{ withCredentials: true })
       .subscribe(
         response => {
-          console.log('Request accepted', response);
           this.router.navigate(['/allTrips'], { queryParams: { tripId } });
         },
         error => {
@@ -223,6 +220,10 @@ export class RequestAufAnfrageOSucheComponent  implements OnInit {
           console.error('There was an error!', error);
         },
       );
+  }
+
+  toPaymentPage() {
+    this.router.navigate(['/request/' + this.id + '/payment'], { queryParams: { this: this.id } });
   }
 
   protected readonly window = window;

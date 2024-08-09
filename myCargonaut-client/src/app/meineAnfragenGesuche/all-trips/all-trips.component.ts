@@ -6,9 +6,14 @@ import { SessionService } from '../../services/session.service';
 import { UserService } from '../../services/user.service';
 import { DateFormatPipe } from '../../search/date-format.pipe';
 import { offer } from '../../search/offers';
-import { DatePipe, NgClass, NgForOf, NgIf, NgOptimizedImage } from '@angular/common';
+import {CurrencyPipe, DatePipe, NgClass, NgForOf, NgIf, NgOptimizedImage} from '@angular/common';
 import { SearchCardComponent } from '../../search/search-main/search-card/search-card.component';
 import { TripService } from '../../services/trip-service.service';
+
+import {LOCALE_ID} from '@angular/core';
+import {registerLocaleData} from '@angular/common';
+import localeDe from '@angular/common/locales/de';
+import localeDeExtra from '@angular/common/locales/extra/de';
 
 @Component({
   selector: 'app-all-trips',
@@ -22,6 +27,7 @@ import { TripService } from '../../services/trip-service.service';
     NgIf,
     NgClass,
     DatePipe,
+    CurrencyPipe,
   ],
   templateUrl: './all-trips.component.html',
   styleUrls: ['./all-trips.component.css']
@@ -51,8 +57,6 @@ export class AllTripsComponent {
       if (currentUser != -1) {
         this.isLoggedIn = true;
         this.userID = currentUser;
-        console.log(currentUser + ' this is the user ID');
-        console.log(this.userID + ' this is the user ID');
         this.getAllTrips(); // Move getAllTrips() here
         this.loadTripsData();
       } else {
@@ -134,7 +138,6 @@ export class AllTripsComponent {
   }
 
   handleButtonClick(number: number) {
-    console.log(number);
     this.sendTripId(number)
   }
 
@@ -142,16 +145,10 @@ export class AllTripsComponent {
     this.tripService.changeTripId(number);  // Update the trip ID in the service
     this.router.navigate(['/review']);      // Navigate to the review route
   }
-  handleButtonClick2(number: number) {
-    console.log(number);
-  }
 
   getAllTrips() {
-    console.log("getAllTrips");
     this.http.get('http://localhost:8000/trip/user-trips/' + this.userID, { withCredentials: true }).subscribe(
       (response: any) => {
-        // Log the response to understand its structure
-        console.log('Response:', response);
 
         const offerTrips = response.offerTrips
           .filter((offerTrip: any) => offerTrip.drive && (offerTrip.drive.status === 3 || offerTrip.drive.status === 4 || offerTrip.drive.status === 5))
@@ -213,14 +210,8 @@ export class AllTripsComponent {
             locations: requestDriveTrips.locations || []
 
           }));
-        console.log(requestDriveTrips.locations + "Test");
-        console.log(requestTrips.locations + "Test");
-        console.log(offerDriveTrips.locations + "Test");
-        console.log(offerTrips.locations + "Test");
         // Combine all trips into activeTrips
         this.activeTrips = [].concat(offerTrips, requestTrips, offerDriveTrips, requestDriveTrips);
-        console.log('Active Trips:', this.activeTrips);
-        console.log("Requesst:", this.allRequests)
       },
       error => {
         console.error('Error fetching requests:', error);

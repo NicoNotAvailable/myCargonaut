@@ -73,7 +73,7 @@ export class TripsComponent implements OnInit {
       next: (data: GetOffer) => {
         this.offer = data;
         this.rating = this.offer.user.rating;
-        console.log('Offer Details:', this.offer);
+        this.offer.locations.sort((a, b) => a.stopNr - b.stopNr);
       },
       error: (error) => {
         console.error('Error fetching offer details:', error);
@@ -85,7 +85,6 @@ export class TripsComponent implements OnInit {
       next: (data: GetRequest) => {
         this.request = data;
         this.rating = this.request.user.rating;
-        console.log('Offer Details:', this.request);
         },
       error: (error) => {
         console.error('Error fetching offer details:', error);
@@ -100,6 +99,4 @@ export class TripsComponent implements OnInit {
   starFillSrc: string = './assets/star-fill.svg';
   starEmptySrc: string = './assets/star.svg';
   stars: number[] = [1, 2, 3, 4, 5];
-
-
 }

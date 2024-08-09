@@ -7,9 +7,13 @@ import { Router } from '@angular/router';
 import { SessionService } from '../../services/session.service';
 import { UserService } from '../../services/user.service';
 import { request } from '../../search/requests';
-import { NgForOf, NgIf, NgOptimizedImage } from '@angular/common';
+import {CurrencyPipe, NgForOf, NgIf, NgOptimizedImage} from '@angular/common';
 import { DateFormatPipe } from '../../search/date-format.pipe';
 import { TripService } from '../../services/trip-service.service';
+import {LOCALE_ID} from '@angular/core';
+import {registerLocaleData} from '@angular/common';
+import localeDe from '@angular/common/locales/de';
+import localeDeExtra from '@angular/common/locales/extra/de';
 
 @Component({
   selector: 'app-meine-letzten-fahrten',
@@ -21,6 +25,7 @@ import { TripService } from '../../services/trip-service.service';
     DateFormatPipe,
     NgForOf,
     NgIf,
+    CurrencyPipe,
   ],
   templateUrl: './meine-letzten-fahrten.component.html',
   styleUrl: './meine-letzten-fahrten.component.css',
@@ -124,15 +129,12 @@ export class MeineLetztenFahrtenComponent {
   }
 
   handleButtonClick(number: number) {
-    console.log(number);
     this.tripService.changeTripId(number);
     this.router.navigate(['/review']);  }
 
   handleButtonClick2(number: number) {
-    console.log(number);
     this.tripService.changeTripId(number);
     this.router.navigate(['/review']);
-
   }
 
   protected readonly window = window;

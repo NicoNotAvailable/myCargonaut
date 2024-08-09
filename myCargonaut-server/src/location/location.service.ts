@@ -19,4 +19,17 @@ export class LocationService {
     }
     return location;
   }
+
+  async getLocationsOfDrive(
+    locationID: number,
+    driveID: number,
+  ): Promise<LocationDB> {
+    const location = await this.locationRepository.findOne({
+      where: { stopNr: locationID, drive: { id: driveID } },
+    });
+    if (!location) {
+      throw new NotFoundException('Location not found');
+    }
+    return location;
+  }
 }

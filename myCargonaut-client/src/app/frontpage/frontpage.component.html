@@ -15,16 +15,18 @@
       Nutze unsere Suche und Tracking-Funktionen, um die besten Optionen für dich zu finden. Leg los und erlebe, wie unkompliziert es sein kann! </p>
   </div>
 </div>
-
-<div class="container d-flex justify-content-center">
-  <div class="col-8 justify-content-center mb-5 mt-5">
-    <div class="row">
-      <p class="greenText text-center justify-content-center">Noch Kein Account?</p>
-    </div>
-    <div class="row d-flex justify-content-center">
-      <div class="col-1 d-flex justify-content-center">
-        <button class="btn btn-primary greenButton">Registrieren</button>
+@if (!this.isLoggedIn) {
+  <div class="container d-flex justify-content-center">
+    <div class="col-8 justify-content-center mb-5 mt-5">
+      <div class="row">
+        <p class="greenText text-center justify-content-center">Noch Kein Account?</p>
+      </div>
+      <div class="row d-flex justify-content-center">
+        <div class="col-1 d-flex justify-content-center">
+          <button routerLink="/register" class="btn btn-primary greenButton">Registrieren</button>
+        </div>
       </div>
     </div>
   </div>
-</div>
+}
+

@@ -45,7 +45,7 @@ export class VehicleService {
       const savedCar = await this.carRepository.save(newCar);
       return savedCar;
     } catch (error) {
-      console.log('Error saving CarDB:', error);
+      console.error('Error saving CarDB:', error);
       throw new Error('An error occurred while saving the car');
     }
   }
