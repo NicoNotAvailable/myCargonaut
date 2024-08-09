@@ -277,7 +277,7 @@ export class TripService {
       );
     }
 
-    drive.status = 2;
+    drive.status = 3;
 
     try {
       return await this.driveRepository.save(drive);
@@ -305,7 +305,7 @@ export class TripService {
       );
     }
 
-    drive.status = 2;
+    drive.status = 3;
 
     try {
       return await this.driveRepository.save(drive);

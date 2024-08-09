@@ -5,10 +5,15 @@ import { Router } from '@angular/router';
 import { SessionService } from '../../services/session.service';
 import { UserService } from '../../services/user.service';
 import { DateFormatPipe } from '../../search/date-format.pipe';
+import { offer } from '../../search/offers';
 import {CurrencyPipe, DatePipe, NgClass, NgForOf, NgIf, NgOptimizedImage} from '@angular/common';
 import { SearchCardComponent } from '../../search/search-main/search-card/search-card.component';
 import { TripService } from '../../services/trip-service.service';
 
+import {LOCALE_ID} from '@angular/core';
+import {registerLocaleData} from '@angular/common';
+import localeDe from '@angular/common/locales/de';
+import localeDeExtra from '@angular/common/locales/extra/de';
 
 @Component({
   selector: 'app-all-trips',
@@ -103,17 +108,16 @@ export class AllTripsComponent {
 
   checkTrips(trips: any[]) {
     trips.forEach(trip => {
-      if (trip?.drive?.status === 3 || 4 || 5) {
+      // Check if drive status is 3, 4, or 5
+      if (trip?.drive?.status === 3 || trip?.drive?.status === 4 || trip?.drive?.status === 5) {
         this.activeTrips.push(trip);
-      } else if ((trip?.drive?.status === 1 || 2) && (trip?.requesting?.id === this.userID)) {
+      }
+      // Check if drive status is 0, 1, or 2 and requesting user ID matches
+      else if ((trip?.drive?.status === 0 || trip?.drive?.status === 1 || trip?.drive?.status === 2) && (trip?.requesting?.id === this.userID)) {
         this.oneAndTwoTrips.push(trip);
       }
     });
   }
-
-
-
-
 
   handleButtonClickStatus(number: number) {
     this.sendTripId(number)
@@ -124,5 +128,12 @@ export class AllTripsComponent {
     this.router.navigate(['/review']);      // Navigate to the review route
   }
 
+  toPaymentPage(id: number, priceType: number) {
+    if (!priceType) {
+      this.router.navigate(['/request/' + id + '/payment'], { queryParams: { this: id } });
+    } else {
+      this.router.navigate(['/offer/' + id + '/payment'], { queryParams: { this: id } });
+    }
+  }
 
 }

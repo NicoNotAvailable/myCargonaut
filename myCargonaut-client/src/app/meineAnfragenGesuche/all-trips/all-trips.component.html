@@ -219,8 +219,8 @@
                               </div>
                             </div>
                           </div>
-                          <div *ngIf="trip.drive.status === 2">
-                            <button type="button" (click)="handleButtonClickStatus(trip.id)"
+                          <div *ngIf="trip.drive.status === 1">
+                            <button type="button" (click)="toPaymentPage(trip.drive.id, trip.drive.priceType)"
                                     class="btn btn-primary greenButton">
                               Zur Bezahlung
                             </button>
