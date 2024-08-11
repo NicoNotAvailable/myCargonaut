@@ -39,7 +39,7 @@ const mockSession: SessionData = {
   },
 };
 
-describe('UserController', () => {
+describe('Session Controller', () => {
   let userController: UserController;
   let userService: UserService;
   let reviewService: ReviewService;
