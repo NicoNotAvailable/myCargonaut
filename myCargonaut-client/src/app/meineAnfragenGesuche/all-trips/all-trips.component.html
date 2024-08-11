@@ -111,7 +111,7 @@
                                   <button type="button" class="btn btn-primary greenButton m-2" (click)="finishedDrive(activeTrip.drive.id)">Fahrt Beenden</button>
                                 </div>
                                 <div class="horizontal-right" *ngIf="activeTrip.drive.status === 4">
-                                  <button type="button" (click)="handleButtonClickStatus(activeTrip.drive.id)"
+                                  <button type="button" (click)="handleButtonClickStatus(activeTrip.id)"
                                           class="btn btn-primary greenButton">Zur Review
                                   </button>
                                 </div>

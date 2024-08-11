@@ -44,7 +44,7 @@ export class ReviewCreateComponent {
       if (currentUser != -1) {
         this.isloggedIn = true;
         this.currentUserID = currentUser;
-        this.getAllTrips(); // Move getAllTrips() here
+        this.getAllTrips();
       } else {
         this.isloggedIn = false;
       }
@@ -89,7 +89,7 @@ export class ReviewCreateComponent {
   createReview(){
 
     const reviewData = {
-      tripId: this.tripId,
+      tripID: this.tripId,
       rating: this.averageFilledStars,
       text: this.text,
     };

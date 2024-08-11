@@ -1,4 +1,4 @@
-<div class="container" *ngIf="isUserInvolved">
+<div class="container" *ngIf="!isUserInvolved">
   <div class="row">
     <div class="col-lg-12 col-12">
       <div class="card m-4">
@@ -84,7 +84,7 @@
   </div>
 
 </div>
-<div class="container" *ngIf="!isUserInvolved">
+<div class="container" *ngIf="isUserInvolved">
   <div class="row">
     <div class="col-lg-12 col-12">
       <div class="card m-4">
