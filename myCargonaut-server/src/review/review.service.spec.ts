@@ -39,12 +39,15 @@ describe('ReviewService', () => {
 
     service = module.get<ReviewService>(ReviewService);
     tripRepository = module.get<Repository<TripDB>>(getRepositoryToken(TripDB));
-    reviewRepository = module.get<Repository<ReviewDB>>(getRepositoryToken(ReviewDB));
-    driveRepository = module.get<Repository<DriveDB>>(getRepositoryToken(DriveDB));
+    reviewRepository = module.get<Repository<ReviewDB>>(
+      getRepositoryToken(ReviewDB),
+    );
+    driveRepository = module.get<Repository<DriveDB>>(
+      getRepositoryToken(DriveDB),
+    );
   });
 
   it('should be defined', () => {
     expect(service).toBeDefined();
   });
-
 });
