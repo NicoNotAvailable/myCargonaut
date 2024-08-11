@@ -44,9 +44,9 @@ import { UtilsService } from '../utils/utils.service';
 @Controller('user')
 export class UserController {
   constructor(
-    private readonly userService: UserService,
-    private readonly utilsService: UtilsService,
-    private readonly reviewService: ReviewService,
+    public readonly userService: UserService,
+    public readonly utilsService: UtilsService,
+    public readonly reviewService: ReviewService,
   ) {}
 
   private readonly logger = new Logger(UserController.name);
@@ -102,20 +102,23 @@ export class UserController {
       rating = await this.reviewService.getRating(session.currentUser);
     } catch (err) {
       console.error(err);
+      user = {} as UserDB;
+      rating = 0;
     }
     const dto: GetOwnUserDTO = new GetOwnUserDTO();
-    dto.lastName = user.lastName;
-    dto.firstName = user.firstName;
-    dto.email = user.email;
-    dto.profilePic = user.profilePic;
-    dto.phoneNumber = user.phoneNumber;
-    dto.birthday = user.birthday;
-    dto.isSmoker = user.isSmoker;
-    dto.profileText = user.profileText;
-    dto.languages = user.languages;
+    dto.lastName = user?.lastName || '';
+    dto.firstName = user?.firstName || '';
+    dto.email = user?.email || '';
+    dto.profilePic = user?.profilePic || '';
+    dto.phoneNumber = user?.phoneNumber || '';
+    dto.birthday = user?.birthday || new Date();
+    dto.isSmoker = user?.isSmoker || false;
+    dto.profileText = user?.profileText || '';
+    dto.languages = user?.languages || '';
     dto.rating = rating;
     return dto;
   }
+
 
   @ApiResponse({ type: OkDTO, description: 'creates a new user' })
   @Post()
