@@ -78,7 +78,9 @@ export class AllTripsComponent {
 
   getAllTrips() {
     console.log("getAllTripsData");
-    const prePath: string = '/user/image/';
+    this.activeTrips = []
+
+    //const prePath: string = '/vehicle/image/';
     this.http.get(`http://localhost:8000/trip/user-trips/${this.userID}`, { withCredentials: true }).subscribe(
       (response: any) => {
         this.checkTrips(response.offerTrips);
@@ -86,22 +88,25 @@ export class AllTripsComponent {
         this.checkTrips(response.offerDriveTrips);
         this.checkTrips(response.requestDriveTrips);
 
+        // Combine all trips to process additional data
+        const allTrips = [...this.activeTrips, ...this.oneAndTwoTrips];
+
+        // Fetch additional data for each trip's drive
+        allTrips.forEach(trip => {
+          this.getDriveDataOffer(trip.drive.id);
+          this.getDriveDataRequest(trip.drive.id)
+        });
+
+
         console.log("All Activ Trips" );
         console.log( this.activeTrips);
         console.log("Status 1 or 2 ")
         console.log(this.oneAndTwoTrips)
 
 
-
-        response.forEach((element: { user: { profilePic: string; }; }) => {
-          const imagePath: string = element.user.profilePic;
-          this.pathToImageArray.push(imagePath === 'empty.png' ? '/empty.png' : prePath.concat(imagePath));
-        });
-
-
       },
       error => {
-        console.error('Error fetching requests:', error);
+        console.error('Error fetching trips:', error);
       }
     );
   }
@@ -115,8 +120,60 @@ export class AllTripsComponent {
       // Check if drive status is 0, 1, or 2 and requesting user ID matches
       else if ((trip?.drive?.status === 0 || trip?.drive?.status === 1 || trip?.drive?.status === 2) && (trip?.requesting?.id === this.userID)) {
         this.oneAndTwoTrips.push(trip);
+      } else if ((trip?.drive?.id === this.userID) && (trip?.drive?.status === 1)) {
+        this.oneAndTwoTrips.push(trip);
       }
     });
+  }
+
+  getDriveDataOffer(driveID: number) {
+    this.http.get(`http://localhost:8000/drive/offer/${driveID}`, { withCredentials: true }).subscribe(
+      (response: any) => {
+        // Update the trip in activeTrips if it matches the drive ID
+        let tripToUpdate = this.activeTrips.find((trip: { drive: { id: number; }; }) => trip.drive.id === driveID);
+
+        // If not found in activeTrips, search in oneAndTwoTrips
+        if (!tripToUpdate) {
+          tripToUpdate = this.oneAndTwoTrips.find((trip: { drive: { id: number; }; }) => trip.drive.id === driveID);
+        }
+
+        // If a matching trip is found, merge the additional data
+        if (tripToUpdate) {
+          Object.assign(tripToUpdate.drive, response);
+          console.log(`Updated trip with drive ID ${driveID}:`, tripToUpdate);
+        }
+
+
+      },
+      error => {
+        console.error('Error fetching drive data:', error);
+      }
+    );
+  }
+
+  getDriveDataRequest(driveID: number) {
+    this.http.get(`http://localhost:8000/drive/request/${driveID}`, { withCredentials: true }).subscribe(
+      (response: any) => {
+        // Update the trip in activeTrips if it matches the drive ID
+        let tripToUpdate = this.activeTrips.find((trip: { drive: { id: number; }; }) => trip.drive.id === driveID);
+
+        // If not found in activeTrips, search in oneAndTwoTrips
+        if (!tripToUpdate) {
+          tripToUpdate = this.oneAndTwoTrips.find((trip: { drive: { id: number; }; }) => trip.drive.id === driveID);
+        }
+
+        // If a matching trip is found, merge the additional data
+        if (tripToUpdate) {
+          Object.assign(tripToUpdate.drive, response);
+          console.log(`Updated trip with drive ID ${driveID}:`, tripToUpdate);
+        }
+
+
+      },
+      error => {
+        console.error('Error fetching drive data:', error);
+      }
+    );
   }
 
   handleButtonClickStatus(number: number) {
@@ -136,4 +193,18 @@ export class AllTripsComponent {
     }
   }
 
+  finishedDrive(tripId: number) {
+    console.log("finishedDrive");
+    this.http.put(`http://localhost:8000/drive/status/${tripId}`, { newStatus: 4}, {withCredentials: true}).subscribe(
+      (response: any) => {
+        this.ngOnInit()
+
+      },
+      error => {
+        console.error('Error fetching requests:', error);
+      }
+    );
+  }
+
+  protected readonly window = window;
 }

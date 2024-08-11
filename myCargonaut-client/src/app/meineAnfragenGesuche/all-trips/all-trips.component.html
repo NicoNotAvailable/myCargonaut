@@ -107,8 +107,8 @@
                                   <div class="line"></div>
                                   <div class="dot" [ngClass]="{'highlight': activeTrip.drive.status === 4}"></div>
                                 </div>
-                                <div class="horizontal-right" *ngIf="activeTrip.drive.status === 3">
-                                  <button type="button" class="btn btn-primary greenButton m-2">Angekommen</button>
+                                <div class="horizontal-right" *ngIf="activeTrip.drive.status === 3 && userID !== activeTrip.requesting.id">
+                                  <button type="button" class="btn btn-primary greenButton m-2" (click)="finishedDrive(activeTrip.drive.id)">Fahrt Beenden</button>
                                 </div>
                                 <div class="horizontal-right" *ngIf="activeTrip.drive.status === 4">
                                   <button type="button" (click)="handleButtonClickStatus(activeTrip.drive.id)"
