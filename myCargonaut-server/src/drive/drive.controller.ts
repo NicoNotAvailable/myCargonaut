@@ -9,6 +9,7 @@ import {
   ParseIntPipe,
   Post,
   Put,
+  Query,
   Session,
   UseGuards,
 } from '@nestjs/common';
@@ -26,6 +27,7 @@ import { GetRequestDTO } from './DTO/GetRequestDTO';
 import { UtilsService } from '../utils/utils.service';
 import { ChangeStatusDTO } from './DTO/ChangeStatusDTO';
 import { UserDB } from '../database/UserDB';
+import { FilterDTO } from './DTO/FilterDTO';
 
 @ApiTags('drive')
 @Controller('drive')
@@ -245,18 +247,26 @@ export class DriveController {
     }
   }
 
-  @ApiResponse({
-    type: [GetRequestDTO],
-    description: 'gets all requests',
-  })
   @Get('/all/requests')
-  async getAllRequests(@Session() session: SessionData) {
+  async getAllRequests(
+    @Session() session: SessionData,
+    @Query() query: FilterDTO,
+    @Query('sortRating') sortRating?: 'ASC' | 'DESC',
+  ) {
     let user: UserDB;
     if (session.currentUser) {
       user = await this.userService.getUserById(session.currentUser);
     }
+
     try {
-      const requests = await this.driveService.getAllRequests(user);
+      const filters = {
+        ...query,
+        sortRating,
+      };
+
+      const requests = await this.driveService.getAllRequests(user, filters, {
+        rating: sortRating,
+      });
       return await Promise.all(
         requests.map(async (request) => {
           return this.utilsService.transformRequestDBtoGetRequestDTO(request);

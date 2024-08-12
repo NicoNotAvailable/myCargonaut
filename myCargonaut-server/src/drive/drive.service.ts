@@ -18,6 +18,7 @@ import { LocationDB } from '../database/LocationDB';
 import { CreateLocationDTO } from '../location/DTO/CreateLocationDTO';
 import { StatusEnum } from '../database/enums/StatusEnum';
 import { ChangeStatusDTO } from './DTO/ChangeStatusDTO';
+import { FilterDTO } from './DTO/FilterDTO';
 
 @Injectable()
 export class DriveService {
@@ -172,16 +173,86 @@ export class DriveService {
     }
     return offers;
   }
-  async getAllRequests(user?: UserDB): Promise<RequestDB[]> {
-    const requests = await this.requestRepository.find({
-      relations: ['user', 'cargo', 'location'],
-    });
-    if (!requests) {
+  async getAllRequests(
+    user?: UserDB,
+    filters?: FilterDTO,
+    sort?: {
+      rating?: 'ASC' | 'DESC';
+    },
+  ): Promise<RequestDB[]> {
+    const queryBuilder = this.requestRepository
+      .createQueryBuilder('request')
+      .leftJoinAndSelect('request.user', 'user')
+      .leftJoinAndSelect('request.cargo', 'cargo')
+      .leftJoinAndSelect('request.startLocation', 'startLocation')
+      .leftJoinAndSelect('request.endLocation', 'endLocation');
+
+    if (user) {
+      queryBuilder.andWhere('request.user.id != :userId', { userId: user.id });
+    }
+
+    if (filters?.date) {
+      queryBuilder.andWhere('request.date = :date', { date: filters.date });
+    }
+
+    if (filters?.startLocation) {
+      queryBuilder.andWhere('startLocation.name LIKE :startLocation', {
+        startLocation: `%${filters.startLocation}%`,
+      });
+    }
+
+    if (filters?.endLocation) {
+      queryBuilder.andWhere('endLocation.name LIKE :endLocation', {
+        endLocation: `%${filters.endLocation}%`,
+      });
+    }
+
+    if (filters?.minRating) {
+      queryBuilder.andWhere('user.rating >= :minRating', {
+        minRating: filters.minRating,
+      });
+    }
+
+    if (filters?.seats) {
+      queryBuilder.andWhere('request.seats >= :seats', {
+        seats: filters.seats,
+      });
+    }
+
+    if (filters?.weight) {
+      queryBuilder.andWhere('request.weight >= :weight', {
+        weight: filters.weight,
+      });
+    }
+
+    if (filters?.height) {
+      queryBuilder.andWhere('request.height >= :height', {
+        height: filters.height,
+      });
+    }
+
+    if (filters?.length) {
+      queryBuilder.andWhere('request.length >= :length', {
+        length: filters.length,
+      });
+    }
+
+    if (filters?.width) {
+      queryBuilder.andWhere('request.width >= :width', {
+        width: filters.width,
+      });
+    }
+
+    if (sort?.rating) {
+      queryBuilder.orderBy('user.rating', sort.rating);
+    }
+
+    const requests = await queryBuilder.getMany();
+
+    if (!requests.length) {
       throw new NotFoundException('Requests not found');
     }
-    if (user) {
-      return requests.filter((request) => request.user.id !== user.id);
-    }
+
     return requests;
   }
   async getOwnRequests(user: number): Promise<RequestDB[]> {
