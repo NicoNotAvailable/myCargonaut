@@ -1,46 +1,48 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { UserService } from './user.service';
-import { databaseTest, tables } from '../../testDatabase/databaseTest';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { UserController } from './user.controller';
-import fs from 'fs/promises';
+import { UserDB } from '../database/UserDB'; // Adjust the import path as necessary
+import { getRepositoryToken } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
-jest.setTimeout(30000);
+// Mock data
+const mockUser = {
+  id: 1,
+  email: 'test@example.com',
+  password: 'hashedpassword',
+  firstName: 'Test',
+  lastName: 'User',
+  birthday: new Date('2000-01-01'),
+  phoneNumber: '1234567890',
+  profilePic: 'default.jpg',
+  isSmoker: false,
+  profileText: 'This is a test user',
+  languages: 'English',
+} as UserDB;
 
 describe('UserService', () => {
-  let service: UserService;
-  let module: TestingModule;
+  let userService: UserService;
+  let userRepository: Repository<UserDB>;
 
-  beforeAll(async () => {
-    module = await Test.createTestingModule({
-      imports: [
-        databaseTest('./testDatabase/dbTest.sqlite'),
-        TypeOrmModule.forFeature(tables),
+  beforeEach(async () => {
+    const module: TestingModule = await Test.createTestingModule({
+      providers: [
+        UserService,
+        {
+          provide: getRepositoryToken(UserDB),
+          useValue: {
+            findOne: jest.fn(),
+            save: jest.fn(),
+            // Add other methods you use in UserService
+          },
+        },
       ],
-      controllers: [UserController],
-      providers: [UserService],
     }).compile();
 
-    service = module.get<UserService>(UserService);
+    userService = module.get<UserService>(UserService);
+    userRepository = module.get<Repository<UserDB>>(getRepositoryToken(UserDB));
   });
 
   it('should be defined', () => {
-    expect(service).toBeDefined();
-  });
-
-  afterAll(async () => {
-    await module.close();
-
-    // Add delay to ensure all operations are complete
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-
-    // Delete the test database file
-    try {
-      await fs.unlink('./testDatabase/dbTest.sqlite');
-      console.error('Test database file removed');
-    } catch (err) {
-      console.error('Error removing test database file:', err);
-    }
+    expect(userService).toBeDefined();
   });
 });
-
