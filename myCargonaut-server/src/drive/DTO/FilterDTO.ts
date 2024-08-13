@@ -6,10 +6,10 @@ import {
   IsString,
   Min,
 } from 'class-validator';
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiPropertyOptional } from '@nestjs/swagger';
 
 export class FilterDTO {
-  @ApiProperty({
+  @ApiPropertyOptional({
     description: 'the date of the drive',
     example: '2024-06-13T18:21:15.068Z',
   })
@@ -17,7 +17,7 @@ export class FilterDTO {
   @IsDateString()
   date?: Date;
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     description: 'the start location',
     example: 'Hamburg',
   })
@@ -25,7 +25,7 @@ export class FilterDTO {
   @IsString()
   startLocation?: string;
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     description: 'the end location',
     example: 'Stuttgart',
   })
@@ -33,35 +33,63 @@ export class FilterDTO {
   @IsString()
   endLocation?: string;
 
+  @ApiPropertyOptional({
+    description: 'filter by min rating',
+    example: '3',
+  })
   @IsOptional()
   @IsNumber()
   @Min(0)
   minRating?: number;
 
+  @ApiPropertyOptional({
+    description: 'decide if you want to sort by rating',
+    example: 'ASC',
+  })
   @IsOptional()
   @IsEnum(['ASC', 'DESC'])
   sortRating?: 'ASC' | 'DESC';
 
+  @ApiPropertyOptional({
+    description: 'number of seats that are required',
+    example: '2',
+  })
   @IsOptional()
   @IsNumber()
   @Min(0)
   seats?: number;
 
+  @ApiPropertyOptional({
+    description: 'min weight that is required',
+    example: '20',
+  })
   @IsOptional()
   @IsNumber()
   @Min(0)
   weight?: number;
 
+  @ApiPropertyOptional({
+    description: 'min height that is required',
+    example: '20',
+  })
   @IsOptional()
   @IsNumber()
   @Min(0)
   height?: number;
 
+  @ApiPropertyOptional({
+    description: 'min length that is required',
+    example: '20',
+  })
   @IsOptional()
   @IsNumber()
   @Min(0)
   length?: number;
 
+  @ApiPropertyOptional({
+    description: 'min width that is required',
+    example: '20',
+  })
   @IsOptional()
   @IsNumber()
   @Min(0)

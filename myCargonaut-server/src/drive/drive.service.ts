@@ -238,6 +238,8 @@ export class DriveService {
       });
     }
 
+    queryBuilder.orderBy('request.timestamp', 'DESC');
+
     const drives = await queryBuilder.getMany();
 
     if (!drives.length) {
