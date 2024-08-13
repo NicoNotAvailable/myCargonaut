@@ -189,6 +189,8 @@ export class DriveService {
       .leftJoinAndSelect('request.cargo', 'cargo')
       .leftJoinAndSelect('request.location', 'locations');
 
+    queryBuilder.andWhere('request.status = 0');
+
     if (user) {
       queryBuilder.andWhere('request.user.id != :userId', { userId: user.id });
     }
@@ -358,19 +360,26 @@ export class DriveService {
       queryBuilder.andWhere((qb) => {
         const subQuery = qb
           .subQuery()
-          .select('loc1.driveId')
-          .from(LocationDB, 'loc1')
-          .leftJoin(LocationDB, 'loc2', 'loc1.driveId = loc2.driveId')
-          .where('loc1.name LIKE :startLocation', {
+          .select('loc.driveId')
+          .from(LocationDB, 'loc')
+          .where('loc.city LIKE :startLocation', {
             startLocation: `%${startLocation}%`,
           })
-          .andWhere('loc2.name LIKE :endLocation', {
-            endLocation: `%${endLocation}%`,
-          })
-          .andWhere('loc1.index < loc2.index')
+          .andWhere(
+            'loc.driveId IN ' +
+              qb
+                .subQuery()
+                .select('loc2.driveId')
+                .from(LocationDB, 'loc2')
+                .where('loc2.city LIKE :endLocation', {
+                  endLocation: `%${endLocation}%`,
+                })
+                .andWhere('loc2.stopNr > loc.stopNr')
+                .getQuery(),
+          )
           .getQuery();
 
-        return 'request.id IN ' + subQuery;
+        return 'offer.id IN ' + subQuery;
       });
     } else if (startLocation) {
       queryBuilder.andWhere((qb) => {
@@ -378,15 +387,21 @@ export class DriveService {
           .subQuery()
           .select('loc.driveId')
           .from(LocationDB, 'loc')
-          .where('loc.name LIKE :startLocation', {
+          .where('loc.city LIKE :startLocation', {
             startLocation: `%${startLocation}%`,
           })
           .andWhere(
-            'loc.index < (SELECT MAX(index) FROM LocationDB WHERE driveId = loc.driveId)',
+            'loc.driveId IN ' +
+              qb
+                .subQuery()
+                .select('loc2.driveId')
+                .from(LocationDB, 'loc2')
+                .where('loc2.stopNr >= loc.stopNr')
+                .getQuery(),
           )
           .getQuery();
 
-        return 'request.id IN ' + subQuery;
+        return 'offer.id IN ' + subQuery;
       });
     } else if (endLocation) {
       queryBuilder.andWhere((qb) => {
@@ -394,13 +409,21 @@ export class DriveService {
           .subQuery()
           .select('loc.driveId')
           .from(LocationDB, 'loc')
-          .where('loc.name LIKE :endLocation', {
+          .where('loc.city LIKE :endLocation', {
             endLocation: `%${endLocation}%`,
           })
-          .andWhere('loc.index > 0')
+          .andWhere(
+            'loc.driveId IN ' +
+              qb
+                .subQuery()
+                .select('loc2.driveId')
+                .from(LocationDB, 'loc2')
+                .where('loc2.stopNr < loc.stopNr')
+                .getQuery(),
+          )
           .getQuery();
 
-        return 'request.id IN ' + subQuery;
+        return 'offer.id IN ' + subQuery;
       });
     }
   }
@@ -416,27 +439,31 @@ export class DriveService {
     }
 
     if (filters?.weight) {
-      queryBuilder.andWhere('request.weight >= :weight', {
-        weight: filters.weight,
-      });
+      queryBuilder.andWhere(
+        '(SELECT SUM(cargo.weight) FROM cargo cargo WHERE cargo.request.id = request.id) <= :maxWeight',
+        { maxWeight: filters.weight },
+      );
     }
 
     if (filters?.height) {
-      queryBuilder.andWhere('request.height >= :height', {
-        height: filters.height,
-      });
+      queryBuilder.andWhere(
+        '(SELECT MAX(cargo.height) FROM cargo cargo WHERE cargo.request.id = request.id) <= :maxHeight',
+        { maxHeight: filters.height },
+      );
     }
 
     if (filters?.length) {
-      queryBuilder.andWhere('request.length >= :length', {
-        length: filters.length,
-      });
+      queryBuilder.andWhere(
+        '(SELECT MAX(cargo.length) FROM cargo cargo WHERE cargo.request.id = request.id) <= :maxLength',
+        { maxLength: filters.length },
+      );
     }
 
     if (filters?.width) {
-      queryBuilder.andWhere('request.width >= :width', {
-        width: filters.width,
-      });
+      queryBuilder.andWhere(
+        '(SELECT MAX(cargo.width) FROM cargo cargo WHERE cargo.request.id = request.id) <= :maxWidth',
+        { maxWidth: filters.width },
+      );
     }
   }
 
