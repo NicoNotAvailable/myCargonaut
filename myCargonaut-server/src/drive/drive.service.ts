@@ -194,12 +194,12 @@ export class DriveService {
     }
 
     this.applyDateFilter(queryBuilder, filters?.date);
-    this.applyLocationFilters(
+    this.applyReqLocationFilters(
       queryBuilder,
       filters?.startLocation,
       filters?.endLocation,
     );
-    this.applySizeFilters(queryBuilder, filters);
+    this.applyRequestSizeFilters(queryBuilder, filters);
 
     queryBuilder.orderBy('request.timestamp', 'DESC');
 
@@ -329,25 +329,83 @@ export class DriveService {
     }
   }
 
-  private applyLocationFilters(
+  private applyReqLocationFilters(
     queryBuilder: SelectQueryBuilder<RequestDB>,
     startLocation?: string,
     endLocation?: string,
   ) {
     if (startLocation) {
-      queryBuilder.andWhere('startLocation.name LIKE :startLocation', {
-        startLocation: `%${startLocation}%`,
-      });
+      queryBuilder.andWhere(
+        'locations.stopNr = 1 AND locations.city LIKE :startLocation',
+        { startLocation: `%${startLocation}%` },
+      );
     }
 
     if (endLocation) {
-      queryBuilder.andWhere('endLocation.name LIKE :endLocation', {
-        endLocation: `%${endLocation}%`,
+      queryBuilder.andWhere(
+        'locations.stopNr = 100 AND locations.city LIKE :endLocation',
+        { endLocation: `%${endLocation}%` },
+      );
+    }
+  }
+
+  private applyOfferLocationFilters(
+    queryBuilder: SelectQueryBuilder<OfferDB>,
+    startLocation?: string,
+    endLocation?: string,
+  ) {
+    if (startLocation && endLocation) {
+      queryBuilder.andWhere((qb) => {
+        const subQuery = qb
+          .subQuery()
+          .select('loc1.driveId')
+          .from(LocationDB, 'loc1')
+          .leftJoin(LocationDB, 'loc2', 'loc1.driveId = loc2.driveId')
+          .where('loc1.name LIKE :startLocation', {
+            startLocation: `%${startLocation}%`,
+          })
+          .andWhere('loc2.name LIKE :endLocation', {
+            endLocation: `%${endLocation}%`,
+          })
+          .andWhere('loc1.index < loc2.index')
+          .getQuery();
+
+        return 'request.id IN ' + subQuery;
+      });
+    } else if (startLocation) {
+      queryBuilder.andWhere((qb) => {
+        const subQuery = qb
+          .subQuery()
+          .select('loc.driveId')
+          .from(LocationDB, 'loc')
+          .where('loc.name LIKE :startLocation', {
+            startLocation: `%${startLocation}%`,
+          })
+          .andWhere(
+            'loc.index < (SELECT MAX(index) FROM LocationDB WHERE driveId = loc.driveId)',
+          )
+          .getQuery();
+
+        return 'request.id IN ' + subQuery;
+      });
+    } else if (endLocation) {
+      queryBuilder.andWhere((qb) => {
+        const subQuery = qb
+          .subQuery()
+          .select('loc.driveId')
+          .from(LocationDB, 'loc')
+          .where('loc.name LIKE :endLocation', {
+            endLocation: `%${endLocation}%`,
+          })
+          .andWhere('loc.index > 0')
+          .getQuery();
+
+        return 'request.id IN ' + subQuery;
       });
     }
   }
 
-  private applySizeFilters(
+  private applyRequestSizeFilters(
     queryBuilder: SelectQueryBuilder<RequestDB>,
     filters?: FilterDTO,
   ) {
