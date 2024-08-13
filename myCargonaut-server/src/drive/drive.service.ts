@@ -5,7 +5,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, SelectQueryBuilder } from 'typeorm';
 import { DriveDB, OfferDB, RequestDB } from '../database/DriveDB';
 import { UserDB } from '../database/UserDB';
 import { CreateOfferDTO } from './DTO/CreateOfferDTO';
@@ -175,6 +175,7 @@ export class DriveService {
     }
     return offers;
   }
+
   async getAllRequests(
     user?: UserDB,
     filters?: FilterDTO,
@@ -192,51 +193,13 @@ export class DriveService {
       queryBuilder.andWhere('request.user.id != :userId', { userId: user.id });
     }
 
-    if (filters?.date) {
-      queryBuilder.andWhere('request.date = :date', { date: filters.date });
-    }
-
-    if (filters?.startLocation) {
-      queryBuilder.andWhere('startLocation.name LIKE :startLocation', {
-        startLocation: `%${filters.startLocation}%`,
-      });
-    }
-
-    if (filters?.endLocation) {
-      queryBuilder.andWhere('endLocation.name LIKE :endLocation', {
-        endLocation: `%${filters.endLocation}%`,
-      });
-    }
-
-    if (filters?.seats) {
-      queryBuilder.andWhere('request.seats >= :seats', {
-        seats: filters.seats,
-      });
-    }
-
-    if (filters?.weight) {
-      queryBuilder.andWhere('request.weight >= :weight', {
-        weight: filters.weight,
-      });
-    }
-
-    if (filters?.height) {
-      queryBuilder.andWhere('request.height >= :height', {
-        height: filters.height,
-      });
-    }
-
-    if (filters?.length) {
-      queryBuilder.andWhere('request.length >= :length', {
-        length: filters.length,
-      });
-    }
-
-    if (filters?.width) {
-      queryBuilder.andWhere('request.width >= :width', {
-        width: filters.width,
-      });
-    }
+    this.applyDateFilter(queryBuilder, filters?.date);
+    this.applyLocationFilters(
+      queryBuilder,
+      filters?.startLocation,
+      filters?.endLocation,
+    );
+    this.applySizeFilters(queryBuilder, filters);
 
     queryBuilder.orderBy('request.timestamp', 'DESC');
 
@@ -246,29 +209,10 @@ export class DriveService {
       throw new NotFoundException('Requests not found');
     }
 
-    let filteredDrives = [];
-    for (const drive of drives) {
-      const rating = await this.reviewService.getRating(drive.user.id);
-      if (!filters.minRating || rating >= filters.minRating) {
-        filteredDrives.push(drive);
-      }
-    }
+    let filteredDrives = await this.filterByRating(drives, filters?.minRating);
 
     if (sort?.rating) {
-      const drivesWithRatings = await Promise.all(
-        filteredDrives.map(async (drive) => {
-          const rating = await this.reviewService.getRating(drive.user.id);
-          return { drive, rating };
-        }),
-      );
-
-      drivesWithRatings.sort((a, b) => {
-        return filters.sortRating === 'ASC'
-          ? a.rating - b.rating
-          : b.rating - a.rating;
-      });
-
-      filteredDrives = drivesWithRatings.map((item) => item.drive);
+      filteredDrives = await this.sortByRating(filteredDrives, sort.rating);
     }
 
     return filteredDrives;
@@ -374,5 +318,101 @@ export class DriveService {
       );
     }
     await this.driveRepository.remove(drive);
+  }
+
+  private applyDateFilter(
+    queryBuilder: SelectQueryBuilder<RequestDB>,
+    date?: Date,
+  ) {
+    if (date) {
+      queryBuilder.andWhere('request.date = :date', { date });
+    }
+  }
+
+  private applyLocationFilters(
+    queryBuilder: SelectQueryBuilder<RequestDB>,
+    startLocation?: string,
+    endLocation?: string,
+  ) {
+    if (startLocation) {
+      queryBuilder.andWhere('startLocation.name LIKE :startLocation', {
+        startLocation: `%${startLocation}%`,
+      });
+    }
+
+    if (endLocation) {
+      queryBuilder.andWhere('endLocation.name LIKE :endLocation', {
+        endLocation: `%${endLocation}%`,
+      });
+    }
+  }
+
+  private applySizeFilters(
+    queryBuilder: SelectQueryBuilder<RequestDB>,
+    filters?: FilterDTO,
+  ) {
+    if (filters?.seats) {
+      queryBuilder.andWhere('request.seats >= :seats', {
+        seats: filters.seats,
+      });
+    }
+
+    if (filters?.weight) {
+      queryBuilder.andWhere('request.weight >= :weight', {
+        weight: filters.weight,
+      });
+    }
+
+    if (filters?.height) {
+      queryBuilder.andWhere('request.height >= :height', {
+        height: filters.height,
+      });
+    }
+
+    if (filters?.length) {
+      queryBuilder.andWhere('request.length >= :length', {
+        length: filters.length,
+      });
+    }
+
+    if (filters?.width) {
+      queryBuilder.andWhere('request.width >= :width', {
+        width: filters.width,
+      });
+    }
+  }
+
+  private async filterByRating(
+    drives: RequestDB[],
+    minRating?: number,
+  ): Promise<RequestDB[]> {
+    if (!minRating) return drives;
+
+    const filteredDrives = [];
+    for (const drive of drives) {
+      const rating = await this.reviewService.getRating(drive.user.id);
+      if (rating >= minRating) {
+        filteredDrives.push(drive);
+      }
+    }
+    return filteredDrives;
+  }
+
+  private async sortByRating(
+    drives: RequestDB[],
+    sortOrder: 'ASC' | 'DESC',
+  ): Promise<RequestDB[]> {
+    const drivesWithRatings = await Promise.all(
+      drives.map(async (drive) => {
+        const rating = await this.reviewService.getRating(drive.user.id);
+        return { drive, rating };
+      }),
+    );
+
+    drivesWithRatings.sort((a, b) => {
+      return sortOrder === 'ASC' ? a.rating - b.rating : b.rating - a.rating;
+    });
+
+    return drivesWithRatings.map((item) => item.drive);
   }
 }
