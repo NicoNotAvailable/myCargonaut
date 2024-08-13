@@ -10,7 +10,6 @@ import { EditEmailDTO } from './DTO/EditEmailDTO';
 import { EditUserDTO } from './DTO/EditUserDTO';
 import { SessionData } from 'express-session';
 import * as bcrypt from 'bcryptjs';
-import { Response } from 'express';
 
 // Mock session data with cookie properties
 const mockSession: Partial<SessionData> = {
@@ -28,8 +27,6 @@ jest.fn();
 describe('UserController', () => {
   let controller: UserController;
   let userService: UserService;
-  let utilsService: UtilsService;
-  let reviewService: ReviewService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -61,8 +58,6 @@ describe('UserController', () => {
 
     controller = module.get<UserController>(UserController);
     userService = module.get<UserService>(UserService);
-    utilsService = module.get<UtilsService>(UtilsService);
-    reviewService = module.get<ReviewService>(ReviewService);
   });
 
   it('should be defined', () => {
@@ -105,6 +100,26 @@ describe('UserController', () => {
       );
     });
 
+    it('should throw error for missing agb', async () => {
+      const body = {
+        firstName: 'John',
+        lastName: 'Doe',
+        email: 'john.doe@example.com',
+        emailConfirm: 'john.doe@example.com',
+        password: 'securepassword',
+        passwordConfirm: 'securepassword',
+        agb: false,
+        birthday: new Date('2000-01-01'),
+        phoneNumber: '0800555555',
+      };
+
+      await expect(
+        controller.createUser(body, mockSession as SessionData),
+      ).rejects.toThrow(
+        'Du musst die AGB akzeptieren, um dich zu registrieren',
+      );
+    });
+
     it('should throw error for invalid password confirmation', async () => {
       const body = {
         firstName: 'John',
@@ -120,7 +135,117 @@ describe('UserController', () => {
 
       await expect(
         controller.createUser(body, mockSession as SessionData),
+      ).rejects.toThrow('Passwort muss übereinstimmen');
+    });
+
+    it('should throw error for invalid age', async () => {
+      const body = {
+        firstName: 'John',
+        lastName: 'Doe',
+        email: 'john.doe@example.com',
+        emailConfirm: 'john.doe@example.com',
+        password: 'securepassword',
+        passwordConfirm: 'securepassword',
+        agb: true,
+        birthday: new Date('2010-01-01'),
+        phoneNumber: '0800555555',
+      };
+
+      await expect(
+        controller.createUser(body, mockSession as SessionData),
+      ).rejects.toThrow(
+        'Sie müssen mindestens 18 Jahre alt sein, um sich zu registrieren.',
+      );
+    });
+
+    it('should throw error for invalid password length', async () => {
+      const body = {
+        firstName: 'John',
+        lastName: 'Doe',
+        email: 'john.doe@example.com',
+        emailConfirm: 'john.doe@example.com',
+        password: 'secure',
+        passwordConfirm: 'secure',
+        agb: true,
+        birthday: new Date('2000-01-01'),
+        phoneNumber: '0800555555',
+      };
+
+      await expect(
+        controller.createUser(body, mockSession as SessionData),
       ).rejects.toThrow(BadRequestException);
+    });
+
+    it('should throw error for empty firstName field', async () => {
+      const body = {
+        firstName: '',
+        lastName: 'Doe',
+        email: 'john.doe@example.com',
+        emailConfirm: 'john.doe@example.com',
+        password: 'securepassword',
+        passwordConfirm: 'securepassword',
+        agb: true,
+        birthday: new Date('2000-01-01'),
+        phoneNumber: '0800555555',
+      };
+
+      await expect(
+        controller.createUser(body, mockSession as SessionData),
+      ).rejects.toThrow('Vorname darf nicht leer sein');
+    });
+
+    it('should throw error for empty lastName field', async () => {
+      const body = {
+        firstName: 'John',
+        lastName: '',
+        email: 'john.doe@example.com',
+        emailConfirm: 'john.doe@example.com',
+        password: 'securepassword',
+        passwordConfirm: 'securepassword',
+        agb: true,
+        birthday: new Date('2000-01-01'),
+        phoneNumber: '0800555555',
+      };
+
+      await expect(
+        controller.createUser(body, mockSession as SessionData),
+      ).rejects.toThrow('Nachname darf nicht leer sein');
+    });
+
+    it('should throw error for empty password field', async () => {
+      const body = {
+        firstName: 'John',
+        lastName: 'Doe',
+        email: 'john.doe@example.com',
+        emailConfirm: 'john.doe@example.com',
+        password: '',
+        passwordConfirm: '',
+        agb: true,
+        birthday: new Date('2000-01-01'),
+        phoneNumber: '0800555555',
+      };
+
+      await expect(
+        controller.createUser(body, mockSession as SessionData),
+      ).rejects.toThrow('Passwort darf nicht leer sein');
+    });
+
+    it('should throw error for empty Email field', async () => {
+      const body = {
+        firstName: 'John',
+        lastName: 'Doe',
+        email: '',
+        emailConfirm: '',
+        password: 'securepassword',
+        passwordConfirm: 'securepassword',
+        agb: true,
+        birthday: new Date('2010-01-01'),
+        phoneNumber: '0800555555',
+      };
+
+      await expect(
+        controller.createUser(body, mockSession as SessionData),
+      ).rejects.toThrow('Email darf nicht leer sein');
     });
   });
 
@@ -161,7 +286,41 @@ describe('UserController', () => {
 
       await expect(
         controller.updatePassword(mockSession as SessionData, body),
-      ).rejects.toThrow(BadRequestException);
+      ).rejects.toThrow('Aktuelles Passwort ist falsch');
+    });
+
+    it('should throw error for incorrect new confirmed password', async () => {
+      const body: EditPasswordDTO = {
+        password: 'currentpassword',
+        newPassword: 'newsecurepassword',
+        newPasswordConfirm: 'newpassword',
+      };
+
+      jest.spyOn(userService, 'getUserById').mockResolvedValue({
+        password: await bcrypt.hash('currentpassword', 10),
+      } as any);
+      jest.spyOn(bcrypt, 'compare' as any).mockResolvedValue(true);
+
+      await expect(
+        controller.updatePassword(mockSession as SessionData, body),
+      ).rejects.toThrow('Neues Passwort muss übereinstimmen');
+    });
+
+    it('should throw error for empty new confirmed password', async () => {
+      const body: EditPasswordDTO = {
+        password: 'currentpassword',
+        newPassword: '',
+        newPasswordConfirm: '',
+      };
+
+      jest.spyOn(userService, 'getUserById').mockResolvedValue({
+        password: await bcrypt.hash('currentpassword', 10),
+      } as any);
+      jest.spyOn(bcrypt, 'compare' as any).mockResolvedValue(true);
+
+      await expect(
+        controller.updatePassword(mockSession as SessionData, body),
+      ).rejects.toThrow('Neues Passwort darf nicht leer sein');
     });
   });
 
@@ -196,7 +355,18 @@ describe('UserController', () => {
 
       await expect(
         controller.updateEmail(mockSession as SessionData, body),
-      ).rejects.toThrow(BadRequestException);
+      ).rejects.toThrow('Email muss übereinstimmen');
+    });
+
+    it('should throw error for empty email', async () => {
+      const body: EditEmailDTO = {
+        newEmail: '',
+        newEmailConfirm: '',
+      };
+
+      await expect(
+        controller.updateEmail(mockSession as SessionData, body),
+      ).rejects.toThrow('Email darf nicht leer sein');
     });
   });
 
@@ -222,7 +392,9 @@ describe('UserController', () => {
         lastName: 'OldLastName',
       };
 
-      jest.spyOn(userService, 'getUserById').mockResolvedValue(initialUser as any);
+      jest
+        .spyOn(userService, 'getUserById')
+        .mockResolvedValue(initialUser as any);
       jest.spyOn(userService, 'updateUser').mockResolvedValue(undefined);
 
       // Define the updated user object that will be passed to updateUser
@@ -250,7 +422,7 @@ describe('UserController', () => {
 
       await expect(
         controller.updateUser(mockSession as SessionData, body),
-      ).rejects.toThrow(BadRequestException);
+      ).rejects.toThrow('Ungültige telefon-Nummer');
     });
   });
 
