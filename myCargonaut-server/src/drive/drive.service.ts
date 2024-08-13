@@ -201,7 +201,6 @@ export class DriveService {
       filters?.startLocation,
       filters?.endLocation,
     );
-    this.applyRequestSizeFilters(queryBuilder, filters);
 
     queryBuilder.orderBy('request.timestamp', 'DESC');
 
@@ -212,6 +211,11 @@ export class DriveService {
     }
 
     let filteredDrives = await this.filterByRating(drives, filters?.minRating);
+
+    filteredDrives = await this.applyRequestSizeFilters(
+      filteredDrives,
+      filters,
+    );
 
     if (sort?.rating) {
       filteredDrives = await this.sortByRating(filteredDrives, sort.rating);
@@ -428,43 +432,44 @@ export class DriveService {
     }
   }
 
-  private applyRequestSizeFilters(
-    queryBuilder: SelectQueryBuilder<RequestDB>,
+  async applyRequestSizeFilters(
+    requests: RequestDB[],
     filters?: FilterDTO,
-  ) {
-    if (filters?.seats) {
-      queryBuilder.andWhere('request.seats >= :seats', {
-        seats: filters.seats,
-      });
-    }
+  ): Promise<RequestDB[]> {
+    if (!filters) return requests;
 
-    if (filters?.weight) {
-      queryBuilder.andWhere(
-        '(SELECT SUM(cargo.weight) FROM cargo cargo WHERE cargo.request.id = request.id) <= :maxWeight',
-        { maxWeight: filters.weight },
-      );
-    }
+    return requests.filter(async (request) => {
+      const cargos = await request.cargo;
 
-    if (filters?.height) {
-      queryBuilder.andWhere(
-        '(SELECT MAX(cargo.height) FROM cargo cargo WHERE cargo.request.id = request.id) <= :maxHeight',
-        { maxHeight: filters.height },
-      );
-    }
+      const weight = cargos.reduce((sum, cargo) => sum + cargo.weight, 0);
+      const maxHeight = Math.max(...cargos.map((cargo) => cargo.height), 0);
+      const maxLength = Math.max(...cargos.map((cargo) => cargo.length), 0);
+      const maxWidth = Math.max(...cargos.map((cargo) => cargo.width), 0);
 
-    if (filters?.length) {
-      queryBuilder.andWhere(
-        '(SELECT MAX(cargo.length) FROM cargo cargo WHERE cargo.request.id = request.id) <= :maxLength',
-        { maxLength: filters.length },
-      );
-    }
+      let isValid = true;
 
-    if (filters?.width) {
-      queryBuilder.andWhere(
-        '(SELECT MAX(cargo.width) FROM cargo cargo WHERE cargo.request.id = request.id) <= :maxWidth',
-        { maxWidth: filters.width },
-      );
-    }
+      if (filters.seats && request.seats < filters.seats) {
+        isValid = false;
+      }
+
+      if (filters.weight && weight > filters.weight) {
+        isValid = false;
+      }
+
+      if (filters.height && maxHeight > filters.height) {
+        isValid = false;
+      }
+
+      if (filters.length && maxLength > filters.length) {
+        isValid = false;
+      }
+
+      if (filters.width && maxWidth > filters.width) {
+        isValid = false;
+      }
+
+      return isValid;
+    });
   }
 
   private async filterByRating(
