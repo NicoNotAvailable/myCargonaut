@@ -19,6 +19,7 @@ import { CreateLocationDTO } from '../location/DTO/CreateLocationDTO';
 import { StatusEnum } from '../database/enums/StatusEnum';
 import { ChangeStatusDTO } from './DTO/ChangeStatusDTO';
 import { FilterDTO } from './DTO/FilterDTO';
+import { ReviewService } from '../review/review.service';
 
 @Injectable()
 export class DriveService {
@@ -33,6 +34,7 @@ export class DriveService {
     private cargoRepository: Repository<CargoDB>,
     @InjectRepository(LocationDB)
     private locationRepository: Repository<LocationDB>,
+    private readonly reviewService: ReviewService,
   ) {}
 
   async createOffer(
@@ -184,8 +186,7 @@ export class DriveService {
       .createQueryBuilder('request')
       .leftJoinAndSelect('request.user', 'user')
       .leftJoinAndSelect('request.cargo', 'cargo')
-      .leftJoinAndSelect('request.startLocation', 'startLocation')
-      .leftJoinAndSelect('request.endLocation', 'endLocation');
+      .leftJoinAndSelect('request.location', 'locations');
 
     if (user) {
       queryBuilder.andWhere('request.user.id != :userId', { userId: user.id });
@@ -204,12 +205,6 @@ export class DriveService {
     if (filters?.endLocation) {
       queryBuilder.andWhere('endLocation.name LIKE :endLocation', {
         endLocation: `%${filters.endLocation}%`,
-      });
-    }
-
-    if (filters?.minRating) {
-      queryBuilder.andWhere('user.rating >= :minRating', {
-        minRating: filters.minRating,
       });
     }
 
@@ -243,18 +238,40 @@ export class DriveService {
       });
     }
 
-    if (sort?.rating) {
-      queryBuilder.orderBy('user.rating', sort.rating);
-    }
+    const drives = await queryBuilder.getMany();
 
-    const requests = await queryBuilder.getMany();
-
-    if (!requests.length) {
+    if (!drives.length) {
       throw new NotFoundException('Requests not found');
     }
 
-    return requests;
+    let filteredDrives = [];
+    for (const drive of drives) {
+      const rating = await this.reviewService.getRating(drive.user.id);
+      if (!filters.minRating || rating >= filters.minRating) {
+        filteredDrives.push(drive);
+      }
+    }
+
+    if (sort?.rating) {
+      const drivesWithRatings = await Promise.all(
+        filteredDrives.map(async (drive) => {
+          const rating = await this.reviewService.getRating(drive.user.id);
+          return { drive, rating };
+        }),
+      );
+
+      drivesWithRatings.sort((a, b) => {
+        return filters.sortRating === 'ASC'
+          ? a.rating - b.rating
+          : b.rating - a.rating;
+      });
+
+      filteredDrives = drivesWithRatings.map((item) => item.drive);
+    }
+
+    return filteredDrives;
   }
+
   async getOwnRequests(user: number): Promise<RequestDB[]> {
     const requests = await this.requestRepository.find({
       where: { user: { id: user } },
