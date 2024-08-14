@@ -39,6 +39,7 @@ import { Response } from 'express';
 import { ReviewService } from '../review/review.service';
 import { GetOtherUserDTO } from './DTO/GetOtherUserDTO';
 import { UtilsService } from '../utils/utils.service';
+import { UserStatsDTO } from "./DTO/UserStatsDTO";
 
 @ApiTags('user')
 @Controller('user')
@@ -119,6 +120,26 @@ export class UserController {
     return dto;
   }
 
+  @ApiResponse({
+    type: UserStatsDTO,
+    description: 'Gets the Statistics of Users',
+  })
+  @Get('/statistics/:id')
+  async getUserStats(
+    @Session() session: SessionData,
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<UserStatsDTO> {
+    let dto: UserStatsDTO = new UserStatsDTO();
+    let user: UserDB;
+    try {
+      user = await this.userService.getUserById(
+        id == -1 ? session.currentUser : id,
+      );
+    } catch (err) {
+      console.error(err);
+    }
+    return dto;
+  }
 
   @ApiResponse({ type: OkDTO, description: 'creates a new user' })
   @Post()

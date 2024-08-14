@@ -1,7 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
 ::selection{
   background-color: #005B52;
-  color: ghostwhite;
+  color: #fff;
 }
 
 .textGreen {
@@ -9,7 +9,7 @@
 }
 
 html, body {
-  background-color: ghostwhite !important;
+  background-color: #fff !important;
   height: 100vh;
   margin: 0;
   font-family: Roboto, sans-serif;
