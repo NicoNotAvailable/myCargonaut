@@ -10,6 +10,8 @@ import { GetOtherUserDTO } from '../user/DTO/GetOtherUserDTO';
 import * as bcrypt from 'bcryptjs';
 import { UserDB } from '../database/UserDB';
 import { GetOwnUserDTO } from '../user/DTO/GetOwnUserDTO';
+import { SessionController } from './session.controller';
+import { LoginDTO } from './DTO/LoginDTO';
 
 // Mock data
 const mockUser = {
@@ -45,10 +47,11 @@ describe('Session Controller', () => {
   let reviewService: ReviewService;
   let utilsService: UtilsService;
   let session: SessionData;
+  let sessionController: SessionController;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      controllers: [UserController],
+      controllers: [UserController, SessionController],
       providers: [
         {
           provide: UserService,
@@ -57,6 +60,7 @@ describe('Session Controller', () => {
             getUserByEmail: jest.fn(),
             getUserById: jest.fn(),
             updateUser: jest.fn(),
+            getLoggingUser: jest.fn(),
           },
         },
         {
@@ -78,6 +82,7 @@ describe('Session Controller', () => {
     userService = module.get<UserService>(UserService);
     reviewService = module.get<ReviewService>(ReviewService);
     utilsService = module.get<UtilsService>(UtilsService);
+    sessionController = module.get<SessionController>(SessionController);
 
     session = mockSession;
   });
@@ -313,6 +318,85 @@ describe('Session Controller', () => {
       await expect(
         userController.updatePassword(session, body),
       ).rejects.toThrow(BadRequestException);
+    });
+  });
+
+  describe('loginUser', () => {
+    it('should successfully login user with correct credentials', async () => {
+      const dto: LoginDTO = {
+        email: 'test@example.com',
+        password: 'password123',
+      };
+
+      jest.spyOn(bcrypt, 'compare' as any).mockResolvedValue(true);
+
+      // Mock userService to return the mock user
+      jest.spyOn(userService, 'getLoggingUser').mockResolvedValue(mockUser);
+
+      // Mock session object
+      const result = await sessionController.loginUser(session, dto);
+
+      expect(userService.getLoggingUser).toHaveBeenCalledWith(dto);
+      expect(bcrypt.compare).toHaveBeenCalledWith(
+        dto.password,
+        mockUser.password,
+      );
+      expect(session.currentUser).toEqual(mockUser.id);
+      expect(result.ok).toBe(true);
+      expect(result.message).toBe('User was logged in');
+    });
+    it('should throw UnauthorizedException for incorrect password', async () => {
+      const dto: LoginDTO = {
+        email: 'test@example.com',
+        password: 'wrongpassword',
+      };
+
+      // Mock bcrypt.compare to return false
+      jest.spyOn(bcrypt, 'compare' as any).mockResolvedValue(false);
+
+      // Mock userService to return the mock user
+      jest.spyOn(userService, 'getLoggingUser').mockResolvedValue(mockUser);
+
+      await expect(sessionController.loginUser(session, dto)).rejects.toThrow(
+        'Passwort oder Email ist falsch',
+      );
+    });
+
+    it('should throw BadRequestException if email or password is missing', async () => {
+      const dto: LoginDTO = {
+        email: '',
+        password: 'password123',
+      };
+
+      await expect(sessionController.loginUser(session, dto)).rejects.toThrow(
+        'Felder müssen ausgefüllt sein',
+      );
+    });
+  });
+
+  describe('logout', () => {
+    it('should successfully logout user', async () => {
+      const result = sessionController.logout(session);
+      expect(mockSession.currentUser).toBeUndefined();
+      expect(result.ok).toBe(true);
+    });
+
+    it('should throw BadRequestException if no user is logged in', () => {
+      const mockSession: SessionData = {
+        currentUser: undefined,
+        cookie: {
+          originalMaxAge: 3600000,
+          expires: new Date(Date.now() + 3600000),
+          maxAge: 3600000,
+          httpOnly: true,
+          secure: false,
+          path: '/',
+        },
+      };
+
+      expect(() => sessionController.logout(mockSession)).toThrow(
+        BadRequestException,
+      );
     });
   });
 });
