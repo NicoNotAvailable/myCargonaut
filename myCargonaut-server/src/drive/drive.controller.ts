@@ -28,6 +28,7 @@ import { UtilsService } from '../utils/utils.service';
 import { ChangeStatusDTO } from './DTO/ChangeStatusDTO';
 import { UserDB } from '../database/UserDB';
 import { FilterDTO } from './DTO/FilterDTO';
+import { RequestDB } from '../database/DriveDB';
 
 @ApiTags('drive')
 @Controller('drive')
@@ -190,13 +191,23 @@ export class DriveController {
     description: 'gets all offers',
   })
   @Get('/all/offers')
-  async getAllOffers(@Session() session: SessionData) {
+  async getAllOffers(@Session() session: SessionData,
+                     @Query() query: FilterDTO,
+                     @Query('sort')
+                         sort?: 'timeAsc' | 'timeDesc' | 'rating' | 'price',) {
     let user: UserDB;
     if (session.currentUser) {
       user = await this.userService.getUserById(session.currentUser);
     }
     try {
-      const offers = await this.driveService.getAllOffers(user);
+      const filters = {
+        ...query,
+        sort,
+      };
+
+      const offers = await this.driveService.getAllOffers(user, filters, {
+        sort: sort,
+      });
       return await Promise.all(
         offers.map(async (offer) => {
           return this.utilsService.transformOfferDBtoGetOfferDTO(offer);
@@ -265,7 +276,7 @@ export class DriveController {
         sort,
       };
 
-      const requests = await this.driveService.getAllRequests(user, filters, {
+      const requests:RequestDB[] = await this.driveService.getAllRequests(user, filters, {
         sort: sort,
       });
       return await Promise.all(

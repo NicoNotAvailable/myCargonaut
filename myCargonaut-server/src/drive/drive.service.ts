@@ -152,19 +152,49 @@ export class DriveService {
     }
     return drive;
   }
-  async getAllOffers(user?: UserDB): Promise<OfferDB[]> {
-    const offers = await this.offerRepository.find({
-      relations: ['user', 'car', 'trailer', 'location'],
-    });
-    if (!offers) {
+  async getAllOffers(
+    user?: UserDB,
+    filters?: FilterDTO,
+    sort?: {
+      sort?: 'timeAsc' | 'timeDesc' | 'rating' | 'price';
+    },
+  ): Promise<OfferDB[]> {
+    const queryBuilder = this.offerRepository
+      .createQueryBuilder('offer')
+      .leftJoinAndSelect('offer.user', 'user')
+      .leftJoinAndSelect('offer.car', 'car')
+      .leftJoinAndSelect('offer.trailer', 'trailer')
+      .leftJoinAndSelect('offer.location', 'location');
+
+    queryBuilder.andWhere('request.status = 0');
+
+    if (user) {
+      queryBuilder.andWhere('request.user.id != :userId', { userId: user.id });
+    }
+
+    this.applyDateFilter(queryBuilder, filters?.date);
+    this.applyOfferLocationFilters(
+      queryBuilder,
+      filters?.startLocation,
+      filters?.endLocation,
+    );
+
+    queryBuilder.orderBy('offer.timestamp', 'DESC');
+
+    let offers = await queryBuilder.getMany();
+    if (!offers.length) {
       throw new NotFoundException('Offers not found');
     }
-    if (user) {
-      return offers.filter((offer) => offer.user.id !== user.id);
+
+    offers = await this.filterByRating(offers, filters?.minRating);
+
+    if (sort?.sort) {
+      offers = await this.sortOrder(offers, sort.sort);
     }
 
     return offers;
   }
+
   async getOwnOffers(user: number): Promise<OfferDB[]> {
     const offers = await this.offerRepository.find({
       where: { user: { id: user } },
@@ -210,7 +240,7 @@ export class DriveService {
       throw new NotFoundException('Requests not found');
     }
 
-    let filteredDrives = await this.filterByRating(drives, filters?.minRating);
+    let filteredDrives: RequestDB[] = await this.filterByRating(drives, filters?.minRating);
 
     filteredDrives = await this.applyRequestSizeFilters(
       filteredDrives,
@@ -327,7 +357,7 @@ export class DriveService {
   }
 
   private applyDateFilter(
-    queryBuilder: SelectQueryBuilder<RequestDB>,
+    queryBuilder: SelectQueryBuilder<any>,
     date?: Date,
   ) {
     if (date) {
@@ -473,9 +503,9 @@ export class DriveService {
   }
 
   private async filterByRating(
-    drives: RequestDB[],
+    drives: any[] ,
     minRating?: number,
-  ): Promise<RequestDB[]> {
+  ): Promise<any[]> {
     if (!minRating) return drives;
 
     const filteredDrives = [];
@@ -489,9 +519,9 @@ export class DriveService {
   }
 
   private async sortOrder(
-    drives: RequestDB[],
+    drives: DriveDB[],
     sortOrder: 'timeAsc' | 'timeDesc' | 'rating' | 'price',
-  ): Promise<RequestDB[]> {
+  ): Promise<any[]> {
     const drivesWithRatings = await Promise.all(
       drives.map(async (drive) => {
         const rating = await this.reviewService.getRating(drive.user.id);
