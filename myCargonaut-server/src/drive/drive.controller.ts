@@ -195,8 +195,6 @@ export class DriveController {
   async getAllOffers(
     @Session() session: SessionData,
     @Query() query: FilterDTO,
-    @Query('sort')
-    sort?: SortingEnum,
   ) {
     let user: UserDB;
     if (session.currentUser) {
@@ -205,12 +203,9 @@ export class DriveController {
     try {
       const filters = {
         ...query,
-        sort,
       };
 
-      const offers = await this.driveService.getAllOffers(user, filters, {
-        sort: sort,
-      });
+      const offers = await this.driveService.getAllOffers(user, filters)
       return await Promise.all(
         offers.map(async (offer) => {
           return this.utilsService.transformOfferDBtoGetOfferDTO(offer);
@@ -265,8 +260,6 @@ export class DriveController {
   async getAllRequests(
     @Session() session: SessionData,
     @Query() query: FilterDTO,
-    @Query('sort')
-    sort?: SortingEnum,
   ) {
     let user: UserDB;
     if (session.currentUser) {
@@ -276,15 +269,11 @@ export class DriveController {
     try {
       const filters = {
         ...query,
-        sort,
       };
 
       const requests: RequestDB[] = await this.driveService.getAllRequests(
         user,
         filters,
-        {
-          sort: sort,
-        },
       );
       return await Promise.all(
         requests.map(async (request) => {

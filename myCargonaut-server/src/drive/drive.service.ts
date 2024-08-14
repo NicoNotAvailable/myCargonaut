@@ -156,9 +156,6 @@ export class DriveService {
   async getAllOffers(
     user?: UserDB,
     filters?: FilterDTO,
-    sort?: {
-      sort?: SortingEnum;
-    },
   ): Promise<OfferDB[]> {
     const queryBuilder = this.offerRepository
       .createQueryBuilder('offer')
@@ -189,8 +186,8 @@ export class DriveService {
 
     offers = await this.filterByRating(offers, filters?.minRating);
 
-    if (sort?.sort) {
-      offers = await this.sortOrder(offers, sort.sort);
+    if (filters?.sort) {
+      offers = await this.sortOrder(offers, filters.sort);
     }
 
     return offers;
@@ -210,9 +207,6 @@ export class DriveService {
   async getAllRequests(
     user?: UserDB,
     filters?: FilterDTO,
-    sort?: {
-      sort?: SortingEnum;
-    },
   ): Promise<RequestDB[]> {
     const queryBuilder = this.requestRepository
       .createQueryBuilder('request')
@@ -251,8 +245,8 @@ export class DriveService {
       filters,
     );
 
-    if (sort?.sort) {
-      filteredDrives = await this.sortOrder(filteredDrives, sort.sort);
+    if (filters?.sort) {
+      filteredDrives = await this.sortOrder(filteredDrives, filters.sort);
     }
 
     return filteredDrives;
