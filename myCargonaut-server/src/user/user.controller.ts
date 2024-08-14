@@ -46,8 +46,6 @@ import { CarDB } from '../database/CarDB';
 import { VehicleService } from '../vehicle/vehicle.service';
 import { TrailerDB } from '../database/TrailerDB';
 import { TripService } from '../trip/trip.service';
-import { OfferTripDB } from "../database/OfferTripDB";
-import { RequestTripDB } from "../database/RequestTripDB";
 
 @ApiTags('user')
 @Controller('user')
@@ -194,7 +192,9 @@ export class UserController {
           }
         }
         for (const requestTrip of allTrips.requestDriveTrips) {
-          totalSeats += requestTrip.
+          if (requestTrip.drive.status === 4 || requestTrip.drive.status === 5) {
+            totalSeats += requestTrip.drive.seats;
+          }
         }
       }
 
