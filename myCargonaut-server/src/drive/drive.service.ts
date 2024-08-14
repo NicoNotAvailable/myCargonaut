@@ -402,7 +402,7 @@ export class DriveService {
         );
       } else if (endLocation) {
         isValid = locations.some(
-          (loc) => loc.city.includes(startLocation) && loc.stopNr !== 1,
+          (loc) => loc.city.includes(endLocation) && loc.stopNr !== 1,
         );
       }
 
