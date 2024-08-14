@@ -43,12 +43,12 @@ export class FilterDTO {
   minRating?: number;
 
   @ApiPropertyOptional({
-    description: 'decide if you want to sort by rating',
-    example: 'ASC',
+    description: 'decide if you want to sort by rating, time or money',
+    example: 'timeAsc',
   })
   @IsOptional()
-  @IsEnum(['ASC', 'DESC'])
-  sortRating?: 'ASC' | 'DESC';
+  @IsEnum(['timeAsc', 'timeDesc', 'rating', 'price'])
+  sort?: 'timeAsc' | 'timeDesc' | 'rating' | 'price';
 
   @ApiPropertyOptional({
     description: 'number of seats that are required',

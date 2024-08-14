@@ -251,7 +251,8 @@ export class DriveController {
   async getAllRequests(
     @Session() session: SessionData,
     @Query() query: FilterDTO,
-    @Query('sortRating') sortRating?: 'ASC' | 'DESC',
+    @Query('sort')
+    sort?: 'timeAsc' | 'timeDesc' | 'rating' | 'price',
   ) {
     let user: UserDB;
     if (session.currentUser) {
@@ -261,11 +262,11 @@ export class DriveController {
     try {
       const filters = {
         ...query,
-        sortRating,
+        sort,
       };
 
       const requests = await this.driveService.getAllRequests(user, filters, {
-        rating: sortRating,
+        sort: sort,
       });
       return await Promise.all(
         requests.map(async (request) => {

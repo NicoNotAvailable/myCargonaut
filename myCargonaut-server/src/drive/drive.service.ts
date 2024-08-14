@@ -180,7 +180,7 @@ export class DriveService {
     user?: UserDB,
     filters?: FilterDTO,
     sort?: {
-      rating?: 'ASC' | 'DESC';
+      sort?: 'timeAsc' | 'timeDesc' | 'rating' | 'price';
     },
   ): Promise<RequestDB[]> {
     const queryBuilder = this.requestRepository
@@ -217,8 +217,8 @@ export class DriveService {
       filters,
     );
 
-    if (sort?.rating) {
-      filteredDrives = await this.sortByRating(filteredDrives, sort.rating);
+    if (sort?.sort) {
+      filteredDrives = await this.sortOrder(filteredDrives, sort.sort);
     }
 
     return filteredDrives;
@@ -331,7 +331,7 @@ export class DriveService {
     date?: Date,
   ) {
     if (date) {
-      queryBuilder.andWhere('request.date = :date', { date });
+      queryBuilder.andWhere('DATE(request.date) = DATE(:date)', { date });
     }
   }
 
@@ -488,9 +488,9 @@ export class DriveService {
     return filteredDrives;
   }
 
-  private async sortByRating(
+  private async sortOrder(
     drives: RequestDB[],
-    sortOrder: 'ASC' | 'DESC',
+    sortOrder: 'timeAsc' | 'timeDesc' | 'rating' | 'price',
   ): Promise<RequestDB[]> {
     const drivesWithRatings = await Promise.all(
       drives.map(async (drive) => {
@@ -498,11 +498,24 @@ export class DriveService {
         return { drive, rating };
       }),
     );
-
     drivesWithRatings.sort((a, b) => {
-      return sortOrder === 'ASC' ? a.rating - b.rating : b.rating - a.rating;
+      switch (sortOrder) {
+        case 'rating':
+          return b.rating - a.rating;
+        case 'timeAsc':
+          return (
+            new Date(a.drive.timestamp).getTime() -
+            new Date(b.drive.timestamp).getTime()
+          );
+        case 'timeDesc':
+          return (
+            new Date(b.drive.timestamp).getTime() -
+            new Date(a.drive.timestamp).getTime()
+          );
+        case 'price':
+          return b.drive.price - a.drive.price;
+      }
     });
-
     return drivesWithRatings.map((item) => item.drive);
   }
 }
