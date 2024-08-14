@@ -240,7 +240,10 @@ export class DriveService {
       throw new NotFoundException('Requests not found');
     }
 
-    let filteredDrives: RequestDB[] = await this.filterByRating(drives, filters?.minRating);
+    let filteredDrives: RequestDB[] = await this.filterByRating(
+      drives,
+      filters?.minRating,
+    );
 
     filteredDrives = await this.applyRequestSizeFilters(
       filteredDrives,
@@ -356,10 +359,7 @@ export class DriveService {
     await this.driveRepository.remove(drive);
   }
 
-  private applyDateFilter(
-    queryBuilder: SelectQueryBuilder<any>,
-    date?: Date,
-  ) {
+  private applyDateFilter(queryBuilder: SelectQueryBuilder<any>, date?: Date) {
     if (date) {
       queryBuilder.andWhere('DATE(request.date) = DATE(:date)', { date });
     }
@@ -462,7 +462,7 @@ export class DriveService {
     }
   }
 
-  async applyRequestSizeFilters(
+  private async applyRequestSizeFilters(
     requests: RequestDB[],
     filters?: FilterDTO,
   ): Promise<RequestDB[]> {
@@ -503,7 +503,7 @@ export class DriveService {
   }
 
   private async filterByRating(
-    drives: any[] ,
+    drives: any[],
     minRating?: number,
   ): Promise<any[]> {
     if (!minRating) return drives;
