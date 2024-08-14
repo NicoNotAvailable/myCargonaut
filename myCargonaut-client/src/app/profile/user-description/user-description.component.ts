@@ -65,6 +65,7 @@ export class UserDescriptionComponent {
 
   offeredDrives = signal(0);
   takenDrives = signal(0);
+  totalDrives = signal(0);
 
   profileText: string = '';
   distanceDriven: number = 0;
@@ -80,8 +81,6 @@ export class UserDescriptionComponent {
   errorMessage: string = '';
 
   imgUpload: boolean = false;
-
-  totalDrives = computed(() => this.offeredDrives() + this.takenDrives());
 
 
   ngOnInit(): void {
@@ -109,11 +108,12 @@ export class UserDescriptionComponent {
         this.startedSmoking = response.isSmoker;
         this.userService.readUserStats().subscribe(
           response2 => {
-            response2.offeredDrives == null ? this.offeredDrives.set(1234) : this.offeredDrives.set(response2.offeredDrives);
-            response2.takenDrives == null ? this.takenDrives.set(123) : this.takenDrives.set(response2.takenDrives);
-            this.distanceDriven = response2.distanceDriven == null ? 0 : response2.distanceDriven;
-            this.totalPassengers = response2.totalPassengers == null ? 12 : response2.totalPassengers;
-            this.highestWeight = response2.highestWeight == null ? 12 : response2.highestWeight;
+            this.totalDrives.set(response2.totalDrives);
+            this.offeredDrives.set(response2.offeredDrives);
+            this.takenDrives.set(response2.takenDrives);
+            this.distanceDriven = response2.distanceDriven;
+            this.totalPassengers = response2.totalPassengers;
+            this.highestWeight = response2.highestWeight;
           },
           error => {
             this.errorMessage = 'Awooga somethings wrong';
@@ -139,11 +139,12 @@ export class UserDescriptionComponent {
     this.email = "";
     this.userService.readUserStats(user!.id).subscribe(
       response => {
-        user!.offeredDrives == null ? this.offeredDrives.set(1234) : this.offeredDrives.set(user!.offeredDrives);
-        user!.takenDrives == null ? this.takenDrives.set(123) : this.takenDrives.set(user!.takenDrives);
-        this.distanceDriven = user!.distanceDriven == null ? 0 : user!.distanceDriven;
-        this.totalPassengers = user!.totalPassengers == null ? 12 : user!.totalPassengers;
-        this.highestWeight = user!.highestWeight == null ? 12 : user!.highestWeight;
+        this.totalDrives.set(response.totalDrives);
+        this.offeredDrives.set(response.offeredDrives);
+        this.takenDrives.set(response.takenDrives);
+        this.distanceDriven = response.distanceDriven;
+        this.totalPassengers = response.totalPassengers;
+        this.highestWeight = response.highestWeight;
       },
       error => {
         this.errorMessage = 'Awooga somethings wrong';

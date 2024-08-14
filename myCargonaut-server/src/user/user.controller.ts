@@ -39,7 +39,10 @@ import { Response } from 'express';
 import { ReviewService } from '../review/review.service';
 import { GetOtherUserDTO } from './DTO/GetOtherUserDTO';
 import { UtilsService } from '../utils/utils.service';
-import { UserStatsDTO } from "./DTO/UserStatsDTO";
+import { TripService } from '../trip/trip.service';
+import { UserStatsDTO } from './DTO/UserStatsDTO';
+import { DriveService } from '../drive/drive.service';
+import { OfferDB, RequestDB } from "../database/DriveDB";
 
 @ApiTags('user')
 @Controller('user')
@@ -48,6 +51,8 @@ export class UserController {
     public readonly userService: UserService,
     public readonly utilsService: UtilsService,
     public readonly reviewService: ReviewService,
+    public readonly tripService: TripService,
+    public readonly driveService: DriveService,
   ) {}
 
   private readonly logger = new Logger(UserController.name);
@@ -129,12 +134,28 @@ export class UserController {
     @Session() session: SessionData,
     @Param('id', ParseIntPipe) id: number,
   ): Promise<UserStatsDTO> {
-    let dto: UserStatsDTO = new UserStatsDTO();
+    const dto: UserStatsDTO = new UserStatsDTO();
     let user: UserDB;
     try {
       user = await this.userService.getUserById(
         id == -1 ? session.currentUser : id,
       );
+
+      const offeredDrives: OfferDB[] = await this.driveService.getOwnOffers(user.id);
+      const finishedOfferedDrives: OfferDB[] = offeredDrives.filter(
+        (offeredDrive) =>
+          offeredDrive.status === 4 || offeredDrive.status === 5,
+      );
+
+      const requestedDrives: RequestDB[] = await this.driveService.getOwnRequests(user.id);
+      const finishedRequestedDrives: RequestDB[] = requestedDrives.filter(
+        (requestedDrive) =>
+          requestedDrive.status === 4 || requestedDrive.status === 5,
+      );
+
+      dto.offeredDrives = offeredDrives.length;
+      dto.takenDrives = requestedDrives.length;
+      dto.totalDrives = finishedOfferedDrives.length + finishedRequestedDrives.length;
     } catch (err) {
       console.error(err);
     }

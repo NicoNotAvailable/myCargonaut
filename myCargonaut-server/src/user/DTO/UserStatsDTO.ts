@@ -15,6 +15,11 @@ export class UserStatsDTO {
   @ApiProperty()
   @IsNumber()
   @IsNotEmpty()
+  totalDrives: number;
+
+  @ApiProperty()
+  @IsNumber()
+  @IsNotEmpty()
   distanceDriven: number;
 
   @ApiProperty()
