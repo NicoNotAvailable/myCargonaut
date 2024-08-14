@@ -39,10 +39,15 @@ import { Response } from 'express';
 import { ReviewService } from '../review/review.service';
 import { GetOtherUserDTO } from './DTO/GetOtherUserDTO';
 import { UtilsService } from '../utils/utils.service';
-import { TripService } from '../trip/trip.service';
 import { UserStatsDTO } from './DTO/UserStatsDTO';
 import { DriveService } from '../drive/drive.service';
-import { OfferDB, RequestDB } from "../database/DriveDB";
+import { OfferDB, RequestDB } from '../database/DriveDB';
+import { CarDB } from '../database/CarDB';
+import { VehicleService } from '../vehicle/vehicle.service';
+import { TrailerDB } from '../database/TrailerDB';
+import { TripService } from '../trip/trip.service';
+import { OfferTripDB } from "../database/OfferTripDB";
+import { RequestTripDB } from "../database/RequestTripDB";
 
 @ApiTags('user')
 @Controller('user')
@@ -51,8 +56,9 @@ export class UserController {
     public readonly userService: UserService,
     public readonly utilsService: UtilsService,
     public readonly reviewService: ReviewService,
-    public readonly tripService: TripService,
+    public readonly vehicleService: VehicleService,
     public readonly driveService: DriveService,
+    public readonly tripService: TripService,
   ) {}
 
   private readonly logger = new Logger(UserController.name);
@@ -141,21 +147,63 @@ export class UserController {
         id == -1 ? session.currentUser : id,
       );
 
+      const cars: CarDB[] = await this.vehicleService.getAllCarsForUser(user.id);
+      let carMaxWeight: number = 0;
+      if (cars) {
+        for (const car of cars) {
+          if (car.weight > carMaxWeight) {
+            carMaxWeight = car.weight;
+          }
+        }
+      }
+
+      const trailer: TrailerDB[] = await this.vehicleService.getAllTrailersForUser(user.id);
+      let trailerMaxWeight: number = 0;
+      if (trailer) {
+        for (const trail of trailer) {
+          if (trail.weight > trailerMaxWeight) {
+            trailerMaxWeight = trail.weight;
+          }
+        }
+      }
+
       const offeredDrives: OfferDB[] = await this.driveService.getOwnOffers(user.id);
-      const finishedOfferedDrives: OfferDB[] = offeredDrives.filter(
-        (offeredDrive) =>
-          offeredDrive.status === 4 || offeredDrive.status === 5,
-      );
+      let finishedOfferedDrives: OfferDB[];
+      if (offeredDrives) {
+        finishedOfferedDrives = offeredDrives.filter(
+          (offeredDrive) =>
+            offeredDrive.status === 4 || offeredDrive.status === 5,
+        );
+      }
 
       const requestedDrives: RequestDB[] = await this.driveService.getOwnRequests(user.id);
-      const finishedRequestedDrives: RequestDB[] = requestedDrives.filter(
-        (requestedDrive) =>
-          requestedDrive.status === 4 || requestedDrive.status === 5,
-      );
+      let finishedRequestedDrives: RequestDB[];
+      if (requestedDrives) {
+        finishedRequestedDrives = requestedDrives.filter(
+          (requestedDrive) =>
+            requestedDrive.status === 4 || requestedDrive.status === 5,
+        );
+      }
 
-      dto.offeredDrives = offeredDrives.length;
-      dto.takenDrives = requestedDrives.length;
-      dto.totalDrives = finishedOfferedDrives.length + finishedRequestedDrives.length;
+      const allTrips = await this.tripService.getUserTrips(user.id);
+      let totalSeats: number = 0;
+      if (allTrips) {
+        for (const offerTrip of allTrips.offerDriveTrips) {
+          if (offerTrip.drive.status === 4 || offerTrip.drive.status === 5) {
+            totalSeats += offerTrip.usedSeats;
+          }
+        }
+        for (const requestTrip of allTrips.requestDriveTrips) {
+          totalSeats += requestTrip.
+        }
+      }
+
+      dto.offeredDrives = offeredDrives == null ? 0 : offeredDrives.length;
+      dto.takenDrives = requestedDrives == null ? 0 : requestedDrives.length;
+      dto.totalDrives = finishedOfferedDrives == null || finishedRequestedDrives == null ? 0 : finishedOfferedDrives.length + finishedRequestedDrives.length;
+      dto.distanceDriven = dto.totalDrives * 100;
+      dto.highestWeight = carMaxWeight + trailerMaxWeight;
+      dto.totalPassengers = totalSeats;
     } catch (err) {
       console.error(err);
     }
