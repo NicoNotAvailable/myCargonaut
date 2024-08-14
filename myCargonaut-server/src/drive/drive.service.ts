@@ -153,10 +153,7 @@ export class DriveService {
     }
     return drive;
   }
-  async getAllOffers(
-    user?: UserDB,
-    filters?: FilterDTO,
-  ): Promise<OfferDB[]> {
+  async getAllOffers(user?: UserDB, filters?: FilterDTO): Promise<OfferDB[]> {
     const queryBuilder = this.offerRepository
       .createQueryBuilder('offer')
       .leftJoinAndSelect('offer.user', 'user')
@@ -171,13 +168,6 @@ export class DriveService {
     }
 
     this.applyDateFilter(queryBuilder, filters?.date);
-    this.applyOfferLocationFilters(
-      queryBuilder,
-      filters?.startLocation,
-      filters?.endLocation,
-    );
-
-    queryBuilder.orderBy('offer.timestamp', 'DESC');
 
     let offers = await queryBuilder.getMany();
     if (!offers.length) {
@@ -185,6 +175,12 @@ export class DriveService {
     }
 
     offers = await this.filterByRating(offers, filters?.minRating);
+
+    offers = this.applyOfferLocationFilters(
+      offers,
+      filters?.startLocation,
+      filters?.endLocation,
+    );
 
     if (filters?.sort) {
       offers = await this.sortOrder(offers, filters.sort);
@@ -226,8 +222,6 @@ export class DriveService {
       filters?.startLocation,
       filters?.endLocation,
     );
-
-    queryBuilder.orderBy('request.timestamp', 'DESC');
 
     const drives = await queryBuilder.getMany();
 
@@ -381,80 +375,39 @@ export class DriveService {
   }
 
   private applyOfferLocationFilters(
-    queryBuilder: SelectQueryBuilder<OfferDB>,
+    offers: OfferDB[],
     startLocation?: string,
     endLocation?: string,
-  ) {
-    if (startLocation && endLocation) {
-      queryBuilder.andWhere((qb) => {
-        const subQuery = qb
-          .subQuery()
-          .select('loc.driveId')
-          .from(LocationDB, 'loc')
-          .where('loc.city LIKE :startLocation', {
-            startLocation: `%${startLocation}%`,
-          })
-          .andWhere(
-            'loc.driveId IN ' +
-              qb
-                .subQuery()
-                .select('loc2.driveId')
-                .from(LocationDB, 'loc2')
-                .where('loc2.city LIKE :endLocation', {
-                  endLocation: `%${endLocation}%`,
-                })
-                .andWhere('loc2.stopNr > loc.stopNr')
-                .getQuery(),
-          )
-          .getQuery();
+  ): OfferDB[] {
+    return offers.filter(async (offer) => {
+      const locations = await offer.location;
 
-        return 'offer.id IN ' + subQuery;
-      });
-    } else if (startLocation) {
-      queryBuilder.andWhere((qb) => {
-        const subQuery = qb
-          .subQuery()
-          .select('loc.driveId')
-          .from(LocationDB, 'loc')
-          .where('loc.city LIKE :startLocation', {
-            startLocation: `%${startLocation}%`,
-          })
-          .andWhere(
-            'loc.driveId IN ' +
-              qb
-                .subQuery()
-                .select('loc2.driveId')
-                .from(LocationDB, 'loc2')
-                .where('loc2.stopNr >= loc.stopNr')
-                .getQuery(),
-          )
-          .getQuery();
+      let isValid = true;
 
-        return 'offer.id IN ' + subQuery;
-      });
-    } else if (endLocation) {
-      queryBuilder.andWhere((qb) => {
-        const subQuery = qb
-          .subQuery()
-          .select('loc.driveId')
-          .from(LocationDB, 'loc')
-          .where('loc.city LIKE :endLocation', {
-            endLocation: `%${endLocation}%`,
-          })
-          .andWhere(
-            'loc.driveId IN ' +
-              qb
-                .subQuery()
-                .select('loc2.driveId')
-                .from(LocationDB, 'loc2')
-                .where('loc2.stopNr < loc.stopNr')
-                .getQuery(),
-          )
-          .getQuery();
+      if (startLocation && endLocation) {
+        const location1 = locations.find(
+          (loc) => loc.city.includes(startLocation) && loc.stopNr !== 100,
+        );
+        const hasValidEndLocation =
+          location1 &&
+          locations.some(
+            (loc) =>
+              loc.city.includes(endLocation) && loc.stopNr > location1.stopNr,
+          );
 
-        return 'offer.id IN ' + subQuery;
-      });
-    }
+        isValid = !!location1 && hasValidEndLocation;
+      } else if (startLocation) {
+        isValid = locations.some(
+          (loc) => loc.city.includes(startLocation) && loc.stopNr !== 100,
+        );
+      } else if (endLocation) {
+        isValid = locations.some(
+          (loc) => loc.city.includes(startLocation) && loc.stopNr !== 1,
+        );
+      }
+
+      return isValid;
+    });
   }
 
   private async applyRequestSizeFilters(

@@ -29,7 +29,6 @@ import { ChangeStatusDTO } from './DTO/ChangeStatusDTO';
 import { UserDB } from '../database/UserDB';
 import { FilterDTO } from './DTO/FilterDTO';
 import { RequestDB } from '../database/DriveDB';
-import { SortingEnum } from '../database/enums/SortingEnum';
 
 @ApiTags('drive')
 @Controller('drive')
@@ -205,7 +204,7 @@ export class DriveController {
         ...query,
       };
 
-      const offers = await this.driveService.getAllOffers(user, filters)
+      const offers = await this.driveService.getAllOffers(user, filters);
       return await Promise.all(
         offers.map(async (offer) => {
           return this.utilsService.transformOfferDBtoGetOfferDTO(offer);
