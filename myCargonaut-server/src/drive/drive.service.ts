@@ -161,14 +161,16 @@ export class DriveService {
       .leftJoinAndSelect('offer.trailer', 'trailer')
       .leftJoinAndSelect('offer.location', 'location');
 
-    queryBuilder.andWhere('request.status = 0');
+    queryBuilder.andWhere('offer.status = 0');
 
     if (user) {
-      queryBuilder.andWhere('request.user.id != :userId', { userId: user.id });
+      queryBuilder.andWhere('offer.user.id != :userId', { userId: user.id });
     }
-
-    this.applyDateFilter(queryBuilder, filters?.date);
-
+    if (filters?.date) {
+      queryBuilder.andWhere('DATE(offer.date) = DATE(:date)', {
+        date: filters.date,
+      });
+    }
     let offers = await queryBuilder.getMany();
 
     offers = await this.filterByRating(offers, filters?.minRating);
@@ -218,7 +220,12 @@ export class DriveService {
       queryBuilder.andWhere('request.user.id != :userId', { userId: user.id });
     }
 
-    this.applyDateFilter(queryBuilder, filters?.date);
+    if (filters?.date) {
+      queryBuilder.andWhere('DATE(request.date) = DATE(:date)', {
+        date: filters.date,
+      });
+    }
+
     this.applyReqLocationFilters(
       queryBuilder,
       filters?.startLocation,
@@ -347,12 +354,6 @@ export class DriveService {
       );
     }
     await this.driveRepository.remove(drive);
-  }
-
-  private applyDateFilter(queryBuilder: SelectQueryBuilder<any>, date?: Date) {
-    if (date) {
-      queryBuilder.andWhere('DATE(request.date) = DATE(:date)', { date });
-    }
   }
 
   private applyReqLocationFilters(
