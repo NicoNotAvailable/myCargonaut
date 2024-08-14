@@ -170,9 +170,6 @@ export class DriveService {
     this.applyDateFilter(queryBuilder, filters?.date);
 
     let offers = await queryBuilder.getMany();
-    if (!offers.length) {
-      throw new NotFoundException('Offers not found');
-    }
 
     offers = await this.filterByRating(offers, filters?.minRating);
 
@@ -182,10 +179,15 @@ export class DriveService {
       filters?.endLocation,
     );
 
+    offers = await this.applyOfferSizeFilters(offers, filters);
+
     if (filters?.sort) {
       offers = await this.sortOrder(offers, filters.sort);
     }
 
+    if (!offers.length) {
+      throw new NotFoundException('no matching offers found');
+    }
     return offers;
   }
 
@@ -225,10 +227,6 @@ export class DriveService {
 
     const drives = await queryBuilder.getMany();
 
-    if (!drives.length) {
-      throw new NotFoundException('Requests not found');
-    }
-
     let filteredDrives: RequestDB[] = await this.filterByRating(
       drives,
       filters?.minRating,
@@ -243,6 +241,9 @@ export class DriveService {
       filteredDrives = await this.sortOrder(filteredDrives, filters.sort);
     }
 
+    if (!drives.length) {
+      throw new NotFoundException('no matching requests found');
+    }
     return filteredDrives;
   }
 
@@ -406,6 +407,50 @@ export class DriveService {
         );
       }
 
+      return isValid;
+    });
+  }
+
+  private async applyOfferSizeFilters(
+    offers: OfferDB[],
+    filters?: FilterDTO,
+  ): Promise<OfferDB[]> {
+    if (!filters) return offers;
+
+    return offers.filter(async (offer) => {
+      let isValid = true;
+
+      if (filters.seats && offer.car.seats < filters.seats) {
+        isValid = false;
+      }
+      if (
+        filters.weight &&
+        offer.car.weight > filters.weight &&
+        offer.trailer?.weight > filters.weight
+      ) {
+        isValid = false;
+      }
+      if (
+        filters.height &&
+        offer.car.height > filters.height &&
+        offer.trailer?.height > filters.height
+      ) {
+        isValid = false;
+      }
+      if (
+        filters.length &&
+        offer.car.length > filters.length &&
+        offer.trailer?.length > filters.length
+      ) {
+        isValid = false;
+      }
+      if (
+        filters.width &&
+        offer.car.width > filters.width &&
+        offer.trailer?.width > filters.width
+      ) {
+        isValid = false;
+      }
       return isValid;
     });
   }
