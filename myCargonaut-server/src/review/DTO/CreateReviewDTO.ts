@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsNumber } from 'class-validator';
+import {IsNotEmpty, IsNumber, IsString} from 'class-validator';
 
 
 export class CreateReviewDTO {
@@ -18,6 +18,6 @@ export class CreateReviewDTO {
     example: 'der Fahrer hat komische Musik gehört :/',
   })
 
-  @IsNumber()
+  @IsString()
   text: string;
 }

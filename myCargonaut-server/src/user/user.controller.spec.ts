@@ -173,7 +173,7 @@ describe('UserController', () => {
 
       await expect(
         controller.createUser(body, mockSession as SessionData),
-      ).rejects.toThrow(BadRequestException);
+      ).rejects.toThrow('Passwort muss mindestens 8 Zeichen lang sein');
     });
 
     it('should throw error for empty firstName field', async () => {

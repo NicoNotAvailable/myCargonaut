@@ -5,22 +5,30 @@ import { UserService } from '../user/user.service'; // Adjust import as needed
 import { UtilsService } from '../utils/utils.service';
 import { TripService } from '../trip/trip.service';
 import { DriveService } from '../drive/drive.service';
+import { BadRequestException, NotFoundException } from '@nestjs/common';
+import { CreateReviewDTO } from './DTO/CreateReviewDTO';
+import { SessionData } from 'express-session';
+import { UserDB } from '../database/UserDB';
+import { TripDB } from '../database/TripDB';
+import { OkDTO } from '../serverDTO/OkDTO';
 
 // Mock implementations
 const mockReviewService = {
-  // Add mocked methods here
+  createReview: jest.fn(),
+  getReviews: jest.fn(),
 };
 
 const mockUserService = {
-  // Add mocked methods here
+  getUserById: jest.fn(),
 };
 
 const mockUtilsService = {
-  // Add mocked methods here
+  transformReviewDBToGetReviewDTO: jest.fn(),
 };
 
 const mockTripService = {
-  // Add mocked methods here
+  getOfferTripById: jest.fn(),
+  getRequestTripById: jest.fn(),
 };
 
 const mockDriveService = {
@@ -62,5 +70,81 @@ describe('ReviewController', () => {
 
   it('should be defined', () => {
     expect(controller).toBeDefined();
+  });
+
+  describe('createReview', () => {
+    it('should create a review successfully', async () => {
+      const mockUser = { id: 1 } as UserDB;
+      const mockTrip = { id: 1 } as TripDB;
+      const session = { currentUser: 1 } as SessionData;
+      const createReviewDto: CreateReviewDTO = {
+        tripID: 1,
+        rating: 5,
+        text: 'Great trip!',
+      };
+
+      mockUserService.getUserById.mockResolvedValue(mockUser);
+      mockTripService.getOfferTripById.mockResolvedValue(mockTrip);
+      mockReviewService.createReview.mockResolvedValue(undefined);
+
+      const result = await controller.createReview(createReviewDto, session);
+
+      expect(result).toEqual(new OkDTO(true, 'Review was created'));
+      expect(mockUserService.getUserById).toHaveBeenCalledWith(
+        session.currentUser,
+      );
+      expect(mockTripService.getOfferTripById).toHaveBeenCalledWith(
+        createReviewDto.tripID,
+      );
+      expect(mockReviewService.createReview).toHaveBeenCalledWith(
+        mockUser,
+        mockTrip,
+        createReviewDto,
+      );
+    });
+
+    it('should throw BadRequestException if user is not found', async () => {
+      const session = { currentUser: 1 } as SessionData;
+      const createReviewDto: CreateReviewDTO = {
+        tripID: 1,
+        rating: 5,
+        text: 'Great trip!',
+      };
+
+      mockUserService.getUserById.mockResolvedValue(null);
+
+      await expect(
+        controller.createReview(createReviewDto, session),
+      ).rejects.toThrow('User was not found');
+    });
+
+    it('should throw BadRequestException if trip is not found', async () => {
+      const mockUser = { id: 1 } as UserDB;
+      const session = { currentUser: 1 } as SessionData;
+      const createReviewDto: CreateReviewDTO = {
+        tripID: 1,
+        rating: 5,
+        text: 'Great trip!',
+      };
+
+      // Mock user retrieval
+      mockUserService.getUserById.mockResolvedValue(mockUser);
+
+      // Mock trip retrievals to throw NotFoundException
+      mockTripService.getOfferTripById.mockRejectedValue(
+        new NotFoundException(),
+      );
+      mockTripService.getRequestTripById.mockRejectedValue(
+        new NotFoundException(),
+      );
+
+      // Expect that createReview will throw a BadRequestException
+      await expect(
+        controller.createReview(createReviewDto, session),
+      ).rejects.toThrow(BadRequestException);
+      await expect(
+        controller.createReview(createReviewDto, session),
+      ).rejects.toThrow('Trip was not found');
+    });
   });
 });
