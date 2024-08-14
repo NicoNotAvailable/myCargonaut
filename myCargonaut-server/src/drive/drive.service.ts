@@ -20,6 +20,7 @@ import { StatusEnum } from '../database/enums/StatusEnum';
 import { ChangeStatusDTO } from './DTO/ChangeStatusDTO';
 import { FilterDTO } from './DTO/FilterDTO';
 import { ReviewService } from '../review/review.service';
+import { SortingEnum } from '../database/enums/SortingEnum';
 
 @Injectable()
 export class DriveService {
@@ -156,7 +157,7 @@ export class DriveService {
     user?: UserDB,
     filters?: FilterDTO,
     sort?: {
-      sort?: 'timeAsc' | 'timeDesc' | 'rating' | 'price';
+      sort?: SortingEnum;
     },
   ): Promise<OfferDB[]> {
     const queryBuilder = this.offerRepository
@@ -210,7 +211,7 @@ export class DriveService {
     user?: UserDB,
     filters?: FilterDTO,
     sort?: {
-      sort?: 'timeAsc' | 'timeDesc' | 'rating' | 'price';
+      sort?: SortingEnum;
     },
   ): Promise<RequestDB[]> {
     const queryBuilder = this.requestRepository
@@ -520,7 +521,7 @@ export class DriveService {
 
   private async sortOrder(
     drives: DriveDB[],
-    sortOrder: 'timeAsc' | 'timeDesc' | 'rating' | 'price',
+    sortOrder: SortingEnum,
   ): Promise<any[]> {
     const drivesWithRatings = await Promise.all(
       drives.map(async (drive) => {
@@ -530,19 +531,19 @@ export class DriveService {
     );
     drivesWithRatings.sort((a, b) => {
       switch (sortOrder) {
-        case 'rating':
+        case 2:
           return b.rating - a.rating;
-        case 'timeAsc':
+        case 0:
           return (
             new Date(a.drive.timestamp).getTime() -
             new Date(b.drive.timestamp).getTime()
           );
-        case 'timeDesc':
+        case 1:
           return (
             new Date(b.drive.timestamp).getTime() -
             new Date(a.drive.timestamp).getTime()
           );
-        case 'price':
+        case 3:
           return b.drive.price - a.drive.price;
       }
     });

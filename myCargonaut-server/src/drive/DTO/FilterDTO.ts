@@ -7,6 +7,7 @@ import {
   Min,
 } from 'class-validator';
 import { ApiPropertyOptional } from '@nestjs/swagger';
+import { SortingEnum } from '../../database/enums/SortingEnum';
 
 export class FilterDTO {
   @ApiPropertyOptional({
@@ -44,11 +45,11 @@ export class FilterDTO {
 
   @ApiPropertyOptional({
     description: 'decide if you want to sort by rating, time or money',
-    example: 'timeAsc',
+    example: '1',
   })
   @IsOptional()
   @IsEnum(['timeAsc', 'timeDesc', 'rating', 'price'])
-  sort?: 'timeAsc' | 'timeDesc' | 'rating' | 'price';
+  sort?: SortingEnum;
 
   @ApiPropertyOptional({
     description: 'number of seats that are required',

@@ -29,6 +29,7 @@ import { ChangeStatusDTO } from './DTO/ChangeStatusDTO';
 import { UserDB } from '../database/UserDB';
 import { FilterDTO } from './DTO/FilterDTO';
 import { RequestDB } from '../database/DriveDB';
+import { SortingEnum } from '../database/enums/SortingEnum';
 
 @ApiTags('drive')
 @Controller('drive')
@@ -191,10 +192,12 @@ export class DriveController {
     description: 'gets all offers',
   })
   @Get('/all/offers')
-  async getAllOffers(@Session() session: SessionData,
-                     @Query() query: FilterDTO,
-                     @Query('sort')
-                         sort?: 'timeAsc' | 'timeDesc' | 'rating' | 'price',) {
+  async getAllOffers(
+    @Session() session: SessionData,
+    @Query() query: FilterDTO,
+    @Query('sort')
+    sort?: SortingEnum,
+  ) {
     let user: UserDB;
     if (session.currentUser) {
       user = await this.userService.getUserById(session.currentUser);
@@ -263,7 +266,7 @@ export class DriveController {
     @Session() session: SessionData,
     @Query() query: FilterDTO,
     @Query('sort')
-    sort?: 'timeAsc' | 'timeDesc' | 'rating' | 'price',
+    sort?: SortingEnum,
   ) {
     let user: UserDB;
     if (session.currentUser) {
@@ -276,9 +279,13 @@ export class DriveController {
         sort,
       };
 
-      const requests:RequestDB[] = await this.driveService.getAllRequests(user, filters, {
-        sort: sort,
-      });
+      const requests: RequestDB[] = await this.driveService.getAllRequests(
+        user,
+        filters,
+        {
+          sort: sort,
+        },
+      );
       return await Promise.all(
         requests.map(async (request) => {
           return this.utilsService.transformRequestDBtoGetRequestDTO(request);
