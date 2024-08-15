@@ -175,7 +175,7 @@ export class DriveService {
 
     offers = await this.filterByRating(offers, filters?.minRating);
 
-    offers = this.applyOfferLocationFilters(
+    offers = await this.applyOfferLocationFilters(
       offers,
       filters?.startLocation,
       filters?.endLocation,
@@ -376,12 +376,14 @@ export class DriveService {
     }
   }
 
-  private applyOfferLocationFilters(
+  private async applyOfferLocationFilters(
     offers: OfferDB[],
     startLocation?: string,
     endLocation?: string,
-  ): OfferDB[] {
-    return offers.filter(async (offer) => {
+  ): Promise<OfferDB[]> {
+    const filteredOffers: OfferDB[] = [];
+
+    for (const offer of offers) {
       const locations = await offer.location;
 
       let isValid = true;
@@ -407,9 +409,11 @@ export class DriveService {
           (loc) => loc.city.includes(endLocation) && loc.stopNr !== 1,
         );
       }
-
-      return isValid;
-    });
+      if (isValid) {
+        filteredOffers.push(offer);
+      }
+    }
+    return filteredOffers;
   }
 
   private async applyOfferSizeFilters(
