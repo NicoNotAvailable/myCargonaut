@@ -524,19 +524,23 @@ export class DriveService {
     );
     drivesWithRatings.sort((a, b) => {
       switch (sortOrder) {
-        case 2:
-          return b.rating - a.rating;
-        case 0:
+        case SortingEnum.timeAsc:
           return (
             new Date(a.drive.timestamp).getTime() -
             new Date(b.drive.timestamp).getTime()
           );
-        case 1:
+        case SortingEnum.timeDesc:
           return (
             new Date(b.drive.timestamp).getTime() -
             new Date(a.drive.timestamp).getTime()
           );
-        case 3:
+        case SortingEnum.ratingAsc:
+          return a.rating - b.rating;
+        case SortingEnum.ratingDesc:
+          return b.rating - a.rating;
+        case SortingEnum.priceAsc:
+          return a.drive.price - b.drive.price;
+        case SortingEnum.priceDesc:
           return b.drive.price - a.drive.price;
       }
     });
