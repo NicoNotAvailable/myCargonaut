@@ -418,8 +418,8 @@ export class DriveService {
   ): Promise<OfferDB[]> {
     if (!filters) return offers;
 
-    return offers.filter(async (offer) => {
-      let isValid = true;
+    return offers.filter((offer: OfferDB) => {
+      let isValid: boolean = true;
 
       if (filters.seats && offer.car.seats < filters.seats) {
         isValid = false;
@@ -427,28 +427,28 @@ export class DriveService {
       if (
         filters.weight &&
         offer.car.weight < filters.weight &&
-        offer.trailer?.weight < filters.weight
+        (!offer.trailer || offer.trailer.weight < filters.weight)
       ) {
         isValid = false;
       }
       if (
         filters.height &&
         offer.car.height < filters.height &&
-        offer.trailer?.height < filters.height
+        (!offer.trailer || offer.trailer.height < filters.height)
       ) {
         isValid = false;
       }
       if (
         filters.length &&
         offer.car.length < filters.length &&
-        offer.trailer?.length < filters.length
+        (!offer.trailer || offer.trailer.length < filters.length)
       ) {
         isValid = false;
       }
       if (
         filters.width &&
         offer.car.width < filters.width &&
-        offer.trailer?.width < filters.width
+        (!offer.trailer || offer.trailer.width < filters.width)
       ) {
         isValid = false;
       }
@@ -472,23 +472,23 @@ export class DriveService {
 
       let isValid = true;
 
-      if (filters.seats && request.seats < filters.seats) {
+      if (filters.seats && request.seats > filters.seats) {
         isValid = false;
       }
 
-      if (filters.weight && weight < filters.weight) {
+      if (filters.weight && weight > filters.weight) {
         isValid = false;
       }
 
-      if (filters.height && maxHeight < filters.height) {
+      if (filters.height && maxHeight > filters.height) {
         isValid = false;
       }
 
-      if (filters.length && maxLength < filters.length) {
+      if (filters.length && maxLength > filters.length) {
         isValid = false;
       }
 
-      if (filters.width && maxWidth < filters.width) {
+      if (filters.width && maxWidth > filters.width) {
         isValid = false;
       }
 
