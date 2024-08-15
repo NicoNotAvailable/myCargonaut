@@ -14,10 +14,9 @@ import {
   BadRequestException,
 } from '@nestjs/common';
 import { CreateOfferDTO } from './DTO/CreateOfferDTO';
-import { CreateRequestDTO } from './DTO/CreateRequestDTO';
 import { StatusEnum } from '../database/enums/StatusEnum';
-import { ChangeStatusDTO } from './DTO/ChangeStatusDTO';
 import { CreateLocationDTO } from '../location/DTO/CreateLocationDTO';
+import { ReviewService } from '../review/review.service';
 
 describe('DriveService', () => {
   let service: DriveService;
@@ -26,6 +25,7 @@ describe('DriveService', () => {
   let requestRepository: Repository<RequestDB>;
   let cargoRepository: Repository<CargoDB>;
   let locationRepository: Repository<LocationDB>;
+  let reviewService: ReviewService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -51,6 +51,10 @@ describe('DriveService', () => {
           provide: getRepositoryToken(LocationDB),
           useClass: Repository,
         },
+        {
+          provide: ReviewService,
+          useValue: {},
+        },
       ],
     }).compile();
 
@@ -70,6 +74,7 @@ describe('DriveService', () => {
     locationRepository = module.get<Repository<LocationDB>>(
       getRepositoryToken(LocationDB),
     );
+    reviewService = module.get<ReviewService>(ReviewService);
   });
 
   it('should be defined', () => {
