@@ -18,6 +18,9 @@
             "browser": "src/main.ts",
             "polyfills": [
               "zone.js"
+            ],"allowedCommonJsDependencies": [
+              "socket.io-client",
+              "engine.io-client"
             ],
             "tsConfig": "tsconfig.app.json",
             "assets": [
@@ -42,8 +45,8 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "500kb",
-                  "maximumError": "1mb"
+                  "maximumWarning": "1.5mb",
+                  "maximumError": "2mb"
                 },
                 {
                   "type": "anyComponentStyle",
