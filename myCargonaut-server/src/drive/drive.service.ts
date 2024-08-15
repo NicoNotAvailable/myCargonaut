@@ -426,29 +426,29 @@ export class DriveService {
       }
       if (
         filters.weight &&
-        offer.car.weight > filters.weight &&
-        offer.trailer?.weight > filters.weight
+        offer.car.weight < filters.weight &&
+        offer.trailer?.weight < filters.weight
       ) {
         isValid = false;
       }
       if (
         filters.height &&
-        offer.car.height > filters.height &&
-        offer.trailer?.height > filters.height
+        offer.car.height < filters.height &&
+        offer.trailer?.height < filters.height
       ) {
         isValid = false;
       }
       if (
         filters.length &&
-        offer.car.length > filters.length &&
-        offer.trailer?.length > filters.length
+        offer.car.length < filters.length &&
+        offer.trailer?.length < filters.length
       ) {
         isValid = false;
       }
       if (
         filters.width &&
-        offer.car.width > filters.width &&
-        offer.trailer?.width > filters.width
+        offer.car.width < filters.width &&
+        offer.trailer?.width < filters.width
       ) {
         isValid = false;
       }
@@ -516,7 +516,7 @@ export class DriveService {
     drives: DriveDB[],
     sortOrder: SortingEnum,
   ): Promise<any[]> {
-    const order = Number(sortOrder);
+    const order: number = Number(sortOrder);
     const drivesWithRatings = await Promise.all(
       drives.map(async (drive) => {
         const rating =
@@ -527,13 +527,13 @@ export class DriveService {
     drivesWithRatings.sort((a, b) => {
       if (order === 0) {
         return (
-          new Date(a.drive.timestamp).getTime() -
-          new Date(b.drive.timestamp).getTime()
+          new Date(b.drive.timestamp).getTime() -
+          new Date(a.drive.timestamp).getTime()
         );
       } else if (order === 1) {
         return (
-          new Date(b.drive.timestamp).getTime() -
-          new Date(a.drive.timestamp).getTime()
+          new Date(a.drive.timestamp).getTime() -
+          new Date(b.drive.timestamp).getTime()
         );
       } else if (order === 2) {
         return a.rating - b.rating;

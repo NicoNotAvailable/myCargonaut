@@ -1,6 +1,6 @@
 export enum SortingEnum {
-  timeAsc,
   timeDesc,
+  timeAsc,
   ratingAsc,
   ratingDesc,
   priceAsc,

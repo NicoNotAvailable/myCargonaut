@@ -27,10 +27,10 @@
       <div> Maße: </div>
     </div>
     <div class="col-lg-1 col-4 m-2">
-      <input type="text" class="form-control inputLowBanner" id="heightSearch" placeholder="Höhe (cm)" [(ngModel)]="filter.height">
+      <input type="text" class="form-control inputLowBanner" id="widthSearch" placeholder="Breite (cm)" [(ngModel)]="filter.width">
     </div>
     <div class="col-lg-1 col-4 m-2">
-      <input type="text" class="form-control inputLowBanner" id="widthSearch" placeholder="Breite (cm)" [(ngModel)]="filter.width">
+      <input type="text" class="form-control inputLowBanner" id="heightSearch" placeholder="Höhe (cm)" [(ngModel)]="filter.height">
     </div>
     <div class="col-lg-1 col-4 m-2">
       <input type="text" class="form-control inputLowBanner" id="lengthSearch" placeholder="Länge (cm)" [(ngModel)]="filter.length">
@@ -54,10 +54,10 @@
   </div>
 
   <div class="row m-2">
-    <div class="col-lg-2 col-4 m-2 d-flex justify-content-start">
+    <div class="col-lg-4 col-4 m-2 d-flex justify-content-start">
       <select class="form-control" id="sort" [(ngModel)]="filter.sort">
-        <option value="1">Sortieren nach: Datum (neueste zuerst)</option>
-        <option value="0">Sortieren nach: Datum (älteste zuerst)</option>
+        <option value="">Sortieren nach: Datum (neueste zuerst)</option>
+        <option value="1">Sortieren nach: Datum (älteste zuerst)</option>
         <option value="3">Sortieren nach: Bewertung (höchste zuerst)</option>
         <option value="2">Sortieren nach: Bewertung (niedrigste zuerst)</option>
         <option value="5">Sortieren nach: Preis (höchster zuerst)</option>
