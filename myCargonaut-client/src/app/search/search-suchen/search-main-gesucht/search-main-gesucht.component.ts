@@ -137,6 +137,7 @@ export class SearchMainGesuchtComponent {
         },
         (error: { error: { message: string; }; }) => {
           console.error('Fehler beim Abrufen der Angebote:', error);
+          this.allRequests = [];
         }
       );
     }
