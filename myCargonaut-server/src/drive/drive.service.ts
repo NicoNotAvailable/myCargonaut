@@ -476,19 +476,19 @@ export class DriveService {
         isValid = false;
       }
 
-      if (filters.weight && weight > filters.weight) {
+      if (filters.weight && weight < filters.weight) {
         isValid = false;
       }
 
-      if (filters.height && maxHeight > filters.height) {
+      if (filters.height && maxHeight < filters.height) {
         isValid = false;
       }
 
-      if (filters.length && maxLength > filters.length) {
+      if (filters.length && maxLength < filters.length) {
         isValid = false;
       }
 
-      if (filters.width && maxWidth > filters.width) {
+      if (filters.width && maxWidth < filters.width) {
         isValid = false;
       }
 
