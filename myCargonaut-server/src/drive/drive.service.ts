@@ -462,7 +462,9 @@ export class DriveService {
   ): Promise<RequestDB[]> {
     if (!filters) return requests;
 
-    return requests.filter(async (request) => {
+    const filteredRequests: RequestDB[] = [];
+
+    for (const request of requests) {
       const cargos = await request.cargo;
 
       const weight = cargos.reduce((sum, cargo) => sum + cargo.weight, 0);
@@ -492,8 +494,11 @@ export class DriveService {
         isValid = false;
       }
 
-      return isValid;
-    });
+      if (isValid) {
+        filteredRequests.push(request);
+      }
+    }
+    return filteredRequests;
   }
 
   private async filterByRating(
