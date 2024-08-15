@@ -34,7 +34,9 @@ export class SearchInputComponent {
   }
 
 
-  @Output() searchTriggered = new EventEmitter<SearchFilter>();
+  @Output() offerSearchTriggered = new EventEmitter<SearchFilter>();
+  @Output() requestSearchTriggered = new EventEmitter<SearchFilter>();
+
 
   constructor(private router: Router) {}
 
@@ -61,6 +63,10 @@ export class SearchInputComponent {
   }
 
   onSearchButtonClick(): void {
-    this.searchTriggered.emit(this.filter);
+    if (this.currentRoute === 'searchRequest') {
+      this.requestSearchTriggered.emit(this.filter);
+    } else if (this.currentRoute === 'searchOffer') {
+      this.offerSearchTriggered.emit(this.filter);
+    }
   }
 }

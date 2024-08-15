@@ -1,4 +1,4 @@
-<app-search-input></app-search-input>
+<app-search-input (requestSearchTriggered)="getFilteredRequests($event)"></app-search-input>
 
 <app-search-card
   [allRequests] = "this.allRequests"
