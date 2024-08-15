@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { faSave, faStar, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { faStar as faStarRegular } from '@fortawesome/free-regular-svg-icons';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
@@ -9,6 +9,7 @@ import { TripService } from '../../services/trip-service.service';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { SessionService } from '../../services/session.service';
 import { response } from 'express';
+import { th } from '@faker-js/faker';
 
 
 
@@ -29,7 +30,7 @@ import { response } from 'express';
 })
 
 
-export class ReviewCreateComponent {
+export class ReviewCreateComponent implements OnInit {
   public sessionService: SessionService = inject(SessionService);
 
 
@@ -38,27 +39,6 @@ export class ReviewCreateComponent {
 
   currentUserID: number = 0
   isloggedIn: boolean = false;
-
-  ngOnInit(): void {
-    this.sessionService.checkLoginNum().then(currentUser => {
-      if (currentUser != -1) {
-        this.isloggedIn = true;
-        this.currentUserID = currentUser;
-        this.getAllTrips(); // Move getAllTrips() here
-      } else {
-        this.isloggedIn = false;
-      }
-    });
-
-    // Subscribe to the trip ID from the service
-    this.tripService.currentTripId.subscribe(id => {
-      this.tripId = id;
-    });
-    this.getAllTrips()
-
-
-
-  }
 
 
 
@@ -82,6 +62,29 @@ export class ReviewCreateComponent {
 
   averageStarsFilled: boolean[] = [false, false, false, false, false];
 
+  ngOnInit(): void {
+    // Subscribe to the trip ID from the service
+    this.tripService.currentTripId.subscribe(id => {
+      this.tripId = id;
+
+      // Only navigate if tripId is null
+      if (this.tripId === null) {
+        this.router.navigate(['/alltrips']);
+      }
+    });
+
+    this.sessionService.checkLoginNum().then(currentUser => {
+      if (currentUser != -1) {
+        this.isloggedIn = true;
+        this.currentUserID = currentUser;
+        this.getAllTrips();
+      } else {
+        this.isloggedIn = false;
+      }
+    });
+  }
+
+
   /**
    * Creates a new review by sending a POST request to the server with review data,
    * then handles the server response and any errors.
@@ -89,7 +92,7 @@ export class ReviewCreateComponent {
   createReview(){
 
     const reviewData = {
-      tripId: this.tripId,
+      tripID: this.tripId,
       rating: this.averageFilledStars,
       text: this.text,
     };
@@ -244,6 +247,10 @@ export class ReviewCreateComponent {
         this.checkUserInvolvementInOfferDriveTrips()
         this.checkUserInvolvementInRequestDriveTrips()
 
+        if (this.tripId === null){
+          this.router.navigate(['/allTrips']);
+        }
+
       },
       error => {
         console.error('Error fetching trips:', error);
@@ -256,8 +263,8 @@ export class ReviewCreateComponent {
   // Method to check user involvement in offer trips
   checkUserInvolvementInOfferTrips(): boolean {
 
-    for (let i = 0; i < this.offerTrips.length; i++) {
-      const trip = this.offerTrips[i];
+    for (const element of this.offerTrips) {
+      const trip = element;
 
       if (trip.id === this.tripId && trip.requesting && trip.requesting.id === this.currentUserID) {
         this.isUserInvolved = true;
@@ -271,8 +278,8 @@ export class ReviewCreateComponent {
 
     // Iterate through requestTrips
 
-    for (let i = 0; i < this.requestTrips.length; i++) {
-      const trip = this.requestTrips[i];
+    for (const element of this.requestTrips) {
+      const trip = element;
 
       if (trip.id === this.tripId && trip.requesting && trip.requesting.id === this.currentUserID) {
         this.isUserInvolved = true;
@@ -286,8 +293,8 @@ export class ReviewCreateComponent {
 
     // Iterate through offerDriveTrips
 
-    for (let i = 0; i < this.offerDriveTrips.length; i++) {
-      const trip = this.offerDriveTrips[i];
+    for (const element of this.offerDriveTrips) {
+      const trip = element;
 
       if (trip.id === this.tripId && trip.requesting && trip.requesting.id === this.currentUserID) {
         this.isUserInvolved = true;
@@ -300,8 +307,8 @@ export class ReviewCreateComponent {
   checkUserInvolvementInRequestDriveTrips(): boolean {
 
     // Iterate through requestDriveTrips
-    for (let i = 0; i < this.requestDriveTrips.length; i++) {
-      const trip = this.requestDriveTrips[i];
+    for (const element of this.requestDriveTrips) {
+      const trip = element;
 
       if (trip.id === this.tripId && trip.requesting && trip.requesting.id === this.currentUserID) {
         this.isUserInvolved = true;

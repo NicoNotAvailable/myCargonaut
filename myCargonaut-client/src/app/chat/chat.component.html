@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container" xmlns="http://www.w3.org/1999/html">
   <div class="row m-5">
     <div class="col-12 my-auto">
       <div class="row text-center">
@@ -29,6 +29,11 @@
                       <div class="card-body">
                         <h5 class="card-title">{{ trips[room]?.drive?.name || '' }}</h5>
                         <p class="card-text">{{ formatDate(trips[room]?.drive?.date || '') }}</p>
+                        @if (trips[room]?.drive?.status >= 1) {
+                          <span class="card-text">
+                            <fa-icon [icon]="faPhone"></fa-icon>{{ trips[room]?.requesting?.phoneNumber }}
+                          </span>
+                        }
                       </div>
                     </div>
                   </div>

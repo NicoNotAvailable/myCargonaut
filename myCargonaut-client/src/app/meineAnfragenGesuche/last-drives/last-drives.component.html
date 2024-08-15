@@ -1,0 +1,103 @@
+<app-top-auswahl [allOffers]="allOffers" [allRequests]="allRequests"></app-top-auswahl>
+
+<div class="container">
+  <!-- Display all active trips and roadmap -->
+  <div class="row">
+    <div class="col-12">
+      <div *ngIf="activeTrips.length > 0">
+        <div *ngFor="let activeTrip of activeTrips; let i = index">
+          <div class="card m-4">
+            <div class="row no-gutters flex-column flex-lg-row card-horizontal">
+              <div class="col-lg-9">
+                <div class="card-body">
+                  <div class="container-fluid">
+                    <div class="row mb-4">
+                      <div class="col-12 col-lg-6">
+                        <div class="row">
+                          <h5 class="card-title greenText">{{ activeTrip.drive.name }}</h5>
+                        </div>
+                        <div class="row">
+                          <div class="col-6">
+                            <span>{{ activeTrip.drive.user.firstName }} {{ activeTrip.drive.user.lastName }}</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-6 col-lg-3">
+                        <h5 class="greenText">{{ activeTrip.drive.date | dateFormat }}</h5>
+                      </div>
+                      <div class="col-6 col-lg-3">
+                        <div class="horizontal-right">
+                          <h5
+                            class="blueText">{{ activeTrip.drive.price | currency: 'EUR':'symbol':'1.2-2':'de-DE' }}
+                            <span *ngIf="activeTrip.drive.priceType === 1"> </span>
+                            <span *ngIf="activeTrip.drive.priceType === 2">p. Person</span>
+                            <span *ngIf="activeTrip.drive.priceType === 3">p. Kilo</span>
+                          </h5>
+                        </div>
+                      </div>
+                    </div>
+
+
+                    <div class="row">
+                      <div class="col-12 col-lg-3">
+                        <div class="row">
+                          <div class="col-6 col-lg-4">
+                            <span>von:</span>
+                          </div>
+
+                          <div class="col-6 col-lg-8">
+                            @for (location of activeTrip.drive.locations; track $index) {
+                              @if (location.stopNr == 1) {
+                                <span class="highlightText">{{ location.zipCode }} {{ location.city }}</span>
+                              }
+                            }
+                          </div>
+
+                        </div>
+                        <div class="row">
+                          <div class="col-6 col-lg-4">
+                            <span>nach:</span>
+                          </div>
+                          <div class="col-6 col-lg-8">
+                            @for (location of activeTrip.drive.locations; track $index) {
+                              @if (location.stopNr == 100) {
+                                <span class="highlightText">{{ location.zipCode }} {{ location.city }}</span>
+                              }
+                            }
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="col-12 col-lg-6">
+                        <div class="row">
+                          <div class="col-6">
+                            <span>Gesamtgewicht:</span>
+                          </div>
+                          <div class="col-6">
+                            <span class="highlightText">{{ activeTrip.drive.maxCWeight }} kg</span>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-6">
+                            <span>Max. Volumen:</span>
+                          </div>
+                          <div class="col-6">
+                            <span class="highlightText">{{ activeTrip.drive.maxCVolumen }} m<sup>3</sup></span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="activeTrips.length === 0">
+        <p>Keine Trips gefunden.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
