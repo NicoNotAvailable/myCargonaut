@@ -39,8 +39,8 @@ export class SearchCardComponent {
   bewertungsDummy : number = 4;
   stars: number[] = [1, 2, 3, 4, 5];
 
-  @Input() allOffers!: offer[];
-  @Input() allRequests!: request[];
+  @Input() allOffers!: any;
+  @Input() allRequests!: any;
   @Input() gewichte!: number[];
   @Input() masse!: number[];
   @Input() requestBool!: boolean;
