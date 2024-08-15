@@ -183,6 +183,7 @@ export class DriveController {
     }
   }
 
+  //No Tests for now
   @ApiResponse({
     type: [GetOfferDTO],
     description: 'gets all offers',
@@ -245,6 +246,7 @@ export class DriveController {
     }
   }
 
+  //No Tests for now
   @ApiResponse({
     type: [GetRequestDTO],
     description: 'gets all requests',
