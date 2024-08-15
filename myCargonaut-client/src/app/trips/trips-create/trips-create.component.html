@@ -1,6 +1,6 @@
 <ng-template #cargoModal let-modal="modal">
   <div class="modal-header">
-    <h4 class="modal-title" id="modal-basic-title">Cargo Hinzufügen</h4>
+    <h4 class="modal-title" id="modal-basic-title">Cargo {{ editModeText }}</h4>
     <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
   </div>
   <div class="modal-body">
@@ -65,7 +65,7 @@
               @for (cargo of cargoDataArray;  track cargo; let index = $index) {
                 <div class="border-1 position-relative mt-3">
                   <div class="button-container position-absolute end-0 mt-1 me-3">
-                    <button (click)="openCargoModal(cargoModal)" type="button"
+                    <button (click)="editCargoClicked(cargoModal, index)" type="button"
                             class="btn btn-primary editButton text-end me-1" id="editButton">
                       <i>
                         <fa-icon [icon]="faPenToSquare"></fa-icon>
@@ -99,7 +99,7 @@
                   </div>
                 </div>
               }
-              <button (click)="openCargoModal(cargoModal)" type="button" class="btn btn-primary blueButton" data-toggle="modal" data-target="#cargoModal">Cargo hinzufügen</button>
+              <button (click)="addCargoClicked(cargoModal)" type="button" class="btn btn-primary blueButton" data-toggle="modal" data-target="#cargoModal">Cargo hinzufügen</button>
               </div>
             </div>
           <div class="row d-flex justify-content-center align-bottom text-end mt-3 me-3">
