@@ -10,7 +10,6 @@ import { EditEmailDTO } from './DTO/EditEmailDTO';
 import { EditUserDTO } from './DTO/EditUserDTO';
 import { SessionData } from 'express-session';
 import * as bcrypt from 'bcryptjs';
-import { Response } from 'express';
 
 // Mock session data with cookie properties
 const mockSession: Partial<SessionData> = {
