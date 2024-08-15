@@ -425,34 +425,34 @@ export class DriveService {
     return offers.filter((offer: OfferDB) => {
       let isValid: boolean = true;
 
-      if (filters.seats && offer.car.seats < filters.seats) {
+      if (filters.seats && offer.seats < filters.seats) {
         isValid = false;
       }
       if (
         filters.weight &&
-        offer.car.weight < filters.weight &&
-        (!offer.trailer || offer.trailer.weight < filters.weight)
+        offer.maxCWeight < filters.weight &&
+        (!offer.trailer || offer.maxTWeight < filters.weight)
       ) {
         isValid = false;
       }
       if (
         filters.height &&
-        offer.car.height < filters.height &&
-        (!offer.trailer || offer.trailer.height < filters.height)
+        offer.maxCHeight < filters.height &&
+        (!offer.trailer || offer.maxTHeight < filters.height)
       ) {
         isValid = false;
       }
       if (
         filters.length &&
-        offer.car.length < filters.length &&
-        (!offer.trailer || offer.trailer.length < filters.length)
+        offer.maxCLength < filters.length &&
+        (!offer.trailer || offer.maxTLength < filters.length)
       ) {
         isValid = false;
       }
       if (
         filters.width &&
-        offer.car.width < filters.width &&
-        (!offer.trailer || offer.trailer.width < filters.width)
+        offer.maxCWidth < filters.width &&
+        (!offer.trailer || offer.maxTWidth < filters.width)
       ) {
         isValid = false;
       }
