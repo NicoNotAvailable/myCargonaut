@@ -60,11 +60,11 @@ export class ReviewReadComponent {
       .subscribe(
         (response: any) => {
           this.reviewsArray = response;
-          for (let i: number = 0; i < response.length; i++) {
-            this.reviewTitle = response[i].writer.firstName + " " + response[i].writer.lastName;
-            this.reviewContent = response[i].text;
-            this.reviewRating = response[i].rating;
-            this.reviewPicture = response[i].writer.profilePic;
+          for (const element of response) {
+            this.reviewTitle = element.writer.firstName + ' ' + element.writer.lastName;
+            this.reviewContent = element.text;
+            this.reviewRating = element.rating;
+            this.reviewPicture = element.writer.profilePic;
           }
 
           if (this.reviewRating === 1) {

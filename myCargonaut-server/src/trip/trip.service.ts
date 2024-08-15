@@ -17,7 +17,6 @@ import { TrailerDB } from '../database/TrailerDB';
 import { CreateCargoDTO } from '../cargo/DTO/CreateCargoDTO';
 import { LocationDB } from '../database/LocationDB';
 import { StatusEnum } from '../database/enums/StatusEnum';
-import {displayManualRestartTip} from "@nestjs/cli/lib/compiler/helpers/manual-restart";
 
 @Injectable()
 export class TripService {

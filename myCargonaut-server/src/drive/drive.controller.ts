@@ -9,6 +9,7 @@ import {
   ParseIntPipe,
   Post,
   Put,
+  Query,
   Session,
   UseGuards,
 } from '@nestjs/common';
@@ -26,6 +27,8 @@ import { GetRequestDTO } from './DTO/GetRequestDTO';
 import { UtilsService } from '../utils/utils.service';
 import { ChangeStatusDTO } from './DTO/ChangeStatusDTO';
 import { UserDB } from '../database/UserDB';
+import { FilterDTO } from './DTO/FilterDTO';
+import { RequestDB } from '../database/DriveDB';
 
 @ApiTags('drive')
 @Controller('drive')
@@ -183,19 +186,25 @@ export class DriveController {
     }
   }
 
-  //No Tests for now
   @ApiResponse({
     type: [GetOfferDTO],
     description: 'gets all offers',
   })
   @Get('/all/offers')
-  async getAllOffers(@Session() session: SessionData) {
+  async getAllOffers(
+    @Session() session: SessionData,
+    @Query() query: FilterDTO,
+  ) {
     let user: UserDB;
     if (session.currentUser) {
       user = await this.userService.getUserById(session.currentUser);
     }
     try {
-      const offers = await this.driveService.getAllOffers(user);
+      const filters = {
+        ...query,
+      };
+
+      const offers = await this.driveService.getAllOffers(user, filters);
       return await Promise.all(
         offers.map(async (offer) => {
           return this.utilsService.transformOfferDBtoGetOfferDTO(offer);
@@ -246,19 +255,25 @@ export class DriveController {
     }
   }
 
-  //No Tests for now
-  @ApiResponse({
-    type: [GetRequestDTO],
-    description: 'gets all requests',
-  })
   @Get('/all/requests')
-  async getAllRequests(@Session() session: SessionData) {
+  async getAllRequests(
+    @Session() session: SessionData,
+    @Query() query: FilterDTO,
+  ) {
     let user: UserDB;
     if (session.currentUser) {
       user = await this.userService.getUserById(session.currentUser);
     }
+
     try {
-      const requests = await this.driveService.getAllRequests(user);
+      const filters = {
+        ...query,
+      };
+
+      const requests: RequestDB[] = await this.driveService.getAllRequests(
+        user,
+        filters,
+      );
       return await Promise.all(
         requests.map(async (request) => {
           return this.utilsService.transformRequestDBtoGetRequestDTO(request);

@@ -1,6 +1,6 @@
 <div class="container">
   <div class="flex-row text-center m-4">
-    <h3 class="greenText">Deine passende {{ topText }} finden</h3>
+    <h3 class="greenText">{{ topText }}</h3>
   </div>
 
   <div class="row searchBanner m-4">
@@ -9,41 +9,60 @@
       </div>
     </div>
     <div class="col-lg-2 col-5 m-2">
-      <div class="">
-        <input type="text" class="form-control inputBanner" id="locationSearch" placeholder="Standort">
-      </div>
+      <input type="text" class="form-control inputBanner" id="locationSearch" placeholder="Startort" [(ngModel)]="filter.startLocation">
     </div>
     <div class="col-lg-2 col-5 m-2">
-      <div class="">
-        <input type="text" class="form-control inputBanner" id="destinationSearch" placeholder="Zielort">
-      </div>
+      <input type="text" class="form-control inputBanner" id="destinationSearch" placeholder="Zielort" [(ngModel)]="filter.endLocation">
     </div>
     <div class="col-lg-2 col-5 m-2">
-      <div class="">
-        <input type="text" class="form-control inputBanner" id="dateSearch" placeholder="Datum">
-      </div>
+      <input name="dateInput" class="form-control rounded-5 p-2 col-12" placeholder="Datum" id="dateInput" [(ngModel)]="filter.date" type="date">
     </div>
     <div class="col-lg-2 col-5 m-2">
-      <button type="button" class="btn btn-primary blueButton">Suchen</button>
+      <button type="button" class="btn btn-primary blueButton" (click)="onSearchButtonClick()">Suchen</button>
     </div>
   </div>
 
   <div class="row m-2 horizontal-center">
-    <div class="col-lg-2 col-5 m-2">
-      <input type="text" class="form-control inputLowBanner" id="weightSearch" placeholder="Gewicht">
-
+    <div class="col-lg-1 col-4 m-2">
+      <div> Maße: </div>
     </div>
-    <div class="col-lg-2 col-5 m-2">
-      <input type="text" class="form-control inputLowBanner " id="sizeSearch" placeholder="Maße">
-
+    <div class="col-lg-1 col-4 m-2">
+      <input type="text" class="form-control inputLowBanner" id="widthSearch" placeholder="Breite (cm)" [(ngModel)]="filter.width">
     </div>
-    <div class="col-lg-2 col-5 m-2">
-      <input type="text" class="form-control inputLowBanner" id="ratingSearch" placeholder="Bewertung">
-
+    <div class="col-lg-1 col-4 m-2">
+      <input type="text" class="form-control inputLowBanner" id="heightSearch" placeholder="Höhe (cm)" [(ngModel)]="filter.height">
     </div>
-    <div class="col-lg-2 col-5 m-2">
-      <input type="text" class="form-control inputLowBanner" id="seatsSearch" placeholder="{{placeholderInput}}">
+    <div class="col-lg-1 col-4 m-2">
+      <input type="text" class="form-control inputLowBanner" id="lengthSearch" placeholder="Länge (cm)" [(ngModel)]="filter.length">
+    </div>
+    <div class="col-lg-2 col-4 m-2 align-content-end">
+      <input type="text" class="form-control inputLowBanner" id="weightSearch" placeholder="Gewicht (kg)" [(ngModel)]="filter.weight">
+    </div>
+    <div class="col-lg-2 col-4 m-2">
+      <input type="text" class="form-control inputLowBanner" id="seatsSearch" placeholder="{{placeholderInput}}" [(ngModel)]="filter.seats">
+    </div>
+    <div class="col-lg-2 col-4 m-2">
+      <select class="form-control inputLowBanner" id="ratingSearch" [(ngModel)]="filter.minRating">
+        <option value="">Bewertung</option>
+        <option value="5">5 Sterne</option>
+        <option value="4">4 Sterne</option>
+        <option value="3">3 Sterne</option>
+        <option value="2">2 Sterne</option>
+        <option value="1">1 Stern</option>
+      </select>
+    </div>
+  </div>
 
+  <div class="row m-2">
+    <div class="col-lg-4 col-4 m-2 d-flex justify-content-start">
+      <select class="form-control" id="sort" [(ngModel)]="filter.sort">
+        <option value="">Sortieren nach: Datum (neueste zuerst)</option>
+        <option value="1">Sortieren nach: Datum (älteste zuerst)</option>
+        <option value="3">Sortieren nach: Bewertung (höchste zuerst)</option>
+        <option value="2">Sortieren nach: Bewertung (niedrigste zuerst)</option>
+        <option value="5">Sortieren nach: Preis (höchster zuerst)</option>
+        <option value="4">Sortieren nach: Preis (niedrigster zuerst)</option>
+      </select>
     </div>
   </div>
 </div>

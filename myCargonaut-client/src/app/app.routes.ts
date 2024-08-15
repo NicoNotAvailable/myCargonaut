@@ -12,9 +12,6 @@ import {MeineGesucheComponent} from "./meineAnfragenGesuche/meine-gesuche/meine-
 
 import {RequestAufAnfrageOSucheComponent} from "./meineAnfragenGesuche/request-auf-anfrage-osuche/request-auf-anfrage-osuche.component";
 
-import {
-  MeineLetztenFahrtenComponent
-} from './meineAnfragenGesuche/meine-letzten-fahrten/meine-letzten-fahrten.component';
 import { AllTripsComponent } from './meineAnfragenGesuche/all-trips/all-trips.component';
 import { ReviewComponent } from './review/review.component';
 
@@ -23,6 +20,7 @@ import { RequestComponent } from './drive/request/request.component';
 import { OfferComponent } from './drive/offer/offer.component';
 import { SummaryComponent } from './drive/summary/summary.component';
 import {PaymentComponent} from "./payment/payment.component";
+import { LastDrivesComponent } from './meineAnfragenGesuche/last-drives/last-drives.component';
 
 export const routes: Routes = [
 
@@ -53,7 +51,7 @@ export const routes: Routes = [
   {path: 'request/:id/payment', component: PaymentComponent},
   {path: 'offer/:id/payment', component: PaymentComponent},
 
-  {path: 'myLastRides', component: MeineLetztenFahrtenComponent},
+  {path: 'myLastRides', component: LastDrivesComponent},
   {path: 'allTrips' , component: AllTripsComponent},
 
   {path: 'review', component: ReviewComponent},
