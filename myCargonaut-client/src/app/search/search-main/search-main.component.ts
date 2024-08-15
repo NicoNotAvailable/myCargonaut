@@ -19,7 +19,7 @@ import { SearchFilter } from '../SearchFilter';
 })
 export class SearchMainComponent implements OnInit {
 
-  allOffers: offer[] = [];
+  allOffers: any = [];
   offerBool: boolean = true;
 
   pathToImage: string = "empty.png";
@@ -35,7 +35,6 @@ export class SearchMainComponent implements OnInit {
 
     const prePath: string = "/vehicle/image/";
 
-
     this.http.get("http://localhost:8000/drive/all/offers", { withCredentials: true })
       .subscribe(
         (response: any) => {
@@ -45,9 +44,8 @@ export class SearchMainComponent implements OnInit {
             this.pathToImageArray.push(this.pathToImage);
           }
 
-
-          this.allOffers = response;
-        },
+          this.allOffers = response.filter((offer: any)=> offer.status < 2);
+          },
         (error: { error: { message: string; }; }) => {
           console.error('Fehler beim Abrufen der Angebote:', error);
         }

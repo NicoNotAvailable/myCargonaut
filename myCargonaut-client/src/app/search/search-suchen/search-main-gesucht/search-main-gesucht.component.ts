@@ -17,7 +17,7 @@ import { SearchFilter } from '../../SearchFilter';
 })
 export class SearchMainGesuchtComponent {
 
-  allRequests: request[] = [];
+  allRequests: any = [];
   requestBool: boolean = true;
 
   gesamtgewicht: number = 0;
@@ -44,7 +44,7 @@ export class SearchMainGesuchtComponent {
     this.http.get("http://localhost:8000/drive/all/requests", { withCredentials: true })
       .subscribe(
         (response: any) => {
-          this.allRequests = response;
+          this.allRequests = response.filter((offer: any)=> offer.status < 2);
 
           for (let element of response) {
             const imagePath: string = element.user.profilePic;
