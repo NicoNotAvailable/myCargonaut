@@ -139,6 +139,8 @@ export class RequestComponent {
     this.cargoWidth = null
     this.cargoHeight = null
 
+    this.editedCargo = -1;
+
     this.editModeText = "hinzufügen";
 
     this.openCargoModal(content);

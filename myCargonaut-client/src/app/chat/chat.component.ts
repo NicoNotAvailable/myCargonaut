@@ -7,11 +7,13 @@ import { ActivatedRoute } from "@angular/router";
 import { HttpClient } from "@angular/common/http";
 import { Message } from './message.interface';
 import { tr } from "@faker-js/faker";
+import {FaIconComponent} from "@fortawesome/angular-fontawesome";
+import {faPhone} from "@fortawesome/free-solid-svg-icons";
 
 @Component({
   selector: 'app-chat',
   standalone: true,
-  imports: [CommonModule, FormsModule, NgOptimizedImage],
+  imports: [CommonModule, FormsModule, NgOptimizedImage, FaIconComponent],
   templateUrl: './chat.component.html',
   styleUrl: './chat.component.css'
 })
@@ -238,4 +240,5 @@ export class ChatComponent implements OnInit {
   }
 
   protected readonly window = window;
+  protected readonly faPhone = faPhone;
 }
