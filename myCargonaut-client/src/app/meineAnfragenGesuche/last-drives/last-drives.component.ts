@@ -43,6 +43,10 @@ export class LastDrivesComponent {
 
   constructor(private http: HttpClient) {}
 
+  /**
+   * Lifecycle hook that is called after the component is initialized.
+   * It checks if the user is logged in and if so, loads all trips data.
+   */
   ngOnInit(): void {
     this.sessionService.checkLoginNum().then(currentUser => {
       if (currentUser != -1) {
@@ -56,9 +60,11 @@ export class LastDrivesComponent {
     });
   }
 
-
+  /**
+   * Fetches all trips associated with the logged-in user from the server.
+   * Processes and categorizes the trips based on their status.
+   */
   getAllTrips() {
-    console.log("getAllTripsData");
     this.activeTrips = []
 
     //const prePath: string = '/vehicle/image/';
@@ -86,9 +92,13 @@ export class LastDrivesComponent {
     );
   }
 
+  /**
+   * Checks and categorizes trips based on their drive status.
+   * @param trips - The array of trips to check.
+   */
   checkTrips(trips: any[]) {
     trips.forEach(trip => {
-      // Check if drive status is 3, 4, or 5
+      // Check if drive status 5
       if (trip?.drive?.status === 5) {
         this.activeTrips.push(trip);
       }
@@ -96,6 +106,10 @@ export class LastDrivesComponent {
     });
   }
 
+  /**
+   * Fetches additional data for an offered drive and updates the corresponding trip.
+   * @param driveID - The ID of the drive to fetch data for.
+   */
   getDriveDataOffer(driveID: number) {
     this.http.get(`http://localhost:8000/drive/offer/${driveID}`, { withCredentials: true }).subscribe(
       (response: any) => {
@@ -106,7 +120,6 @@ export class LastDrivesComponent {
         // If a matching trip is found, merge the additional data
         if (tripToUpdate) {
           Object.assign(tripToUpdate.drive, response);
-          console.log(`Updated trip with drive ID ${driveID}:`, tripToUpdate);
         }
 
 
@@ -117,6 +130,10 @@ export class LastDrivesComponent {
     );
   }
 
+  /**
+   * Fetches additional data for a requested drive and updates the corresponding trip.
+   * @param driveID - The ID of the drive to fetch data for.
+   */
   getDriveDataRequest(driveID: number) {
     this.http.get(`http://localhost:8000/drive/request/${driveID}`, { withCredentials: true }).subscribe(
       (response: any) => {
@@ -127,7 +144,6 @@ export class LastDrivesComponent {
         // If a matching trip is found, merge the additional data
         if (tripToUpdate) {
           Object.assign(tripToUpdate.drive, response);
-          console.log(`Updated trip with drive ID ${driveID}:`, tripToUpdate);
         }
 
 
