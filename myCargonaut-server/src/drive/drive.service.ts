@@ -187,7 +187,7 @@ export class DriveService {
       offers = await this.sortOrder(offers, filters.sort);
     }
 
-    if (!offers.length) {
+    if (offers.length == 0) {
       throw new NotFoundException('no matching offers found');
     }
     return offers;

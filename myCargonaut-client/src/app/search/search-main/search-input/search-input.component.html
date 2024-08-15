@@ -9,48 +9,40 @@
       </div>
     </div>
     <div class="col-lg-2 col-5 m-2">
-      <div class="">
-        <input type="text" class="form-control inputBanner" id="locationSearch" placeholder="Startort">
-      </div>
+      <input type="text" class="form-control inputBanner" id="locationSearch" placeholder="Startort" [(ngModel)]="filter.startLocation">
     </div>
     <div class="col-lg-2 col-5 m-2">
-      <div class="">
-        <input type="text" class="form-control inputBanner" id="destinationSearch" placeholder="Zielort">
-      </div>
+      <input type="text" class="form-control inputBanner" id="destinationSearch" placeholder="Zielort" [(ngModel)]="filter.endLocation">
     </div>
     <div class="col-lg-2 col-5 m-2">
-      <div class="col-12">
-        <input name="dateInput"
-               class="form-control rounded-5 p-2 col-12" placeholder="Datum" id="dateInput"
-               ngbDatepicker #d="ngbDatepicker" type="date">
-      </div>
+      <input name="dateInput" class="form-control rounded-5 p-2 col-12" placeholder="Datum" id="dateInput" [(ngModel)]="filter.date" type="date">
     </div>
     <div class="col-lg-2 col-5 m-2">
-      <button type="button" class="btn btn-primary blueButton">Suchen</button>
+      <button type="button" class="btn btn-primary blueButton" (click)="onSearchButtonClick()">Suchen</button>
     </div>
   </div>
+
   <div class="row m-2 horizontal-center">
     <div class="col-lg-1 col-4 m-2">
       <div> Maße: </div>
     </div>
     <div class="col-lg-1 col-4 m-2">
-      <input type="text" class="form-control inputLowBanner " id="heightSearch" placeholder="Höhe (cm)">
+      <input type="text" class="form-control inputLowBanner" id="heightSearch" placeholder="Höhe (cm)" [(ngModel)]="filter.height">
     </div>
     <div class="col-lg-1 col-4 m-2">
-      <input type="text" class="form-control inputLowBanner " id="widthSearch" placeholder="Breite (cm)">
+      <input type="text" class="form-control inputLowBanner" id="widthSearch" placeholder="Breite (cm)" [(ngModel)]="filter.width">
     </div>
     <div class="col-lg-1 col-4 m-2">
-      <input type="text" class="form-control inputLowBanner " id="lengthSearch" placeholder="Länge (cm)">
+      <input type="text" class="form-control inputLowBanner" id="lengthSearch" placeholder="Länge (cm)" [(ngModel)]="filter.length">
     </div>
     <div class="col-lg-2 col-4 m-2 align-content-end">
-      <input type="text" class="form-control inputLowBanner" id="weightSearch" placeholder="Gewicht (kg)">
+      <input type="text" class="form-control inputLowBanner" id="weightSearch" placeholder="Gewicht (kg)" [(ngModel)]="filter.weight">
     </div>
     <div class="col-lg-2 col-4 m-2">
-      <input type="text" class="form-control inputLowBanner" id="seatsSearch" placeholder="{{placeholderInput}}">
-
+      <input type="text" class="form-control inputLowBanner" id="seatsSearch" placeholder="{{placeholderInput}}" [(ngModel)]="filter.seats">
     </div>
     <div class="col-lg-2 col-4 m-2">
-      <select class="form-control inputLowBanner" id="ratingSearch">
+      <select class="form-control inputLowBanner" id="ratingSearch" [(ngModel)]="filter.minRating">
         <option value="">Bewertung</option>
         <option value="5">5 Sterne</option>
         <option value="4">4 Sterne</option>
@@ -60,15 +52,16 @@
       </select>
     </div>
   </div>
+
   <div class="row m-2">
     <div class="col-lg-2 col-4 m-2 d-flex justify-content-start">
-      <select id="sort">
-        <option value="date_desc">Sortieren nach: Datum (neueste zuerst)</option>
-        <option value="date_asc">Sortieren nach: Datum (älteste zuerst)</option>
-        <option value="rating_desc">Sortieren nach: Bewertung (höchste zuerst)</option>
-        <option value="rating_asc">Sortieren nach: Bewertung (niedrigste zuerst)</option>
-        <option value="price_desc">Sortieren nach: Preis (höchster zuerst)</option>
-        <option value="price_asc">Sortieren nach: Preis (niedrigster zuerst)</option>
+      <select class="form-control" id="sort" [(ngModel)]="filter.sort">
+        <option value="1">Sortieren nach: Datum (neueste zuerst)</option>
+        <option value="0">Sortieren nach: Datum (älteste zuerst)</option>
+        <option value="3">Sortieren nach: Bewertung (höchste zuerst)</option>
+        <option value="2">Sortieren nach: Bewertung (niedrigste zuerst)</option>
+        <option value="5">Sortieren nach: Preis (höchster zuerst)</option>
+        <option value="4">Sortieren nach: Preis (niedrigster zuerst)</option>
       </select>
     </div>
   </div>

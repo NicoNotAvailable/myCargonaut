@@ -1,4 +1,4 @@
-<app-search-input></app-search-input>
+<app-search-input (searchTriggered)="getFilteredOffers($event)"></app-search-input>
 
 <app-search-card
 [allOffers] = "this.allOffers"

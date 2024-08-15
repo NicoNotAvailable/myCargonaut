@@ -1,27 +1,42 @@
-import {Component, Input} from '@angular/core';
-import {NavigationEnd, Router} from "@angular/router";
-import {filter} from "rxjs/operators";
+import { Component, Output, EventEmitter } from '@angular/core';
+import { Router, NavigationEnd } from '@angular/router';
+import { filter } from 'rxjs/operators';
 import { FormsModule } from '@angular/forms';
-import { NgbInputDatepicker } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDatepicker } from '@ng-bootstrap/ng-bootstrap';
+import { SearchFilter } from '../../SearchFilter';
 
 @Component({
   selector: 'app-search-input',
   standalone: true,
   imports: [
     FormsModule,
-    NgbInputDatepicker,
+    NgbDatepicker,
   ],
   templateUrl: './search-input.component.html',
-  styleUrl: './search-input.component.css'
+  styleUrls: ['./search-input.component.css']
 })
 export class SearchInputComponent {
   currentRoute: string = '';
-  topText: string = "";
-  placeholderInput: string = "";
+  topText: string = '';
+  placeholderInput: string = '';
 
-
-  constructor(private router: Router) {
+  filter: SearchFilter = {
+    startLocation: '',
+    endLocation: '',
+    date: '',
+    height:'',
+    width: '',
+    length: '',
+    weight: '',
+    seats: '',
+    minRating: '',
+    sort: '',
   }
+
+
+  @Output() searchTriggered = new EventEmitter<SearchFilter>();
+
+  constructor(private router: Router) {}
 
   ngOnInit(): void {
     this.updateCurrentRoute();
@@ -36,13 +51,16 @@ export class SearchInputComponent {
   private updateCurrentRoute(): void {
     const route = this.router.url.split('/').pop();
     this.currentRoute = route ? route : '';
-    if (this.currentRoute === "searchRequest") {
-      this.topText = "Dein passendes Gesuch finden";
-      this.placeholderInput = "benötigte Plätze";
-    } else if (this.currentRoute === "searchOffer") {
-      this.topText = "Deine passende Fahrt finden";
-      this.placeholderInput = "verfügbare Plätze";
-
+    if (this.currentRoute === 'searchRequest') {
+      this.topText = 'Dein passendes Gesuch finden';
+      this.placeholderInput = 'benötigte Plätze';
+    } else if (this.currentRoute === 'searchOffer') {
+      this.topText = 'Deine passende Fahrt finden';
+      this.placeholderInput = 'verfügbare Plätze';
     }
+  }
+
+  onSearchButtonClick(): void {
+    this.searchTriggered.emit(this.filter);
   }
 }
