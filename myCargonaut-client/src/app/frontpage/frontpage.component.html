@@ -9,49 +9,24 @@
       <h3 class="greenText fw-semibold">MyCargonaut</h3>
     </div>
     <p class="fw-semibold">Was ist MyCargonaut?</p>
-    <p class="fw-semibold-">Hello everybody my Name is Welcome, HE HE WHO IS 87??? Was that the byte of Markiplier?
-      Hello Everybody my name is Portuguese. Haha youre so portuguese. If youre coming right now let me see it. What is
-      he yapping about? Hello everybody my Name is Welcome, HE HE WHO IS 87??? Was that the byte of Markiplier? Hello
-      Everybody my name is Portuguese. Haha youre so portuguese. If youre coming right now let me see it. Hello
-      everybody my Name is Welcome, HE HE WHO IS 87??? Was that the byte of Markiplier? Hello Everybody my name is
-      Portuguese. Haha youre so portuguese. If youre coming right now let me see it. </p>
+    <p class="fw-semibold-">
+      Finde Mitfahrgelegenheiten und Frachttransporte ganz einfach.
+      Registriere dich, erstelle Angebote oder Gesuche und bewerte deine Fahrer und Mitfahrer nach jeder Fahrt.
+      Nutze unsere Suche und Tracking-Funktionen, um die besten Optionen für dich zu finden. Leg los und erlebe, wie unkompliziert es sein kann! </p>
   </div>
 </div>
-
-<div class="container d-flex justify-content-center">
-  <div class="col-8 justify-content-center mb-5 mt-5">
-    <div class="row">
-      <p class="greenText text-center justify-content-center">Noch Kein Account?</p>
-    </div>
-    <div class="row d-flex justify-content-center">
-      <div class="col-1 d-flex justify-content-center">
-        <button class="btn btn-primary greenButton">Registrieren</button>
+@if (!this.isLoggedIn) {
+  <div class="container d-flex justify-content-center">
+    <div class="col-8 justify-content-center mb-5 mt-5">
+      <div class="row">
+        <p class="greenText text-center justify-content-center">Noch Kein Account?</p>
       </div>
-
-    </div>
-  </div>
-
-</div>
-
-<div class="container d-flex justify-content-center">
-  <div class="col-8 field ">
-    <div class="row text-center">
-
-    <h3 class="greenText fw-semibold">Aktuelle Fahrten</h3>
-    </div>
-
-    <div class="row">
-        <div class="card custom-card mx-auto">
-          <img src="https://via.placeholder.com/300x150" class="card-img-top" alt="Auto Bild">
-          <div class="card-body">
-            <h5 class="card-title">Entspannte fahrt in meinem Tesla</h5>
-          </div>
-          <a href="" class="card-footer">
-            Zur Fahrt
-          </a>
+      <div class="row d-flex justify-content-center">
+        <div class="col-1 d-flex justify-content-center">
+          <button routerLink="/register" class="btn btn-primary greenButton">Registrieren</button>
         </div>
-
-
+      </div>
     </div>
   </div>
-</div>
+}
+

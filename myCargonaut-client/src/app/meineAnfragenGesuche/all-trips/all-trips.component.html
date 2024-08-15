@@ -1,0 +1,240 @@
+<app-top-auswahl [allOffers]="allOffers" [allRequests]="allRequests"></app-top-auswahl>
+
+<div class="container">
+  <div class="accordion">
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="headingOne">
+        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne"
+                aria-expanded="true" aria-controls="collapseOne">
+          <h3 class="greenText">Aktive Trips</h3>
+        </button>
+      </h2>
+      <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne"
+           data-bs-parent="#accordionExample">
+        <div class="accordion-body">
+          <!-- Display all active trips and roadmap -->
+          <div class="row">
+            <div class="col-12">
+              <div *ngIf="activeTrips.length > 0">
+                <div *ngFor="let activeTrip of activeTrips; let i = index">
+                  <div class="card m-4">
+                    <div class="row no-gutters flex-column flex-lg-row card-horizontal">
+                      <div class="col-lg-9">
+                        <div class="card-body">
+                          <div class="container-fluid">
+                            <div class="row mb-4">
+                              <div class="col-12 col-lg-6">
+                                <div class="row">
+                                  <h5 class="card-title greenText">{{ activeTrip.drive.name }}</h5>
+                                </div>
+                                <div class="row">
+                                  <div class="col-6">
+                                    <span>{{ activeTrip.drive.user.firstName }} {{ activeTrip.drive.user.lastName }}</span>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="col-6 col-lg-3">
+                                <h5 class="greenText">{{ activeTrip.drive.date | dateFormat }}</h5>
+                              </div>
+                              <div class="col-6 col-lg-3">
+                                <div class="horizontal-right">
+                                  <h5
+                                    class="blueText">{{ activeTrip.drive.price | currency: 'EUR':'symbol':'1.2-2':'de-DE' }}
+                                    <span *ngIf="activeTrip.drive.priceType === 1"> </span>
+                                    <span *ngIf="activeTrip.drive.priceType === 2">p. Person</span>
+                                    <span *ngIf="activeTrip.drive.priceType === 3">p. Kilo</span>
+                                  </h5>
+                                </div>
+                              </div>
+                            </div>
+
+
+                            <div class="row">
+                              <div class="col-12 col-lg-3">
+                                <div class="row">
+                                  <div class="col-6 col-lg-4">
+                                    <span>von:</span>
+                                  </div>
+
+                                  <div class="col-6 col-lg-8">
+                                    @for (location of activeTrip.drive.locations; track $index) {
+                                      @if (location.stopNr == 1) {
+                                        <span class="highlightText">{{ location.zipCode }} {{ location.city }}</span>
+                                      }
+                                    }
+                                  </div>
+
+                                </div>
+                                <div class="row">
+                                  <div class="col-6 col-lg-4">
+                                    <span>nach:</span>
+                                  </div>
+                                  <div class="col-6 col-lg-8">
+                                    @for (location of activeTrip.drive.locations; track $index) {
+                                      @if (location.stopNr == 100) {
+                                        <span class="highlightText">{{ location.zipCode }} {{ location.city }}</span>
+                                      }
+                                    }
+                                  </div>
+                                </div>
+                              </div>
+
+                              <div class="col-12 col-lg-6">
+                                <div class="row">
+                                  <div class="col-6">
+                                    <span>Gesamtgewicht:</span>
+                                  </div>
+                                  <div class="col-6">
+                                    <span class="highlightText">{{ activeTrip.drive.maxCWeight }} kg</span>
+                                  </div>
+                                </div>
+                                <div class="row">
+                                  <div class="col-6">
+                                    <span>Max. Volumen:</span>
+                                  </div>
+                                  <div class="col-6">
+                                    <span class="highlightText">{{ activeTrip.drive.maxCVolumen }} m<sup>3</sup></span>
+                                  </div>
+                                </div>
+                              </div>
+
+
+                              <div class="col-12 col-lg-3">
+                                <div class="roadmap">
+                                  <div class="dot" [ngClass]="{'highlight': activeTrip.drive.status === 2}"></div>
+                                  <div class="line"></div>
+                                  <div class="dot" [ngClass]="{'highlight': activeTrip.drive.status === 3}"></div>
+                                  <div class="line"></div>
+                                  <div class="dot" [ngClass]="{'highlight': activeTrip.drive.status === 4}"></div>
+                                </div>
+                                <div class="horizontal-right" *ngIf="activeTrip.drive.status === 3 && userID !== activeTrip.requesting.id">
+                                  <button type="button" class="btn btn-primary greenButton m-2" (click)="finishedDrive(activeTrip.drive.id)">Fahrt Beenden</button>
+                                </div>
+                                <div class="horizontal-right" *ngIf="activeTrip.drive.status === 4">
+                                  <button type="button" (click)="handleButtonClickStatus(activeTrip.id)"
+                                          class="btn btn-primary greenButton">Zur Review
+                                  </button>
+                                </div>
+                                <div class="horizontal-right" *ngIf="activeTrip.drive.status === 5">
+                                  <button type="button" (click)="handleButtonClickStatus(activeTrip.drive.id)"
+                                          class="btn btn-primary greenButton">Alles Erledigt
+                                  </button>
+                                </div>
+                              </div>
+
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div *ngIf="activeTrips.length === 0">
+                <p>Keine aktiven Trips gefunden.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="headingTwo">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                  data-bs-target="#collapseTwo"
+                  aria-expanded="false" aria-controls="collapseTwo">
+            <h3 class="greenText">Deine Anfragen:</h3>
+          </button>
+        </h2>
+        <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo"
+             data-bs-parent="#accordionExample">
+          <div class="accordion-body">
+            <!-- Content for Deine Anfragen -->
+            <div *ngFor="let trip of oneAndTwoTrips; let i = index">
+              <div class="row">
+                <div class="col-lg-12 col-12">
+                  <div class="card m-4">
+                    <div class="row no-gutters flex-column flex-lg-row card-horizontal">
+                      <div class="col-lg-9">
+                        <div class="card-body">
+                          <div class="container-fluid">
+                            <div class="row mb-4">
+                              <div class="col-12 col-lg-6">
+                                <div class="row">
+                                  <h5 class="card-title greenText">{{ trip.name }}</h5>
+                                </div>
+                                <div class="row">
+                                  <div class="col-6">
+                                    <span>{{ trip.drive.user.firstName }} {{ trip.drive.user.lastName }}</span>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="col-6 col-lg-3">
+                                <h5 class="greenText">{{ trip.drive.date | dateFormat }}</h5>
+                              </div>
+                              <div class="col-6 col-lg-3">
+                                <div class="horizontal-right">
+                                  <h5 class="blueText">{{ trip.drive.price | currency: 'EUR':'symbol':'1.2-2':'de-DE' }}
+                                    <span *ngIf="trip.drive.priceType === 1"> </span>
+                                    <span *ngIf="trip.drive.priceType === 2">p. Person</span>
+                                    <span *ngIf="trip.drive.priceType === 3">p. Kilo</span>
+                                  </h5>
+                                </div>
+                              </div>
+                            </div>
+
+                            <div class="row" *ngIf="trip.drive.locations && trip.drive.locations.length > 0">
+                              <div class="col-12 col-lg-6">
+                                <div class="row">
+                                  <div class="col-6 col-lg-4">
+                                    <span>von:</span>
+                                  </div>
+                                  <div class="col-6 col-lg-8">
+                              <span *ngFor="let location of trip.drive.locations">
+                                <span *ngIf="location.stopNr == 1"
+                                      class="highlightText">{{ location.zipCode }} {{ location.city }}</span>
+                              </span>
+                                  </div>
+                                </div>
+                                <div class="row">
+                                  <div class="col-6 col-lg-4">
+                                    <span>nach:</span>
+                                  </div>
+                                  <div class="col-6 col-lg-8">
+                              <span *ngFor="let location of trip.drive.locations">
+                                <span *ngIf="location.stopNr == 100"
+                                      class="highlightText">{{ location.zipCode }} {{ location.city }}</span>
+                              </span>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-12 col-lg-6">
+                              <div class="row">
+                                <div class="col-6">
+                                  <span>Plätze:</span>
+                                </div>
+                                <div class="col-6">
+                                  <span class="highlightText">{{ trip.drive.seats }}</span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div *ngIf="trip.drive.status === 1">
+                            <button type="button" (click)="toPaymentPage(trip.drive.id, trip.drive.priceType)"
+                                    class="btn btn-primary greenButton">
+                              Zur Bezahlung
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

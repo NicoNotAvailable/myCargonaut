@@ -13,3 +13,25 @@
 .customButton:hover, .customButton:active, .customButton:focus{
   box-shadow: 0 0 20px #005B52;
 }*/
+
+.content-outer-container {
+  min-height: 100%;
+}
+
+.content-inner-container {
+  padding-bottom: 36px;
+}
+
+body, html, app-root {
+  height: 100%;
+}
+
+body {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.footer-container {
+  height: 24px;
+  margin-top: -36px;
+}

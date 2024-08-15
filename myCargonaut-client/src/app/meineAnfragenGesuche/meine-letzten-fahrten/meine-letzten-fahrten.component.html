@@ -1,0 +1,220 @@
+<app-top-auswahl></app-top-auswahl>
+<div class="container">
+  <!-- Display all offers -->
+  <div *ngFor="let offer of allOffers; let i = index">
+    <div class="row" *ngIf="offer.status === 4 || offer.status === 5">
+      <div class="col-lg-12 col-12">
+        <div class="card m-4">
+          <div class="row no-gutters flex-column flex-lg-row card-horizontal">
+            <div class="col-lg-3">
+              <div class="horizontal-center vertical-center">
+                <div class="sizeRegulator">
+                  <img
+                    src="window.location.protocol + '//' + window.location.host.replace('4200', '8000') + pathToImageArray[offer.id]"
+                    width="400" height="300" class="img-fluid rounded-start bild " alt="">
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-9">
+              <div class="card-body">
+                <div class="container-fluid">
+                  <div class="row mb-4">
+                    <div class="col-12 col-lg-6">
+                      <div class="row">
+                        <h5 class="card-title greenText">{{ offer.name }}</h5>
+                      </div>
+                      <div class="row">
+                        <div class="col-6">
+                          <span>{{ offer.user.firstName }} {{ offer.user.lastName }}</span>
+                        </div>
+                        <div class="col-6">
+
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-6 col-lg-3">
+                      <h5 class="greenText">{{ offer.date | dateFormat }}</h5>
+                    </div>
+                    <div class="col-6 col-lg-3">
+                      <div class="horizontal-right">
+                        <h5 class="blueText">{{ offer.price | currency: 'EUR':'symbol':'1.2-2':'de-DE' }}
+                          <span *ngIf="offer.priceType === 1"> </span>
+                          <span *ngIf="offer.priceType === 2">p. Person</span>
+                          <span *ngIf="offer.priceType === 3">p. Kilo</span>
+                        </h5>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-12 col-lg-3">
+                      <div class="row">
+                        <div class="col-6 col-lg-4">
+                          <span>von:</span>
+                        </div>
+                        <div class="col-6 col-lg-8">
+                          @for (location of offer.locations; track $index) {
+                            @if (location.stopNr == 1) {
+                              <span class="highlightText">{{ location.zipCode }} {{ location.city }}</span>
+                            }
+                          }
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-6 col-lg-4">
+                          <span>nach:</span>
+                        </div>
+                        <div class="col-6 col-lg-8">
+                          @for (location of offer.locations; track $index) {
+                            @if (location.stopNr == 100) {
+                              <span class="highlightText">{{ location.zipCode }} {{ location.city }}</span>
+                            }
+                          }
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-12 col-lg-6">
+                      <div class="row ">
+                        <div class="col-6">
+                          <span>Gesamtgewicht:</span>
+                        </div>
+                        <div class="col-6">
+                          <span class="highlightText">{{ offer.maxCWeight }} kg</span>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-6">
+                          <span>max Maße:</span>
+                        </div>
+                        <div class="col-6">
+                              <span class="highlightText">{{ offer.maxCLength }}cm / {{ offer.maxCWidth }}
+                                cm / {{ offer.maxCHeight }}cm</span>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-6">
+                          <span>Plätze:</span>
+                        </div>
+                        <div class="col-6">
+                          <span class="highlightText">{{ offer.seats }}</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-12 col-lg-3" *ngIf="offer.status === 4">
+                      <div class="horizontal-right">
+                        <button type="button" (click)="handleButtonClick(TripsOffersAll[i])" class="btn btn-primary greenButton">Zur Review</button>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Display all requests -->
+  <div *ngFor="let request of allRequests; let i = index">
+    <div class="row" *ngIf="request.status === 4 || request.status === 5">
+      <div class="col-lg-12 col-12">
+        <div class="card m-4">
+          <div class="row no-gutters flex-column flex-lg-row card-horizontal">
+            <div class="col-lg-3">
+              <div class="horizontal-center vertical-center">
+                <div class="sizeRegulator">
+                  <img src="{{ window.location.protocol + '//' + window.location.host.replace('4200', '8000') + pathToImageArray[request.id] }}" width="400" height="300" class="img-fluid rounded-start bild" alt="">
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-9">
+              <div class="card-body">
+                <div class="container-fluid">
+                  <div class="row mb-4">
+                    <div class="col-12 col-lg-6">
+                      <div class="row">
+                        <h5 class="card-title greenText">{{ request.name }}</h5>
+                      </div>
+                      <div class="row">
+                        <div class="col-6">
+                          <span>{{ request.user.firstName }} {{ request.user.lastName }}</span>
+                        </div>
+                        <div class="col-6">
+
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-6 col-lg-3">
+                      <h5 class="greenText">{{ request.date | dateFormat }}</h5>
+                    </div>
+                    <div class="col-6 col-lg-3">
+                      <div class="horizontal-right">
+                        <h5 class="blueText">{{ request.price | currency: 'EUR':'symbol':'1.2-2':'de-DE' }}
+                          <span *ngIf="request.priceType === 1"> </span>
+                          <span *ngIf="request.priceType === 2">p. Person</span>
+                          <span *ngIf="request.priceType === 3">p. Kilo</span>
+                        </h5>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-12 col-lg-3">
+                      <div class="row">
+                        <div class="col-6 col-lg-4">
+                          <span>von:</span>
+                        </div>
+                        <div class="col-6 col-lg-8">
+                          @for (location of request.locations; track $index) {
+                            @if (location.stopNr == 1) {
+                              <span class="highlightText">{{ location.zipCode }} {{ location.city }}</span>
+                            }
+                          }
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-6 col-lg-4">
+                          <span>nach:</span>
+                        </div>
+                        <div class="col-6 col-lg-8">
+                          @for (location of request.locations; track $index) {
+                            @if (location.stopNr == 100) {
+                              <span class="highlightText">{{ location.zipCode }} {{ location.city }}</span>
+                            }
+                          }
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-12 col-lg-6">
+                      <div class="row">
+                        <div class="col-6">
+                          <span>Plätze:</span>
+                        </div>
+                        <div class="col-6">
+                          <span class="highlightText">{{ request.seats }}</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-12 col-lg-3" *ngIf="request.status === 4">
+                      <div class="horizontal-right">
+                        <button type="button" (click)="handleButtonClick2(TripsRequestAll[i])" class="btn btn-primary greenButton">Zur Review</button>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

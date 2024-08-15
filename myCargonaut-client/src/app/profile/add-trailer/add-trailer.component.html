@@ -14,11 +14,8 @@
           <div class="col-1"></div>
           <div class="col-5">
             <h1 class="textGreen col-7">Infos:</h1>
-            <div class="col-12" *ngIf="editingTrailer == 0">
-              <input [(ngModel)]="model" [ngModelOptions]="{standalone: true}" type="text" class="rounded-5 p-2 col-8" required placeholder="Modell" id="trailerModel">
-            </div>
-            <div class="col-12" *ngIf="editingTrailer != 0">
-              <span class="trailerInfo">{{ model }}</span>
+            <div class="col-12">
+              <input [(ngModel)]="model" [ngModelOptions]="{standalone: true}" type="text" class="rounded-5 p-2 col-8" required placeholder="Modellname" id="trailerModel">
             </div>
             <div class="col-12 mt-5 d-flex align-bottom justify-content-start align-items-center" *ngIf="editingTrailer != 0">
               <button type="button" class="btn customButton deleteButton text-light" (click)="deleteTrailer(editingTrailer)">
@@ -29,19 +26,19 @@
               </button>
             </div>
           </div>
-          <div class="col-5" *ngIf="editingTrailer == 0">
+          <div class="col-5">
             <h1 class="textGreen col-7">Maße:</h1>
             <div class="col-12">
-              <input [(ngModel)]="weight" [ngModelOptions]="{standalone: true}" type="number" required class="rounded-5 p-2 col-8" placeholder="Gewicht in KG" id="trailerWeight">
+              <input [(ngModel)]="weight" [ngModelOptions]="{standalone: true}" type="number" required class="rounded-5 p-2 col-8" placeholder="max. Gewicht in kg (Bsp. 535,50)" id="trailerWeight">
             </div>
             <div class="col-12 mt-5">
-              <input [(ngModel)]="length" [ngModelOptions]="{standalone: true}" type="number" required class="rounded-5 p-2 col-8" placeholder="Länge in M" id="trailerLength">
+              <input [(ngModel)]="length" [ngModelOptions]="{standalone: true}" type="number" required class="rounded-5 p-2 col-8" placeholder="Länge in cm (Bsp. 320)" id="trailerLength">
             </div>
             <div class="col-12 mt-5">
-              <input [(ngModel)]="width" [ngModelOptions]="{standalone: true}" type="number" required class="rounded-5 p-2 col-8" placeholder="Breite in M" id="trailerWidth">
+              <input [(ngModel)]="width" [ngModelOptions]="{standalone: true}" type="number" required class="rounded-5 p-2 col-8" placeholder="Breite in cm (Bsp. 130)" id="trailerWidth">
             </div>
             <div class="col-12 mt-5">
-              <input [(ngModel)]="height" [ngModelOptions]="{standalone: true}" type="number" required class="rounded-5 p-2 col-8" placeholder="Höhe in M" id="trailerHeight">
+              <input [(ngModel)]="height" [ngModelOptions]="{standalone: true}" type="number" required class="rounded-5 p-2 col-8" placeholder="Höhe in cm (Bsp. 80)" id="trailerHeight">
             </div>
             <div class="col-12 mt-3">
               <div class="row">
@@ -66,35 +63,6 @@
               </div>
             </div>
           </div>
-          <div class="col-5" *ngIf="editingTrailer != 0">
-            <h1 class="textGreen col-7">Maße:</h1>
-            <div class="col-12">
-              <div class="trailerInfo">{{ weight }}KG Maximal-Gewicht</div>
-            </div>
-            <div class="col-12 mt-5">
-              <div class="trailerInfo">{{ length }}Meter lang</div>
-            </div>
-            <div class="col-12 mt-5">
-              <div class="trailerInfo">{{ width }}Meter breit</div>
-            </div>
-            <div class="col-12 mt-5">
-              <div class="trailerInfo">{{ height }}Meter hoch</div>
-            </div>
-            <div class="col-12 mt-3">
-              <div class="row">
-                <div class="col-12">
-                  <span class="trailerInfo">{{ isCooled? "Hat eine Klimaanlage" : "Hat keine Klimaanlage" }}</span>
-                </div>
-              </div>
-            </div>
-            <div class="col-12 mt-3">
-              <div class="row">
-                <div class="col-12">
-                  <span class="trailerInfo">{{ isEnclosed? "Ist angeschlossen" : "Ist nicht angeschlossen" }}</span>
-                </div>
-              </div>
-            </div>
-          </div>
           <div class="col-1"></div>
         </div>
         <div class="row d-flex justify-content-center align-bottom text-center">
@@ -103,7 +71,7 @@
           </div>
         </div>
       </div>
-      <div class="col-12 align-bottom d-flex justify-content-around align-items-center" *ngIf="editingTrailer == 0">
+      <div class="col-12 align-bottom d-flex justify-content-around align-items-center">
         <button type="submit" class="btn customButton exitButton text-light">
           <i>
             <fa-icon [icon]="faSave"></fa-icon>

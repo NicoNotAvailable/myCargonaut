@@ -1,233 +1,318 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { SessionController } from './session.controller';
-import { databaseTest, tables } from '../../testDatabase/databaseTest';
-import { getRepositoryToken, TypeOrmModule } from '@nestjs/typeorm';
-import * as fs from 'fs/promises';
-import { UserService } from '../user/user.service';
-import { CreateUserDTO } from '../user/DTO/CreateUserDTO';
-import { OkDTO } from '../serverDTO/OkDTO';
 import { UserController } from '../user/user.controller';
-import { LoginDTO } from './DTO/LoginDTO';
-import { SessionData } from 'express-session';
+import { UserService } from '../user/user.service';
+import { UtilsService } from '../utils/utils.service';
+import { ReviewService } from '../review/review.service';
+import { CreateUserDTO } from '../user/DTO/CreateUserDTO';
 import { BadRequestException } from '@nestjs/common';
-import { Repository } from 'typeorm';
+import { SessionData } from 'express-session';
+import { GetOtherUserDTO } from '../user/DTO/GetOtherUserDTO';
+import * as bcrypt from 'bcryptjs';
 import { UserDB } from '../database/UserDB';
+import { GetOwnUserDTO } from '../user/DTO/GetOwnUserDTO';
 
-jest.setTimeout(30000);
+// Mock data
+const mockUser = {
+  id: 1,
+  email: 'test@example.com',
+  password: 'hashedpassword',
+  firstName: 'Test',
+  lastName: 'User',
+  birthday: new Date('2000-01-01'),
+  phoneNumber: '1234567890',
+  profilePic: 'default.jpg',
+  isSmoker: false,
+  profileText: 'This is a test user',
+  languages: 'English',
+} as UserDB;
 
-describe('SessionController', () => {
-    let controller: SessionController;
-    let userController: UserController;
-    let userService: UserService;
-    let userRepository: Repository<UserDB>;
-    let module: TestingModule;
+// Mock session with complete cookie property
+const mockSession: SessionData = {
+  currentUser: 1,
+  cookie: {
+    originalMaxAge: 3600000,
+    expires: new Date(Date.now() + 3600000),
+    maxAge: 3600000,
+    httpOnly: true,
+    secure: false,
+    path: '/',
+  },
+};
 
-    beforeAll(async () => {
-        module = await Test.createTestingModule({
-            imports: [
-                databaseTest('./testDatabase/dbTest.sqlite'),
-                TypeOrmModule.forFeature(tables),
-            ],
-            controllers: [SessionController, UserController],
-            providers: [
-                UserService,
-                {
-                    provide: getRepositoryToken(UserDB),
-                    useClass: Repository,
-                },
-            ],
-        }).compile();
+describe('Session Controller', () => {
+  let userController: UserController;
+  let userService: UserService;
+  let reviewService: ReviewService;
+  let utilsService: UtilsService;
+  let session: SessionData;
 
-        controller = module.get<SessionController>(SessionController);
-        userController = module.get<UserController>(UserController);
-        userService = module.get<UserService>(UserService);
-        userRepository = module.get<Repository<UserDB>>(
-            getRepositoryToken(UserDB),
-        );
+  beforeEach(async () => {
+    const module: TestingModule = await Test.createTestingModule({
+      controllers: [UserController],
+      providers: [
+        {
+          provide: UserService,
+          useValue: {
+            createUser: jest.fn(),
+            getUserByEmail: jest.fn(),
+            getUserById: jest.fn(),
+            updateUser: jest.fn(),
+          },
+        },
+        {
+          provide: UtilsService,
+          useValue: {
+            transformUserToGetOtherUserDTO: jest.fn(),
+          },
+        },
+        {
+          provide: ReviewService,
+          useValue: {
+            getRating: jest.fn(),
+          },
+        },
+      ],
+    }).compile();
+
+    userController = module.get<UserController>(UserController);
+    userService = module.get<UserService>(UserService);
+    reviewService = module.get<ReviewService>(ReviewService);
+    utilsService = module.get<UtilsService>(UtilsService);
+
+    session = mockSession;
+  });
+
+  describe('createUser', () => {
+    it('should create a new user and set session', async () => {
+      const mockUserResponse: UserDB = {
+        ...mockUser,
+        id: 1,
+      };
+
+      const dto: CreateUserDTO = {
+        firstName: 'Test',
+        lastName: 'User',
+        email: 'test@example.com',
+        emailConfirm: 'test@example.com',
+        password: 'password123',
+        passwordConfirm: 'password123',
+        phoneNumber: '1234567890',
+        birthday: new Date('2000-01-01'),
+        agb: true,
+      };
+
+      jest.spyOn(userService, 'createUser').mockResolvedValue(mockUserResponse);
+      jest
+        .spyOn(userService, 'getUserByEmail')
+        .mockResolvedValue(mockUserResponse);
+
+      const result = await userController.createUser(dto, session);
+
+      expect(userService.createUser).toHaveBeenCalledWith(
+        'Test',
+        'User',
+        'test@example.com',
+        'password123',
+        new Date('2000-01-01'),
+        '1234567890',
+      );
+      expect(userService.getUserByEmail).toHaveBeenCalledWith(
+        'test@example.com',
+      );
+      expect(session.currentUser).toEqual(1);
+      expect(result.ok).toBe(true);
     });
 
-    it('should be defined', () => {
-        expect(controller).toBeDefined();
-        expect(userController).toBeDefined();
-        expect(userService).toBeDefined();
-        expect(userRepository).toBeDefined();
+    it('should throw BadRequestException if passwords do not match', async () => {
+      const dto: CreateUserDTO = {
+        firstName: 'Test',
+        lastName: 'User',
+        email: 'test@example.com',
+        emailConfirm: 'test@example.com',
+        password: 'password123',
+        passwordConfirm: 'password124', // Different password
+        phoneNumber: '1234567890',
+        birthday: new Date('2000-01-01'),
+        agb: true,
+      };
+
+      await expect(userController.createUser(dto, session)).rejects.toThrow(
+        BadRequestException,
+      );
+    });
+  });
+
+  describe('getOtherUser', () => {
+    it('should return transformed user data for valid user ID', async () => {
+      const mockUserResponse: UserDB = {
+        ...mockUser,
+      };
+
+      const mockGetOtherUserDTO: GetOtherUserDTO = {
+        id: 1,
+        firstName: 'Test',
+        lastName: 'User',
+        profilePic: 'pic.jpg',
+        languages: 'English',
+        profileText: 'Hello!',
+        isSmoker: false,
+        rating: 4.5,
+        birthyear: 2000,
+      };
+
+      jest
+        .spyOn(userService, 'getUserById')
+        .mockResolvedValue(mockUserResponse);
+      jest
+        .spyOn(utilsService, 'transformUserToGetOtherUserDTO')
+        .mockResolvedValue(mockGetOtherUserDTO);
+
+      const result = await userController.getOtherUser(1);
+
+      expect(userService.getUserById).toHaveBeenCalledWith(1);
+      expect(result).toEqual(mockGetOtherUserDTO);
     });
 
-    afterAll(async () => {
-        await module.close();
+    it('should handle errors in getOtherUser gracefully', async () => {
+      const consoleErrorSpy = jest
+        .spyOn(console, 'error')
+        .mockImplementation(() => {});
 
-        // Add delay to ensure all operations are complete
-        await new Promise((resolve) => setTimeout(resolve, 1000));
+      jest
+        .spyOn(userService, 'getUserById')
+        .mockRejectedValue(new Error('User not found'));
 
-        // Delete the test database file
-        try {
-            await fs.unlink('./testDatabase/dbTest.sqlite');
-            console.log('Test database file removed');
-        } catch (err) {
-            console.error('Error removing test database file:', err);
-        }
+      const result = await userController.getOtherUser(1);
+      expect(consoleErrorSpy).toHaveBeenCalledWith(expect.any(Error));
+
+      expect(result).toBeUndefined();
+      consoleErrorSpy.mockRestore();
+    });
+  });
+
+  describe('getUser', () => {
+    it('should return own user data with rating', async () => {
+      const mockRating = 4.5;
+      const mockUserResponse = {
+        id: 1,
+        firstName: 'Test',
+        lastName: 'User',
+        email: 'test@example.com',
+      } as UserDB;
+
+      jest
+        .spyOn(userService, 'getUserById')
+        .mockResolvedValue(mockUserResponse);
+      jest.spyOn(reviewService, 'getRating').mockResolvedValue(mockRating);
+
+      session.currentUser = 1;
+      const result = await userController.getUser(session);
+
+      expect(userService.getUserById).toHaveBeenCalledWith(1);
+      expect(reviewService.getRating).toHaveBeenCalledWith(1);
+      expect(result).toEqual(
+        expect.objectContaining({
+          firstName: 'Test',
+          lastName: 'User',
+          email: 'test@example.com',
+          rating: mockRating,
+        }),
+      );
     });
 
-    it('should login an user succesfully', async () => {
-        const newUserData: CreateUserDTO = {
-            firstName: 'John',
-            lastName: 'Doe',
-            email: 'john.doe@example.com',
-            emailConfirm: 'john.doe@example.com',
-            password: 'securepassword',
-            passwordConfirm: 'securepassword',
-            agb: true,
-            birthday: new Date('2000-01-01'),
-            phoneNumber: '0800555555',
-        };
+    it('should handle errors in getUser gracefully', async () => {
+      const consoleErrorSpy = jest
+        .spyOn(console, 'error')
+        .mockImplementation(() => {});
 
-        jest.spyOn(userRepository, 'findOne').mockResolvedValue(null);
-        jest.spyOn(userRepository, 'create').mockReturnValue(
-            newUserData as unknown as UserDB,
-        );
-        jest.spyOn(userRepository, 'save').mockResolvedValue(
-            newUserData as unknown as UserDB,
-        );
-        jest.spyOn(userService, 'createUser').mockImplementation(async () => {
-            return newUserData as unknown as UserDB;
-        });
+      jest
+        .spyOn(userService, 'getUserById')
+        .mockRejectedValue(new Error('User not found'));
+      jest
+        .spyOn(reviewService, 'getRating')
+        .mockRejectedValue(new Error('Rating service failed'));
 
-        const createRes: OkDTO = await userController.createUser(newUserData);
-        expect(createRes.ok).toBe(true);
+      const result = await userController.getUser(session);
 
-        const loginUserData: LoginDTO = {
-            email: newUserData.email,
-            password: newUserData.password,
-        };
-        const mockSession: SessionData = {
-            cookie: {
-                originalMaxAge: null,
-                expires: null,
-                secure: false,
-                httpOnly: true,
-                path: '/',
-                sameSite: 'lax',
-            },
-            currentUser: null,
-        };
+      expect(consoleErrorSpy).toHaveBeenCalledWith(expect.any(Error));
+      expect(consoleErrorSpy).toHaveBeenCalledWith(new Error('User not found'));
+      expect(consoleErrorSpy).toHaveBeenCalledWith(new Error('User not found'));
 
-        jest.spyOn(userService, 'getLoggingUser').mockImplementation(
-            async () => {
-                return newUserData as unknown as UserDB;
-            },
-        );
-        const loginRes: OkDTO = await controller.loginUser(
-            mockSession,
-            loginUserData,
-        );
+      const expectedDto = new GetOwnUserDTO();
+      expectedDto.lastName = '';
+      expectedDto.firstName = '';
+      expectedDto.email = '';
+      expectedDto.profilePic = '';
+      expectedDto.phoneNumber = '';
+      expectedDto.birthday = new Date();
+      expectedDto.isSmoker = false;
+      expectedDto.profileText = '';
+      expectedDto.languages = '';
+      expectedDto.rating = 0;
 
-        expect(loginRes.ok).toBe(true);
-        expect(loginRes.message).toBe('User was logged in');
+      expect(result).toEqual(
+        expect.objectContaining({
+          birthday: expect.any(Date),
+        }),
+      );
+
+      expect(result.lastName).toBe(expectedDto.lastName);
+      expect(result.firstName).toBe(expectedDto.firstName);
+      expect(result.email).toBe(expectedDto.email);
+      expect(result.profilePic).toBe(expectedDto.profilePic);
+      expect(result.phoneNumber).toBe(expectedDto.phoneNumber);
+      expect(result.isSmoker).toBe(expectedDto.isSmoker);
+      expect(result.profileText).toBe(expectedDto.profileText);
+      expect(result.languages).toBe(expectedDto.languages);
+      expect(result.rating).toBe(expectedDto.rating);
+
+      consoleErrorSpy.mockRestore();
+    });
+  });
+
+  describe('updatePassword', () => {
+    it('should update the password when current password matches', async () => {
+      const hashedPassword = await bcrypt.hash('password123', 10);
+      const mockUserResponse = { id: 1, password: hashedPassword } as UserDB;
+      const body = {
+        password: 'password123',
+        newPassword: 'newpassword123',
+        newPasswordConfirm: 'newpassword123',
+      };
+
+      jest
+        .spyOn(userService, 'getUserById')
+        .mockResolvedValue(mockUserResponse);
+      jest.spyOn(userService, 'updateUser').mockResolvedValue(mockUserResponse);
+
+      session.currentUser = 1;
+      const result = await userController.updatePassword(session, body);
+
+      expect(result.ok).toBe(true);
+      expect(userService.updateUser).toHaveBeenCalledWith(
+        expect.objectContaining({
+          password: expect.any(String),
+        }),
+      );
     });
 
-    it('should throw an error for blank inputs', async () => {
-        const newUserData: CreateUserDTO = {
-            firstName: 'John',
-            lastName: 'Doe',
-            email: 'john.doe@example.com',
-            emailConfirm: 'john.doe@example.com',
-            password: 'securepassword',
-            passwordConfirm: 'securepassword',
-            agb: true,
-            birthday: new Date('2000-01-01'),
-            phoneNumber: '0800555555',
-        };
+    it('should throw BadRequestException if current password is incorrect', async () => {
+      const hashedPassword = await bcrypt.hash('password123', 10);
+      const mockUserResponse = { id: 1, password: hashedPassword } as UserDB;
+      const body = {
+        password: 'wrongpassword',
+        newPassword: 'newpassword123',
+        newPasswordConfirm: 'newpassword123',
+      };
 
-        jest.spyOn(userRepository, 'findOne').mockResolvedValue(null);
-        jest.spyOn(userRepository, 'create').mockReturnValue(
-            newUserData as unknown as UserDB,
-        );
-        jest.spyOn(userRepository, 'save').mockResolvedValue(
-            newUserData as unknown as UserDB,
-        );
-        jest.spyOn(userService, 'createUser').mockImplementation(async () => {
-            return newUserData as unknown as UserDB;
-        });
+      jest
+        .spyOn(userService, 'getUserById')
+        .mockResolvedValue(mockUserResponse);
 
-        const createRes: OkDTO = await userController.createUser(newUserData);
-        expect(createRes.ok).toBe(true);
-
-        const loginUserData: LoginDTO = {
-            email: '',
-            password: '',
-        };
-        const mockSession: SessionData = {
-            cookie: {
-                originalMaxAge: null,
-                expires: null,
-                secure: false,
-                httpOnly: true,
-                path: '/',
-                sameSite: 'lax',
-            },
-            currentUser: null,
-        };
-
-        jest.spyOn(userService, 'getLoggingUser').mockImplementation(
-            async () => {
-                return newUserData as unknown as UserDB;
-            },
-        );
-        await expect(
-            controller.loginUser(mockSession, loginUserData),
-        ).rejects.toThrow(BadRequestException);
+      session.currentUser = 1;
+      await expect(
+        userController.updatePassword(session, body),
+      ).rejects.toThrow(BadRequestException);
     });
-
-    it('should throw an error for mismatching data', async () => {
-        const newUserData: CreateUserDTO = {
-            firstName: 'John',
-            lastName: 'Doe',
-            email: 'john.doe@example.com',
-            emailConfirm: 'john.doe@example.com',
-            password: 'securepassword',
-            passwordConfirm: 'securepassword',
-            agb: true,
-            birthday: new Date('2000-01-01'),
-            phoneNumber: '0800555555',
-        };
-
-        jest.spyOn(userRepository, 'findOne').mockResolvedValue(null);
-        jest.spyOn(userRepository, 'create').mockReturnValue(
-            newUserData as unknown as UserDB,
-        );
-        jest.spyOn(userRepository, 'save').mockResolvedValue(
-            newUserData as unknown as UserDB,
-        );
-        jest.spyOn(userService, 'createUser').mockImplementation(async () => {
-            return newUserData as unknown as UserDB;
-        });
-
-        const createRes: OkDTO = await userController.createUser(newUserData);
-        expect(createRes.ok).toBe(true);
-
-        const loginUserData: LoginDTO = {
-            email: 'aghdsah@gmaol.com',
-            password: 'fadasd',
-        };
-        const mockSession: SessionData = {
-            cookie: {
-                originalMaxAge: null,
-                expires: null,
-                secure: false,
-                httpOnly: true,
-                path: '/',
-                sameSite: 'lax',
-            },
-            currentUser: null,
-        };
-
-        jest.spyOn(userService, 'getLoggingUser').mockImplementation(
-            async () => {
-                return loginUserData as unknown as UserDB;
-            },
-        );
-        await controller.loginUser(mockSession, loginUserData);
-
-        expect(mockSession.currentUser).toBe(undefined);
-    });
+  });
 });

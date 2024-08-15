@@ -1,12 +1,3 @@
-.backgroundGreen {
-  background-color: #005B52;
-  border-radius: 2rem;
-  transition: all 0.4s ease;
-}
-.backgroundGreen:hover{
-  box-shadow: #005B52 0 0 20px;
-}
-
 .textGreen {
   color: #005B52;
 }
@@ -75,12 +66,11 @@ img{
   border-radius: 50%;
 }
 
-.editCar:hover {
-  text-decoration: underline;
-  color: #ffffff;
-}
-
 .card {
   margin: 0 auto;
   float: none;
+}
+
+.imageHolder{
+  height: 10px;
 }

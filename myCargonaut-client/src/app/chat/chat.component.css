@@ -1,0 +1,149 @@
+
+.messages {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  padding: 10px;
+}
+
+.message {
+  padding: 10px;
+  margin: 5px 0;
+  border-radius: 5px;
+}
+
+/* Align messages sent by the user to the right */
+.message-right {
+  align-self: flex-end;
+  background-color: #daf8cb; /* Light green */
+  color: #000;
+}
+
+/* Align messages received from others to the left */
+.message-left {
+  align-self: flex-start;
+  background-color: #f1f0f0; /* Light grey */
+  color: #000;
+}
+
+/* Input box for sending messages */
+.chat-card {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  height: 50vh;
+  overflow: hidden;
+}
+
+.chat-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto; /* Enable vertical scrolling */
+}
+
+.card.messages {
+  flex: 1;
+  overflow-y: auto; /* Enable scrolling inside the card */
+  padding: 5px; /* Adjust padding as needed */
+  border: 1px solid #ccc; /* Optional: Add border */
+  border-radius: 5px; /* Optional: Add border radius */
+}
+
+.message {
+  padding: 10px;
+  margin: 5px 0;
+  border-radius: 5px;
+}
+
+.chat-input-container {
+  display: flex;
+  align-items: center; /* Center vertically */
+  padding: 20px;
+}
+
+.chat-input {
+  flex: 1;
+  padding: 5px 10px;
+  border: 1px solid #005B52;
+  border-radius: 10px;
+  margin-right: 10px;
+}
+
+.chat-input:focus {
+  box-shadow: 0 0 20px #005B52;
+  border: none;
+}
+
+.chat-send-button {
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+/* Styling for trip cards */
+.trip-card {
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+
+.card {
+  border: 1px solid #005B52;
+  border-radius: 25px;
+  overflow: hidden;
+  padding: 10px;
+}
+
+.card:hover {
+  box-shadow: 0 0 20px #005B52;
+}
+
+.profile-container {
+  display: flex;
+  margin-right: 10px;
+  align-items: center;
+}
+
+.profileCircle {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+}
+
+.initials {
+  font-size: 20px;
+  margin-left: 10px;
+  text-align: left;
+}
+
+.card-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.card-title {
+  font-size: 20px;
+  font-weight: bold;
+  margin: 0;
+  color: #005B52;
+}
+
+.card-text {
+  font-size: 20px;
+  color: black;
+}
+
+.vl {
+  background-color: #1a9cc5;
+  height: 30em;
+  width: 5px;
+  border-radius: 20px;
+}
+
+.line {
+  display: flex;
+  padding: 0 10px;
+  align-items: center;
+  justify-content: center;
+}

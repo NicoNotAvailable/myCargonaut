@@ -26,9 +26,7 @@ export class LoginComponent {
   }
 
   ngOnInit(): void {
-    //console.log(this.sessionService.checkLogin());
-    this.sessionService.checkLoginNum().then(isLoggedIn => {
-      console.log('Login status:', isLoggedIn);
+    this.sessionService.checkLoginNum().then(async isLoggedIn => {
       isLoggedIn == -1 ? this.isLoggedIn = false : this.isLoggedIn = true;
       if (this.isLoggedIn) {
         window.location.href = "/profile";
@@ -43,11 +41,11 @@ export class LoginComponent {
     };
 
     this.http.post("http://localhost:8000/session/login", userData, { withCredentials: true }).subscribe(
-      response =>{
+      async response => {
         form.resetForm();
-        console.log(response);
         this.textColor = "successText"
         this.message = "Anmeldung lief swaggy";
+
         window.location.href = "/profile";
         setTimeout(() => {
           this.message = "";

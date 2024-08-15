@@ -1,0 +1,22 @@
+<div class="container">
+  <div class="mt-2 mb-2">
+    <div class="row m-lg-3">
+      <div class="col-lg-6 horizontal-center  mb-2 mt-2">
+        <a href="myOffer" class="link p-2 m-3" [ngClass]="{'currentLink': currentRoute === 'myOffer'}">Deine Angebote</a>
+      </div>
+      <div class="col-lg-6 horizontal-center mb-2 mt-2">
+        <a href="myRequest" class="link p-2" [ngClass]="{'currentLink': currentRoute === 'myRequest'}">Deine Gesuche</a>
+      </div>
+
+    </div>
+    <div class="row m-lg-3">
+      <div class="col-lg-6 horizontal-center  mb-2 mt-2">
+        <a href="myLastRides" class="link p-2 m-3" [ngClass]="{'currentLink': currentRoute === 'myLastRides'}">Letzten Fahrten</a>
+      </div>
+      <div class="col-lg-6 horizontal-center  mb-2 mt-2">
+        <a href="allTrips" class="link p-1 m-3" [ngClass]="{'currentLink': currentRoute === 'allTrips'}">Deine Trips</a>
+      </div>
+    </div>
+  </div>
+
+</div>

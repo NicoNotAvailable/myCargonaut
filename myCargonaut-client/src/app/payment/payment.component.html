@@ -1,0 +1,142 @@
+<h2 class="textGreen text-center mt-4">Checkout</h2>
+<div *ngIf="isLoggedIn" class="container mt-3 mb-3 text-start">
+  <div class="row justify-content-center">
+    <div class="col-lg-6 col-12">
+      <form #form="ngForm" (ngSubmit)="validInputs() && finishPayment()">
+        <div class="p-5" id="paymentArea">
+          @if (paymentService.currentRoute == 'offer') {
+            @if (paymentService.priceType == 1) {
+              <div class="row mt-1">
+                <div class="col-6 text-end">
+                  <h5 class="text-decoration-underline">Kosten der Fahrt:</h5>
+                </div>
+                <div class="col-lg-4 col-6 text-end">
+                  <h5 class="text-decoration-underline">{{ paymentService.price | currency: 'EUR':'symbol':'1.2-2':'de-DE' }}</h5>
+                </div>
+                <div class="col-2"></div>
+              </div>
+            } @else if (paymentService.priceType == 2) {
+              <div class="row mt-1">
+                <div class="col-6 text-end">
+                  <h5 class="text-decoration-underline">Pro Person:</h5>
+                </div>
+                <div class="col-lg-4 col-6 text-end">
+                  <h5 class="text-decoration-underline">{{ paymentService.price | currency: 'EUR':'symbol':'1.2-2':'de-DE' }}</h5>
+                </div>
+                <div class="col-2"></div>
+              </div>
+              <div class="row mt-1">
+                <div class="col-6 text-end">
+                  <h5 class="text-decoration-underline">Anzahl der Personen:</h5>
+                </div>
+                <div class="col-lg-4 col-6 text-end">
+                  <h5 class="text-decoration-underline">{{ paymentService.seats }}x</h5>
+                </div>
+                <div class="col-2"></div>
+              </div>
+              <div class="row mt-1">
+                <div class="col-6 text-end">
+                  <h5 class="text-decoration-underline">Zwischensumme:</h5>
+                </div>
+                <div class="col-lg-4 col-6 text-end">
+                  <h5 class="text-decoration-underline">{{ paymentService.price! * paymentService.seats! | currency: 'EUR':'symbol':'1.2-2':'de-DE'}}</h5>
+                </div>
+                <div class="col-2"></div>
+              </div>
+            } @else if (paymentService.priceType == 3) {
+              <div class="row mt-1">
+                <div class="col-6 text-end">
+                  <h5 class="text-decoration-underline">Preis pro kg Cargo:</h5>
+                </div>
+                <div class="col-lg-4 col-6 text-end">
+                  <h5 class="text-decoration-underline">{{ paymentService.price | currency: 'EUR':'symbol':'1.2-2':'de-DE' }}</h5>
+                </div>
+                <div class="col-2"></div>
+              </div>
+              <div class="row mt-1">
+                <div class="col-6 text-end">
+                  <h5 class="text-decoration-underline">Gesamtgewicht:</h5>
+                </div>
+                <div class="col-lg-4 col-6 text-end">
+                  <h5 class="text-decoration-underline">{{ paymentService.totalWeight }} kg</h5>
+                </div>
+                <div class="col-2"></div>
+              </div>
+              <div class="row mt-1">
+                <div class="col-6 text-end">
+                  <h5 class="text-decoration-underline">Zwischensumme:</h5>
+                </div>
+                <div class="col-lg-4 col-6 text-end">
+                  <h5 class="text-decoration-underline">{{ paymentService.price! * paymentService.totalWeight! | currency: 'EUR':'symbol':'1.2-2':'de-DE'}}</h5>
+                </div>
+                <div class="col-2"></div>
+              </div>
+            }
+          } @else if (paymentService.currentRoute == 'request') {
+            <div class="row mt-1">
+              <div class="col-6 text-end">
+                <h5 class="text-decoration-underline">Kosten der Fahrt:</h5>
+              </div>
+              <div class="col-lg-4 col-6 text-end">
+                <h5 class="text-decoration-underline">{{ paymentService.price | currency: 'EUR':'symbol':'1.2-2':'de-DE' }}</h5>
+              </div>
+              <div class="col-2"></div>
+            </div>
+          }
+
+
+          <div class="row mt-1">
+            <div class="col-6 text-end">
+              <h5 class="text-decoration-underline">+Servicegebühren:</h5>
+            </div>
+            <div class="col-lg-4 col-6 text-end">
+              <h5 class="text-decoration-underline">{{ paymentService.servicePrice | currency: 'EUR':'symbol':'1.2-2':'de-DE' }}</h5>
+            </div>
+            <div class="col-2"></div>
+          </div>
+          <div class="row justify-content-start">
+            <div class="col-auto">
+              <div class="image-cropper">
+                <img src="assets/empty.png" alt="Profilbild des angemeldeten ">
+              </div>
+            </div>
+          </div>
+          <div class="text-decoration-underline text-end mt-3">
+            <h3>Gesamt: {{ paymentService.totalPrice | currency: 'EUR':'symbol':'1.2-2':'de-DE' }}
+            </h3>
+          </div>
+        </div>
+        <h3 class="textGreen text-center mt-5">Zahlungsmethode auswählen</h3>
+        <div class="row justify-content-center">
+          <div class="col-12 col-lg-8">
+            <div class="row mt-4 justify-content-between">
+              <div class="col-auto">
+                <button type="button" (click)="paymentService.setPaymentMethod(1)" [ngClass]="paymentService.paymentMethod === 1 ? 'paymentActiveButton' : 'paymentNonactiveButton'" class="btn customButton text-light">
+                  <img class="paypal-logo object-fit-contain" src="assets/payment/paypal-payment.png" alt="PayPal-Logo">
+                </button>
+              </div>
+              <div class="col-auto">
+                <button type="button" (click)="paymentService.setPaymentMethod(2)" [ngClass]="paymentService.paymentMethod === 2 ? 'paymentActiveButton' : 'paymentNonactiveButton'" class="btn customButton text-light">
+                  <img class="sepa-logo object-fit-contain" src="assets/payment/sepa-payment.png" alt="SEPA-Lastschrift Logo">
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row mt-5 justify-content-center">
+          <div class="col-auto text-center">
+            <button type="submit" class="btn customButton exitButton text-light">
+              <span class="px-3">Bezahlen</span>
+            </button>
+          </div>
+        </div>
+        <div class="row mt-2 d-flex justify-content-center align-bottom text-center">
+          <div class="col-12">
+            <span [ngClass]="textColor">{{ this.errorMessage }}</span>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

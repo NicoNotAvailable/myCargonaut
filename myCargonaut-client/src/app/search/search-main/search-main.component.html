@@ -1,0 +1,10 @@
+<app-search-input (offerSearchTriggered)="getFilteredOffers($event)"></app-search-input>
+
+<app-search-card
+[allOffers] = "this.allOffers"
+[offerBool] = "this.offerBool"
+[pathToImageArray] = "this.pathToImageArray"
+>
+  <img src="./assets/searchCard/cutout-car-images.jpg" class="img-fluid rounded-start bild" alt="...">
+
+</app-search-card>

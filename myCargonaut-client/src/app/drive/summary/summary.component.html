@@ -1,0 +1,273 @@
+<div class="rounded-3 container mt-3 mb-3 text-start" *ngIf="isLoggedIn">
+  <button type="button" class="btn customButton exitButton text-light" (click)="navigateBack()">
+    <span class="px-3"><fa-icon [icon]="faArrowLeft"></fa-icon> Zurück</span>
+  </button>
+  <form #form="ngForm" class="mt-3">
+    <div class="row">
+      <div class="p-5 mb-4" id="summaryArea">
+        <div *ngIf="templateToLoad === 'summaryOffer'">
+          <h1 class="textGreen text-center mt-4">Zusammenfassung ihres Angebots</h1>
+          <div class="row justify-content-center">
+            <div class="col-lg-3 col-8 mt-5">
+              <div class="image-cropper">
+                <img *ngIf="offerService.selectedCar?.carPicture !== 'empty.png'"
+                     [ngSrc]="window.location.protocol + '//' + window.location.host.replace('4200', '8000') + '/vehicle/image/'+ offerService.selectedCar?.carPicture"
+                     width="70" height="55" class="card-img-top img-fluid backgroundGreen profileCircle my-4" alt="">
+                <img *ngIf="offerService.selectedCar?.carPicture === 'empty.png'" src="../../../assets/Cybertruck-fremont-cropped.jpg" class="card-img-top img-fluid backgroundGreen mb-4" alt="">
+              </div>
+            </div>
+            <div class="col-lg-9 col-12 mt-5">
+              <div class="row justify-content-between">
+                <div class="col-7">
+                  <h4 class="text-end">{{ offerService.name }}</h4>
+                  <div class="hstack justify-content-end text-end">
+                    <p>
+                      {{ this.offerService.firstName }} {{ this.offerService.lastName }}
+                      <fa-icon [icon]="faStar"></fa-icon>
+                      <fa-icon [icon]="faStar"></fa-icon>
+                      <fa-icon [icon]="faStar"></fa-icon>
+                      <fa-icon [icon]="faStar"></fa-icon>
+                      <fa-icon [icon]="faStarRegular"></fa-icon>
+                    </p>
+                  </div>
+                </div>
+                <div class="col-4">
+                  <h4>{{ offerService.price | currency: 'EUR':'symbol':'1.2-2':'de-DE' }}</h4>
+                  <p>
+                    {{ offerService.priceType === 2 ? 'Pro Person' : offerService.info === 3 ? 'Pro KG' : 'Gesamt' }}
+                  </p>
+                </div>
+              </div>
+              <div class="row justify-content-center mt-4">
+                <hr class="blueLine col-8">
+              </div>
+            </div>
+          </div>
+          <div class="row mt-4">
+            <div class="col-12 col-lg-4">
+              <h5 class="textGreen mt-5">Fahrzeuginformationen</h5>
+              <div class="row">
+                <div class="col-6">
+                  <p>verfügbare Plätze:</p>
+                </div>
+                <div class="col-6">
+                  <p class="fw-bold">{{ offerService.seats }}</p>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-6">
+                  <p>maximales Gewicht:</p>
+                </div>
+                <div class="col-6">
+                  <p class="fw-bold">{{ offerService.maxCWeight }}kg</p>
+                </div>
+              </div>
+              <div>
+                <p>maximale Maße: <br>
+                Länge: <span class="fw-bold">{{ offerService.maxCLength }}cm</span> /
+                Breite: <span class="fw-bold">{{ offerService.maxCWidth }}cm</span> /
+                Höhe: <span class="fw-bold">{{ offerService.maxCLength }}cm</span>
+                </p>
+              </div>
+              @if (offerService.selectedTrailer) {
+                <div>
+                  <h5 class="textGreen mt-5">Anhängerinformationen</h5>
+                  <div class="row">
+                    <div class="col-6">
+                      <p>maximales Gewicht:</p>
+                    </div>
+                    <div class="col-6">
+                      <p class="fw-bold">{{ offerService.maxTWeight }}kg</p>
+                    </div>
+                  </div>
+                  <div>
+                    <p>maximale Maße: <br>
+                      Länge: <span class="fw-bold">{{ offerService.maxTLength }}cm</span> /
+                      Breite: <span class="fw-bold">{{ offerService.maxTLength }}cm</span> /
+                      Höhe: <span class="fw-bold">{{ offerService.maxTLength }}cm</span>
+                    </p>
+                  </div>
+                </div>
+              }
+            </div>
+            <div class="col-12 col-lg-4">
+              <h5 class="textGreen mt-5">Allgemeine Informationen</h5>
+              <div class="row">
+                <div class="col-6">
+                  <p>Start des Trips:</p>
+                </div>
+                <div class="col-6">
+                  <p class="fw-bold">Um {{ this.offerService.time }} am
+                    {{ this.offerService.date?.day }}.{{ this.offerService.date?.month }}.{{ this.offerService.date?.year }}</p>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-6">
+                  <p>Startpunkt:</p>
+                </div>
+                <div class="col-6">
+                  <p class="fw-bold">
+                    {{ offerService.startLocation.city }} {{ offerService.startLocation.zipCode }} <br>
+                    {{ offerService.startLocation.country }}
+                  </p>                </div>
+              </div>
+              <div *ngFor="let stops of this.offerService.getStops; let i = index">
+                <div class="row">
+                  <div class="col-6">
+                    <p>{{ i + 1 }}. Stopp:</p>
+                  </div>
+                  <div class="col-6">
+                    <p class="fw-bold">
+                      {{ stops.city }} {{ stops.zipCode }} <br>
+                      {{ stops.country }}
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-6">
+                  <p>Zielort:</p>
+                </div>
+                <div class="col-6">
+                  <p class="fw-bold">
+                    {{ offerService.endLocation.city }} {{ offerService.endLocation.zipCode }} <br>
+                    {{ offerService.endLocation.country }}
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="col-12 col-lg-4">
+              <h5 class="textGreen mt-5">Zusatzinformationen</h5>
+              <div class="row">
+                <div class="col-6">
+                  <p>Raucher:</p>
+                  <p>Tiere:</p>
+                  <p>Kommunikationswunsch:</p>
+                </div>
+                <div class="col-6">
+                  <p class="fw-bold">{{ offerService.smokingAllowed ? 'ja' : 'nein' }}</p>
+                  <p class="fw-bold">{{ offerService.animalsAllowed ? 'ja' : 'nein' }}</p>
+                  <p class="fw-bold">
+                    {{ offerService.info === 1 ? 'Nur Musik' : offerService.info === 2 ? 'Nur Reden' : 'Nach Wunsch' }}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="text-center mt-5">
+            <button class="btn customButton px-5" (click)="offerService.createOffer()">Angebot erstellen</button>
+          </div>
+        </div>
+        <div *ngIf="templateToLoad === 'summaryRequest'">
+          <h1 class="textGreen text-center">Zusammenfassung ihres Gesuchs</h1>
+          <div class="row justify-content-center">
+            <div class="col-lg-3 col-8 mt-5">
+              <div class="image-cropper">
+                <img *ngIf="this.requestService.profilePic === 'empty.png' " class="profileCircle"
+                     [ngSrc]="this.requestService.pathToImage" alt="profile" width="150" height="150">
+                <img *ngIf="this.requestService.profilePic !== 'empty.png' "
+                     [ngSrc]="window.location.protocol + '//' + window.location.host.replace('4200', '8000') + '/user/image/'+ this.requestService.profilePic"
+                     width="70" height="55" class="card-img-top img-fluid backgroundGreen profileCircle my-4" alt="">
+              </div>
+            </div>
+            <div class="col-lg-8 col-12 mt-5">
+              <div class="row justify-content-between">
+                <div class="col-7">
+                  <h4 class="text-end">{{ requestService.name }}</h4>
+                  <div class="hstack justify-content-end text-end">
+                    <p>{{ this.requestService.firstName }} {{ this.requestService.lastName }}
+                      <fa-icon [icon]="faStar"></fa-icon>
+                      <fa-icon [icon]="faStar"></fa-icon>
+                      <fa-icon [icon]="faStar"></fa-icon>
+                      <fa-icon [icon]="faStar"></fa-icon>
+                      <fa-icon [icon]="faStarRegular"></fa-icon>
+                    </p>
+                  </div>
+                </div>
+                <div class="col-4">
+                  <h4>{{ requestService.price | currency: 'EUR':'symbol':'1.2-2':'de-DE' }}</h4>
+                  <p>Gesamt</p>
+                </div>
+              </div>
+              <div class="row justify-content-center mt-4">
+                <hr class="blueLine col-8">
+              </div>
+            </div>
+          </div>
+          <div class="row mt-4">
+            <div class="col-12 col-lg-4">
+              <div *ngFor="let cargo of cargoDataArray; let i = index">
+                <h5 class="textGreen mt-5">{{ i + 1 }}. Cargo</h5>
+                <div class="row">
+                  <div class="col-6">
+                    <p>Name des Cargos:</p>
+                  </div>
+                  <div class="col-6">
+                    <p class="fw-bold">{{ cargo.description }}</p>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-6">
+                    <p>maximales Gewicht:</p>
+                  </div>
+                  <div class="col-6">
+                    <p class="fw-bold">{{ cargo.weight }}kg</p>
+                  </div>
+                </div>
+                <div>
+                  <p>Maße des Cargo: <br>
+                    Länge: <span class="fw-bold">{{ cargo.length }}cm</span> /
+                    Breite: <span class="fw-bold">{{ cargo.width }}cm</span> /
+                    Höhe: <span class="fw-bold">{{ cargo.height }}cm</span>
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="col-12 col-lg-4">
+              <h5 class="textGreen mt-5">Allgemeine Informationen</h5>
+              <div class="row">
+                <div class="col-6">
+                  <p>Start des Trips:</p>
+                  <p>Startpunkt:</p>
+                  <p>Zielort:</p>
+                </div>
+                <div class="col-6">
+                  <p class="fw-bold">Um {{ this.requestService.time }} am
+                    {{ this.requestService.date?.day }}.{{ this.requestService.date?.month }}.{{ this.requestService.date?.year }}</p>
+                  <p class="fw-bold">{{ requestService.locations[0].zipCode }} {{ requestService.locations[0].city }}
+                    <br>
+                    {{ requestService.locations[0].country }}
+                  </p>
+                  <p class="fw-bold">{{ requestService.locations[1].zipCode }} {{ requestService.locations[1].city }}
+                    <br>
+                    {{ requestService.locations[1].country }}
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="col-12 col-lg-4">
+              <h5 class="textGreen mt-5">Zusatzinformationen</h5>
+              <div class="row">
+                <div class="col-6">
+                  <p>Raucher:</p>
+                  <p>Tiere:</p>
+                  <p>Atmosphäre:</p>
+                </div>
+                <div class="col-6">
+                  <p class="fw-bold">{{ requestService.smokingAllowed ? 'ja' : 'nein' }}</p>
+                  <p class="fw-bold">{{ requestService.animalsAllowed ? 'ja' : 'nein' }}</p>
+                  <p class="fw-bold">
+                    {{ requestService.info === 1 ? 'Nur Musik' : requestService.info === 2 ? 'Nur Reden' : 'Nach Wunsch' }}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="text-center mt-5">
+            <button class="btn customButton px-5" (click)="requestService.createRequest()">Gesuche erstellen</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

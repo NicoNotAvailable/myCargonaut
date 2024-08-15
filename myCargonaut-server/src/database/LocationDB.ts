@@ -2,8 +2,8 @@ import {
   Entity,
   Column,
   PrimaryGeneratedColumn,
-  OneToOne,
   OneToMany,
+  ManyToOne,
 } from 'typeorm';
 import { OfferTripDB } from './OfferTripDB';
 import { DriveDB } from './DriveDB';
@@ -13,7 +13,7 @@ export class LocationDB {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @OneToOne(() => DriveDB)
+  @ManyToOne(() => DriveDB, { onDelete: 'CASCADE' })
   drive: DriveDB;
 
   @Column()
@@ -28,9 +28,13 @@ export class LocationDB {
   @Column()
   city: string;
 
-  @OneToMany(() => OfferTripDB, (request) => request.startLocation)
+  @OneToMany(() => OfferTripDB, (request) => request.startLocation, {
+    cascade: true,
+  })
   startLocationRequests: Promise<OfferTripDB[]>;
 
-  @OneToMany(() => OfferTripDB, (request) => request.endLocation)
+  @OneToMany(() => OfferTripDB, (request) => request.endLocation, {
+    cascade: true,
+  })
   endLocationRequests: Promise<OfferTripDB[]>;
 }

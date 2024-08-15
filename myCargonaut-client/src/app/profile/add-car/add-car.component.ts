@@ -6,6 +6,7 @@ import { HttpClient } from "@angular/common/http";
 import { FormsModule } from "@angular/forms";
 import { NgClass, NgIf } from "@angular/common";
 import { response } from "express";
+import { Car } from "../Car";
 
 @Component({
   selector: "app-add-car",
@@ -62,35 +63,61 @@ export class AddCarComponent {
   }
 
   saveCar(form: any): void {
-    if (this.editingCar != 0) return;
     const carData = {
+      id: this.editingCar,
       name: this.model,
       weight: this.weight == null? 0 : this.weight,
       length: this.length == null ? 0 : this.length,
-      height: this.height == null? 0 : this.height,
+      height: this.height == null ? 0 : this.height,
       width: this.width == null ? 0 : this.width,
       seats: this.seats == null ? 0 : this.seats,
       hasAC: this.hasAc,
       hasTelevision: this.hasTv
     };
-    console.log(carData);
 
-    this.http.post("http://localhost:8000/vehicle/car", carData, { withCredentials: true }).subscribe(
+    if (this.editingCar != 0) {
+      this.http.put("http://localhost:8000/vehicle/updateCar/"+this.editingCar, carData, {withCredentials: true}).subscribe(
+        response => {
+          form.resetForm();
+          this.changeAddCarState();
+        },
+        error => {
+          console.error(error);
+          this.errorMessage = error.error.message || "Bitte überprüfen Sie die eingabe";
+          this.removeErrorMessage();
+        }
+      )
+    }
+    else {
+      this.http.post("http://localhost:8000/vehicle/car", carData, { withCredentials: true }).subscribe(
+        response => {
+          form.resetForm();
+          this.fetchCreatedCar();
+          this.enableImageUpload();
+        },
+        error => {
+          console.error(error);
+          this.errorMessage = error.error.message || "Bitte überprüfen Sie die Eingabe";
+          this.removeErrorMessage();
+        }
+      );
+    }
+  }
+
+  fetchCreatedCar(): void {
+    this.vehicleService.readCars().subscribe(
       response => {
-        form.resetForm();
-        this.changeAddCarState();
+        this.editingCar = response[response.length - 1].id;
       },
       error => {
         console.error(error);
-        this.errorMessage = error.error.message || "Bitte überprüfen Sie die eingabe";
-        this.removeErrorMessage();
       }
     );
   }
 
   changeSeatCount(num: any) {
     if (num < 1) {
-      this.errorMessage = "Dein Auto kann nicht weniger als einen Sitz haben wth you talking about";
+      this.errorMessage = "Wert muss mindestens 1 sein";
       this.removeErrorMessage();
       return;
     }
@@ -122,9 +149,9 @@ export class AddCarComponent {
       const formData: FormData = new FormData();
       formData.append("file", file);
 
-      this.http.post("http://localhost:8000/vehicle/carPicture", formData, { withCredentials: true }).subscribe(
+      this.http.post("http://localhost:8000/vehicle/carPicture/"+this.editingCar, formData, { withCredentials: true }).subscribe(
         response => {
-          this.uploadCarImgState = false;
+          this.enableImageUpload();
           this.changeAddCarState();
         },
         error => {

@@ -10,19 +10,21 @@ import {
   faSmoking,
   faStar
 } from "@fortawesome/free-solid-svg-icons";
-import { NgIf } from "@angular/common";
+import { NgForOf, NgIf } from '@angular/common';
+import { ActivatedRoute, Router } from "@angular/router";
 import { TrailerOverviewComponent } from "./trailer-overview/trailer-overview.component";
 import { HttpClient } from "@angular/common/http";
 import { DateUtils } from "../../../../utils/DateUtils";
 import { NgOptimizedImage } from "@angular/common";
 import { SessionService } from "../services/session.service";
 import { UserService } from "../services/user.service";
+import { ReviewReadComponent } from '../review/ReviewReadComponent/review-read.component';
 
 
 @Component({
   selector: "app-profile",
   standalone: true,
-  imports: [UserDescriptionComponent, AddCarComponent, AddTrailerComponent, CarOverviewComponent, FaIconComponent, NgOptimizedImage, TrailerOverviewComponent, NgIf],
+  imports: [UserDescriptionComponent, AddCarComponent, AddTrailerComponent, CarOverviewComponent, FaIconComponent, NgOptimizedImage, TrailerOverviewComponent, NgIf, ReviewReadComponent, NgForOf],
   templateUrl: "./profile.component.html",
   styleUrl: "./profile.component.css"
 })
@@ -57,17 +59,20 @@ export class ProfileComponent {
   fullName = computed(() => `${this.firstName()} ${this.lastName()}`);
   birthday: string = "";
   pathToImage: string = "empty.png";
+  profilePic: string = "";
+  rating: number = 0;
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private route: ActivatedRoute, private router: Router) {
   }
 
   ngOnInit(): void {
+
     this.sessionService.checkLoginNum().then(isLoggedIn => {
       isLoggedIn == -1 ? this.isLoggedIn = false : this.isLoggedIn = true;
       if (!this.isLoggedIn && typeof window !== undefined) {
-        window.location.href = "/";
+        window.location.href = "/login";
       } else {
-        this.readUser();
+        this.getProfile();
         setTimeout(()=>{
           this.loaded = true;
         }, 100);
@@ -75,8 +80,16 @@ export class ProfileComponent {
     });
   }
 
-  readUser(): void {
+  getProfile(): void {
+    const url: string = this.router.url;
+    if (url.includes('userProfile')) {
+      this.readOtherUser();
+    } else {
+      this.readOwnUser();
+    }
+  }
 
+  readOwnUser(): void {
     const prePath: string = "assets/";
 
     setTimeout(() => {
@@ -87,18 +100,40 @@ export class ProfileComponent {
     }, 200);
     this.userService.readUser().subscribe(
       response => {
-        console.log("Userdata read successfully", response);
         this.firstName.set(response.firstName);
         this.lastName.set(response.lastName);
         this.birthday = DateUtils.parseDate(response.birthday);
         const imagePath: string = response.profilePic;
+        this.profilePic = response.profilePic;
         this.pathToImage = imagePath === "empty.png" ? "assets/empty.png" : prePath.concat(imagePath);
         this.smoker = this.formatSmokeBool(response.isSmoker);
+        this.rating = response.rating;
       },
       error => {
-        console.error("There was an error!", error);
       }
     );
+  }
+
+  readOtherUser(): void {
+    const prePath: string = "assets/";
+    this.pathToImage = "";
+    let imagePath: string = "empty.png";
+    this.pathToImage = prePath.concat(imagePath);
+
+    let user;
+
+    this.userService.otherUser$.subscribe(otherUser => {
+      user = otherUser;
+    });
+
+    this.firstName.set(user!.firstName);
+    this.lastName.set(user!.lastName);
+    this.birthday = user!.birthyear.toString();
+    imagePath = user!.profilePic;
+    this.profilePic = user!.profilePic;
+    this.pathToImage = imagePath === "empty.png" ? "assets/empty.png" : prePath.concat(imagePath);
+    this.smoker = this.formatSmokeBool(user!.isSmoker);
+    this.rating = user!.rating;
   }
 
   formatSmokeBool(bool: boolean): string{
@@ -130,4 +165,10 @@ export class ProfileComponent {
     this.addTrailers = !this.addTrailers;
     this.viewTrailers = !this.viewTrailers;
   }
+
+  starFillSrc: string = './assets/star-fill.svg';
+  starEmptySrc: string = './assets/star.svg';
+  stars: number[] = [1, 2, 3, 4, 5];
+
+  protected readonly window = window;
 }

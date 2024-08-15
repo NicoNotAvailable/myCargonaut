@@ -1,0 +1,215 @@
+@if (this.offerBool) {
+  <div class="row">
+    <div class="col-2"></div>
+    <div class="col-8">
+      <div class="row">
+        <div class="col-2"></div>
+        <div class="col-3">
+          <p>Zwischenziele:</p>
+          <span class="fw-bold">
+            @if (offer?.locations!.length != 2) {
+              @for (location of offer?.locations; track $index) {
+                @if (location.stopNr != 1 && location.stopNr != 100) {
+                  <span class="highlightText">{{ location.zipCode }} {{ location.city }}</span>
+                  <p class="highlightText">{{ location.country }} </p>
+                }
+              }
+            } @else {
+              <br>
+              - keine
+            }
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="container m-lg-5">
+    <div class="row justify-content-center">
+      <div class="col-10 col-md-6 col-lg-6 my-5 p-5 field">
+        <div class="row ms-3 me-3 mb-4">
+          <div class="col-12 col-md-8 col-lg-2 text-start">
+            <span>Auto:</span>
+          </div>
+          <div class="col-12 col-md-8 col-lg-4 text-end fw-bold">
+            <span>{{ (carModel || "loading") }}</span>
+          </div>
+          <div class="col-3 text-start ">
+            <span>{{ offer?.trailerID !== undefined ? "Anhänger:" : "" }}</span>
+          </div>
+          <div class="col-3 text-end fw-bold">
+          </div>
+        </div>
+        <div class="row ms-3 me-3 mb-4">
+          <div class="col-12 col-md-8 col-lg-2 text-start">
+            <span>Maximales Gewicht:</span>
+          </div>
+          <div class="col-12 col-md-8 col-lg-4 text-end fw-bold">
+            <span>{{ (offer?.maxCWeight || "") }} kg</span>
+          </div>
+          <div class="col-3">
+          </div>
+          <div class="col-3 text-end fw-bold">
+            <span>{{ (offer?.maxTLength ? offer?.maxTLength + " kg" : "") }}</span>
+          </div>
+        </div>
+        <div class="row ms-3 me-3 mb-4">
+          <div class="col-12 col-md-8 col-lg-2 text-start font-weight-bold">
+            <span>Maximale Maße:</span>
+          </div>
+          <div class="col-12 col-md-8 col-lg-4 text-end fw-bold">
+            <span>{{ (offer?.maxCLength || "") }}cm / {{ (offer?.maxCWidth || "") }}cm / {{ (offer?.maxCHeight || "") }}
+              cm</span>
+          </div>
+          <div class="col-3">
+          </div>
+          <div class="col-3 text-end fw-bold">
+            <span>{{ (offer?.maxTLength ? offer?.maxTLength + "cm /" : "") }}
+              {{ (offer?.maxTWidth ? offer?.maxTWidth + "cm /" : "") }}
+              {{ (offer?.maxTHeight ? offer?.maxTHeight + "cm" : "") }}
+            </span>
+          </div>
+        </div>
+        <div class="row ms-3 me-3 mb-4">
+          <div class="col-12 col-md-8 col-lg-2 text-start">
+            <span>Verfügbare Sitzplätze:</span>
+          </div>
+          <div class="col-12 col-md-8 col-lg-4 text-end fw-bold">
+            <span>{{ (offer?.seats || "") }}</span>
+          </div>
+        </div>
+        <div class="row ms-3 me-3 mb-4">
+          <div class="col-12 col-md-8 col-lg-2 text-start">
+            <strong>{{ carTV ? "Fernseher," : "" }}</strong>
+            <strong>{{ carAC ? "Klimaanlage" : "keine Klimaanlage" }}</strong>
+          </div>
+          <div class="col-4"></div>
+          <div class="col-12 col-md-8 col-lg-4 text-start">
+            <strong>
+              @if (!trailerCool) {
+
+              }
+              @if (trailerCool == true) {
+                gekühlt
+              } @else if (trailerCool == false){
+                ungekühlt
+              }
+            </strong>
+          </div>
+        </div>
+        <div class="row ms-3 me-3 mb-4">
+          <div class="col-12 col-md-8 col-lg-4 text-start fw-bold">
+            <strong>{{ offer?.smokingAllowed ? "Rauchen ist erlaubt" : "Rauchen ist nicht erlaubt" }}</strong><br><br>
+            <strong>{{ offer?.animalsAllowed ? "Tiere sind erlaubt" : "Tiere sind nicht erlaubt" }}</strong>
+
+          </div>
+          <div class="col-12 col-md-8 col-lg-4">
+          </div>
+          <div class="col-3 text-start fw-bold">
+            <span>
+              @if (offer?.info == 1) {
+                gerne quatschen!
+              } @else if (offer?.info == 2) {
+                lieber nur Musik hören
+              } @else if (offer?.info == 3) {
+                ich passe mich gerne an!
+              }
+            </span>
+          </div>
+          <div class="col-3">
+          </div>
+        </div>
+
+        <div class="row justify-content-center">
+          <div class="col-12 col-md-8 col-lg-10 mt-5 mb-3 text-center">
+            <button type="submit" class="btn blueButton ps-5 pe-5" (click)="onSendRequestClick()">Jetzt Anfrage
+              schicken!
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+} @else if (requestBool) {
+  <div class="container m-lg-5">
+    <div class="row justify-content-center">
+      <div class="col-10 col-md-8 col-lg-10 my-5 p-4 field">
+        <div class="row ms-3 me-3 mb-4">
+          <div class="col-12 col-md-8 col-lg-4 text-start">
+            <span>Sitzplätze:</span>
+          </div>
+          <div class="col-12 col-md-8 col-lg -4 text-start fw-bold">
+            <span>{{ (request?.seats) }}</span>
+          </div>
+        </div>
+        <div class="row ms-3 me-3 mb-4">
+          <div class="col-12 col-md-8 col-lg-4 text-start fw-bold">
+            <strong>{{ request?.smokingAllowed ? "Ich würde gerne rauchen" : "ich bin Nichtraucher" }}</strong>
+          </div>
+          <div class="col-12 col-md-8 col-lg-3 text-start fw-bold">
+            <div class="d-flex justify-content-end">
+              <strong>{{ request?.animalsAllowed ? "Ich habe Tier(e) dabei" : "Ich habe keine Tiere dabei" }}</strong>
+            </div>
+          </div>
+          <div class="col-4 text-end fw-bold">
+            <span> @if (request?.info == 1) {
+              gerne quatschen!
+            } @else if (request?.info == 2) {
+              lieber nur Musik hören
+            } @else if (request?.info == 3) {
+              ich passe mich gerne an!
+            }</span>
+          </div>
+        </div>
+        @if (request?.cargo != undefined) {
+          <div class="row ms-3 me-3 mb-4 blueHeader fw-bold">
+            <span>Cargo</span>
+          </div>
+          @for (cargo of request?.cargo; track $index) {
+            <div class="col-10 col-md-8 col-lg-12 p-2 field">
+              <div class="row ms-1 me-3 mb-3 mt-2 fw-bold fs-5">
+                <span>{{ (cargo?.description || "") }}</span>
+              </div>
+              <div class="row ms-1 me-3 mb-4">
+                <div class="col-3">
+                  <span>Länge:</span>
+                </div>
+                <div class="col-3 fw-bold">
+                  <span>{{ (cargo?.length || "") }} cm </span>
+                </div>
+                <div class="col-3">
+                  <span>Gewicht:</span>
+                </div>
+                <div class="col-3 fw-bold">
+                  <span>{{ (cargo?.weight || "") }} kg</span>
+                </div>
+              </div>
+              <div class="row ms-1 me-3 mb-4">
+                <div class="col-3">
+                  <span>Breite</span>
+                </div>
+                <div class="col-3 fw-bold">
+                  <span>{{ (cargo?.width || "") }} cm</span>
+                </div>
+              </div>
+              <div class="row ms-1 me-3 mb-4">
+                <div class="col-3">
+                  <span>Höhe:</span>
+                </div>
+                <div class="col-3 fw-bold">
+                  <span>{{ (cargo?.height || "") }} cm</span>
+                </div>
+              </div>
+            </div>
+          }
+        }
+        <div class="row justify-content-center">
+          <div class="col-12 col-md-8 col-lg-10 mt-5 mb-3 text-center">
+            <button type="submit" class="btn blueButton ps-5 pe-5" (click)="onSendRequestClick()">Jetzt Anfrage
+              schicken!
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+}

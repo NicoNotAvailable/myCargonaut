@@ -1,5 +1,5 @@
 <div class="container mt-3 text-center" *ngIf="!deleteBoolean">
-  <div class="text-end col-12" *ngIf="editState">
+  <div class="text-end col-12" *ngIf="editState && !unchangable">
     <button type="button" class="btn btn-primary cancelButton text-center" id="cancelButton"
             (click)="changeEditState()">
       <i>
@@ -7,7 +7,7 @@
       </i>
     </button>
   </div>
-  <div class="text-end col-12" *ngIf="!editState">
+  <div class="text-end col-12" *ngIf="!editState && !unchangable">
     <button type="button" class="btn btn-primary editButton text-end" id="editButton" (click)="changeEditState()">
       <i>
         <fa-icon [icon]="faPenToSquare"></fa-icon>
@@ -30,7 +30,7 @@
             <textarea *ngIf="editState" [ngModelOptions]="{standalone: true}" [(ngModel)]="newProfileText" type="text"
                       class="border border-2 rounded-3 col-11 textareaSize mb-3"
                       id="selfNote"></textarea>
-            <div class="row mt-4">
+            <div class="row mt-4" *ngIf="!unchangable">
               <div class="col-5">
                 <button type="button"
                         class="btn border border-2 rounded-3 customButton text-center text-light p-2 ps-5 pe-5"
@@ -43,6 +43,18 @@
                         class="btn border border-2 rounded-3 customButton text-center text-light p-2 ps-5 pe-5"
                         id="trailer" (click)="changeViewTrailerState()"><h4>Deine Trailer</h4>
                 </button>
+              </div>
+              <div class="col-6 my-4" *ngIf="editState">
+                <span>Neuer Vorname</span>
+                  <input [(ngModel)]="newFirstname" [ngModelOptions]="{standalone: true}" type="text"
+                         placeholder="Neuer Vorname?" id="firstnameInput"
+                         class="form-control mb-3">
+              </div>
+              <div class="col-6 my-4" *ngIf="editState">
+                <span>Neuer Nachname (Gratuliere)</span>
+                  <input [(ngModel)]="newLastname" [ngModelOptions]="{standalone: true}" type="text"
+                         placeholder="Neuer Nachname (Gratulation)" id="lastnameInput"
+                         class="form-control mb-3">
               </div>
             </div>
           </div>
@@ -104,7 +116,7 @@
                 <p class="m-0" id="weight">{{ highestWeight }} Tonnen</p>
               </div>
             </div>
-            <div class="row">
+            <div class="row" *ngIf="!unchangable">
               <div class="col-5 border border-2 rounded-3 mt-4 pb-3" *ngIf="editState">
                 <i>
                   <fa-icon [icon]="faEnvelope"></fa-icon>
@@ -148,8 +160,8 @@
               <div class="col-5 my-4">
                 <p>Profilbild ändern</p>
                 <span class="d-flex justify-content-around text-start">
-                <button class="btn customButton" type="button">Hochladen</button>
-                <button class="btn customButton" type="button" id="deleteBtn">Löschen</button>
+                <button class="btn customButton" type="button" (click)="enableImgUpload()">Hochladen</button>
+                <input (change)="onFileChange($event)" *ngIf="imgUpload" type="file" required name="carImgInput" class="customButton"><br>
               </span>
               </div>
               <div class="col-5 my-4">

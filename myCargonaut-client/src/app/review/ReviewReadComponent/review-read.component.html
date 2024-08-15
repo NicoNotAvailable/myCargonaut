@@ -1,0 +1,40 @@
+<div class="container">
+  <div class="row " *ngFor="let review of reviewsArray">
+    <div class="col-lg-12 col-12">
+      <div class="card m-4">
+        <div class="row no-gutters flex-column flex-lg-row card-horizontal">
+          <div class="col-lg-12">
+            <div class="card-body">
+              <div class="headline">
+                <h5 class="card-title greenText">{{ review.writer.firstName }} {{ review.writer.lastName }}</h5>
+              </div>
+              <div class="col margin-vertical ">
+                <div class="stars" >
+                  <button class="star-button" *ngFor="let filled of getStarsArray(review.rating)">
+                    <fa-icon [icon]="filled ? faStar : faStarRegular" class="star-icon"></fa-icon>
+                  </button>
+                </div>
+                <!-- Display profile picture -->
+                <img *ngIf="review.writer.profilePic === 'empty.png'"
+                     class="profileCircle"
+                     src="assets/empty.png"
+                     alt="profile">
+
+                <img *ngIf="review.writer.profilePic !== 'empty.png'"
+                     [src]="window.location.protocol + '//' + window.location.host.replace('4200', '8000') + '/user/image/' + review.writer.profilePic"
+                     class="profileCircle"
+                     alt="profile picture">
+                <div [ngClass]="reviewContent" class=" ReviewText">
+                <p>{{ review.text }}</p>
+
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>

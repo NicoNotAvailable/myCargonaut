@@ -21,12 +21,14 @@
   color: #fff;
   border-radius: 20px;
 }
-
-
+.horizontal-center {
+  display: flex;
+  justify-content: center;
+}
 
 
 .custom-card {
-  width: 14rem;
+  width: 12em;
   border: none;
   overflow: hidden;
   border-radius: 15px;

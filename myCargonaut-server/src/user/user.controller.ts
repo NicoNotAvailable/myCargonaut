@@ -4,8 +4,11 @@ import {
   Controller,
   Get,
   Logger,
+  Param,
+  ParseIntPipe,
   Post,
   Put,
+  Res,
   Session,
   UploadedFile,
   UseGuards,
@@ -20,7 +23,7 @@ import {
 import { UserService } from './user.service';
 import { CreateUserDTO } from './DTO/CreateUserDTO';
 import { OkDTO } from '../serverDTO/OkDTO';
-import { extname } from 'path';
+import { extname, join } from 'path';
 import { diskStorage } from 'multer';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { EditPasswordDTO } from './DTO/EditPasswordDTO';
@@ -32,12 +35,20 @@ import * as validator from 'validator';
 import * as bcrypt from 'bcryptjs';
 import { GetOwnUserDTO } from './DTO/GetOwnUserDTO';
 import { UserDB } from '../database/UserDB';
-import { EditUserProfileDTO } from './DTO/EditUserProfileDTO';
+import { Response } from 'express';
+import { ReviewService } from '../review/review.service';
+import { GetOtherUserDTO } from './DTO/GetOtherUserDTO';
+import { UtilsService } from '../utils/utils.service';
 
 @ApiTags('user')
 @Controller('user')
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    public readonly userService: UserService,
+    public readonly utilsService: UtilsService,
+    public readonly reviewService: ReviewService,
+  ) {}
+
   private readonly logger = new Logger(UserController.name);
 
   private validateNonEmptyString(value: string, errorMessage: string): void {
@@ -60,38 +71,54 @@ export class UserController {
     const today = new Date();
     let age = today.getFullYear() - birthday.getFullYear();
     const monthDifference = today.getMonth() - birthday.getMonth();
-
     if (
       monthDifference < 0 ||
       (monthDifference === 0 && today.getDate() < birthday.getDate())
     ) {
       age--;
     }
-
     return age >= 18;
+  }
+
+  @ApiResponse({ type: GetOtherUserDTO, description: 'gets other user' })
+  @Get('/:id')
+  async getOtherUser(@Param('id', ParseIntPipe) id: number) {
+    let user: UserDB;
+    try {
+      user = await this.userService.getUserById(id);
+    } catch (err) {
+      console.error(err);
+    }
+    return this.utilsService.transformUserToGetOtherUserDTO(user);
   }
 
   @ApiResponse({ type: GetOwnUserDTO, description: 'gets the own user' })
   @Get()
   async getUser(@Session() session: SessionData): Promise<GetOwnUserDTO> {
     let user: UserDB;
+    let rating: number;
     try {
       user = await this.userService.getUserById(session.currentUser);
+      rating = await this.reviewService.getRating(session.currentUser);
     } catch (err) {
-      console.log(err);
+      console.error(err);
+      user = {} as UserDB;
+      rating = 0;
     }
     const dto: GetOwnUserDTO = new GetOwnUserDTO();
-    dto.lastName = user.lastName;
-    dto.firstName = user.firstName;
-    dto.email = user.email;
-    dto.profilePic = user.profilePic;
-    dto.phoneNumber = user.phoneNumber;
-    dto.birthday = user.birthday;
-    dto.isSmoker = user.isSmoker;
-    dto.profileText = user.profileText;
-    dto.languages = user.languages;
+    dto.lastName = user?.lastName || '';
+    dto.firstName = user?.firstName || '';
+    dto.email = user?.email || '';
+    dto.profilePic = user?.profilePic || '';
+    dto.phoneNumber = user?.phoneNumber || '';
+    dto.birthday = user?.birthday || new Date();
+    dto.isSmoker = user?.isSmoker || false;
+    dto.profileText = user?.profileText || '';
+    dto.languages = user?.languages || '';
+    dto.rating = rating;
     return dto;
   }
+
 
   @ApiResponse({ type: OkDTO, description: 'creates a new user' })
   @Post()
@@ -269,7 +296,7 @@ export class UserController {
     type: OkDTO,
     description: 'updates a specifics user details',
   })
-  @Put()
+  @Put('/profile')
   @ApiBearerAuth()
   @UseGuards(IsLoggedInGuard)
   async updateUser(
@@ -299,6 +326,10 @@ export class UserController {
       );
       user.lastName = body.lastName;
     }
+    if (body.languages !== '' || body.languages !== undefined) {
+      user.languages = body.languages;
+    }
+    if (body.isSmoker) user.isSmoker = body.isSmoker;
     if (body.profileText) user.profileText = body.profileText;
     try {
       await this.userService.updateUser(user);
@@ -308,38 +339,19 @@ export class UserController {
     }
   }
 
-  @ApiResponse({
-    type: OkDTO,
-    description: 'updates a specifics user with their profile details',
-  })
-  @Put('/profile')
-  @ApiBearerAuth()
-  @UseGuards(IsLoggedInGuard)
-  async updateUserProfile(
-    @Session() session: SessionData,
-    @Body() body: EditUserProfileDTO,
-  ): Promise<OkDTO> {
-    const id: number = session.currentUser;
-    const user: UserDB = await this.userService.getUserById(id);
-    console.log('der Nutzer: ' + user, ' Der body: ', body);
-    if (body.email.trim() !== '' || body.email !== undefined) {
-      user.email = body.email;
-    }
-    if (body.languages !== '' || body.languages !== undefined) {
-      user.languages = body.languages;
-    }
-    if (body.phoneNumber.trim() !== '' || body.phoneNumber !== undefined) {
-      user.phoneNumber = body.phoneNumber;
-    }
-    if (body.profileText.trim() !== '' || body.profileText !== undefined) {
-      user.profileText = body.profileText;
-    }
-    user.isSmoker = body.isSmoker;
+  @ApiResponse({ description: 'Fetches the image of a vehicle' })
+  @Get('image/:image')
+  async getImage(@Param('image') image: string, @Res() res: Response) {
     try {
-      await this.userService.updateUser(user);
-      return new OkDTO(true, 'User was updated');
+      const imgPath: string = join(
+        process.cwd(),
+        'uploads',
+        'profilePictures',
+        image,
+      );
+      res.sendFile(imgPath);
     } catch (err) {
-      throw err;
+      throw new BadRequestException(err);
     }
   }
 
@@ -369,3 +381,31 @@ export class UserController {
     }
   }
 }
+/*
+  @Get('/:id')
+  @ApiOperation({ summary: 'Get user by ID' })
+  @ApiParam({
+    name: 'id',
+    type: 'number',
+    description: 'The ID of the user to retrieve',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'The user has been successfully retrieved.',
+    type: UserDB,
+  })
+  @ApiResponse({ status: 404, description: 'User not found' })
+  async getUserById(@Param('id') id: number): Promise<UserDB> {
+    try {
+      const user = await this.userService.getUserById(id);
+      console.log(user);
+      return user;
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw new NotFoundException('User not found');
+      }
+      throw error;
+    }
+  }
+}
+*/

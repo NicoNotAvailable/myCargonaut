@@ -4,8 +4,14 @@
   color: ghostwhite;
 }
 
-html{
+.textGreen {
+  color: #005B52;
+}
+
+html, body {
   background-color: ghostwhite !important;
+  height: 100vh;
+  margin: 0;
   font-family: Roboto, sans-serif;
 }
 
@@ -43,7 +49,7 @@ html{
 }
 
 .add-fix {
-  width: 32px;
+  width: 32px !important;
 }
 
 .non-pointable {
@@ -56,4 +62,73 @@ html{
 
 .starRating{
   color: #1a9cc5;
+}
+
+/* notification style EXAMPLE */
+
+.notifications {
+  position: absolute;
+  top: 70px;
+  right: 20px;
+  z-index: 1000;
+}
+
+.notification {
+  background-color: #005B52;
+  box-shadow: 0 0 20px ghostwhite;
+  color: ghostwhite;
+  font-weight: bold;
+  border-radius: 15px;
+  transition: all 0.5s ease;
+  padding: 10px 5px;
+}
+
+.notification:hover {
+  cursor: pointer;
+  box-shadow: 0 0 20px #1a9cc5;
+}
+
+
+.backgroundGreen {
+  background-color: #005B52;
+  border-radius: 2rem;
+  transition: all 0.4s ease;
+}
+.backgroundGreen:hover{
+  box-shadow: #005B52 0 0 20px;
+}
+
+.editButton:hover {
+  text-decoration: underline;
+  color: #ffffff;
+  box-shadow: #1a9cc5 0 0 20px;
+  text-shadow: ghostwhite 0 0 10px;
+}
+
+.editButton, .deleteButton{
+  position: relative;
+  z-index: 2;
+  font-size: 1rem;
+  border-radius: 5rem;
+  border-color: transparent;
+  transition: all 0.3s ease;
+}
+
+.deleteButton:hover {
+  box-shadow: #dc3545 0 0 20px;
+  text-shadow: ghostwhite 0 0 10px;
+}
+
+.editButton {
+  background-color: #1A9CC5;
+}
+
+.deleteButton{
+  background-color: #dc3545;
+}
+
+
+.blueLine {
+  border: 2px solid #1a9cc5;
+  opacity: 100%;
 }
