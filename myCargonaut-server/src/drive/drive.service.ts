@@ -516,32 +516,33 @@ export class DriveService {
     drives: DriveDB[],
     sortOrder: SortingEnum,
   ): Promise<any[]> {
+    const order = Number(sortOrder);
     const drivesWithRatings = await Promise.all(
       drives.map(async (drive) => {
-        const rating = await this.reviewService.getRating(drive.user.id);
+        const rating =
+          (await this.reviewService.getRating(drive.user.id)) ?? -1;
         return { drive, rating };
       }),
     );
     drivesWithRatings.sort((a, b) => {
-      switch (sortOrder) {
-        case SortingEnum.timeAsc:
-          return (
-            new Date(a.drive.timestamp).getTime() -
-            new Date(b.drive.timestamp).getTime()
-          );
-        case SortingEnum.timeDesc:
-          return (
-            new Date(b.drive.timestamp).getTime() -
-            new Date(a.drive.timestamp).getTime()
-          );
-        case SortingEnum.ratingAsc:
-          return a.rating - b.rating;
-        case SortingEnum.ratingDesc:
-          return b.rating - a.rating;
-        case SortingEnum.priceAsc:
-          return a.drive.price - b.drive.price;
-        case SortingEnum.priceDesc:
-          return b.drive.price - a.drive.price;
+      if (order === 0) {
+        return (
+          new Date(a.drive.timestamp).getTime() -
+          new Date(b.drive.timestamp).getTime()
+        );
+      } else if (order === 1) {
+        return (
+          new Date(b.drive.timestamp).getTime() -
+          new Date(a.drive.timestamp).getTime()
+        );
+      } else if (order === 2) {
+        return a.rating - b.rating;
+      } else if (order === 3) {
+        return b.rating - a.rating;
+      } else if (order === 4) {
+        return a.drive.price - b.drive.price;
+      } else if (order === 5) {
+        return b.drive.price - a.drive.price;
       }
     });
     return drivesWithRatings.map((item) => item.drive);
