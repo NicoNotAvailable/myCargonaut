@@ -117,10 +117,22 @@ export class NavbarComponent {
 
     this.socketService.on('message').subscribe((message: any) => {
       if (!window.location.href.includes('/chats')) {
-        this.notificationService.showNotification(`Du hast eine neue Nachricht: "${message.message}"`);
+        this.notificationService.showNotification(
+          `Du hast eine neue Nachricht: "${message.message}"`,
+          '/chats',
+          { tripId: message.trip.id }
+        );
       }
     });
   }
   protected readonly faTags = faTags;
   protected readonly faSearchDollar = faSearchDollar;
+
+  closeNotification(index: number): void {
+    this.notificationService.removeNotification(index);
+  }
+
+  navigate(link: string): void {
+    this.notificationService.navigateTo(link);
+  }
 }

@@ -52,7 +52,12 @@ export class ChatComponent implements OnInit {
       }, 200);
 
       this.route.queryParams.subscribe(params => {
-        this.selectRoom('trip_'+params['tripId']);
+        const tripId = params['tripId'];
+        if (tripId) {
+          this.selectRoom('trip_' + tripId);
+        } else {
+          this.room = undefined;
+        }
       });
 
     });
@@ -194,6 +199,19 @@ export class ChatComponent implements OnInit {
       }
     });
   }
+
+  hasUnreadMessages(room: string): boolean {
+    if (!this.messages[room]) return false;
+
+    return this.messages[room].some(message => !message.read && message.writer.id !== this.userId);
+  }
+
+  getUnreadMessageCount(room: string): number {
+    if (!this.messages[room]) return 0;
+
+    return this.messages[room].filter(message => !message.read && message.writer.id !== this.userId).length;
+  }
+
 
   getMessageClasses(message: Message): string {
     if (message.writer?.id !== this.userId) {
