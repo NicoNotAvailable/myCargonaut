@@ -100,6 +100,7 @@
     <div *ngFor="let notification of notificationService.getNotifications(); let i = index" class="notification">
       <p>{{ notification.message }}</p>
       <div class="notification-actions">
+        <!-- Only show the button if there's a link -->
         <button *ngIf="notification.link" (click)="navigate(notification.link)" class="notButton customButton">Zur Seite</button>
         <button (click)="closeNotification(i)" class="deleteButton customButton">X</button>
       </div>

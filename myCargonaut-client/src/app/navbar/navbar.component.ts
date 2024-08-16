@@ -119,7 +119,8 @@ export class NavbarComponent {
       if (!window.location.href.includes('/chats')) {
         this.notificationService.showNotification(
           `Du hast eine neue Nachricht: "${message.message}"`,
-          '/chats'
+          '/chats',
+          { tripId: message.trip.id }
         );
       }
     });

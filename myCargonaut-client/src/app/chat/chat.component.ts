@@ -195,6 +195,19 @@ export class ChatComponent implements OnInit {
     });
   }
 
+  hasUnreadMessages(room: string): boolean {
+    if (!this.messages[room]) return false;
+
+    return this.messages[room].some(message => !message.read && message.writer.id !== this.userId);
+  }
+
+  getUnreadMessageCount(room: string): number {
+    if (!this.messages[room]) return 0;
+
+    return this.messages[room].filter(message => !message.read && message.writer.id !== this.userId).length;
+  }
+
+
   getMessageClasses(message: Message): string {
     if (message.writer?.id !== this.userId) {
       return 'message-left';

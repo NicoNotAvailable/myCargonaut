@@ -1,4 +1,4 @@
-<div class="container" xmlns="http://www.w3.org/1999/html">
+<div class="container">
   <div class="row m-5">
     <div class="col-12 my-auto">
       <div class="row text-center">
@@ -14,7 +14,7 @@
           <ng-template #chatList>
             <div>
               <div *ngFor="let room of rooms" class="trip-card">
-                <div class="row card justify-content-start" (click)="selectRoom(room)">
+                <div class="row card userCards justify-content-start position-relative" (click)="selectRoom(room)">
                   <div class="profile-container col-12 align-items-center">
                     <img *ngIf="trips[room].user.profilePic"
                          [src]="getProfilePicUrl(trips[room].user.profilePic)"
@@ -29,13 +29,19 @@
                       <div class="card-body">
                         <h5 class="card-title">{{ trips[room]?.drive?.name || '' }}</h5>
                         <p class="card-text">{{ formatDate(trips[room]?.drive?.date || '') }}</p>
-                        @if (trips[room]?.drive?.status >= 1) {
+                        <ng-container *ngIf="trips[room]?.drive?.status >= 1">
                           <span class="card-text">
                             <fa-icon [icon]="faPhone"></fa-icon>{{ trips[room]?.requesting?.phoneNumber }}
                           </span>
-                        }
+                        </ng-container>
                       </div>
                     </div>
+                    <!-- Blue dot for unread messages -->
+                    <ng-container *ngIf="hasUnreadMessages(room)">
+                      <div class="blue-dot">
+                        <span class="dot-number">{{ getUnreadMessageCount(room) }}</span>
+                      </div>
+                    </ng-container>
                   </div>
                 </div>
               </div>
@@ -45,9 +51,10 @@
         <div class="col-1 line">
           <span class="vl"></span>
         </div>
-        <div class="chat-window col-5 ">
+        <div class="chat-window col-5">
           <div *ngIf="room" class="chat-card">
-            <div class="card messages" #messagesContainer>
+            <!-- Chat content -->
+            <div class="messages card" #messagesContainer>
               <div *ngFor="let message of messages[room]" [ngClass]="['message', getMessageClasses(message)]">
                 {{ message.message }}
               </div>
@@ -57,7 +64,7 @@
               <button class="customButton chat-send-button" (click)="sendMessage(message)">Senden</button>
             </div>
           </div>
-          <div *ngIf="!room">
+          <div *ngIf="!room" class="select-chat-message">
             <p>Wähle einen Chat aus, um zu schreiben!</p>
           </div>
         </div>
