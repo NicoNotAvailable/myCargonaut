@@ -1,30 +1,44 @@
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
+
+interface Notification {
+  message: string;
+  link?: string;
+}
 
 @Injectable({
   providedIn: 'root'
 })
 export class NotificationService {
-  private notifications: string[] = [];
+  private notifications: Notification[] = [];
   private maxNotifications = 1;
 
-  constructor() { }
+  constructor(private router: Router) { }
 
-  showNotification(message: string): void {
+  showNotification(message: string, link?: string): void {
     if (this.notifications.length >= this.maxNotifications) {
       this.notifications.shift(); // Remove oldest notification if max limit reached
     }
-    this.notifications.push(message);
+    this.notifications.push({ message, link });
 
     setTimeout(() => {
       this.notifications.shift();
-    }, 5000);
+    }, 10000); // 10 seconds
   }
 
-  getNotifications(): string[] {
+  getNotifications(): Notification[] {
     return this.notifications;
   }
 
   clearNotifications(): void {
     this.notifications = [];
+  }
+
+  removeNotification(index: number): void {
+    this.notifications.splice(index, 1);
+  }
+
+  navigateTo(link: string): void {
+    this.router.navigate([link]);
   }
 }
