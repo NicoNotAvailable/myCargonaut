@@ -52,7 +52,12 @@ export class ChatComponent implements OnInit {
       }, 200);
 
       this.route.queryParams.subscribe(params => {
-        this.selectRoom('trip_'+params['tripId']);
+        const tripId = params['tripId'];
+        if (tripId) {
+          this.selectRoom('trip_' + tripId);
+        } else {
+          this.room = undefined;
+        }
       });
 
     });
