@@ -22,6 +22,7 @@ Dies ist das README-Dokument für das KMS-Projekt, das im Rahmen der Prüfungsle
     - Nach Angebot
     - Nach Gesuch
     - Von/Bis, Datum, Fracht (Gewicht/Maße), Nach Bewertung, Anzahl verfügbare Plätze
+    - sortieren nach Preis, Bewertung und Datum
 
 
 - Profilansicht:
