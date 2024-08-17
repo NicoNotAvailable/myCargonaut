@@ -7,11 +7,13 @@ import { ActivatedRoute } from "@angular/router";
 import { HttpClient } from "@angular/common/http";
 import { Message } from './message.interface';
 import { tr } from "@faker-js/faker";
+import {FaIconComponent} from "@fortawesome/angular-fontawesome";
+import {faPhone} from "@fortawesome/free-solid-svg-icons";
 
 @Component({
   selector: 'app-chat',
   standalone: true,
-  imports: [CommonModule, FormsModule, NgOptimizedImage],
+  imports: [CommonModule, FormsModule, NgOptimizedImage, FaIconComponent],
   templateUrl: './chat.component.html',
   styleUrl: './chat.component.css'
 })
@@ -50,7 +52,12 @@ export class ChatComponent implements OnInit {
       }, 200);
 
       this.route.queryParams.subscribe(params => {
-        this.selectRoom('trip_'+params['tripId']);
+        const tripId = params['tripId'];
+        if (tripId) {
+          this.selectRoom('trip_' + tripId);
+        } else {
+          this.room = undefined;
+        }
       });
 
     });
@@ -193,6 +200,19 @@ export class ChatComponent implements OnInit {
     });
   }
 
+  hasUnreadMessages(room: string): boolean {
+    if (!this.messages[room]) return false;
+
+    return this.messages[room].some(message => !message.read && message.writer.id !== this.userId);
+  }
+
+  getUnreadMessageCount(room: string): number {
+    if (!this.messages[room]) return 0;
+
+    return this.messages[room].filter(message => !message.read && message.writer.id !== this.userId).length;
+  }
+
+
   getMessageClasses(message: Message): string {
     if (message.writer?.id !== this.userId) {
       return 'message-left';
@@ -238,4 +258,5 @@ export class ChatComponent implements OnInit {
   }
 
   protected readonly window = window;
+  protected readonly faPhone = faPhone;
 }

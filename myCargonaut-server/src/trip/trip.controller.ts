@@ -90,7 +90,7 @@ export class TripController {
         startLocation,
         endLocation,
       );
-      new OkDTO(true, 'Request for the offer was created');
+      return new OkDTO(true, 'Request for the offer was created');
     } catch (err) {
       throw new BadRequestException('An error occurred: ' + err.message);
     }

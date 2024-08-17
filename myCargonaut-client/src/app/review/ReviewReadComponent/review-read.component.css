@@ -111,6 +111,8 @@
   margin: 1rem;
   border-radius: 50%;
   box-shadow: 0 10px 0 #005B52;
+  object-fit: cover; /* Crops the image to fit the container */
+  object-position: center; /* Centers the image */
 }
 
 

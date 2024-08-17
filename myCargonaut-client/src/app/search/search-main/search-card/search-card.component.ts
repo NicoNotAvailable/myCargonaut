@@ -7,10 +7,6 @@ import {request} from "../../requests"
 
 import {DateFormatPipe} from "../../date-format.pipe";
 import {CurrencyPipe, NgForOf, NgIf, NgOptimizedImage} from "@angular/common";
-import {LOCALE_ID} from '@angular/core';
-import {registerLocaleData} from '@angular/common';
-import localeDe from '@angular/common/locales/de';
-import localeDeExtra from '@angular/common/locales/extra/de';
 
 
 @Component({
@@ -39,8 +35,8 @@ export class SearchCardComponent {
   bewertungsDummy : number = 4;
   stars: number[] = [1, 2, 3, 4, 5];
 
-  @Input() allOffers!: offer[];
-  @Input() allRequests!: request[];
+  @Input() allOffers!: any;
+  @Input() allRequests!: any;
   @Input() gewichte!: number[];
   @Input() masse!: number[];
   @Input() requestBool!: boolean;

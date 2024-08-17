@@ -5,7 +5,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, SelectQueryBuilder } from 'typeorm';
 import { DriveDB, OfferDB, RequestDB } from '../database/DriveDB';
 import { UserDB } from '../database/UserDB';
 import { CreateOfferDTO } from './DTO/CreateOfferDTO';
@@ -18,6 +18,9 @@ import { LocationDB } from '../database/LocationDB';
 import { CreateLocationDTO } from '../location/DTO/CreateLocationDTO';
 import { StatusEnum } from '../database/enums/StatusEnum';
 import { ChangeStatusDTO } from './DTO/ChangeStatusDTO';
+import { FilterDTO } from './DTO/FilterDTO';
+import { ReviewService } from '../review/review.service';
+import { SortingEnum } from '../database/enums/SortingEnum';
 
 @Injectable()
 export class DriveService {
@@ -32,6 +35,7 @@ export class DriveService {
     private cargoRepository: Repository<CargoDB>,
     @InjectRepository(LocationDB)
     private locationRepository: Repository<LocationDB>,
+    private readonly reviewService: ReviewService,
   ) {}
 
   async createOffer(
@@ -149,19 +153,46 @@ export class DriveService {
     }
     return drive;
   }
-  async getAllOffers(user?: UserDB): Promise<OfferDB[]> {
-    const offers = await this.offerRepository.find({
-      relations: ['user', 'car', 'trailer', 'location'],
-    });
-    if (!offers) {
-      throw new NotFoundException('Offers not found');
-    }
+  async getAllOffers(user?: UserDB, filters?: FilterDTO): Promise<OfferDB[]> {
+    const queryBuilder = this.offerRepository
+      .createQueryBuilder('offer')
+      .leftJoinAndSelect('offer.user', 'user')
+      .leftJoinAndSelect('offer.car', 'car')
+      .leftJoinAndSelect('offer.trailer', 'trailer')
+      .leftJoinAndSelect('offer.location', 'location');
+
+    queryBuilder.andWhere('offer.status = 0');
+
     if (user) {
-      return offers.filter((offer) => offer.user.id !== user.id);
+      queryBuilder.andWhere('offer.user.id != :userId', { userId: user.id });
+    }
+    if (filters?.date) {
+      queryBuilder.andWhere('DATE(offer.date) = DATE(:date)', {
+        date: filters.date,
+      });
+    }
+    let offers = await queryBuilder.getMany();
+
+    offers = await this.filterByRating(offers, filters?.minRating);
+
+    offers = await this.applyOfferLocationFilters(
+      offers,
+      filters?.startLocation,
+      filters?.endLocation,
+    );
+
+    offers = await this.applyOfferSizeFilters(offers, filters);
+
+    if (filters?.sort) {
+      offers = await this.sortOrder(offers, filters.sort);
     }
 
+    if (offers.length == 0) {
+      throw new NotFoundException('no matching offers found');
+    }
     return offers;
   }
+
   async getOwnOffers(user: number): Promise<OfferDB[]> {
     const offers = await this.offerRepository.find({
       where: { user: { id: user } },
@@ -172,18 +203,57 @@ export class DriveService {
     }
     return offers;
   }
-  async getAllRequests(user?: UserDB): Promise<RequestDB[]> {
-    const requests = await this.requestRepository.find({
-      relations: ['user', 'cargo', 'location'],
-    });
-    if (!requests) {
-      throw new NotFoundException('Requests not found');
-    }
+
+  async getAllRequests(
+    user?: UserDB,
+    filters?: FilterDTO,
+  ): Promise<RequestDB[]> {
+    const queryBuilder = this.requestRepository
+      .createQueryBuilder('request')
+      .leftJoinAndSelect('request.user', 'user')
+      .leftJoinAndSelect('request.cargo', 'cargo')
+      .leftJoinAndSelect('request.location', 'locations');
+
+    queryBuilder.andWhere('request.status = 0');
+
     if (user) {
-      return requests.filter((request) => request.user.id !== user.id);
+      queryBuilder.andWhere('request.user.id != :userId', { userId: user.id });
     }
-    return requests;
+
+    if (filters?.date) {
+      queryBuilder.andWhere('DATE(request.date) = DATE(:date)', {
+        date: filters.date,
+      });
+    }
+
+    this.applyReqLocationFilters(
+      queryBuilder,
+      filters?.startLocation,
+      filters?.endLocation,
+    );
+
+    const drives = await queryBuilder.getMany();
+
+    let filteredDrives: RequestDB[] = await this.filterByRating(
+      drives,
+      filters?.minRating,
+    );
+
+    filteredDrives = await this.applyRequestSizeFilters(
+      filteredDrives,
+      filters,
+    );
+
+    if (filters?.sort) {
+      filteredDrives = await this.sortOrder(filteredDrives, filters.sort);
+    }
+
+    if (!drives.length) {
+      throw new NotFoundException('no matching requests found');
+    }
+    return filteredDrives;
   }
+
   async getOwnRequests(user: number): Promise<RequestDB[]> {
     const requests = await this.requestRepository.find({
       where: { user: { id: user } },
@@ -284,5 +354,206 @@ export class DriveService {
       );
     }
     await this.driveRepository.remove(drive);
+  }
+
+  private applyReqLocationFilters(
+    queryBuilder: SelectQueryBuilder<RequestDB>,
+    startLocation?: string,
+    endLocation?: string,
+  ) {
+    if (startLocation) {
+      queryBuilder.andWhere(
+        'locations.stopNr = 1 AND locations.city LIKE :startLocation',
+        { startLocation: `%${startLocation}%` },
+      );
+    }
+
+    if (endLocation) {
+      queryBuilder.andWhere(
+        'locations.stopNr = 100 AND locations.city LIKE :endLocation',
+        { endLocation: `%${endLocation}%` },
+      );
+    }
+  }
+
+  private async applyOfferLocationFilters(
+    offers: OfferDB[],
+    startLocation?: string,
+    endLocation?: string,
+  ): Promise<OfferDB[]> {
+    const filteredOffers: OfferDB[] = [];
+
+    for (const offer of offers) {
+      const locations = await offer.location;
+
+      let isValid = true;
+
+      if (startLocation && endLocation) {
+        const location1 = locations.find(
+          (loc) => loc.city.includes(startLocation) && loc.stopNr !== 100,
+        );
+        const hasValidEndLocation =
+          location1 &&
+          locations.some(
+            (loc) =>
+              loc.city.includes(endLocation) && loc.stopNr > location1.stopNr,
+          );
+
+        isValid = !!location1 && hasValidEndLocation;
+      } else if (startLocation) {
+        isValid = locations.some(
+          (loc) => loc.city.includes(startLocation) && loc.stopNr !== 100,
+        );
+      } else if (endLocation) {
+        isValid = locations.some(
+          (loc) => loc.city.includes(endLocation) && loc.stopNr !== 1,
+        );
+      }
+      if (isValid) {
+        filteredOffers.push(offer);
+      }
+    }
+    return filteredOffers;
+  }
+
+  private async applyOfferSizeFilters(
+    offers: OfferDB[],
+    filters?: FilterDTO,
+  ): Promise<OfferDB[]> {
+    if (!filters) return offers;
+
+    return offers.filter((offer: OfferDB) => {
+      let isValid: boolean = true;
+
+      if (filters.seats && offer.seats < filters.seats) {
+        isValid = false;
+      }
+      if (
+        filters.weight &&
+        offer.maxCWeight < filters.weight &&
+        (!offer.trailer || offer.maxTWeight < filters.weight)
+      ) {
+        isValid = false;
+      }
+      if (
+        filters.height &&
+        offer.maxCHeight < filters.height &&
+        (!offer.trailer || offer.maxTHeight < filters.height)
+      ) {
+        isValid = false;
+      }
+      if (
+        filters.length &&
+        offer.maxCLength < filters.length &&
+        (!offer.trailer || offer.maxTLength < filters.length)
+      ) {
+        isValid = false;
+      }
+      if (
+        filters.width &&
+        offer.maxCWidth < filters.width &&
+        (!offer.trailer || offer.maxTWidth < filters.width)
+      ) {
+        isValid = false;
+      }
+      return isValid;
+    });
+  }
+
+  private async applyRequestSizeFilters(
+    requests: RequestDB[],
+    filters?: FilterDTO,
+  ): Promise<RequestDB[]> {
+    if (!filters) return requests;
+
+    const filteredRequests: RequestDB[] = [];
+
+    for (const request of requests) {
+      const cargos = await request.cargo;
+
+      const weight = cargos.reduce((sum, cargo) => sum + cargo.weight, 0);
+      const maxHeight = Math.max(...cargos.map((cargo) => cargo.height), 0);
+      const maxLength = Math.max(...cargos.map((cargo) => cargo.length), 0);
+      const maxWidth = Math.max(...cargos.map((cargo) => cargo.width), 0);
+
+      let isValid = true;
+
+      if (filters.seats && request.seats > filters.seats) {
+        isValid = false;
+      }
+
+      if (filters.weight && weight > filters.weight) {
+        isValid = false;
+      }
+
+      if (filters.height && maxHeight > filters.height) {
+        isValid = false;
+      }
+
+      if (filters.length && maxLength > filters.length) {
+        isValid = false;
+      }
+
+      if (filters.width && maxWidth > filters.width) {
+        isValid = false;
+      }
+
+      if (isValid) {
+        filteredRequests.push(request);
+      }
+    }
+    return filteredRequests;
+  }
+
+  private async filterByRating(
+    drives: any[],
+    minRating?: number,
+  ): Promise<any[]> {
+    if (!minRating) return drives;
+
+    const filteredDrives = [];
+    for (const drive of drives) {
+      const rating = await this.reviewService.getRating(drive.user.id);
+      if (rating >= minRating) {
+        filteredDrives.push(drive);
+      }
+    }
+    return filteredDrives;
+  }
+
+  private async sortOrder(
+    drives: DriveDB[],
+    sortOrder: SortingEnum,
+  ): Promise<any[]> {
+    const order: number = Number(sortOrder);
+    const drivesWithRatings = await Promise.all(
+      drives.map(async (drive) => {
+        const rating =
+          (await this.reviewService.getRating(drive.user.id)) ?? -1;
+        return { drive, rating };
+      }),
+    );
+    drivesWithRatings.sort((a, b) => {
+      if (order === 0) {
+        return (
+          new Date(b.drive.timestamp).getTime() -
+          new Date(a.drive.timestamp).getTime()
+        );
+      } else if (order === 1) {
+        return (
+          new Date(a.drive.timestamp).getTime() -
+          new Date(b.drive.timestamp).getTime()
+        );
+      } else if (order === 2) {
+        return a.rating - b.rating;
+      } else if (order === 3) {
+        return b.rating - a.rating;
+      } else if (order === 4) {
+        return a.drive.price - b.drive.price;
+      } else if (order === 5) {
+        return b.drive.price - a.drive.price;
+      }
+    });
+    return drivesWithRatings.map((item) => item.drive);
   }
 }

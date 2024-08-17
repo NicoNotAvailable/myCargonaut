@@ -74,18 +74,36 @@ html, body {
 }
 
 .notification {
-  background-color: #005B52;
+  background-color: #1a9cc5;
   box-shadow: 0 0 20px ghostwhite;
-  color: ghostwhite;
+  color: white;
   font-weight: bold;
   border-radius: 15px;
   transition: all 0.5s ease;
-  padding: 10px 5px;
+  padding: 10px 15px;
+  margin-bottom: 10px;
 }
 
 .notification:hover {
   cursor: pointer;
   box-shadow: 0 0 20px #1a9cc5;
+}
+
+.notification-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.notButton {
+  background-color: #005B52;
+  color: ghostwhite;
+  position: relative;
+  z-index: 2;
+  font-size: 1rem;
+  border-radius: 5rem;
+  border-color: transparent;
+  transition: all 0.3s ease;
 }
 
 

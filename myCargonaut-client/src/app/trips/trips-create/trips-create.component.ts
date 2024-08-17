@@ -33,6 +33,8 @@ export class TripsCreateComponent implements OnInit {
   public requestService: RequestService = inject(RequestService);
   public tripsService: TripsService = inject(TripsService);
 
+  editedCargo: number = -1;
+
   offerBool: boolean = true;
   requestBool: boolean = false;
   private cargoModalRef: NgbModalRef | undefined;
@@ -42,6 +44,8 @@ export class TripsCreateComponent implements OnInit {
   cargoWidth: number | null = null;
   cargoHeight: number | null = null;
   cargoWeight: number | null = null;
+
+  editModeText: string = "hinzufügen";
 
   cars: Car[] = [];
   trailers: Trailer[] = [];
@@ -85,22 +89,67 @@ export class TripsCreateComponent implements OnInit {
     this.cargoModalRef = this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'});
   }
 
+  addCargoClicked(content: TemplateRef<any>) {
+    this.cargoDescription = null
+    this.cargoWeight = null
+    this.cargoLength = null
+    this.cargoWidth = null
+    this.cargoHeight = null
+
+    this.editedCargo = -1;
+
+    this.editModeText = "hinzufügen";
+
+    this.openCargoModal(content);
+  }
+
+  editCargoClicked(content: TemplateRef<any>,  index: number) {
+    this.cargoDescription = this.requestService.cargos[index].description;
+    this.cargoWeight = this.requestService.cargos[index].weight;
+    this.cargoLength = this.requestService.cargos[index].length;
+    this.cargoWidth = this.requestService.cargos[index].width;
+    this.cargoHeight = this.requestService.cargos[index].height;
+
+    this.editedCargo = index;
+    this.editModeText = "bearbeiten";
+
+    this.openCargoModal(content);
+  }
+
   addCargoToArray() {
     if (this.cargoDescription != null && this.cargoWeight != null &&
       this.cargoLength != null && this.cargoWidth != null &&
       this.cargoHeight != null) {
-      const newCargo = new Cargo(this.cargoDescription, this.cargoWeight, this.cargoLength, this.cargoWidth, this.cargoHeight);
-      this.requestService.addCargo(newCargo);
+      if (this.editedCargo < 0) {
+        const newCargo = new Cargo(this.cargoDescription, this.cargoWeight, this.cargoLength, this.cargoWidth, this.cargoHeight);
+        this.requestService.addCargo(newCargo);
 
-      this.cargoDescription = null;
-      this.cargoWeight = null;
-      this.cargoLength = null;
-      this.cargoWidth = null;
-      this.cargoHeight = null;
+        this.cargoDescription = null;
+        this.cargoWeight = null;
+        this.cargoLength = null;
+        this.cargoWidth = null;
+        this.cargoHeight = null;
+
+      } else if (this.editedCargo >= 0) {
+        this.editCargo();
+        this.editedCargo = -1;
+      }
     }
 
     if (this.cargoModalRef) {
       this.cargoModalRef.close();
+    }
+  }
+
+  editCargo() {
+    if (this.cargoDescription != null && this.cargoWeight != null &&
+      this.cargoLength != null && this.cargoWidth != null &&
+      this.cargoHeight != null) {
+      this.requestService.cargos[this.editedCargo].description = this.cargoDescription;
+      this.requestService.cargos[this.editedCargo].weight = this.cargoWeight;
+      this.requestService.cargos[this.editedCargo].length = this.cargoLength;
+      this.requestService.cargos[this.editedCargo].width = this.cargoWidth;
+      this.requestService.cargos[this.editedCargo].height = this.cargoHeight;
     }
   }
 
