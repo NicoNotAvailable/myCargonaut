@@ -42,29 +42,27 @@ export class PaymentService {
           this.priceType = response.priceType
           this.seats = response.seats;
           this.price = response.price;
-        },
-        (error: { error: { message: string; }; }) => {
-          console.error('Fehler beim Abrufen der Angebote:', error);
-        }
-      );
 
-    this.http.get(`http://localhost:8000/trip/offer/offerTrips/${this.id}`, {withCredentials: true})
-      .subscribe(
-        (response: any) => {
+          this.http.get(`http://localhost:8000/trip/offer/offerTrips/${this.id}`, {withCredentials: true})
+            .subscribe(
+              (response: any) => {
+                if (this.priceType == 1) {  //cost for whole trip
+                  this.totalPrice = this.price! + this.servicePrice;
+                } else if (this.priceType == 2) { //cost per person
+                  this.totalPrice = this.price! * this.seats! + this.servicePrice;
+                } else if (this.priceType == 3) { //cost per kg weight
+                  for (const element of response[0].cargo) {
+                    this.totalWeight += element.weight;
+                  }
+                  this.totalPrice = this.price! * this.totalWeight! + this.servicePrice;
+                  this.totalWeight = parseFloat(this.totalWeight!.toFixed(2));
+                }
 
-
-          if (this.priceType == 1) {  //cost for whole trip
-            this.totalPrice = this.price! + this.servicePrice;
-          } else if (this.priceType == 2) { //cost per person
-            this.totalPrice = this.price! * this.seats! + this.servicePrice;
-          } else if (this.priceType == 3) { //cost per kg weight
-            for (const element of response[0].cargo) {
-              this.totalWeight += element.weight;
-            }
-            this.totalPrice = this.price! * this.totalWeight! + this.servicePrice;
-            this.totalWeight = parseFloat(this.totalWeight!.toFixed(2));
-          }
-
+              },
+              (error: { error: { message: string; }; }) => {
+                console.error('Fehler beim Abrufen der Angebote:', error);
+              }
+            );
         },
         (error: { error: { message: string; }; }) => {
           console.error('Fehler beim Abrufen der Angebote:', error);
