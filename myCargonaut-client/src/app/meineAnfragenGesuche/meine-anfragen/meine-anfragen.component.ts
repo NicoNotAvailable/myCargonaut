@@ -53,6 +53,8 @@ export class MeineAnfragenComponent {
         (response: any) => {
           this.allOffers = response;
 
+          this.allOffers = response.filter((offer: any)=> offer.status < 5);
+
           for (let element of response) {
             const imagePath: string = element.carPicture;
             this.pathToImage = imagePath === "empty.png" ? "/empty.png" : prePath.concat(imagePath);
