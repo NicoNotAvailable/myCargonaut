@@ -7,6 +7,14 @@ https://moodle.thm.de/course/view.php?id=3301
 
 Dies ist das README-Dokument für das KMS-Projekt, das im Rahmen der Prüfungsleistung entwickelt wird. In diesem Projekt werden die folgenden Anforderungen umgesetzt:
 
+## Dokumente
+
+-Wireframes & Mockup:
+https://www.figma.com/design/R3of46Zo8xClLik5mkbWiL/KMS?node-id=0-1&t=qhFxqSy56e4uNvFu-1
+
+-Domänendiagramm:
+https://miro.com/welcomeonboard/Q1BuNHNnRTFST0hRc1o1T2NnS25aeUU4a2ExY1RIUTZjMTBxTHJnTGt3UFI5MVdSNWhlcmFYalZWTlJSMzB4MHwzNDU4NzY0NTUyNzI2NTIyNTE4fDI=?share_link_id=758333048028
+
 ## Anforderungen
 
 - Registrierung:
