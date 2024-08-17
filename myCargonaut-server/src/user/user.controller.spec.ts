@@ -9,6 +9,9 @@ import { EditEmailDTO } from './DTO/EditEmailDTO';
 import { EditUserDTO } from './DTO/EditUserDTO';
 import { SessionData } from 'express-session';
 import * as bcrypt from 'bcryptjs';
+import { DriveService } from '../drive/drive.service';
+import { TripService } from '../trip/trip.service';
+import { VehicleService } from '../vehicle/vehicle.service';
 
 // Mock session data with cookie properties
 const mockSession: Partial<SessionData> = {
@@ -26,6 +29,9 @@ jest.fn();
 describe('UserController', () => {
   let controller: UserController;
   let userService: UserService;
+  let driveService: DriveService;
+  let tripService: TripService;
+  let vehicleService: VehicleService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -52,11 +58,26 @@ describe('UserController', () => {
             getRating: jest.fn(),
           },
         },
+        {
+          provide: DriveService,
+          useValue: {},
+        },
+        {
+          provide: TripService,
+          useValue: {},
+        },
+        {
+          provide: VehicleService,
+          useValue: {},
+        },
       ],
     }).compile();
 
     controller = module.get<UserController>(UserController);
     userService = module.get<UserService>(UserService);
+    driveService = module.get<DriveService>(DriveService);
+    tripService = module.get<TripService>(TripService);
+    vehicleService = module.get<VehicleService>(VehicleService);
   });
 
   it('should be defined', () => {
