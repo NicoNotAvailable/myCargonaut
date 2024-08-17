@@ -65,6 +65,7 @@ export class UserDescriptionComponent {
 
   offeredDrives = signal(0);
   takenDrives = signal(0);
+  totalDrives = signal(0);
 
   profileText: string = '';
   distanceDriven: number = 0;
@@ -80,8 +81,6 @@ export class UserDescriptionComponent {
   errorMessage: string = '';
 
   imgUpload: boolean = false;
-
-  totalDrives = computed(() => this.offeredDrives() + this.takenDrives());
 
 
   ngOnInit(): void {
@@ -103,15 +102,24 @@ export class UserDescriptionComponent {
     this.userService.readUser().subscribe(
       response => {
         this.profileText = response.profileText == null || response.profileText === '' ? 'Deine Beschreibung...' : response.profileText;
-        response.offeredDrives == null ? this.offeredDrives.set(1234) : this.offeredDrives.set(response.offeredDrives);
-        response.takenDrives == null ? this.takenDrives.set(123) : this.takenDrives.set(response.takenDrives);
-        this.distanceDriven = response.distanceDriven == null ? 0 : response.distanceDriven;
-        this.totalPassengers = response.totalPassengers == null ? 12 : response.totalPassengers;
-        this.highestWeight = response.highestWeight == null ? 12 : response.highestWeight;
         this.phoneNumber = response.phoneNumber == null || response.phoneNumber === '' ? 'Keine Nummer angegeben' : response.phoneNumber;
         this.languages = response.languages == null || response.languages === '' ? 'Keine Sprache angegeben' : response.languages;
         this.email = response.email;
         this.startedSmoking = response.isSmoker;
+        this.userService.readUserStats().subscribe(
+          response2 => {
+            this.totalDrives.set(response2.totalDrives);
+            this.offeredDrives.set(response2.offeredDrives);
+            this.takenDrives.set(response2.takenDrives);
+            this.distanceDriven = response2.distanceDriven;
+            this.totalPassengers = response2.totalPassengers;
+            this.highestWeight = response2.highestWeight;
+          },
+          error => {
+            this.errorMessage = 'Awooga somethings wrong';
+            this.removeErrorMessage();
+          }
+        )
       },
       error => {
         this.errorMessage = 'Email ist ungültig';
@@ -127,13 +135,22 @@ export class UserDescriptionComponent {
       user = otherUser;
     });
     this.profileText = user!.profileText == null || user!.profileText === '' ? `${user!.firstName}s Beschreibung...` : user!.profileText;
-    user!.offeredDrives == null ? this.offeredDrives.set(1234) : this.offeredDrives.set(user!.offeredDrives);
-    user!.takenDrives == null ? this.takenDrives.set(123) : this.takenDrives.set(user!.takenDrives);
-    this.distanceDriven = user!.distanceDriven == null ? 0 : user!.distanceDriven;
-    this.totalPassengers = user!.totalPassengers == null ? 12 : user!.totalPassengers;
-    this.highestWeight = user!.highestWeight == null ? 12 : user!.highestWeight;
     this.languages = user!.languages == null || user!.languages === '' ? 'Keine Sprache angegeben' : user!.languages;
     this.email = "";
+    this.userService.readUserStats(user!.id).subscribe(
+      response => {
+        this.totalDrives.set(response.totalDrives);
+        this.offeredDrives.set(response.offeredDrives);
+        this.takenDrives.set(response.takenDrives);
+        this.distanceDriven = response.distanceDriven;
+        this.totalPassengers = response.totalPassengers;
+        this.highestWeight = response.highestWeight;
+      },
+      error => {
+        this.errorMessage = 'Awooga somethings wrong';
+        this.removeErrorMessage();
+      }
+    )
   }
 
   saveUser(form: any): void {

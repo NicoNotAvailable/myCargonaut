@@ -12,6 +12,9 @@ import { UserDB } from '../database/UserDB';
 import { GetOwnUserDTO } from '../user/DTO/GetOwnUserDTO';
 import { SessionController } from './session.controller';
 import { LoginDTO } from './DTO/LoginDTO';
+import { VehicleService } from '../vehicle/vehicle.service';
+import {DriveService} from "../drive/drive.service";
+import {TripService} from "../trip/trip.service";
 
 // Mock data
 const mockUser = {
@@ -48,6 +51,9 @@ describe('Session Controller', () => {
   let utilsService: UtilsService;
   let session: SessionData;
   let sessionController: SessionController;
+  let vehicleService: VehicleService;
+  let driveService: DriveService;
+  let tripService: TripService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -75,6 +81,18 @@ describe('Session Controller', () => {
             getRating: jest.fn(),
           },
         },
+        {
+          provide: VehicleService,
+          useValue: {},
+        },
+        {
+          provide: DriveService, // Add this mock service
+          useValue: {},
+        },
+        {
+          provide: TripService, // Provide the mock service here
+          useValue: {},
+        },
       ],
     }).compile();
 
@@ -83,6 +101,9 @@ describe('Session Controller', () => {
     reviewService = module.get<ReviewService>(ReviewService);
     utilsService = module.get<UtilsService>(UtilsService);
     sessionController = module.get<SessionController>(SessionController);
+    vehicleService = module.get<VehicleService>(VehicleService);
+    driveService = module.get<DriveService>(DriveService);
+    tripService = module.get<TripService>(TripService);
 
     session = mockSession;
   });

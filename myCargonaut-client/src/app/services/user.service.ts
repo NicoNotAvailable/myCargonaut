@@ -73,6 +73,10 @@ export class UserService {
     )
   }
 
+  readUserStats(userId: number = -1): Observable<any> {
+    return this.http.get<any>("http://localhost:8000/user/statistics/" + userId, { withCredentials: true });
+  }
+
   editUser(userData: any): Observable<any> {
     return this.http.put<any>("http://localhost:8000/user/profile", userData, { withCredentials: true });
   }
