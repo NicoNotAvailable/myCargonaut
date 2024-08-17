@@ -70,10 +70,9 @@ export class MeineGesucheComponent {
               this.pathToImageArray.push(this.pathToImage);
             }
 
-
-
             this.allRequests = response;
 
+            this.allRequests = response.filter((offer: any)=> offer.status < 5);
 
             for (let elements of this.allRequests) {
               for (let cargo of elements.cargo) {
