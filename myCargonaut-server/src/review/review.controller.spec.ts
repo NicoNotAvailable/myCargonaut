@@ -39,6 +39,7 @@ describe('ReviewController', () => {
   let controller: ReviewController;
 
   beforeEach(async () => {
+    jest.clearAllMocks();
     const module: TestingModule = await Test.createTestingModule({
       controllers: [ReviewController],
       providers: [
@@ -151,7 +152,7 @@ describe('ReviewController', () => {
   describe('getReviews', () => {
     it('should return the reviews for a user', async () => {
       const userId = 1;
-      const mockReview = [
+      const mockReviews = [
         { id: 1, rating: 5, text: 'Great trip!' },
         { id: 2, rating: 4, text: 'Good experience.' },
       ];
@@ -161,7 +162,7 @@ describe('ReviewController', () => {
       ];
 
       // Mocking review service and utils service methods
-      mockReviewService.getReviews.mockResolvedValue(mockReview);
+      mockReviewService.getReviews.mockResolvedValue(mockReviews);
       mockUtilsService.transformReviewDBToGetReviewDTO.mockImplementation(
         (reviewDB) => {
           return Promise.resolve(
@@ -176,7 +177,7 @@ describe('ReviewController', () => {
       expect(mockReviewService.getReviews).toHaveBeenCalledWith(userId);
       expect(
         mockUtilsService.transformReviewDBToGetReviewDTO,
-      ).toHaveBeenCalledTimes(mockReview.length);
+      ).toHaveBeenCalledTimes(mockReviews.length);
     });
 
     it('should throw a BadRequestException if an error occurs', async () => {
