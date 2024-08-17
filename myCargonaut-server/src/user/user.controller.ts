@@ -119,7 +119,6 @@ export class UserController {
     return dto;
   }
 
-
   @ApiResponse({ type: OkDTO, description: 'creates a new user' })
   @Post()
   async createUser(
