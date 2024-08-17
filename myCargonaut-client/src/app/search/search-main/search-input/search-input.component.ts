@@ -4,6 +4,8 @@ import { filter } from 'rxjs/operators';
 import { FormsModule } from '@angular/forms';
 import { NgbDatepicker } from '@ng-bootstrap/ng-bootstrap';
 import { SearchFilter } from '../../SearchFilter';
+import { faCirclePlus, faSort } from '@fortawesome/free-solid-svg-icons';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 
 @Component({
   selector: 'app-search-input',
@@ -11,6 +13,7 @@ import { SearchFilter } from '../../SearchFilter';
   imports: [
     FormsModule,
     NgbDatepicker,
+    FaIconComponent,
   ],
   templateUrl: './search-input.component.html',
   styleUrls: ['./search-input.component.css']
@@ -69,4 +72,7 @@ export class SearchInputComponent {
       this.offerSearchTriggered.emit(this.filter);
     }
   }
+
+  protected readonly faCirclePlus = faCirclePlus;
+  protected readonly faSort = faSort;
 }

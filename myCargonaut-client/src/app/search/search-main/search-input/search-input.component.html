@@ -23,26 +23,26 @@
   </div>
 
   <div class="row m-2 horizontal-center">
-    <div class="col-lg-1 col-4 m-2">
+    <div class="col-lg-1 col-4 m-2 ms-5 ps-4">
       <div> Maße: </div>
     </div>
-    <div class="col-lg-1 col-4 m-2">
+    <div class="col-lg-1 col-4 m-2 p-0">
       <input type="text" class="form-control inputLowBanner" id="widthSearch" placeholder="Breite (cm)" [(ngModel)]="filter.width">
     </div>
-    <div class="col-lg-1 col-4 m-2">
+    <div class="col-lg-1 col-4 m-2 p-0">
       <input type="text" class="form-control inputLowBanner" id="heightSearch" placeholder="Höhe (cm)" [(ngModel)]="filter.height">
     </div>
-    <div class="col-lg-1 col-4 m-2">
+    <div class="col-lg-1 col-4 m-2 me-5 p-0">
       <input type="text" class="form-control inputLowBanner" id="lengthSearch" placeholder="Länge (cm)" [(ngModel)]="filter.length">
     </div>
     <div class="col-lg-2 col-4 m-2 align-content-end">
       <input type="text" class="form-control inputLowBanner" id="weightSearch" placeholder="Gewicht (kg)" [(ngModel)]="filter.weight">
     </div>
-    <div class="col-lg-2 col-4 m-2">
+    <div class="col-lg-2 col-4 m-2 align-content-end">
       <input type="text" class="form-control inputLowBanner" id="seatsSearch" placeholder="{{placeholderInput}}" [(ngModel)]="filter.seats">
     </div>
-    <div class="col-lg-2 col-4 m-2">
-      <select class="form-control inputLowBanner" id="ratingSearch" [(ngModel)]="filter.minRating">
+    <div class="col-lg-2 col-4 m-2 me-4">
+      <select class="form-control inputLowBanner pb-0" id="ratingSearch" [(ngModel)]="filter.minRating">
         <option value="">Bewertung</option>
         <option value="5">5 Sterne</option>
         <option value="4">4 Sterne</option>
@@ -53,15 +53,17 @@
     </div>
   </div>
 
+
   <div class="row m-2">
-    <div class="col-lg-4 col-4 m-2 d-flex justify-content-start">
+    <div class="col-lg-3 col-4 m-2 d-flex justify-content-start">
+      <fa-icon [icon]="faSort"  class="me-3" style="font-size: 2rem;"></fa-icon>
       <select class="form-control" id="sort" [(ngModel)]="filter.sort">
-        <option value="">Sortieren nach: Datum (neueste zuerst)</option>
-        <option value="1">Sortieren nach: Datum (älteste zuerst)</option>
-        <option value="3">Sortieren nach: Bewertung (höchste zuerst)</option>
-        <option value="2">Sortieren nach: Bewertung (niedrigste zuerst)</option>
-        <option value="5">Sortieren nach: Preis (höchster zuerst)</option>
-        <option value="4">Sortieren nach: Preis (niedrigster zuerst)</option>
+        <option value="">Datum (neueste zuerst)</option>
+        <option value="1">Datum (älteste zuerst)</option>
+        <option value="3">Bewertung (höchste zuerst)</option>
+        <option value="2">Bewertung (niedrigste zuerst)</option>
+        <option value="5">Preis (höchster zuerst)</option>
+        <option value="4">Preis (niedrigster zuerst)</option>
       </select>
     </div>
   </div>
