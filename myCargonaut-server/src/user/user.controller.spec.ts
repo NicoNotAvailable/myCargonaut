@@ -3,7 +3,6 @@ import { UserController } from './user.controller';
 import { UserService } from './user.service';
 import { UtilsService } from '../utils/utils.service';
 import { ReviewService } from '../review/review.service';
-import { BadRequestException } from '@nestjs/common';
 import { OkDTO } from '../serverDTO/OkDTO';
 import { EditPasswordDTO } from './DTO/EditPasswordDTO';
 import { EditEmailDTO } from './DTO/EditEmailDTO';
@@ -120,6 +119,24 @@ describe('UserController', () => {
       );
     });
 
+    it('should throw error for invalid phone number', async () => {
+      const body = {
+        firstName: 'John',
+        lastName: 'Doe',
+        email: 'john.doe@example.com',
+        emailConfirm: 'john.doe@example.com',
+        password: 'securepassword',
+        passwordConfirm: 'securepassword',
+        agb: true,
+        birthday: new Date('2000-01-01'),
+        phoneNumber: 'invalid',
+      };
+
+      await expect(
+        controller.createUser(body, mockSession as SessionData),
+      ).rejects.toThrow('Ungültige Telefon-Nummer');
+    });
+
     it('should throw error for invalid password confirmation', async () => {
       const body = {
         firstName: 'John',
@@ -136,6 +153,24 @@ describe('UserController', () => {
       await expect(
         controller.createUser(body, mockSession as SessionData),
       ).rejects.toThrow('Passwort muss übereinstimmen');
+    });
+
+    it('should throw error for invalid email confirmation', async () => {
+      const body = {
+        firstName: 'John',
+        lastName: 'Doe',
+        email: 'john.doe@example.com',
+        emailConfirm: 'john.notDoe@example.com',
+        password: 'securepassword',
+        passwordConfirm: 'securepassword',
+        agb: true,
+        birthday: new Date('2000-01-01'),
+        phoneNumber: '0800555555',
+      };
+
+      await expect(
+        controller.createUser(body, mockSession as SessionData),
+      ).rejects.toThrow('Email muss übereinstimmen');
     });
 
     it('should throw error for invalid age', async () => {
@@ -321,6 +356,23 @@ describe('UserController', () => {
       await expect(
         controller.updatePassword(mockSession as SessionData, body),
       ).rejects.toThrow('Neues Passwort darf nicht leer sein');
+    });
+
+    it('should throw error for new password beeing less than 8 characters', async () => {
+      const body: EditPasswordDTO = {
+        password: 'currentpassword',
+        newPassword: 'new',
+        newPasswordConfirm: 'new',
+      };
+
+      jest.spyOn(userService, 'getUserById').mockResolvedValue({
+        password: await bcrypt.hash('currentpassword', 10),
+      } as any);
+      jest.spyOn(bcrypt, 'compare' as any).mockResolvedValue(true);
+
+      await expect(
+        controller.updatePassword(mockSession as SessionData, body),
+      ).rejects.toThrow('Neues Passwort muss mindestens 8 Zeichen lang sein');
     });
   });
 

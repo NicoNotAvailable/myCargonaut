@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { ReviewController } from './review.controller';
 import { ReviewService } from './review.service';
-import { UserService } from '../user/user.service'; // Adjust import as needed
+import { UserService } from '../user/user.service';
 import { UtilsService } from '../utils/utils.service';
 import { TripService } from '../trip/trip.service';
 import { DriveService } from '../drive/drive.service';
@@ -145,6 +145,100 @@ describe('ReviewController', () => {
       await expect(
         controller.createReview(createReviewDto, session),
       ).rejects.toThrow('Trip was not found');
+    });
+  });
+
+  describe('getReviews', () => {
+    it('should return the reviews for a user', async () => {
+      const userId = 1;
+      const mockReview = [
+        { id: 1, rating: 5, text: 'Great trip!' },
+        { id: 2, rating: 4, text: 'Good experience.' },
+      ];
+      const mockReviewDTOs = [
+        { id: 1, rating: 5, text: 'Great trip!' },
+        { id: 2, rating: 4, text: 'Good experience.' },
+      ];
+
+      // Mocking review service and utils service methods
+      mockReviewService.getReviews.mockResolvedValue(mockReview);
+      mockUtilsService.transformReviewDBToGetReviewDTO.mockImplementation(
+        (reviewDB) => {
+          return Promise.resolve(
+            mockReviewDTOs.find((dto) => dto.id === reviewDB.id),
+          );
+        },
+      );
+
+      const result = await controller.getReviews(userId);
+
+      expect(result).toEqual(mockReviewDTOs);
+      expect(mockReviewService.getReviews).toHaveBeenCalledWith(userId);
+      expect(
+        mockUtilsService.transformReviewDBToGetReviewDTO,
+      ).toHaveBeenCalledTimes(mockReview.length);
+    });
+
+    it('should throw a BadRequestException if an error occurs', async () => {
+      const userId = 1;
+
+      mockReviewService.getReviews.mockRejectedValue(
+        new Error('Something went wrong'),
+      );
+
+      await expect(controller.getReviews(userId)).rejects.toThrow(
+        BadRequestException,
+      );
+      expect(mockReviewService.getReviews).toHaveBeenCalledWith(userId);
+    });
+  });
+
+  describe('getOwnReviews', () => {
+    it('should return the reviews for the current user', async () => {
+      const session = { currentUser: 1 } as SessionData;
+      const mockReview = [
+        { id: 1, rating: 5, text: 'Great trip!' },
+        { id: 2, rating: 4, text: 'Good experience.' },
+      ];
+      const mockReviewDTOs = [
+        { id: 1, rating: 5, text: 'Great trip!' },
+        { id: 2, rating: 4, text: 'Good experience.' },
+      ];
+
+      // Mocking review service and utils service methods
+      mockReviewService.getReviews.mockResolvedValue(mockReview);
+      mockUtilsService.transformReviewDBToGetReviewDTO.mockImplementation(
+        (reviewDB) => {
+          return Promise.resolve(
+            mockReviewDTOs.find((dto) => dto.id === reviewDB.id),
+          );
+        },
+      );
+
+      const result = await controller.getOwnReviews(session);
+
+      expect(result).toEqual(mockReviewDTOs);
+      expect(mockReviewService.getReviews).toHaveBeenCalledWith(
+        session.currentUser,
+      );
+      expect(
+        mockUtilsService.transformReviewDBToGetReviewDTO,
+      ).toHaveBeenCalledTimes(mockReview.length);
+    });
+
+    it('should throw a BadRequestException if an error occurs', async () => {
+      const session = { currentUser: 1 } as SessionData;
+
+      mockReviewService.getReviews.mockRejectedValue(
+        new Error('Something went wrong'),
+      );
+
+      await expect(controller.getOwnReviews(session)).rejects.toThrow(
+        BadRequestException,
+      );
+      expect(mockReviewService.getReviews).toHaveBeenCalledWith(
+        session.currentUser,
+      );
     });
   });
 });

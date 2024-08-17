@@ -374,6 +374,16 @@ describe('Session Controller', () => {
     });
   });
 
+  describe('getSessionUser', () => {
+    it('should get id of currently logged in user', async () => {
+      jest
+        .spyOn(sessionController, 'getSessionUser' as any)
+        .mockResolvedValue(session);
+
+      expect(session.currentUser).toEqual(mockUser.id);
+    });
+  });
+
   describe('logout', () => {
     it('should successfully logout user', async () => {
       const result = sessionController.logout(session);
