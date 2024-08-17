@@ -23,16 +23,16 @@
   </div>
 
   <div class="row m-2 horizontal-center">
-    <div class="col-lg-1 col-4 m-2">
+    <div class="col-lg-1 col-4 m-2 ms-5 ps-4">
       <div> Maße: </div>
     </div>
-    <div class="col-lg-1 col-4 m-2">
+    <div class="col-lg-1 col-4 m-2 p-0">
       <input type="text" class="form-control inputLowBanner" id="widthSearch" placeholder="Breite (cm)" [(ngModel)]="filter.width">
     </div>
-    <div class="col-lg-1 col-4 m-2">
+    <div class="col-lg-1 col-4 m-2 p-0">
       <input type="text" class="form-control inputLowBanner" id="heightSearch" placeholder="Höhe (cm)" [(ngModel)]="filter.height">
     </div>
-    <div class="col-lg-1 col-4 m-2">
+    <div class="col-lg-1 col-4 m-2 me-5 p-0">
       <input type="text" class="form-control inputLowBanner" id="lengthSearch" placeholder="Länge (cm)" [(ngModel)]="filter.length">
     </div>
     <div class="col-lg-2 col-4 m-2 align-content-end">
@@ -41,8 +41,8 @@
     <div class="col-lg-2 col-4 m-2 align-content-end">
       <input type="text" class="form-control inputLowBanner" id="seatsSearch" placeholder="{{placeholderInput}}" [(ngModel)]="filter.seats">
     </div>
-    <div class="col-lg-2 col-4 m-2">
-      <select class="form-control inputLowBanner" id="ratingSearch" [(ngModel)]="filter.minRating">
+    <div class="col-lg-2 col-4 m-2 me-4">
+      <select class="form-control inputLowBanner pb-0" id="ratingSearch" [(ngModel)]="filter.minRating">
         <option value="">Bewertung</option>
         <option value="5">5 Sterne</option>
         <option value="4">4 Sterne</option>
