@@ -219,7 +219,7 @@
                               </div>
                             </div>
                           </div>
-                          <div *ngIf="trip.drive.status === 1">
+                          <div *ngIf="trip.drive.status === 1 && trip.drive.maxCWeight != null ">
                             <button type="button" (click)="toPaymentPage(trip.drive.id, trip.drive.priceType)"
                                     class="btn btn-primary greenButton">
                               Zur Bezahlung
