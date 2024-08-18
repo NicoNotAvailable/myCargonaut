@@ -48,7 +48,6 @@
                               </div>
                             </div>
 
-
                             <div class="row">
                               <div class="col-12 col-lg-3">
                                 <div class="row">
@@ -160,7 +159,7 @@
                             <div class="row mb-4">
                               <div class="col-12 col-lg-6">
                                 <div class="row">
-                                  <h5 class="card-title greenText">{{ trip.name }}</h5>
+                                  <h5 class="card-title greenText">{{ trip.drive.name }}</h5>
                                 </div>
                                 <div class="row">
                                   <div class="col-6">
@@ -182,6 +181,12 @@
                               </div>
                             </div>
 
+                            <div class="row" *ngIf="trip.drive.maxCWeight != null">
+                              <strong>Du bist nicht der Fahrer!</strong>
+                            </div>
+                            <div class="row mb-3 ms-1" *ngIf="trip.drive.maxCWeight == null">
+                              <strong>Du bist der Fahrer!</strong>
+                            </div>
                             <div class="row" *ngIf="trip.drive.locations && trip.drive.locations.length > 0">
                               <div class="col-12 col-lg-6">
                                 <div class="row">
@@ -219,7 +224,7 @@
                               </div>
                             </div>
                           </div>
-                          <div *ngIf="trip.drive.status === 1">
+                          <div *ngIf="trip.drive.status === 1 && trip.drive.maxCWeight != null ">
                             <button type="button" (click)="toPaymentPage(trip.drive.id, trip.drive.priceType)"
                                     class="btn btn-primary greenButton">
                               Zur Bezahlung
