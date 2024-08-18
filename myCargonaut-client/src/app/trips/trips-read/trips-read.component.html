@@ -27,13 +27,12 @@
     <div class="row justify-content-center">
       <div class="col-10 col-md-6 col-lg-6 my-5 p-5 field">
         <div class="row ms-3 me-3 mb-4">
-          <div class="col-12 col-md-8 col-lg-2 text-start">
+          <div class="col-12 col-md-8 col-lg-2 text-start fw-bold">
             <span>Auto:</span>
           </div>
           <div class="col-12 col-md-8 col-lg-4 text-end fw-bold">
-            <span>{{ (carModel || "loading") }}</span>
           </div>
-          <div class="col-3 text-start ">
+          <div class="col-3 text-start fw-bold ">
             <span>{{ offer?.trailerID !== undefined ? "Anhänger:" : "" }}</span>
           </div>
           <div class="col-3 text-end fw-bold">
@@ -49,7 +48,7 @@
           <div class="col-3">
           </div>
           <div class="col-3 text-end fw-bold">
-            <span>{{ (offer?.maxTLength ? offer?.maxTLength + " kg" : "") }}</span>
+            <span>{{ (offer?.maxTWeight ? offer?.maxTWeight + " kg" : "") }}</span>
           </div>
         </div>
         <div class="row ms-3 me-3 mb-4">
@@ -85,9 +84,6 @@
           <div class="col-4"></div>
           <div class="col-12 col-md-8 col-lg-4 text-start">
             <strong>
-              @if (!trailerCool) {
-
-              }
               @if (trailerCool == true) {
                 gekühlt
               } @else if (trailerCool == false){
@@ -102,7 +98,7 @@
             <strong>{{ offer?.animalsAllowed ? "Tiere sind erlaubt" : "Tiere sind nicht erlaubt" }}</strong>
 
           </div>
-          <div class="col-12 col-md-8 col-lg-4">
+          <div class="col-12 col-md-8 col-lg-2">
           </div>
           <div class="col-3 text-start fw-bold">
             <span>
@@ -134,23 +130,28 @@
     <div class="row justify-content-center">
       <div class="col-10 col-md-8 col-lg-10 my-5 p-4 field">
         <div class="row ms-3 me-3 mb-4">
+          <div class="row me-3 mb-4 blueHeader fw-bold">
+            <span>Übersicht: </span>
+          </div>
+        </div>
+        <div class="row ms-3 me-3 mb-4">
           <div class="col-12 col-md-8 col-lg-4 text-start">
             <span>Sitzplätze:</span>
           </div>
-          <div class="col-12 col-md-8 col-lg -4 text-start fw-bold">
+          <div class="col-12 col-md-8 col-lg -4 text-start">
             <span>{{ (request?.seats) }}</span>
           </div>
         </div>
         <div class="row ms-3 me-3 mb-4">
-          <div class="col-12 col-md-8 col-lg-4 text-start fw-bold">
-            <strong>{{ request?.smokingAllowed ? "Ich würde gerne rauchen" : "ich bin Nichtraucher" }}</strong>
+          <div class="col-12 col-md-8 col-lg-4 text-start">
+            <p>{{ request?.smokingAllowed ? "Ich würde gerne rauchen" : "ich bin Nichtraucher" }}</p>
           </div>
-          <div class="col-12 col-md-8 col-lg-3 text-start fw-bold">
+          <div class="col-12 col-md-8 col-lg-3 text-start">
             <div class="d-flex justify-content-end">
-              <strong>{{ request?.animalsAllowed ? "Ich habe Tier(e) dabei" : "Ich habe keine Tiere dabei" }}</strong>
+              <p>{{ request?.animalsAllowed ? "Ich habe Tier(e) dabei" : "Ich habe keine Tiere dabei" }}</p>
             </div>
           </div>
-          <div class="col-4 text-end fw-bold">
+          <div class="col-4 text-end">
             <span> @if (request?.info == 1) {
               gerne quatschen!
             } @else if (request?.info == 2) {
