@@ -14,7 +14,10 @@
                 <div class="row">
                   <div class="col-6">
                     <div class="ms-2">
-                      <img [ngSrc]="window.location.protocol + '//' + window.location.host.replace('4200', '8000') + pathToImageArray[$index]" width="200" height="200" class="img-fluid rounded-img " alt="">
+                      <a href="/userProfile">
+                        <img (click)="saveUserToService(element)"
+                             [ngSrc]="window.location.protocol + '//' + window.location.host.replace('4200', '8000') + pathToImageArray[$index]" width="200" height="200" class="img-fluid rounded-img " alt="">
+                      </a>
                     </div>
                   </div>
                   <div class="col-5">
@@ -127,10 +130,10 @@
               <div class="col-lg-3 mt-4">
                 <div class="row">
                   <div class="col-6">
-                    <div class="ms-2">
-                      <img [ngSrc]="window.location.protocol + '//' + window.location.host.replace('4200', '8000') + pathToImageArray[$index]" width="300" height="200" class="img-fluid rounded-img " alt="">
-
-                    </div>
+                    <a href="/userProfile">
+                      <img (click)="saveUserToService2(element)"
+                           [ngSrc]="window.location.protocol + '//' + window.location.host.replace('4200', '8000') + pathToImageArray[$index]" width="200" height="200" class="img-fluid rounded-img " alt="">
+                    </a>
                   </div>
                   <div class="col-5">
                     <div class="row">

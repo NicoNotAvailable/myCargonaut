@@ -16,12 +16,14 @@
               <div *ngFor="let room of rooms" class="trip-card">
                 <div class="row card userCards justify-content-start position-relative" (click)="selectRoom(room)">
                   <div class="profile-container col-12 align-items-center">
-                    <img *ngIf="trips[room].user.profilePic"
+                    <a href="/userProfile">
+                    <img (click)="saveUserToService(trips[room].user.id)" *ngIf="trips[room].user.profilePic"
                          [src]="getProfilePicUrl(trips[room].user.profilePic)"
                          width="130"
                          height="130"
                          class="profileCircle"
                          alt="profile">
+                    </a>
                     <div class="initials">
                       {{ getInitials(trips[room].user) }}
                     </div>

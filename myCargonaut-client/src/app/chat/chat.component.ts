@@ -9,6 +9,7 @@ import { Message } from './message.interface';
 import { tr } from "@faker-js/faker";
 import {FaIconComponent} from "@fortawesome/angular-fontawesome";
 import {faPhone} from "@fortawesome/free-solid-svg-icons";
+import { UserService } from '../services/user.service';
 
 @Component({
   selector: 'app-chat',
@@ -30,6 +31,7 @@ export class ChatComponent implements OnInit {
   private sessionService: SessionService = inject(SessionService);
   private socketService: SocketService = inject(SocketService);
   private route: ActivatedRoute = inject(ActivatedRoute);
+  public userService: UserService = inject(UserService);
 
   @ViewChild('messageInput') messageInput: ElementRef | undefined;
   @ViewChild('messagesContainer') messagesContainer: ElementRef | undefined;
@@ -255,6 +257,10 @@ export class ChatComponent implements OnInit {
   }
   getProfilePicUrl(profilePic: string): string {
     return `${window.location.protocol}//${window.location.host.replace('4200', '8000')}/user/image/${profilePic}`;
+  }
+
+  saveUserToService(userId : number): void {
+    this.userService.readOtherUser(userId);
   }
 
   protected readonly window = window;

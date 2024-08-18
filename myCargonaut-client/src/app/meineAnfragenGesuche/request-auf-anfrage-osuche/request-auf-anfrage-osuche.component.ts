@@ -124,8 +124,6 @@ export class RequestAufAnfrageOSucheComponent  implements OnInit {
           (response: any) => {
             this.allTripsOffer = response;
 
-            console.log(response)
-
             this.prePath = "/user/image/"
 
             for (let element of response) {
@@ -208,6 +206,13 @@ export class RequestAufAnfrageOSucheComponent  implements OnInit {
     this.router.navigate(['/chats'], { queryParams: { tripId } });
   }
 
+  saveUserToService(offerTrip: offerTrips): void {
+    this.userService.readOtherUser(Number(offerTrip?.requesting.id));
+  }
+
+  saveUserToService2(requestTrip: requestTrips): void {
+    this.userService.readOtherUser(Number(requestTrip?.requesting.id));
+  }
 
   acceptDrive(tripId:number): void {
     this.http.put('http://localhost:8000/trip/accept/' + tripId, {},{ withCredentials: true })
