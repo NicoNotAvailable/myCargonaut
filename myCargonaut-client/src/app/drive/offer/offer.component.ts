@@ -291,7 +291,22 @@ export class OfferComponent {
     if (this.offerService.seats !== undefined && this.offerService.seats !== null && this.offerService.seats > this.offerService.selectedCar?.seats! - 1)
       errors.push('Bitte eine gültige Anzahl der Autositze');
 
-    if (!this.offerService.date) errors.push('Bitte ein Datum festlegen');
+    if (this.offerService.date) {
+      const selectedDate = new Date(
+        this.offerService.date.year,
+        this.offerService.date.month - 1,
+        this.offerService.date.day
+      );
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+
+      if (selectedDate < today) {
+        errors.push('Bitte ein Datum in der Zukunft festlegen');
+      }
+    } else {
+      errors.push('Bitte ein Datum festlegen');
+    }
+
     if (!this.offerService.time || !this.validTime()) errors.push('Bitte eine Uhrzeit festlegen');
 
     if (this.offerService.smokingAllowed === undefined)
