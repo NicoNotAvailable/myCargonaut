@@ -9,11 +9,6 @@ import {CurrencyPipe, DatePipe, NgClass, NgForOf, NgIf, NgOptimizedImage} from '
 import { SearchCardComponent } from '../../search/search-main/search-card/search-card.component';
 import { TripService } from '../../services/trip-service.service';
 
-import {LOCALE_ID} from '@angular/core';
-import {registerLocaleData} from '@angular/common';
-import localeDe from '@angular/common/locales/de';
-import localeDeExtra from '@angular/common/locales/extra/de';
-
 @Component({
   selector: 'app-all-trips',
   standalone: true,
@@ -125,8 +120,6 @@ export class AllTripsComponent {
       }
       // Check if drive status is 0, 1, or 2 and requesting user ID matches
       else if ((trip?.drive?.status === 0 || trip?.drive?.status === 1 || trip?.drive?.status === 2) && (trip?.requesting?.id === this.userID)) {
-        this.oneAndTwoTrips.push(trip);
-      } else if ((trip?.drive?.id === this.userID) && (trip?.drive?.status === 1)) {
         this.oneAndTwoTrips.push(trip);
       }
     });

@@ -220,8 +220,21 @@ export class RequestComponent {
     if (!this.requestService.price) errors.push('Bitte einen Preisvorschlag festlegen');
     if (this.requestService.seats == undefined || this.requestService.seats > 9)
       errors.push('Bitte eine gültige Anzahl der Sitze bis 9 angeben');
-    if (!this.requestService.date) errors.push('Bitte ein Datum festlegen');
-    if (!this.requestService.time || !this.validTime()) errors.push('Bitte eine Uhrzeit festlegen');
+    if (this.requestService.date) {
+      const selectedDate = new Date(
+        this.requestService.date.year,
+        this.requestService.date.month - 1,
+        this.requestService.date.day
+      );
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+
+      if (selectedDate < today) {
+        errors.push('Bitte ein Datum in der Zukunft festlegen');
+      }
+    } else {
+      errors.push('Bitte ein Datum festlegen');
+    }    if (!this.requestService.time || !this.validTime()) errors.push('Bitte eine Uhrzeit festlegen');
 
     if (this.requestService.smokingAllowed === undefined)
       errors.push('Bitte angeben, ob sie Raucher mitnehmen möchten');
