@@ -534,16 +534,10 @@ export class DriveService {
       }),
     );
     drivesWithRatings.sort((a, b) => {
-      if (order === 0) {
-        return (
-          new Date(b.drive.timestamp).getTime() -
-          new Date(a.drive.timestamp).getTime()
-        );
-      } else if (order === 1) {
-        return (
-          new Date(a.drive.timestamp).getTime() -
-          new Date(b.drive.timestamp).getTime()
-        );
+      if (order === 1) {
+        return b.drive.id - a.drive.id;
+      } else if (order === 0) {
+        return a.drive.id - b.drive.id;
       } else if (order === 2) {
         return a.rating - b.rating;
       } else if (order === 3) {
