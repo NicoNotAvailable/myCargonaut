@@ -80,4 +80,8 @@ export class UserService {
   editUser(userData: any): Observable<any> {
     return this.http.put<any>("http://localhost:8000/user/profile", userData, { withCredentials: true });
   }
+
+  editEmail(email: any): Observable<any> {
+    return this.http.put<any>("http://localhost:8000/user/email", email, { withCredentials: true });
+  }
 }
