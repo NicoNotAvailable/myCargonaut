@@ -126,8 +126,6 @@ export class AllTripsComponent {
       // Check if drive status is 0, 1, or 2 and requesting user ID matches
       else if ((trip?.drive?.status === 0 || trip?.drive?.status === 1 || trip?.drive?.status === 2) && (trip?.requesting?.id === this.userID)) {
         this.oneAndTwoTrips.push(trip);
-      } else if ((trip?.drive?.id === this.userID) && (trip?.drive?.status === 1)) {
-        this.oneAndTwoTrips.push(trip);
       }
     });
   }
