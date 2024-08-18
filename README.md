@@ -16,7 +16,7 @@ https://www.figma.com/design/R3of46Zo8xClLik5mkbWiL/KMS?node-id=0-1&t=qhFxqSy56e
 https://miro.com/welcomeonboard/Q1BuNHNnRTFST0hRc1o1T2NnS25aeUU4a2ExY1RIUTZjMTBxTHJnTGt3UFI5MVdSNWhlcmFYalZWTlJSMzB4MHwzNDU4NzY0NTUyNzI2NTIyNTE4fDI=?share_link_id=758333048028
 
 
-## Anforderungen
+## Features
 
 - Registrierung:
     - Vorname, Nachname, Email (zweimal angeben), Passwort, Geburtstag (nur ab 18+)
@@ -78,7 +78,7 @@ https://miro.com/welcomeonboard/Q1BuNHNnRTFST0hRc1o1T2NnS25aeUU4a2ExY1RIUTZjMTBx
 - Angebot/Gesuch erstellen
     - Ablauf:
         1. Feste Zusage per Button auf der Plattform inkl. Zahlungsvorgang
-        2. Möglichkeit der Kommunikation per Telefon/Nachrichten
+        2. Möglichkeit der Kommunikation per Telefon/Nachrichten (Chatanwendung)
         3. Nach der Fahrt (Bewertung des Fahrers/Mitfahrers)
         4. Speichern aller Daten für statistische Zwecke
     - Von/Bis/Zwischenziele, Zeitraum, Fahrzeug/Anhänger auswählen
@@ -97,8 +97,8 @@ https://miro.com/welcomeonboard/Q1BuNHNnRTFST0hRc1o1T2NnS25aeUU4a2ExY1RIUTZjMTBx
 
 
 - Tracking
-    - Fahrer kann Standort mitteilen
-    - Status kann dann abgefragt werden
+    - Fahrer kann über den Chat Standort kommunizieren
+    - Status der Fahrt kann abgefragt werden
 
 
 - Zusätzlich wird eine OpenAPI (Swagger)-Dokumentation implementiert, um die API-Routen zu testen. Die DTOs (Data Transfer Objects) werden mit den OpenAPI-Decorators ausgestattet.
@@ -112,7 +112,6 @@ Das Projekt erfüllt die folgenden technischen und fachlichen Anforderungen:
 3. Datenbank: Die Daten werden mit TypeORM und SQLite persistiert.
 4. Websockets: Websockets werden verwendet, um eine benutzerfreundliche Erfahrung zu bieten.
 5. Autorisierung: Es wird eine passende Autorisierung mit Sessions und Rechten implementiert.
-6. Statische Route: Das Frontend ist über eine statische Route von NestJS aus erreichbar, um das NestJS Session-System zu ermöglichen.
 
 
 ## Installation und Ausführung
@@ -126,21 +125,24 @@ Folgende Schritte sind erforderlich, um das Projekt lokal zum Laufen zu bringen:
 4. Um volle Funktionen zu erhalten musst du die nächsten Schritte durchführen.
 
 
-
-
 ## Frontend (nach der Installation):
 1. Gehe in das Verzeichnis des Frontend-Projekts (Angular) `cd myCargonaut-client`
 2. Nach der Instalation wird das Frontend mit  `npm run start` gestartet.
 3. Navigiere nun in deinem Browser an folgende Adresse: http://localhost:4200
-4. Stelle sicher, dass eine lokale SQLite-Datenbank vorhanden ist und konfiguriere die Verbindungsinformationen im Backend.
-
 
 
 ## Backend (nach der Installation):
 1. Gehe in das Verzeichnis des Backend-Projekts (NestJS)  `cd myCargonaut-server`
 2. Nach der Instalation wird das Backend mit  `npm run start` gestartet.
-3. Um die Funktionen des Backends zu Testen Navigiere nun in deinem Browser an folgende Adresse: http://localhost:8000/api
+3. Falls noch nicht vorhanden, wird eine SQLite-Datei generiert.
+3. Um die Funktionen des Backends zu testen, navigiere nun in deinem Browser an folgende Adresse: http://localhost:8000/api
 
+## Teststrategie
+
+Um das Projekt regelmäßig testen zu können, sind folgende Tests umgesetzt worden:
+1. Unit-Tests: unsere Serverfunktionen werden mit Unit-Tests abgedeckt.
+2. Swagger: Um Backend-Funktionen manuell testen zu können, wurde die Swagger-API implementiert.
+3. Durch die Pipeline werden die Unit-Tests, das builden des Frontends sowie der Start des Backends regelmäßig durchgeführt.
 
 # KMS-Projekt Cargonaut
 
