@@ -19,10 +19,10 @@ h1.textGreen{
 }
 
 .profileCircle {
+  width: 150px;
+  height: 150px;
   border-radius: 50%;
   box-shadow: 0 10px 0 #005B52;
 }
-
-
 
 

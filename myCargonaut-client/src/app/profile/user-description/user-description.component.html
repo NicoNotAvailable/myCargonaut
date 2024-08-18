@@ -34,7 +34,7 @@
               <div class="col-5">
                 <button type="button"
                         class="btn border border-2 rounded-3 customButton text-center text-light p-2 ps-5 pe-5"
-                        id="cars" (click)="changeViewCarState()"><h4>Deine Cars</h4>
+                        id="cars" (click)="changeViewCarState()"><h4>Deine Autos</h4>
                 </button>
               </div>
               <div class="col-1"></div>
@@ -164,12 +164,12 @@
                 <input (change)="onFileChange($event)" *ngIf="imgUpload" type="file" required name="carImgInput" class="customButton"><br>
               </span>
               </div>
-              <div class="col-5 my-4">
-                <div class="col-1">
+              <div class="col-5 my-4 row d-flex justify-content-end">
+                <div class="col-3">
                   <input type="checkbox" [(ngModel)]="startedSmoking" [ngModelOptions]="{standalone: true}"
-                         name="smokeCheck" class="form-check-input larger-checkbox mt-2">
+                         name="smokeCheck" class="form-check-input larger-checkbox">
                 </div>
-                <div class="text-start my-auto col">
+                <div class="text-start mt-2 col-3">
                   <span>Raucher?</span>
                 </div>
               </div>
