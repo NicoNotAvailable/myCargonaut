@@ -134,8 +134,10 @@ Folgende Schritte sind erforderlich, um das Projekt lokal zum Laufen zu bringen:
 ## Backend (nach der Installation):
 1. Gehe in das Verzeichnis des Backend-Projekts (NestJS)  `cd myCargonaut-server`
 2. Nach der Instalation wird das Backend mit  `npm run start` gestartet.
-3. Falls noch nicht vorhanden, wird eine SQLite-Datei generiert.
+3. Falls noch nicht vorhanden, wird eine SQLite-Datei generiert. 
+(Um eine bessere Übersicht über das Projekt zu haben, wurde eine SQLite-Datei mit Testdaten hinzugefügt.)
 3. Um die Funktionen des Backends zu testen, navigiere nun in deinem Browser an folgende Adresse: http://localhost:8000/api
+
 
 ## Teststrategie
 
