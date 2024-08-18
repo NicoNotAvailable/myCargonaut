@@ -7,7 +7,7 @@
       <a href="/userProfile">
         <img (click)="saveUserToService()"
           [ngSrc]="window.location.protocol + '//' + window.location.host.replace('4200', '8000') + '/user/image/'+ (offer?.user?.profilePic || request?.user?.profilePic)"
-          src="assets/empty.png" width="10px" height="10px" class="card-img-top img-fluid profileCircle my-4" alt="">
+          src="assets/empty.png" width="10px" height="10px" class="card-img-top img-fluid profileCircle my-4 rounded-img" alt="">
       </a>
       <div class="row">
         <span>{{ offer?.user?.firstName || request?.user?.firstName || "loading" }} {{ offer?.user?.lastName || request?.user?.lastName || "loading" }}</span>
@@ -23,7 +23,7 @@
     </div>
     <div class="col-12 col-lg-8 ">
       <div class="row text-center">
-        <h2 class="greenText">{{ offer?.name || request?.name || "loading" }}</h2>
+        <h2 class="greenText mb-3">{{ offer?.name || request?.name || "loading" }}</h2>
       </div>
       <div class="row">
         <div class="col-2"></div>
@@ -41,7 +41,7 @@
         </div>
         <div class="col-2"></div>
         <div class="col-5 text-start">
-          <p class="mt-3">von Startpunkt:</p>
+          <p class="mt-3">Startpunkt:</p>
           <span class="fw-bold">
           @for (location of offer?.locations || request?.locations; track $index) {
             @if (location.stopNr == 1) {
@@ -52,7 +52,7 @@
             </span>
         </div>
         <div class="col-5">
-          <p class="mt-3">nach Ziel:</p><span
+          <p class="mt-3">Ziel:</p><span
           class="fw-bold">@for (location of offer?.locations || request?.locations; track $index) {
           @if (location.stopNr == 100) {
             <span class="highlightText">{{ location.zipCode }} {{ location.city }}</span>
