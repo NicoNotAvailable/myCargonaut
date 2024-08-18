@@ -47,7 +47,7 @@ export class ReviewCreateComponent implements OnInit {
   faStar = faStar;  // Filled star icon
   faStarRegular = faStarRegular;  // Empty star icon
 
-
+  isDriverReview: boolean = false;
   message: string = ""
   tripId: number | null = null;
   text: string | undefined
@@ -83,6 +83,14 @@ export class ReviewCreateComponent implements OnInit {
       }
     });
   }
+
+  checkIfDriverReview(): boolean {
+    return this.offerDriveTrips.some(trip => {
+      const driverId = trip.drive?.user?.id;
+      return driverId === this.currentUserID;
+    });
+  }
+
 
 
   /**
@@ -197,12 +205,9 @@ export class ReviewCreateComponent implements OnInit {
    */
   updateAverageStars() {
     // Array of all star arrays
-    const allStarsArrays = [
-      this.starsFilledOne,
-      this.starsFilledTwo,
-      this.starsFilledThree,
-      this.starsFilledFour
-    ];
+    const allStarsArrays = this.isDriverReview ?
+      [this.starsFilledOne, this.starsFilledTwo, this.starsFilledThree] : // Driver
+      [this.starsFilledOne, this.starsFilledTwo, this.starsFilledThree, this.starsFilledFour]; // Passenger
 
     // Total number of stars across all categories
     const totalStars = allStarsArrays.length * this.starsFilledOne.length;
@@ -247,9 +252,13 @@ export class ReviewCreateComponent implements OnInit {
         this.checkUserInvolvementInOfferDriveTrips()
         this.checkUserInvolvementInRequestDriveTrips()
 
+
+
         if (this.tripId === null){
           this.router.navigate(['/allTrips']);
         }
+        // Check if the user is the driver for the current trip
+        this.isDriverReview = this.checkIfDriverReview();
 
       },
       error => {
