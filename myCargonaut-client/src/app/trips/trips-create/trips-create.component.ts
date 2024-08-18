@@ -210,6 +210,7 @@ export class TripsCreateComponent implements OnInit {
           window.location.href = "/chats";
         }, 200);
       }, error => {
+        this.errorMessage = "Du musst eingeloggt sein und ein Profilbild/Telefonnummer hinterlegt haben!";
         console.error('There was an error!', error);
       },
     );
@@ -251,6 +252,7 @@ export class TripsCreateComponent implements OnInit {
             window.location.href = "/chats";
           }, 200);
         }, error => {
+          this.errorMessage = "Du musst eingeloggt sein und ein Profilbild/Telefonnummer hinterlegt haben!";
           console.error('There was an error!', error);
         },
       );
