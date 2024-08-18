@@ -145,7 +145,9 @@ export class UserController {
         id == -1 ? session.currentUser : id,
       );
 
-      const cars: CarDB[] = await this.vehicleService.getAllCarsForUser(user.id);
+      const cars: CarDB[] = await this.vehicleService.getAllCarsForUser(
+        user.id,
+      );
       let carMaxWeight: number = 0;
       if (cars) {
         for (const car of cars) {
@@ -155,7 +157,8 @@ export class UserController {
         }
       }
 
-      const trailer: TrailerDB[] = await this.vehicleService.getAllTrailersForUser(user.id);
+      const trailer: TrailerDB[] =
+        await this.vehicleService.getAllTrailersForUser(user.id);
       let trailerMaxWeight: number = 0;
       if (trailer) {
         for (const trail of trailer) {
@@ -165,7 +168,9 @@ export class UserController {
         }
       }
 
-      const offeredDrives: OfferDB[] = await this.driveService.getOwnOffers(user.id);
+      const offeredDrives: OfferDB[] = await this.driveService.getOwnOffers(
+        user.id,
+      );
       let finishedOfferedDrives: OfferDB[];
       if (offeredDrives) {
         finishedOfferedDrives = offeredDrives.filter(
@@ -174,7 +179,8 @@ export class UserController {
         );
       }
 
-      const requestedDrives: RequestDB[] = await this.driveService.getOwnRequests(user.id);
+      const requestedDrives: RequestDB[] =
+        await this.driveService.getOwnRequests(user.id);
       let finishedRequestedDrives: RequestDB[];
       if (requestedDrives) {
         finishedRequestedDrives = requestedDrives.filter(
@@ -192,7 +198,10 @@ export class UserController {
           }
         }
         for (const requestTrip of allTrips.requestDriveTrips) {
-          if (requestTrip.drive.status === 4 || requestTrip.drive.status === 5) {
+          if (
+            requestTrip.drive.status === 4 ||
+            requestTrip.drive.status === 5
+          ) {
             totalSeats += requestTrip.drive.seats;
           }
         }
@@ -200,7 +209,10 @@ export class UserController {
 
       dto.offeredDrives = offeredDrives == null ? 0 : offeredDrives.length;
       dto.takenDrives = requestedDrives == null ? 0 : requestedDrives.length;
-      dto.totalDrives = finishedOfferedDrives == null || finishedRequestedDrives == null ? 0 : finishedOfferedDrives.length + finishedRequestedDrives.length;
+      dto.totalDrives =
+        finishedOfferedDrives == null || finishedRequestedDrives == null
+          ? 0
+          : finishedOfferedDrives.length + finishedRequestedDrives.length;
       dto.distanceDriven = dto.totalDrives * 100;
       dto.highestWeight = carMaxWeight + trailerMaxWeight;
       dto.totalPassengers = totalSeats;
@@ -316,7 +328,7 @@ export class UserController {
     type: OkDTO,
     description: 'updates a specifics user password by their id',
   })
-  @Put()
+  @Put('/password')
   @ApiBearerAuth()
   @UseGuards(IsLoggedInGuard)
   async updatePassword(
@@ -358,7 +370,7 @@ export class UserController {
     type: OkDTO,
     description: 'updates a specifics user email by their id',
   })
-  @Put()
+  @Put('/email')
   @ApiBearerAuth()
   @UseGuards(IsLoggedInGuard)
   async updateEmail(

@@ -155,7 +155,6 @@ export class UserDescriptionComponent {
 
   saveUser(form: any): void {
     const userData = {
-      email: this.newEmail,
       phoneNumber: this.newPhoneNumber,
       languages: this.newLang,
       profileText: this.newProfileText,
@@ -163,8 +162,19 @@ export class UserDescriptionComponent {
       firstName: this.newFirstname,
       lastName: this.newLastname,
     };
-    if (this.newEmail === '' || this.newEmail === null) {
-      userData.email = this.email;
+    if (this.newEmail !== '' && this.newEmail !== null) {
+      const emailData = {
+        newEmail: this.newEmail,
+        newEmailConfirm: this.newEmailConfirm
+      };
+      this.userService.editEmail(emailData).subscribe(
+        response => {
+          console.log('Email updated successfully');
+        },
+        error => {
+          console.error('Failed to update email', error);
+        }
+      );
     }
     if (this.newPhoneNumber === '' || this.newPhoneNumber === null) {
       userData.phoneNumber = this.phoneNumber;
